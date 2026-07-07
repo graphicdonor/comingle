@@ -61,3 +61,23 @@ body {
   background: #fff;
   border-color: #1E2952;
 }
+
+.input-field {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid #E5E7EB;
+  border-radius: 12px;
+  font-size: 14px;
+  color: #111827;
+  background: #F9FAFB;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  outline: none;
+}
+.input-field:focus {
+  border-color: #8B1A6B;
+  box-shadow: 0 0 0 3px rgba(139,26,107,0.1);
+  background: #fff;
+}
+.input-field::placeholder {
+  color: #9CA3AF;
+}
