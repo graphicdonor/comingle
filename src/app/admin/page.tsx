@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { Users, Globe, FileText, TrendingUp } from "lucide-react";
 import { AdminUsersTable } from "@/components/admin/admin-users-table";
 import type { Profile } from "@/lib/types";
@@ -11,7 +11,7 @@ interface ProfileRow extends Profile {
 }
 
 export default async function AdminDashboard() {
-  const supabase = await createClient();
+  const supabase = createAdminClient();
 
   // Fetch all data in parallel
   const [profilesRes, communitiesRes, postsRes] = await Promise.all([
