@@ -1,7 +1,28 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { createHash } from "crypto";
+
+function isAdminAuthed(request: NextRequest): boolean {
+  const secret = process.env.ADMIN_SECRET;
+  if (!secret) return false;
+  const token = request.cookies.get("admin-token")?.value;
+  const expected = createHash("sha256").update(secret + "admin-salt").digest("hex");
+  return token === expected;
+}
 
 export async function proxy(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  // ── Admin route guard ──────────────────────────────────────────
+  if (pathname.startsWith("/admin") && !pathname.startsWith("/admin/login")) {
+    if (!isAdminAuthed(request)) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/admin/login";
+      return NextResponse.redirect(url);
+    }
+    return NextResponse.next({ request });
+  }
+
   let supabaseResponse = NextResponse.next({ request });
 
   const supabase = createServerClient(
