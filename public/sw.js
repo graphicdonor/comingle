@@ -1,4 +1,4 @@
-const CACHE_VERSION = "v1";
+const CACHE_VERSION = "v2";
 const STATIC_CACHE  = `comingle-static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `comingle-dynamic-${CACHE_VERSION}`;
 
@@ -65,14 +65,12 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // HTML pages — network-first with offline fallback
-  if (request.headers.get("accept")?.includes("text/html")) {
-    event.respondWith(networkFirstWithOfflineFallback(request));
-    return;
-  }
-
-  // Everything else — stale-while-revalidate
-  event.respondWith(staleWhileRevalidate(request, DYNAMIC_CACHE));
+  // Everything else — HTML documents, RSC/client-navigation payloads, and any
+  // other app data — network-first. This must never be stale-while-revalidate:
+  // Next.js client-side navigations fetch RSC payloads without an
+  // `Accept: text/html` header, and serving those from a stale cache means an
+  // already-open tab keeps running yesterday's app logic after a deploy.
+  event.respondWith(networkFirstWithOfflineFallback(request));
 });
 
 // ── Push notifications ────────────────────────────────────────────────────────
@@ -138,14 +136,4 @@ async function networkFirstWithOfflineFallback(request) {
     if (cached) return cached;
     return caches.match("/offline");
   }
-}
-
-async function staleWhileRevalidate(request, cacheName) {
-  const cache = await caches.open(cacheName);
-  const cached = await cache.match(request);
-  const networkFetch = fetch(request).then((response) => {
-    if (response.ok) cache.put(request, response.clone());
-    return response;
-  }).catch(() => null);
-  return cached || (await networkFetch) || new Response("", { status: 408 });
 }
