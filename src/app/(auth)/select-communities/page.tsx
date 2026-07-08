@@ -1,30 +1,43 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { DEV_MODE } from "@/lib/dev-auth";
+import type { Community } from "@/lib/types";
 
 // In dev mode, use hardcoded community options so the UI works without Supabase
-const DEV_COMMUNITIES = [
-  { id: "dev-1", name: "Gurujisangat", slug: "gurujisangat", member_count: 248, description: null, cover_url: null },
-  { id: "dev-2", name: "Jai Mata Di", slug: "jai-mata-di", member_count: 195, description: null, cover_url: null },
-  { id: "dev-3", name: "Radha Swami Ji", slug: "radha-swami-ji", member_count: 312, description: null, cover_url: null },
-  { id: "dev-4", name: "Sai Sangat", slug: "sai-sangat", member_count: 178, description: null, cover_url: null },
-  { id: "dev-5", name: "Sikh Community", slug: "sikh-community", member_count: 420, description: null, cover_url: null },
-  { id: "dev-6", name: "Hindu Samaj", slug: "hindu-samaj", member_count: 390, description: null, cover_url: null },
+const DEV_COMMUNITIES: Community[] = [
+  { id: "dev-1", name: "Gurujisangat", slug: "gurujisangat", member_count: 248, description: null, cover_url: null, creator_id: "dev", created_at: "" },
+  { id: "dev-2", name: "Jai Mata Di", slug: "jai-mata-di", member_count: 195, description: null, cover_url: null, creator_id: "dev", created_at: "" },
+  { id: "dev-3", name: "Radha Swami Ji", slug: "radha-swami-ji", member_count: 312, description: null, cover_url: null, creator_id: "dev", created_at: "" },
+  { id: "dev-4", name: "Sai Sangat", slug: "sai-sangat", member_count: 178, description: null, cover_url: null, creator_id: "dev", created_at: "" },
+  { id: "dev-5", name: "Sikh Community", slug: "sikh-community", member_count: 420, description: null, cover_url: null, creator_id: "dev", created_at: "" },
+  { id: "dev-6", name: "Hindu Samaj", slug: "hindu-samaj", member_count: 390, description: null, cover_url: null, creator_id: "dev", created_at: "" },
 ];
 
-type Community = typeof DEV_COMMUNITIES[0];
-
 export default function SelectCommunitiesPage() {
-  const [communities] = useState<Community[]>(DEV_COMMUNITIES);
+  const [communities, setCommunities] = useState<Community[]>(DEV_MODE ? DEV_COMMUNITIES : []);
+  const [fetching, setFetching] = useState(!DEV_MODE);
   const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const supabase = createClient();
+
+  useEffect(() => {
+    if (DEV_MODE) return;
+    supabase
+      .from("communities")
+      .select("*")
+      .order("member_count", { ascending: false })
+      .then(({ data }) => {
+        setCommunities((data ?? []) as Community[]);
+        setFetching(false);
+      });
+  }, []);
 
   const toggle = (id: string) => {
     setSelected((s) => {
@@ -35,23 +48,35 @@ export default function SelectCommunitiesPage() {
   };
 
   const handleSubmit = async () => {
+    setError("");
     setLoading(true);
 
     if (!DEV_MODE) {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) { router.push("/signup"); return; }
+
       const memberships = Array.from(selected).map((cid) => ({
         community_id: cid, user_id: user.id, role: "member",
       }));
       if (memberships.length > 0) {
-        await supabase.from("community_members").upsert(memberships, { onConflict: "community_id,user_id" });
+        const { error: joinError } = await supabase
+          .from("community_members")
+          .upsert(memberships, { onConflict: "community_id,user_id" });
+        if (joinError) {
+          setError(joinError.message);
+          setLoading(false);
+          return;
+        }
         for (const cid of selected) {
           await supabase.rpc("increment_member_count", { community_id: cid });
         }
       }
+      setLoading(false);
+      router.push("/");
+      return;
     }
 
-    // In dev mode, just navigate home
+    // Dev bypass — just navigate home
     setTimeout(() => { setLoading(false); router.push("/"); }, 400);
   };
 
@@ -73,6 +98,15 @@ export default function SelectCommunitiesPage() {
         </h2>
         <p className="text-xs text-gray-400 mb-5">Select one or more communities</p>
 
+        {fetching ? (
+          <div className="grid grid-cols-2 gap-3">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="rounded-2xl border-2 border-gray-100 p-4 min-h-[90px] animate-pulse bg-gray-50" />
+            ))}
+          </div>
+        ) : communities.length === 0 ? (
+          <p className="text-sm text-gray-400 text-center py-8">No communities available yet.</p>
+        ) : (
         <div className="grid grid-cols-2 gap-3">
           {communities.map((c) => (
             <button
@@ -100,6 +134,9 @@ export default function SelectCommunitiesPage() {
             </button>
           ))}
         </div>
+        )}
+
+        {error && <p className="text-sm text-red-500 text-center mt-4">{error}</p>}
       </div>
 
       <div className="flex gap-3 p-4 pb-8">

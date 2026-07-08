@@ -8,11 +8,6 @@ import { CommunityCard } from "@/components/community/community-card";
 
 const DEV_MODE = process.env.NEXT_PUBLIC_DEV_MODE === "true";
 
-const DEV_COMMUNITIES: Community[] = [
-  { id: "1", slug: "gurujisangat", name: "Gurujisangat", description: "Spiritual community", member_count: 842, creator_id: "dev", created_at: "", cover_url: null },
-  { id: "2", slug: "radha-swami-ji", name: "Radha Swami Ji", description: "Satsang community", member_count: 523, creator_id: "dev", created_at: "", cover_url: null },
-];
-
 export default async function ProfilePage({ params }: { params: Promise<{ username: string }> }) {
   const { username } = await params;
 
@@ -30,28 +25,28 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
 
   const { createClient } = await import("@/lib/supabase/server");
   const supabase = await createClient();
-  const { data: { user: currentUser } } = await supabase.auth.getUser();
 
-  const { data: p } = await supabase.from("profiles").select("*").eq("username", username).single();
+  const [{ data: { user: currentUser } }, { data: p }] = await Promise.all([
+    supabase.auth.getUser(),
+    supabase.from("profiles").select("*").eq("username", username).single(),
+  ]);
   if (!p) notFound();
   profile = p as Profile;
 
   isOwn = currentUser?.id === profile.id;
 
-  const { data: memberships } = await supabase
-    .from("community_members").select("communities(*), role, joined_at")
-    .eq("user_id", profile.id).order("joined_at", { ascending: false });
+  const [{ data: memberships }, { data: posts }, { data: likes }] = await Promise.all([
+    supabase.from("community_members").select("communities(*), role, joined_at")
+      .eq("user_id", profile.id).order("joined_at", { ascending: false }),
+    supabase.from("posts").select("*, profiles(*), communities(*)")
+      .eq("author_id", profile.id).order("created_at", { ascending: false }).limit(20),
+    currentUser
+      ? supabase.from("post_likes").select("post_id").eq("user_id", currentUser.id)
+      : Promise.resolve({ data: null as { post_id: string }[] | null }),
+  ]);
   communities = (memberships ?? []).map((m) => m.communities as unknown as Community).filter(Boolean);
-
-  const { data: posts } = await supabase
-    .from("posts").select("*, profiles(*), communities(*)")
-    .eq("author_id", profile.id).order("created_at", { ascending: false }).limit(20);
   userPosts = (posts ?? []) as Post[];
-
-  if (currentUser) {
-    const { data: likes } = await supabase.from("post_likes").select("post_id").eq("user_id", currentUser.id);
-    likedPostIds = new Set((likes ?? []).map((l) => l.post_id));
-  }
+  likedPostIds = new Set((likes ?? []).map((l) => l.post_id));
 
   return (
     <ProfileView
@@ -87,7 +82,7 @@ function ProfileView({
       {/* Profile header card */}
       <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden mb-5">
         {/* Cover */}
-        <div className="h-28 bg-gradient-to-r from-[#8B1A6B]/30 via-purple-100 to-[#2A5C27]/20 relative">
+        <div className="h-28 bg-gradient-to-r from-[#8B1A6B]/30 via-purple-100 to-[#2A5C27]/20 relative z-0">
           {isOwn && (
             <Link
               href="/profile/edit"
@@ -99,7 +94,7 @@ function ProfileView({
           )}
         </div>
 
-        <div className="px-5 pb-5">
+        <div className="px-5 pb-5 relative z-10">
           {/* Avatar row */}
           <div className="flex items-end justify-between -mt-10 mb-4">
             <Avatar src={p.avatar_url} name={name} size="xl" className="ring-4 ring-white shadow-md" />
@@ -142,7 +137,7 @@ function ProfileView({
             )}
             <span className="flex items-center gap-1 text-xs text-gray-500 bg-gray-50 border border-gray-100 px-2.5 py-1 rounded-full">
               <Calendar className="h-3 w-3 text-[#2A5C27]" />
-              Joined {new Date(p.created_at || Date.now()).toLocaleDateString("en-US", { month: "short", year: "numeric" })}
+              Joined {new Date(p.created_at).toLocaleDateString("en-US", { month: "short", year: "numeric" })}
             </span>
           </div>
         </div>

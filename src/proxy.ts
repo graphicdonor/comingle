@@ -45,7 +45,7 @@ export async function proxy(request: NextRequest) {
   );
 
   // Protected routes
-  const protectedPaths = ["/communities/create", "/settings", "/signup-details", "/pin", "/select-communities", "/profile/edit"];
+  const protectedPaths = ["/communities/create", "/settings", "/notifications", "/signup-details", "/pin", "/select-communities", "/profile/edit"];
   const isProtected = protectedPaths.some((p) => request.nextUrl.pathname.startsWith(p));
 
   if (isProtected) {

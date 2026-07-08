@@ -47,7 +47,7 @@ export default function SignupDetailsPage() {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    if (file.size > 500 * 1024) { setError("Profile picture must be under 500KB"); return; }
+    if (file.size > 5 * 1024 * 1024) { setError("Profile picture must be under 5MB"); return; }
     setAvatarFile(file);
     setAvatarPreview(URL.createObjectURL(file));
     setShowPhotoSheet(false);
@@ -284,7 +284,7 @@ export default function SignupDetailsPage() {
               >
                 {avatarPreview ? "Change Photo" : "Upload Profile Picture"}
               </button>
-              <p className="text-xs text-gray-400">Max 500KB · JPG, JPEG or PNG</p>
+              <p className="text-xs text-gray-400">Max 5MB · JPG, JPEG or PNG</p>
             </div>
 
             <input

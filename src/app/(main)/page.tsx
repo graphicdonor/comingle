@@ -29,19 +29,19 @@ export default async function HomePage() {
   let likedPostIds: Set<string> = new Set();
 
   if (user) {
-    const { data: p } = await supabase.from("profiles").select("*").eq("id", user.id).single();
+    const [{ data: p }, { data: memberOf }, { data: likes }] = await Promise.all([
+      supabase.from("profiles").select("*").eq("id", user.id).single(),
+      supabase.from("community_members").select("community_id").eq("user_id", user.id),
+      supabase.from("post_likes").select("post_id").eq("user_id", user.id),
+    ]);
     profile = p as Profile;
+    likedPostIds = new Set((likes ?? []).map((l) => l.post_id));
 
-    const { data: memberOf } = await supabase.from("community_members").select("community_id").eq("user_id", user.id);
     const communityIds = (memberOf ?? []).map((m) => m.community_id);
-
     if (communityIds.length > 0) {
       const { data } = await supabase.from("posts").select("*, profiles(*), communities(*)")
         .in("community_id", communityIds).order("created_at", { ascending: false }).limit(20);
       posts = (data as Post[]) ?? [];
-
-      const { data: likes } = await supabase.from("post_likes").select("post_id").eq("user_id", user.id);
-      likedPostIds = new Set((likes ?? []).map((l) => l.post_id));
     }
   }
 

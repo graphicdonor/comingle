@@ -10,44 +10,28 @@ import { notFound } from "next/navigation";
 export default async function CommunityPage({ params }: { params: Promise<{ id: string }> }) {
   const { id: slug } = await params;
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
 
-  const { data: community } = await supabase
-    .from("communities")
-    .select("*")
-    .eq("slug", slug)
-    .single();
+  const [{ data: { user } }, { data: community }] = await Promise.all([
+    supabase.auth.getUser(),
+    supabase.from("communities").select("*").eq("slug", slug).single(),
+  ]);
 
   if (!community) notFound();
 
   const c = community as Community;
 
-  let isMember = false;
-  if (user) {
-    const { data: membership } = await supabase
-      .from("community_members")
-      .select("user_id")
-      .eq("community_id", c.id)
-      .eq("user_id", user.id)
-      .single();
-    isMember = !!membership;
-  }
-
-  const { data: posts } = await supabase
-    .from("posts")
-    .select("*, profiles(*), communities(*)")
-    .eq("community_id", c.id)
-    .order("created_at", { ascending: false })
-    .limit(30);
-
-  let likedPostIds: Set<string> = new Set();
-  if (user) {
-    const { data: likes } = await supabase
-      .from("post_likes")
-      .select("post_id")
-      .eq("user_id", user.id);
-    likedPostIds = new Set((likes ?? []).map((l) => l.post_id));
-  }
+  const [membershipResult, { data: posts }, likesResult] = await Promise.all([
+    user
+      ? supabase.from("community_members").select("user_id").eq("community_id", c.id).eq("user_id", user.id).single()
+      : Promise.resolve({ data: null }),
+    supabase.from("posts").select("*, profiles(*), communities(*)")
+      .eq("community_id", c.id).order("created_at", { ascending: false }).limit(30),
+    user
+      ? supabase.from("post_likes").select("post_id").eq("user_id", user.id)
+      : Promise.resolve({ data: null as { post_id: string }[] | null }),
+  ]);
+  const isMember = !!membershipResult.data;
+  const likedPostIds = new Set((likesResult.data ?? []).map((l) => l.post_id));
 
   const communityPosts = (posts ?? []) as Post[];
 

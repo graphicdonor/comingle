@@ -28,18 +28,17 @@ export default async function CommunitiesPage() {
   } else {
     const { createClient } = await import("@/lib/supabase/server");
     const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+
+    const [{ data: { user } }, { data: communities }] = await Promise.all([
+      supabase.auth.getUser(),
+      supabase.from("communities").select("*").order("member_count", { ascending: false }),
+    ]);
     isLoggedIn = !!user;
 
-    const { data: communities } = await supabase
-      .from("communities").select("*").order("member_count", { ascending: false });
-
-    let memberCommunityIds: Set<string> = new Set();
-    if (user) {
-      const { data: memberships } = await supabase
-        .from("community_members").select("community_id").eq("user_id", user.id);
-      memberCommunityIds = new Set((memberships ?? []).map((m) => m.community_id));
-    }
+    const { data: memberships } = user
+      ? await supabase.from("community_members").select("community_id").eq("user_id", user.id)
+      : { data: null as { community_id: string }[] | null };
+    const memberCommunityIds = new Set((memberships ?? []).map((m) => m.community_id));
 
     allCommunities = (communities ?? []) as Community[];
     joined = allCommunities.filter((c) => memberCommunityIds.has(c.id));

@@ -70,6 +70,8 @@ export default function EditProfilePage() {
   const handlePhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    if (file.size > 5 * 1024 * 1024) { setError("Profile picture must be under 5MB"); return; }
+    setError("");
     setAvatarFile(file);
     setAvatarPreview(URL.createObjectURL(file));
   };
