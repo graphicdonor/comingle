@@ -114,7 +114,7 @@ export default function EditProfilePage() {
 
     const { error: updateErr } = await supabase
       .from("profiles")
-      .update({ ...form, avatar_url, updated_at: new Date().toISOString() })
+      .update({ ...form, avatar_url })
       .eq("id", user.id);
 
     setLoading(false);
