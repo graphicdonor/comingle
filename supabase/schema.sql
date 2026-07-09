@@ -27,12 +27,17 @@ create table if not exists communities (
   slug         text unique not null,
   description  text,
   cover_url    text,
+  rules        text,
   creator_id   uuid references profiles(id) on delete set null,
   member_count integer default 0 not null,
   created_at   timestamptz default now() not null
 );
 
--- Community membership
+-- Community membership. Role model: the creator is the sole 'admin' (no UI
+-- path grants a second admin today); admins can promote members to
+-- 'moderator' and demote back. Admins can remove members/moderators but not
+-- other admins; moderators can remove plain members but not other
+-- moderators/admins. Anyone can always remove their own row (leave).
 create table if not exists community_members (
   community_id uuid references communities(id) on delete cascade,
   user_id      uuid references profiles(id) on delete cascade,
@@ -247,6 +252,38 @@ create policy "Memberships are public"     on community_members for select  usin
 create policy "Users can join communities" on community_members for insert  with check (auth.uid() = user_id);
 create policy "Users can leave"            on community_members for delete  using (auth.uid() = user_id);
 
+create policy "Admins can update member roles" on community_members for update
+  using (
+    exists (
+      select 1 from community_members cm
+      where cm.community_id = community_members.community_id
+        and cm.user_id = auth.uid() and cm.role = 'admin'
+    )
+  )
+  with check (
+    exists (
+      select 1 from community_members cm
+      where cm.community_id = community_members.community_id
+        and cm.user_id = auth.uid() and cm.role = 'admin'
+    )
+  );
+create policy "Admins can remove non-admin members" on community_members for delete using (
+  role in ('member', 'moderator')
+  and exists (
+    select 1 from community_members cm
+    where cm.community_id = community_members.community_id
+      and cm.user_id = auth.uid() and cm.role = 'admin'
+  )
+);
+create policy "Moderators can remove members" on community_members for delete using (
+  role = 'member'
+  and exists (
+    select 1 from community_members cm
+    where cm.community_id = community_members.community_id
+      and cm.user_id = auth.uid() and cm.role = 'moderator'
+  )
+);
+
 -- Posts
 create policy "Posts are public" on posts for select using (true);
 create policy "Members can post" on posts for insert with check (
@@ -254,6 +291,13 @@ create policy "Members can post" on posts for insert with check (
   exists (select 1 from community_members where community_id = posts.community_id and user_id = auth.uid())
 );
 create policy "Authors can delete posts" on posts for delete using (auth.uid() = author_id);
+create policy "Moderators can delete any post" on posts for delete using (
+  exists (
+    select 1 from community_members
+    where community_id = posts.community_id
+      and user_id = auth.uid() and role in ('moderator', 'admin')
+  )
+);
 
 -- Post likes
 create policy "Likes are public"        on post_likes for select using (true);

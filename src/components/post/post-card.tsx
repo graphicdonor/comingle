@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
-import { Heart, MessageCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Heart, MessageCircle, MoreVertical, Trash2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import type { Post } from "@/lib/types";
 import { Avatar } from "@/components/ui/avatar";
@@ -11,16 +12,24 @@ interface PostCardProps {
   post: Post;
   currentUserId?: string;
   liked?: boolean;
+  canModerate?: boolean;
 }
 
-export function PostCard({ post, currentUserId, liked: initialLiked = false }: PostCardProps) {
+export function PostCard({ post, currentUserId, liked: initialLiked = false, canModerate = false }: PostCardProps) {
   const [liked, setLiked] = useState(initialLiked);
   const [likeCount, setLikeCount] = useState(post.like_count);
   const [expanded, setExpanded] = useState(false);
   const [canExpand, setCanExpand] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [confirmingDelete, setConfirmingDelete] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState("");
+  const [deleted, setDeleted] = useState(false);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const contentRef = useRef<HTMLParagraphElement>(null);
+  const router = useRouter();
   const supabase = createClient();
+  const canDelete = currentUserId === post.author_id || canModerate;
 
   useEffect(() => {
     // Measured once against the initial (clamped) layout — whether text
@@ -43,6 +52,18 @@ export function PostCard({ post, currentUserId, liked: initialLiked = false }: P
       setLiked(true);
     }
   };
+
+  const handleDeletePost = async () => {
+    setDeleting(true);
+    setDeleteError("");
+    const { error } = await supabase.from("posts").delete().eq("id", post.id);
+    setDeleting(false);
+    if (error) { setDeleteError(error.message); return; }
+    setDeleted(true);
+    router.refresh();
+  };
+
+  if (deleted) return null;
 
   const author = post.profiles;
   const community = post.communities;
@@ -118,6 +139,53 @@ export function PostCard({ post, currentUserId, liked: initialLiked = false }: P
             </div>
           </div>
         </div>
+
+        {canDelete && (
+          <div className="relative flex-shrink-0">
+            <button
+              onClick={() => setMenuOpen((v) => !v)}
+              aria-label="Post options"
+              className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors"
+            >
+              <MoreVertical className="h-4 w-4 text-gray-400" />
+            </button>
+            {menuOpen && (
+              <>
+                <div className="fixed inset-0 z-10" onClick={() => { setMenuOpen(false); setConfirmingDelete(false); }} />
+                <div className="absolute right-0 top-9 z-20 bg-white rounded-xl shadow-lg border border-gray-100 py-1 w-48">
+                  {!confirmingDelete ? (
+                    <button
+                      onClick={() => setConfirmingDelete(true)}
+                      className="w-full flex items-center gap-2 text-left px-4 py-2 text-sm text-red-500 hover:bg-red-50"
+                    >
+                      <Trash2 className="h-3.5 w-3.5" /> Delete Post
+                    </button>
+                  ) : (
+                    <div className="px-4 py-2.5 space-y-2">
+                      <p className="text-xs text-gray-500">Delete this post?</p>
+                      {deleteError && <p className="text-xs text-red-500">{deleteError}</p>}
+                      <div className="flex gap-2 justify-end">
+                        <button
+                          onClick={() => setConfirmingDelete(false)}
+                          className="text-xs font-medium text-gray-500 hover:text-gray-700 px-2 py-1"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          onClick={handleDeletePost}
+                          disabled={deleting}
+                          className="text-xs font-semibold text-white bg-red-500 hover:bg-red-600 rounded-full px-3 py-1 disabled:opacity-50"
+                        >
+                          {deleting ? "Deleting…" : "Confirm"}
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

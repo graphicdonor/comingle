@@ -19,16 +19,20 @@ export interface Community {
   slug: string;
   description: string | null;
   cover_url: string | null;
+  rules: string | null;
   creator_id: string;
   member_count: number;
   created_at: string;
 }
 
+export type CommunityRole = "member" | "moderator" | "admin";
+
 export interface CommunityMember {
   community_id: string;
   user_id: string;
-  role: "member" | "moderator" | "admin";
+  role: CommunityRole;
   joined_at: string;
+  profiles?: Profile;
 }
 
 export interface Post {

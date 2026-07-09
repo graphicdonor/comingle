@@ -56,7 +56,8 @@ export async function proxy(request: NextRequest) {
 
   // Protected routes
   const protectedPaths = ["/communities/create", "/settings", "/notifications", "/signup-details", "/pin", "/select-communities", "/profile/edit", "/services/matrimonial"];
-  const isProtected = protectedPaths.some((p) => request.nextUrl.pathname.startsWith(p));
+  const isManageRoute = pathname.startsWith("/communities/") && pathname.endsWith("/manage");
+  const isProtected = isManageRoute || protectedPaths.some((p) => pathname.startsWith(p));
 
   if (isProtected) {
     if (devMode) {

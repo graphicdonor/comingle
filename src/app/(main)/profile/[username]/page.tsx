@@ -1,5 +1,6 @@
 import { Avatar } from "@/components/ui/avatar";
-import type { Post, Community, Profile } from "@/lib/types";
+import type { Post, Community, Profile, CommunityRole } from "@/lib/types";
+import { isCommunityStaff } from "@/lib/community";
 import { notFound } from "next/navigation";
 import { MapPin, Calendar, Users, Pencil } from "lucide-react";
 import Link from "next/link";
@@ -35,7 +36,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
 
   isOwn = currentUser?.id === profile.id;
 
-  const [{ data: memberships }, { data: posts }, { data: likes }] = await Promise.all([
+  const [{ data: memberships }, { data: posts }, { data: likes }, { data: viewerMemberships }] = await Promise.all([
     supabase.from("community_members").select("communities(*), role, joined_at")
       .eq("user_id", profile.id).order("joined_at", { ascending: false }),
     supabase.from("posts").select("*, profiles!posts_author_id_fkey(*), communities(*)")
@@ -43,10 +44,14 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
     currentUser
       ? supabase.from("post_likes").select("post_id").eq("user_id", currentUser.id)
       : Promise.resolve({ data: null as { post_id: string }[] | null }),
+    currentUser
+      ? supabase.from("community_members").select("community_id, role").eq("user_id", currentUser.id)
+      : Promise.resolve({ data: null as { community_id: string; role: CommunityRole }[] | null }),
   ]);
   communities = (memberships ?? []).map((m) => m.communities as unknown as Community).filter(Boolean);
   userPosts = (posts ?? []) as Post[];
   likedPostIds = new Set((likes ?? []).map((l) => l.post_id));
+  const roleByCommunityId = new Map((viewerMemberships ?? []).map((m) => [m.community_id, m.role]));
 
   return (
     <ProfileView
@@ -56,6 +61,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
       likedPostIds={likedPostIds}
       isOwn={isOwn}
       currentUserId={currentUser?.id}
+      roleByCommunityId={roleByCommunityId}
     />
   );
 }
@@ -67,6 +73,7 @@ function ProfileView({
   likedPostIds,
   isOwn,
   currentUserId,
+  roleByCommunityId,
 }: {
   profile: Profile;
   communities: Community[];
@@ -74,6 +81,7 @@ function ProfileView({
   likedPostIds: Set<string>;
   isOwn: boolean;
   currentUserId?: string;
+  roleByCommunityId: Map<string, CommunityRole>;
 }) {
   const name = p.full_name || p.username;
 
@@ -188,7 +196,13 @@ function ProfileView({
             </div>
           ) : (
             posts.map((post) => (
-              <PostCard key={post.id} post={post} currentUserId={currentUserId} liked={likedPostIds.has(post.id)} />
+              <PostCard
+                key={post.id}
+                post={post}
+                currentUserId={currentUserId}
+                liked={likedPostIds.has(post.id)}
+                canModerate={isCommunityStaff(roleByCommunityId.get(post.community_id))}
+              />
             ))
           )}
         </div>

@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { PostCard } from "@/components/post/post-card";
-import type { Post, Profile } from "@/lib/types";
+import type { Post, Profile, CommunityRole } from "@/lib/types";
+import { isCommunityStaff } from "@/lib/community";
 import Link from "next/link";
 import { HomeGreeting } from "@/components/layout/home-greeting";
 
@@ -27,17 +28,19 @@ export default async function HomePage() {
   let profile: Profile | null = null;
   let posts: Post[] = [];
   let likedPostIds: Set<string> = new Set();
+  let roleByCommunityId = new Map<string, CommunityRole>();
 
   if (user) {
     const [{ data: p }, { data: memberOf }, { data: likes }] = await Promise.all([
       supabase.from("profiles").select("*").eq("id", user.id).single(),
-      supabase.from("community_members").select("community_id").eq("user_id", user.id),
+      supabase.from("community_members").select("community_id, role").eq("user_id", user.id),
       supabase.from("post_likes").select("post_id").eq("user_id", user.id),
     ]);
     profile = p as Profile;
     likedPostIds = new Set((likes ?? []).map((l) => l.post_id));
+    roleByCommunityId = new Map((memberOf ?? []).map((m) => [m.community_id, m.role as CommunityRole]));
 
-    const communityIds = (memberOf ?? []).map((m) => m.community_id);
+    const communityIds = [...roleByCommunityId.keys()];
     if (communityIds.length > 0) {
       const { data } = await supabase.from("posts").select("*, profiles!posts_author_id_fkey(*), communities(*)")
         .in("community_id", communityIds).order("created_at", { ascending: false }).limit(20);
@@ -87,7 +90,13 @@ export default async function HomePage() {
           <h2 className="text-base font-bold text-gray-900 mb-3">Your Feed</h2>
           <div className="space-y-3">
             {posts.map((post) => (
-              <PostCard key={post.id} post={post} currentUserId={user?.id} liked={likedPostIds.has(post.id)} />
+              <PostCard
+                key={post.id}
+                post={post}
+                currentUserId={user?.id}
+                liked={likedPostIds.has(post.id)}
+                canModerate={isCommunityStaff(roleByCommunityId.get(post.community_id))}
+              />
             ))}
           </div>
         </section>
