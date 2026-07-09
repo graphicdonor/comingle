@@ -19,14 +19,17 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Decorative pastel background pattern for auth screens */
+/* Community illustration background for auth screens (login, signup, pin
+   creation, otp, etc.) — anchored to the top since the illustration itself
+   has built-in blank space below the people, which is where the centered
+   card ends up sitting. The brand logo that renders directly on top of
+   this uses BrandLogo's withBackdrop prop for legibility. */
 .pattern-bg {
   background-color: #fff;
-  background-image:
-    radial-gradient(circle at 10% 8%, rgba(255,182,193,0.4) 0%, transparent 40%),
-    radial-gradient(circle at 90% 5%, rgba(200,220,255,0.35) 0%, transparent 35%),
-    radial-gradient(circle at 80% 92%, rgba(255,218,185,0.4) 0%, transparent 40%),
-    radial-gradient(circle at 15% 88%, rgba(216,191,255,0.35) 0%, transparent 35%);
+  background-image: url('/community-main.svg');
+  background-repeat: no-repeat;
+  background-position: top center;
+  background-size: 100% auto;
 }
 
 /* Gradient home header */

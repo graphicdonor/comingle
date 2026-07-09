@@ -135,40 +135,43 @@ export default function SignupDetailsPage() {
 
   return (
     <div className="w-full max-w-sm">
-      {/* Header */}
-      <div className="flex items-center gap-3 mb-4">
-        <button
-          onClick={handleBack}
-          className="w-9 h-9 rounded-full bg-orange-100 flex items-center justify-center flex-shrink-0"
-        >
-          <ChevronLeft className="h-5 w-5 text-orange-500" />
-        </button>
-        <h1 className="text-lg font-bold text-gray-900">Create Profile</h1>
-      </div>
+      {/* Header + step progress sit directly on the community illustration
+          background, so they get their own translucent backdrop for
+          legibility, same treatment as BrandLogo's withBackdrop. */}
+      <div className="bg-white/75 backdrop-blur-md rounded-3xl shadow-sm px-4 pt-4 pb-3 mb-4">
+        <div className="flex items-center gap-3 mb-4">
+          <button
+            onClick={handleBack}
+            className="w-9 h-9 rounded-full bg-orange-100 flex items-center justify-center flex-shrink-0"
+          >
+            <ChevronLeft className="h-5 w-5 text-orange-500" />
+          </button>
+          <h1 className="text-lg font-bold text-gray-900">Create Profile</h1>
+        </div>
 
-      {/* Step progress */}
-      <div className="flex items-center gap-2 mb-5 px-1">
-        {STEPS.map((label, i) => (
-          <div key={label} className="flex items-center gap-2 flex-1">
-            <div className="flex flex-col items-center gap-1">
-              <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
-                i < step
-                  ? "bg-[#2A5C27] text-white"
-                  : i === step
-                  ? "bg-[#8B1A6B] text-white"
-                  : "bg-gray-200 text-gray-400"
-              }`}>
-                {i < step ? <CheckCircle2 className="w-4 h-4" /> : i + 1}
+        <div className="flex items-center gap-2 px-1">
+          {STEPS.map((label, i) => (
+            <div key={label} className="flex items-center gap-2 flex-1">
+              <div className="flex flex-col items-center gap-1">
+                <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
+                  i < step
+                    ? "bg-[#2A5C27] text-white"
+                    : i === step
+                    ? "bg-[#8B1A6B] text-white"
+                    : "bg-gray-200 text-gray-400"
+                }`}>
+                  {i < step ? <CheckCircle2 className="w-4 h-4" /> : i + 1}
+                </div>
+                <span className={`text-[10px] font-medium whitespace-nowrap ${i === step ? "text-[#8B1A6B]" : "text-gray-400"}`}>
+                  {label}
+                </span>
               </div>
-              <span className={`text-[10px] font-medium whitespace-nowrap ${i === step ? "text-[#8B1A6B]" : "text-gray-400"}`}>
-                {label}
-              </span>
+              {i < STEPS.length - 1 && (
+                <div className={`h-0.5 flex-1 mb-4 rounded-full transition-all ${i < step ? "bg-[#2A5C27]" : "bg-gray-200"}`} />
+              )}
             </div>
-            {i < STEPS.length - 1 && (
-              <div className={`h-0.5 flex-1 mb-4 rounded-full transition-all ${i < step ? "bg-[#2A5C27]" : "bg-gray-200"}`} />
-            )}
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
       <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-6">

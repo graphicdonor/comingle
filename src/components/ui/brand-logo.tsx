@@ -4,6 +4,7 @@ interface BrandLogoProps {
   size?: "sm" | "md" | "lg";
   className?: string;
   showTagline?: boolean;
+  withBackdrop?: boolean;
 }
 
 const sizeMap = {
@@ -12,10 +13,19 @@ const sizeMap = {
   lg: { com: "text-5xl", ingle: "text-5xl", tagline: "text-base" },
 };
 
-export function BrandLogo({ size = "md", className, showTagline = true }: BrandLogoProps) {
+export function BrandLogo({ size = "md", className, showTagline = true, withBackdrop = false }: BrandLogoProps) {
   const s = sizeMap[size];
   return (
-    <div className={cn("flex flex-col items-center", className)}>
+    <div
+      className={cn(
+        "flex flex-col items-center",
+        // Auth screens render this directly on the community illustration
+        // background — a translucent backdrop keeps the wordmark legible
+        // over busy artwork instead of fighting it with a page-wide scrim.
+        withBackdrop && "bg-white/75 backdrop-blur-md rounded-3xl px-6 py-3 shadow-sm",
+        className
+      )}
+    >
       <div className={cn("font-black tracking-tight leading-none", s.com)}>
         <span style={{ color: "#8B1A6B" }}>COM</span>
         <span

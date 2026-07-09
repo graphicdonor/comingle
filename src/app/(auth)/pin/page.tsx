@@ -59,8 +59,8 @@ export default function PinPage() {
   const name = profile?.full_name || profile?.username || "User";
 
   return (
-    <div className="w-full max-w-sm flex flex-col items-center pattern-bg min-h-screen py-8 px-4">
-      <BrandLogo size="md" className="mb-8" />
+    <div className="w-full max-w-sm flex flex-col items-center py-8 px-4">
+      <BrandLogo size="md" className="mb-8" withBackdrop />
 
       {profile && (
         <Avatar src={profile.avatar_url} name={name} size="xl" className="mb-4 ring-4 ring-white shadow-md" />

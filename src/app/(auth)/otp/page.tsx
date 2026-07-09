@@ -93,20 +93,7 @@ export default function OtpPage() {
 
   return (
     <div className="w-full max-w-sm flex flex-col items-center gap-6">
-      <BrandLogo size="md" className="mt-4" />
-
-      <div className="relative w-64 h-56">
-        <img
-          src="/community-bg.png"
-          alt=""
-          className="absolute inset-0 w-full h-full object-contain opacity-60"
-        />
-        <img
-          src="/community-hero.png"
-          alt="Community"
-          className="absolute inset-0 w-full h-full object-contain drop-shadow-md"
-        />
-      </div>
+      <BrandLogo size="md" className="mt-4" withBackdrop />
 
       <div className="w-full bg-white rounded-3xl shadow-lg border border-gray-100 p-7">
         <h2 className="text-xl font-bold text-gray-900 text-center mb-2">
