@@ -1,10 +1,10 @@
 "use client";
 import Link from "next/link";
 import { Heart, MessageCircle } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Post } from "@/lib/types";
 import { Avatar } from "@/components/ui/avatar";
-import { timeAgo } from "@/lib/utils";
+import { cn, timeAgo } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
 
 interface PostCardProps {
@@ -16,7 +16,18 @@ interface PostCardProps {
 export function PostCard({ post, currentUserId, liked: initialLiked = false }: PostCardProps) {
   const [liked, setLiked] = useState(initialLiked);
   const [likeCount, setLikeCount] = useState(post.like_count);
+  const [expanded, setExpanded] = useState(false);
+  const [canExpand, setCanExpand] = useState(false);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const contentRef = useRef<HTMLParagraphElement>(null);
   const supabase = createClient();
+
+  useEffect(() => {
+    // Measured once against the initial (clamped) layout — whether text
+    // actually overflowed its clamp, not a guess based on character count.
+    const isClamped = (el: HTMLElement | null) => !!el && el.scrollHeight > el.clientHeight + 1;
+    setCanExpand(isClamped(titleRef.current) || isClamped(contentRef.current));
+  }, [post.title, post.content]);
 
   const handleLike = async () => {
     if (!currentUserId) return;
@@ -62,9 +73,28 @@ export function PostCard({ post, currentUserId, liked: initialLiked = false }: P
             <span className="text-xs text-gray-400">{timeAgo(post.created_at)}</span>
           </div>
 
-          <h3 className="font-semibold text-gray-900 mt-1.5 line-clamp-2 break-words">{post.title}</h3>
+          <h3
+            ref={titleRef}
+            className={cn("font-semibold text-gray-900 mt-1.5 break-words", !expanded && "line-clamp-2")}
+          >
+            {post.title}
+          </h3>
           {post.content && (
-            <p className="text-sm text-gray-600 mt-1 line-clamp-3 break-words">{post.content}</p>
+            <p
+              ref={contentRef}
+              className={cn("text-sm text-gray-600 mt-1 break-words", !expanded && "line-clamp-3")}
+            >
+              {post.content}
+            </p>
+          )}
+          {canExpand && (
+            <button
+              type="button"
+              onClick={() => setExpanded((v) => !v)}
+              className="text-xs font-semibold text-indigo-600 hover:underline mt-1"
+            >
+              {expanded ? "Show less" : "Show more"}
+            </button>
           )}
           {post.image_url && (
             <div className="mt-3 rounded-xl overflow-hidden">
