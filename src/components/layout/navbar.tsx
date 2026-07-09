@@ -5,8 +5,8 @@ import { Home, Users, PlusCircle, User, LogOut, Menu, Bell, Settings, FileText, 
 import { createClient } from "@/lib/supabase/client";
 import { useEffect, useState } from "react";
 import { Avatar } from "@/components/ui/avatar";
-import { cn } from "@/lib/utils";
 import { DEV_MODE, getDevProfile, clearDevSession } from "@/lib/dev-auth";
+import { FloatingNav, type FloatingNavItem } from "@/components/floating-nav";
 
 interface NavUser {
   id: string;
@@ -97,14 +97,23 @@ export function Navbar() {
     router.refresh();
   };
 
-  const navItems: { href: string; icon: LucideIcon; label: string }[] = [
-    { href: "/", icon: Home, label: "Home" },
-    { href: "/communities", icon: Users, label: "Communities" },
-    { href: "/communities/create", icon: PlusCircle, label: "Create" },
-    navUser?.username
-      ? { href: `/profile/${navUser.username}`, icon: User, label: "Profile" }
-      : { href: "/login", icon: User, label: "Profile" },
+  const floatingNavRoutes = [
+    { id: "home", href: "/", icon: Home, label: "Home", color: { from: "#60A5FA", to: "#2563EB" } },
+    { id: "communities", href: "/communities", icon: Users, label: "Communities", color: { from: "#C084FC", to: "#7E22CE" } },
+    { id: "create", href: "/communities/create", icon: PlusCircle, label: "Create", color: { from: "#4ADE80", to: "#15803D" } },
+    {
+      id: "profile",
+      href: navUser?.username ? `/profile/${navUser.username}` : "/login",
+      icon: User,
+      label: "Profile",
+      color: { from: "#F472B6", to: "#BE185D" },
+    },
   ];
+  const activeNavId = floatingNavRoutes.find((route) => route.href === pathname)?.id;
+  const floatingNavItems: FloatingNavItem[] = floatingNavRoutes.map(({ href, ...item }) => ({
+    ...item,
+    onSelect: () => router.push(href),
+  }));
 
   return (
     <>
@@ -226,34 +235,11 @@ export function Navbar() {
         </div>
       )}
 
-      {/* ── Bottom floating nav ──
+      {/* ── Floating nav ──
           Hidden on the matrimonial chat thread — it already has its own
           fixed compose bar at the bottom, which would otherwise compete
           with this for the same screen space. */}
-      {!hideBottomNav && (
-      <nav className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-sm">
-        <div className="bg-white/95 backdrop-blur-xl rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.12)] border border-gray-100 px-2 py-2 flex items-center justify-around">
-          {navItems.map(({ href, icon: Icon, label }) => {
-            const active = pathname === href;
-            return (
-              <Link
-                key={href}
-                href={href}
-                className={cn(
-                  "flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-full transition-all duration-200 min-w-[56px]",
-                  active
-                    ? "bg-[#8B1A6B]/10 text-[#8B1A6B]"
-                    : "bg-gray-900/[0.03] text-gray-400 hover:bg-gray-900/[0.06] hover:text-gray-600"
-                )}
-              >
-                <Icon className="h-5 w-5" strokeWidth={active ? 2.5 : 1.8} />
-                <span className="text-[10px] font-medium leading-none">{label}</span>
-              </Link>
-            );
-          })}
-        </div>
-      </nav>
-      )}
+      {!hideBottomNav && <FloatingNav items={floatingNavItems} activeId={activeNavId} storageKey="comingle-floating-nav-dock" />}
     </>
   );
 }
