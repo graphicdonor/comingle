@@ -145,6 +145,9 @@ create index if not exists idx_notifications_user on notifications (user_id, cre
 -- "matrimonial-photos" (Public, 5MB file limit, jpg/jpeg/png only) —
 -- bucket policies are in supabase/migrations/20260708100100_*.sql; the
 -- bucket itself was created via the Storage API (public, 5MB limit).
+-- "community-covers" (Public, 5MB file limit, jpg/jpeg/png only) — same
+-- shape as avatars: path is {uploader_uid}/{file}, policies in
+-- supabase/migrations/20260709130000_*.sql, bucket created via Storage API.
 -- ============================================================
 
 -- ============================================================

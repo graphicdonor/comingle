@@ -1,24 +1,37 @@
 "use client";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Avatar } from "@/components/ui/avatar";
 import { createClient } from "@/lib/supabase/client";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Camera } from "lucide-react";
 
 export default function CreateCommunityPage() {
   const [form, setForm] = useState({ name: "", description: "" });
+  const [coverFile, setCoverFile] = useState<File | null>(null);
+  const [coverPreview, setCoverPreview] = useState<string | null>(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const supabase = createClient();
+  const fileRef = useRef<HTMLInputElement>(null);
 
   const set = (key: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setForm((f) => ({ ...f, [key]: e.target.value }));
 
   const slugify = (name: string) =>
     name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+
+  const handleCoverChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) { setError("Community picture must be under 5MB"); return; }
+    setError("");
+    setCoverFile(file);
+    setCoverPreview(URL.createObjectURL(file));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,8 +43,20 @@ export default function CreateCommunityPage() {
     if (slug.length < 3) { setError("Community name must be at least 3 characters"); return; }
 
     setLoading(true);
+
+    let cover_url: string | null = null;
+    if (coverFile) {
+      const ext = coverFile.name.split(".").pop();
+      const path = `${user.id}/${Date.now()}.${ext}`;
+      const { error: uploadErr } = await supabase.storage
+        .from("community-covers").upload(path, coverFile);
+      if (uploadErr) { setError(uploadErr.message); setLoading(false); return; }
+      const { data: urlData } = supabase.storage.from("community-covers").getPublicUrl(path);
+      cover_url = urlData.publicUrl;
+    }
+
     const { data, error: insertError } = await supabase.from("communities")
-      .insert({ name: form.name.trim(), slug, description: form.description.trim() || null, creator_id: user.id, member_count: 1 })
+      .insert({ name: form.name.trim(), slug, description: form.description.trim() || null, cover_url, creator_id: user.id, member_count: 1 })
       .select().single();
 
     if (insertError) { setError(insertError.message); setLoading(false); return; }
@@ -57,6 +82,26 @@ export default function CreateCommunityPage() {
       <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-6">
         <p className="text-sm text-gray-500 mb-5">Build a space around a shared interest, identity, or purpose.</p>
         <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="flex flex-col items-center gap-2 pb-1">
+            <div className="relative">
+              <Avatar src={coverPreview} name={form.name || "Community"} size="xl" className="ring-4 ring-gray-100" />
+              <button
+                type="button"
+                onClick={() => fileRef.current?.click()}
+                className="absolute -bottom-1 -right-1 w-8 h-8 bg-[#8B1A6B] rounded-full flex items-center justify-center shadow-md hover:bg-[#7a1760] transition-colors"
+              >
+                <Camera className="w-4 h-4 text-white" />
+              </button>
+              <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleCoverChange} />
+            </div>
+            <button
+              type="button"
+              onClick={() => fileRef.current?.click()}
+              className="text-xs text-[#8B1A6B] font-medium hover:underline"
+            >
+              {coverPreview ? "Change picture" : "Add community picture"}
+            </button>
+          </div>
           <Input
             label="Community Name *"
             placeholder="e.g. Gurujisangat"
