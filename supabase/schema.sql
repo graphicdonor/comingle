@@ -16,6 +16,7 @@ create table if not exists profiles (
   city            text,
   pin_hash        text,
   phone           text,
+  last_active_at  timestamptz,
   created_at      timestamptz default now() not null
 );
 
@@ -70,9 +71,65 @@ create table if not exists comments (
   created_at timestamptz default now() not null
 );
 
+-- Matrimonial service
+create table if not exists matrimonial_profiles (
+  user_id           uuid primary key references profiles(id) on delete cascade,
+  full_name         text not null,
+  date_of_birth     date not null,
+  time_of_birth     time,
+  place_of_birth    text,
+  city              text,
+  height            text,
+  mangalik_dosh     boolean default false not null,
+  income_range      text,
+  marital_status    text check (marital_status in ('Never Married', 'Divorced', 'Widowed', 'Separated')),
+  education         text,
+  employment_status text,
+  created_by        text check (created_by in ('Self', 'Parents', 'Sibling', 'Relative', 'Friend')),
+  about_me          text,
+  photo_urls        text[] default '{}' not null,
+  created_at        timestamptz default now() not null,
+  updated_at        timestamptz default now() not null
+);
+
+create table if not exists matrimonial_invites (
+  sender_id     uuid references profiles(id) on delete cascade,
+  receiver_id   uuid references profiles(id) on delete cascade,
+  status        text default 'pending' not null check (status in ('pending', 'accepted', 'declined', 'cancelled')),
+  created_at    timestamptz default now() not null,
+  responded_at  timestamptz,
+  primary key (sender_id, receiver_id),
+  check (sender_id <> receiver_id)
+);
+
+create table if not exists matrimonial_messages (
+  id           uuid primary key default gen_random_uuid(),
+  sender_id    uuid references profiles(id) on delete cascade,
+  receiver_id  uuid references profiles(id) on delete cascade,
+  content      text not null,
+  created_at   timestamptz default now() not null,
+  check (sender_id <> receiver_id)
+);
+
+create index if not exists idx_matrimonial_messages_pair_a on matrimonial_messages (sender_id, receiver_id, created_at);
+create index if not exists idx_matrimonial_messages_pair_b on matrimonial_messages (receiver_id, sender_id, created_at);
+create index if not exists idx_matrimonial_invites_receiver on matrimonial_invites (receiver_id, status);
+
+-- Shortlist: a personal bookmark of another profile, independent of invites.
+create table if not exists matrimonial_shortlist (
+  user_id             uuid references profiles(id) on delete cascade,
+  shortlisted_user_id uuid references profiles(id) on delete cascade,
+  created_at          timestamptz default now() not null,
+  primary key (user_id, shortlisted_user_id),
+  check (user_id <> shortlisted_user_id)
+);
+
 -- ============================================================
--- Storage bucket for avatars
+-- Storage buckets
 -- Run in Supabase dashboard: Storage > New Bucket > "avatars" (Public)
+-- "matrimonial-photos" (Public, 200KB file limit, jpg/jpeg/png only) —
+-- bucket policies are in supabase/migrations/20260708100100_*.sql; the
+-- bucket itself was created via the Storage API (public, 200KB limit).
 -- ============================================================
 
 -- ============================================================
@@ -98,6 +155,20 @@ returns void language sql security definer as $$
   update posts set like_count = greatest(0, like_count - 1) where id = post_id;
 $$;
 
+-- updated_at on matrimonial_profiles is DB-owned so app code never sets it
+create or replace function set_matrimonial_profile_updated_at()
+returns trigger language plpgsql as $$
+begin
+  new.updated_at = now();
+  return new;
+end;
+$$;
+
+drop trigger if exists trg_matrimonial_profiles_updated_at on matrimonial_profiles;
+create trigger trg_matrimonial_profiles_updated_at
+  before update on matrimonial_profiles
+  for each row execute function set_matrimonial_profile_updated_at();
+
 -- ============================================================
 -- Row Level Security
 -- ============================================================
@@ -107,6 +178,10 @@ alter table community_members enable row level security;
 alter table posts enable row level security;
 alter table post_likes enable row level security;
 alter table comments enable row level security;
+alter table matrimonial_profiles enable row level security;
+alter table matrimonial_invites enable row level security;
+alter table matrimonial_messages enable row level security;
+alter table matrimonial_shortlist enable row level security;
 
 -- Profiles
 create policy "Profiles are public"            on profiles for select  using (true);
@@ -140,6 +215,71 @@ create policy "Users can unlike"        on post_likes for delete using (auth.uid
 create policy "Comments are public"     on comments for select using (true);
 create policy "Users can comment"       on comments for insert with check (auth.uid() = author_id);
 create policy "Authors can delete"      on comments for delete using (auth.uid() = author_id);
+
+-- Matrimonial profiles: visible to self, or to opposite-gender members of a
+-- shared community; only Male/Female profiles.gender may create one.
+create policy "Users can view own matrimonial profile" on matrimonial_profiles for select using (auth.uid() = user_id);
+create policy "Eligible opposite-gender community members are visible" on matrimonial_profiles for select using (
+  exists (
+    select 1 from profiles me, profiles them
+    where me.id = auth.uid() and them.id = matrimonial_profiles.user_id
+      and me.gender in ('Male', 'Female') and them.gender in ('Male', 'Female')
+      and me.gender <> them.gender
+  )
+  and exists (
+    select 1 from community_members cm1
+    join community_members cm2 on cm1.community_id = cm2.community_id
+    where cm1.user_id = auth.uid() and cm2.user_id = matrimonial_profiles.user_id
+  )
+);
+create policy "Eligible users can create own matrimonial profile" on matrimonial_profiles for insert with check (
+  auth.uid() = user_id
+  and exists (select 1 from profiles where id = auth.uid() and gender in ('Male', 'Female'))
+);
+create policy "Users can update own matrimonial profile" on matrimonial_profiles for update using (auth.uid() = user_id);
+create policy "Users can delete own matrimonial profile" on matrimonial_profiles for delete using (auth.uid() = user_id);
+
+-- Matrimonial invites: directional connection requests, gated by the same
+-- gender + shared-community eligibility rule as profile visibility.
+create policy "Participants can view their invites" on matrimonial_invites for select using (auth.uid() = sender_id or auth.uid() = receiver_id);
+create policy "Eligible users can send invites" on matrimonial_invites for insert with check (
+  auth.uid() = sender_id
+  and exists (select 1 from matrimonial_profiles where user_id = sender_id)
+  and exists (
+    select 1 from profiles p1, profiles p2
+    where p1.id = sender_id and p2.id = receiver_id
+      and p1.gender in ('Male', 'Female') and p2.gender in ('Male', 'Female')
+      and p1.gender <> p2.gender
+  )
+  and exists (
+    select 1 from community_members cm1
+    join community_members cm2 on cm1.community_id = cm2.community_id
+    where cm1.user_id = sender_id and cm2.user_id = receiver_id
+  )
+);
+create policy "Senders can cancel or resend invites" on matrimonial_invites for update
+  using (auth.uid() = sender_id and status <> 'accepted')
+  with check (auth.uid() = sender_id and status in ('pending', 'cancelled'));
+create policy "Receivers can respond to invites" on matrimonial_invites for update
+  using (auth.uid() = receiver_id and status = 'pending')
+  with check (auth.uid() = receiver_id and status in ('accepted', 'declined'));
+
+-- Matrimonial messages: only between two users with an accepted invite.
+create policy "Participants can view their messages" on matrimonial_messages for select using (auth.uid() = sender_id or auth.uid() = receiver_id);
+create policy "Accepted matches can message" on matrimonial_messages for insert with check (
+  auth.uid() = sender_id
+  and exists (
+    select 1 from matrimonial_invites mi
+    where mi.status = 'accepted'
+      and ((mi.sender_id = matrimonial_messages.sender_id and mi.receiver_id = matrimonial_messages.receiver_id)
+        or (mi.sender_id = matrimonial_messages.receiver_id and mi.receiver_id = matrimonial_messages.sender_id))
+  )
+);
+
+-- Matrimonial shortlist: owner-only, no eligibility check (private bookmark).
+create policy "Users can view own shortlist" on matrimonial_shortlist for select using (auth.uid() = user_id);
+create policy "Users can add to own shortlist" on matrimonial_shortlist for insert with check (auth.uid() = user_id);
+create policy "Users can remove from own shortlist" on matrimonial_shortlist for delete using (auth.uid() = user_id);
 
 -- ============================================================
 -- Enable Phone Auth in Supabase Dashboard:

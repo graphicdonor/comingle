@@ -9,6 +9,7 @@ export interface Profile {
   state: string | null;
   city: string | null;
   pin_hash: string | null;
+  last_active_at: string | null;
   created_at: string;
 }
 
@@ -51,4 +52,50 @@ export interface Comment {
   post_id: string;
   created_at: string;
   profiles?: Profile;
+}
+
+export interface MatrimonialProfile {
+  user_id: string;
+  full_name: string;
+  date_of_birth: string;
+  time_of_birth: string | null;
+  place_of_birth: string | null;
+  city: string | null;
+  height: string | null;
+  mangalik_dosh: boolean;
+  income_range: string | null;
+  marital_status: "Never Married" | "Divorced" | "Widowed" | "Separated" | null;
+  education: string | null;
+  employment_status: string | null;
+  created_by: "Self" | "Parents" | "Sibling" | "Relative" | "Friend" | null;
+  about_me: string | null;
+  photo_urls: string[];
+  created_at: string;
+  updated_at: string;
+  profiles?: Profile;
+}
+
+export interface MatrimonialInvite {
+  sender_id: string;
+  receiver_id: string;
+  status: "pending" | "accepted" | "declined" | "cancelled";
+  created_at: string;
+  responded_at: string | null;
+  sender?: Profile;
+  receiver?: Profile;
+}
+
+export interface MatrimonialMessage {
+  id: string;
+  sender_id: string;
+  receiver_id: string;
+  content: string;
+  created_at: string;
+  sender?: Profile;
+}
+
+export interface MatrimonialShortlistEntry {
+  user_id: string;
+  shortlisted_user_id: string;
+  created_at: string;
 }
