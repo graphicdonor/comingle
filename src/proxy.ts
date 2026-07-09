@@ -1,13 +1,12 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
-import { createHash } from "crypto";
+import { isAdminTokenValid } from "@/lib/admin-auth";
 
 function isAdminAuthed(request: NextRequest): boolean {
   const secret = process.env.ADMIN_SECRET;
-  if (!secret) return false;
   const token = request.cookies.get("admin-token")?.value;
-  const expected = createHash("sha256").update(secret + "admin-salt").digest("hex");
-  return token === expected;
+  if (!secret || !token) return false;
+  return isAdminTokenValid(token, secret);
 }
 
 export async function proxy(request: NextRequest) {
@@ -45,7 +44,7 @@ export async function proxy(request: NextRequest) {
   );
 
   // Protected routes
-  const protectedPaths = ["/communities/create", "/settings", "/notifications", "/signup-details", "/pin", "/select-communities", "/profile/edit"];
+  const protectedPaths = ["/communities/create", "/settings", "/notifications", "/signup-details", "/pin", "/select-communities", "/profile/edit", "/services/matrimonial"];
   const isProtected = protectedPaths.some((p) => request.nextUrl.pathname.startsWith(p));
 
   if (isProtected) {

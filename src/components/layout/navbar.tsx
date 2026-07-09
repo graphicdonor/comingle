@@ -62,13 +62,13 @@ export function Navbar() {
     router.refresh();
   };
 
-  const navItems = [
+  const navItems: { href: string; icon: LucideIcon; label: string; isCreate?: boolean }[] = [
     { href: "/", icon: Home, label: "Home" },
     { href: "/communities", icon: Users, label: "Communities" },
     { href: "/communities/create", icon: PlusCircle, label: "Create", isCreate: true },
-    ...(navUser?.username
-      ? [{ href: `/profile/${navUser.username}`, icon: User, label: "Profile" }]
-      : [{ href: "/login", icon: User, label: "Profile" }]),
+    navUser?.username
+      ? { href: `/profile/${navUser.username}`, icon: User, label: "Profile" }
+      : { href: "/login", icon: User, label: "Profile" },
   ];
 
   return (
@@ -193,7 +193,7 @@ export function Navbar() {
       {/* ── Bottom floating nav ── */}
       <nav className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-sm">
         <div className="bg-white/95 backdrop-blur-xl rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.12)] border border-gray-100 px-2 py-2 flex items-center justify-around">
-          {navItems.map(({ href, icon: Icon, label, isCreate }: any) => {
+          {navItems.map(({ href, icon: Icon, label, isCreate }) => {
             const active = pathname === href;
             return (
               <Link

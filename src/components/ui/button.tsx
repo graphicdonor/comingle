@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { ButtonHTMLAttributes, forwardRef } from "react";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "dark" | "ghost" | "outline" | "accent";
+  variant?: "dark" | "ghost";
   size?: "sm" | "md" | "lg";
   loading?: boolean;
   fullWidth?: boolean;
@@ -20,8 +20,6 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           {
             "bg-[#1E2952] text-white hover:bg-[#16203D] active:scale-[0.98] shadow-sm": variant === "dark",
             "bg-transparent text-[#6B7280] border border-[#E5E7EB] hover:bg-gray-50 active:scale-[0.98]": variant === "ghost",
-            "bg-transparent text-[#1E2952] border-2 border-[#1E2952] hover:bg-[#1E2952] hover:text-white active:scale-[0.98]": variant === "outline",
-            "bg-[#E8355A] text-white hover:bg-[#D02E50] active:scale-[0.98] shadow-sm": variant === "accent",
           },
           {
             "px-4 py-2 text-sm": size === "sm",

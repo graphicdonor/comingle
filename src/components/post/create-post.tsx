@@ -16,6 +16,7 @@ export function CreatePost({ communityId, authorId }: CreatePostProps) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const router = useRouter();
   const supabase = createClient();
 
@@ -23,19 +24,22 @@ export function CreatePost({ communityId, authorId }: CreatePostProps) {
     e.preventDefault();
     if (!title.trim()) return;
     setLoading(true);
-    const { error } = await supabase.from("posts").insert({
+    setError("");
+    const { error: insertError } = await supabase.from("posts").insert({
       title: title.trim(),
       content: content.trim() || null,
       community_id: communityId,
       author_id: authorId,
     });
     setLoading(false);
-    if (!error) {
-      setTitle("");
-      setContent("");
-      setOpen(false);
-      router.refresh();
+    if (insertError) {
+      setError(insertError.message);
+      return;
     }
+    setTitle("");
+    setContent("");
+    setOpen(false);
+    router.refresh();
   };
 
   if (!open) {
@@ -63,6 +67,7 @@ export function CreatePost({ communityId, authorId }: CreatePostProps) {
         onChange={(e) => setContent(e.target.value)}
         rows={4}
       />
+      {error && <p className="text-sm text-red-500">{error}</p>}
       <div className="flex gap-2 justify-end">
         <Button type="button" variant="ghost" size="sm" onClick={() => setOpen(false)}>
           Cancel

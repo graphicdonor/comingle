@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { PinInput } from "@/components/ui/pin-input";
 import { BrandLogo } from "@/components/ui/brand-logo";
 import { Avatar } from "@/components/ui/avatar";
-import { DEV_MODE, getDevProfile, setDevProfile } from "@/lib/dev-auth";
+import { DEV_MODE, getDevProfile, getDevUser, setDevProfile } from "@/lib/dev-auth";
+import { hashPin } from "@/lib/utils";
 import type { Profile } from "@/lib/types";
 
 export default function PinPage() {
@@ -26,7 +27,10 @@ export default function PinPage() {
     supabase.auth.getUser().then(({ data }) => {
       if (!data.user) { router.push("/signup"); return; }
       supabase.from("profiles").select("*").eq("id", data.user.id).single()
-        .then(({ data: p }) => p && setProfile(p as Profile));
+        .then(({ data: p, error }) => {
+          if (error) { console.error("Failed to load profile:", error.message); return; }
+          setProfile(p as Profile);
+        });
     });
   }, []);
 
@@ -36,14 +40,17 @@ export default function PinPage() {
     setError("");
 
     if (DEV_MODE) {
-      setDevProfile({ pin_hash: btoa(pin) });
+      const devUser = getDevUser();
+      const pin_hash = await hashPin(pin, devUser?.id ?? "dev");
+      setDevProfile({ pin_hash });
       setTimeout(() => { setLoading(false); setDone(true); }, 400);
       return;
     }
 
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
-    const { error } = await supabase.from("profiles").update({ pin_hash: btoa(pin) }).eq("id", user.id);
+    if (!user) { setLoading(false); router.push("/signup"); return; }
+    const pin_hash = await hashPin(pin, user.id);
+    const { error } = await supabase.from("profiles").update({ pin_hash }).eq("id", user.id);
     setLoading(false);
     if (error) { setError(error.message); return; }
     setDone(true);

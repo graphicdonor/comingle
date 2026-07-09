@@ -3,13 +3,10 @@ import { useEffect, useState } from "react";
 import { Avatar } from "@/components/ui/avatar";
 import { MapPin, Calendar, Users, Pencil } from "lucide-react";
 import Link from "next/link";
-import { getDevProfile, getDevUser } from "@/lib/dev-auth";
-import type { Community } from "@/lib/types";
+import { getDevProfile } from "@/lib/dev-auth";
+import { DEV_COMMUNITIES } from "@/lib/dev-data";
 
-const DEV_COMMUNITIES: Community[] = [
-  { id: "1", slug: "gurujisangat", name: "Gurujisangat", description: "Spiritual community", member_count: 842, creator_id: "dev", created_at: "", cover_url: null },
-  { id: "2", slug: "radha-swami-ji", name: "Radha Swami Ji", description: "Satsang community", member_count: 523, creator_id: "dev", created_at: "", cover_url: null },
-];
+const JOINED_COMMUNITIES = DEV_COMMUNITIES.slice(0, 2);
 
 export function DevProfilePageShell({ username }: { username: string }) {
   const [profile, setProfile] = useState<ReturnType<typeof getDevProfile>>(null);
@@ -58,7 +55,7 @@ export function DevProfilePageShell({ username }: { username: string }) {
                 <p className="text-[10px] text-gray-400 uppercase tracking-wide">Posts</p>
               </div>
               <div>
-                <p className="text-lg font-bold text-gray-900">{DEV_COMMUNITIES.length}</p>
+                <p className="text-lg font-bold text-gray-900">{JOINED_COMMUNITIES.length}</p>
                 <p className="text-[10px] text-gray-400 uppercase tracking-wide">Communities</p>
               </div>
             </div>
@@ -97,12 +94,12 @@ export function DevProfilePageShell({ username }: { username: string }) {
           <h2 className="text-base font-bold text-gray-900 flex items-center gap-2">
             <Users className="w-4 h-4 text-[#8B1A6B]" />
             Communities
-            <span className="text-sm font-normal text-gray-400">({DEV_COMMUNITIES.length})</span>
+            <span className="text-sm font-normal text-gray-400">({JOINED_COMMUNITIES.length})</span>
           </h2>
           <Link href="/communities" className="text-xs text-[#8B1A6B] font-semibold hover:underline">Browse →</Link>
         </div>
         <div className="grid grid-cols-2 gap-3">
-          {DEV_COMMUNITIES.map((c) => (
+          {JOINED_COMMUNITIES.map((c) => (
             <div key={c.id} className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#8B1A6B]/15 to-purple-100 flex items-center justify-center text-lg mb-2">
                 🏘️

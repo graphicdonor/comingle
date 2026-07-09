@@ -10,6 +10,13 @@ interface ProfileRow extends Profile {
   community_count?: number;
 }
 
+interface CommunitySummary {
+  id: string;
+  name: string;
+  member_count: number;
+  created_at: string;
+}
+
 export default async function AdminDashboard() {
   const supabase = createAdminClient();
 
@@ -21,7 +28,7 @@ export default async function AdminDashboard() {
   ]);
 
   const profiles = (profilesRes.data ?? []) as ProfileRow[];
-  const communities = communitiesRes.data ?? [];
+  const communities = (communitiesRes.data ?? []) as CommunitySummary[];
   const posts = postsRes.data ?? [];
 
   // Per-user community count
@@ -71,7 +78,7 @@ export default async function AdminDashboard() {
       <div className="bg-[#1A1D27] border border-white/8 rounded-2xl p-5 mb-6">
         <h2 className="text-sm font-bold text-white mb-4">Top Communities</h2>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-          {communities.slice(0, 6).map((c: any) => (
+          {communities.slice(0, 6).map((c) => (
             <div key={c.id} className="flex items-center gap-3 bg-[#0F1117] rounded-xl px-3 py-2.5">
               <div className="w-8 h-8 rounded-lg bg-[#8B1A6B]/15 flex items-center justify-center text-sm flex-shrink-0">🏘️</div>
               <div className="min-w-0">

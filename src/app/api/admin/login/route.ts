@@ -1,15 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createHash } from "crypto";
+import { computeAdminToken, isAdminPasswordValid } from "@/lib/admin-auth";
 
 export async function POST(req: NextRequest) {
-  const { password } = await req.json();
-  const secret = process.env.ADMIN_SECRET;
+  let password: unknown;
+  try {
+    ({ password } = await req.json());
+  } catch {
+    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+  }
 
-  if (!secret || password !== secret) {
+  const secret = process.env.ADMIN_SECRET;
+  if (!secret || typeof password !== "string" || !isAdminPasswordValid(password, secret)) {
     return NextResponse.json({ error: "Invalid password" }, { status: 401 });
   }
 
-  const token = createHash("sha256").update(secret + "admin-salt").digest("hex");
+  const token = computeAdminToken(secret);
   const res = NextResponse.json({ ok: true });
   res.cookies.set("admin-token", token, {
     httpOnly: true,

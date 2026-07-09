@@ -6,17 +6,8 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { DEV_MODE } from "@/lib/dev-auth";
+import { DEV_COMMUNITIES } from "@/lib/dev-data";
 import type { Community } from "@/lib/types";
-
-// In dev mode, use hardcoded community options so the UI works without Supabase
-const DEV_COMMUNITIES: Community[] = [
-  { id: "dev-1", name: "Gurujisangat", slug: "gurujisangat", member_count: 248, description: null, cover_url: null, creator_id: "dev", created_at: "" },
-  { id: "dev-2", name: "Jai Mata Di", slug: "jai-mata-di", member_count: 195, description: null, cover_url: null, creator_id: "dev", created_at: "" },
-  { id: "dev-3", name: "Radha Swami Ji", slug: "radha-swami-ji", member_count: 312, description: null, cover_url: null, creator_id: "dev", created_at: "" },
-  { id: "dev-4", name: "Sai Sangat", slug: "sai-sangat", member_count: 178, description: null, cover_url: null, creator_id: "dev", created_at: "" },
-  { id: "dev-5", name: "Sikh Community", slug: "sikh-community", member_count: 420, description: null, cover_url: null, creator_id: "dev", created_at: "" },
-  { id: "dev-6", name: "Hindu Samaj", slug: "hindu-samaj", member_count: 390, description: null, cover_url: null, creator_id: "dev", created_at: "" },
-];
 
 export default function SelectCommunitiesPage() {
   const [communities, setCommunities] = useState<Community[]>(DEV_MODE ? DEV_COMMUNITIES : []);

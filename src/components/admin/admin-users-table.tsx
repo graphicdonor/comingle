@@ -1,24 +1,16 @@
 "use client";
-import { useState, useMemo } from "react";
+import { Fragment, useState, useMemo } from "react";
 import { Search, ChevronUp, ChevronDown, Users, MapPin, Calendar, Filter } from "lucide-react";
 import type { Profile } from "@/lib/types";
+import { Avatar } from "@/components/ui/avatar";
 
 interface UserRow extends Profile {
   phone?: string;
   community_count?: number;
 }
 
-function Avatar({ src, name }: { src: string | null; name: string }) {
-  const initials = name.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase();
-  if (src) return <img src={src} alt={name} className="w-8 h-8 rounded-full object-cover" />;
-  return (
-    <div className="w-8 h-8 rounded-full bg-[#8B1A6B]/20 text-[#8B1A6B] flex items-center justify-center text-xs font-bold flex-shrink-0">
-      {initials}
-    </div>
-  );
-}
-
 type SortKey = "created_at" | "full_name" | "community_count";
+type SortValue = string | number;
 
 export function AdminUsersTable({ users }: { users: UserRow[] }) {
   const [search, setSearch] = useState("");
@@ -49,13 +41,12 @@ export function AdminUsersTable({ users }: { users: UserRow[] }) {
     }
     if (genderFilter !== "all") list = list.filter((u) => u.gender === genderFilter);
     list = [...list].sort((a, b) => {
-      let av: any = a[sortKey] ?? "";
-      let bv: any = b[sortKey] ?? "";
-      if (sortKey === "community_count") { av = a.community_count ?? 0; bv = b.community_count ?? 0; }
-      if (typeof av === "string") av = av.toLowerCase();
-      if (typeof bv === "string") bv = bv.toLowerCase();
-      if (av < bv) return sortDir === "asc" ? -1 : 1;
-      if (av > bv) return sortDir === "asc" ? 1 : -1;
+      const av: SortValue = sortKey === "community_count" ? a.community_count ?? 0 : a[sortKey] ?? "";
+      const bv: SortValue = sortKey === "community_count" ? b.community_count ?? 0 : b[sortKey] ?? "";
+      const an = typeof av === "string" ? av.toLowerCase() : av;
+      const bn = typeof bv === "string" ? bv.toLowerCase() : bv;
+      if (an < bn) return sortDir === "asc" ? -1 : 1;
+      if (an > bn) return sortDir === "asc" ? 1 : -1;
       return 0;
     });
     return list;
@@ -70,7 +61,7 @@ export function AdminUsersTable({ users }: { users: UserRow[] }) {
     setPage(1);
   };
 
-  const SortIcon = ({ k }: { k: SortKey }) =>
+  const sortIcon = (k: SortKey) =>
     sortKey === k ? (
       sortDir === "asc" ? <ChevronUp className="w-3 h-3 ml-1 inline" /> : <ChevronDown className="w-3 h-3 ml-1 inline" />
     ) : (
@@ -124,7 +115,7 @@ export function AdminUsersTable({ users }: { users: UserRow[] }) {
             <tr className="border-b border-white/8 text-gray-500 uppercase tracking-wider">
               <th className="text-left px-4 py-3 font-semibold">
                 <button onClick={() => toggleSort("full_name")} className="flex items-center hover:text-white transition-colors">
-                  User <SortIcon k="full_name" />
+                  User {sortIcon("full_name")}
                 </button>
               </th>
               <th className="text-left px-4 py-3 font-semibold hidden md:table-cell">Location</th>
@@ -132,12 +123,12 @@ export function AdminUsersTable({ users }: { users: UserRow[] }) {
               <th className="text-left px-4 py-3 font-semibold hidden lg:table-cell">DOB</th>
               <th className="text-left px-4 py-3 font-semibold">
                 <button onClick={() => toggleSort("community_count")} className="flex items-center hover:text-white transition-colors">
-                  Communities <SortIcon k="community_count" />
+                  Communities {sortIcon("community_count")}
                 </button>
               </th>
               <th className="text-left px-4 py-3 font-semibold">
                 <button onClick={() => toggleSort("created_at")} className="flex items-center hover:text-white transition-colors">
-                  Joined <SortIcon k="created_at" />
+                  Joined {sortIcon("created_at")}
                 </button>
               </th>
             </tr>
@@ -151,15 +142,14 @@ export function AdminUsersTable({ users }: { users: UserRow[] }) {
               </tr>
             ) : (
               pageUsers.map((user) => (
-                <>
+                <Fragment key={user.id}>
                   <tr
-                    key={user.id}
                     onClick={() => setExpanded(expanded === user.id ? null : user.id)}
                     className="hover:bg-white/3 cursor-pointer transition-colors"
                   >
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
-                        <Avatar src={user.avatar_url} name={user.full_name || user.username} />
+                        <Avatar src={user.avatar_url} name={user.full_name || user.username} size="sm" />
                         <div>
                           <p className="font-semibold text-white leading-tight">{user.full_name || "—"}</p>
                           <p className="text-gray-500">@{user.username}</p>
@@ -199,7 +189,7 @@ export function AdminUsersTable({ users }: { users: UserRow[] }) {
                   </tr>
                   {/* Expanded row */}
                   {expanded === user.id && (
-                    <tr key={user.id + "-exp"} className="bg-[#0F1117]/60">
+                    <tr className="bg-[#0F1117]/60">
                       <td colSpan={6} className="px-4 py-4">
                         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 text-xs">
                           <Detail label="Full name" value={user.full_name} />
@@ -214,7 +204,7 @@ export function AdminUsersTable({ users }: { users: UserRow[] }) {
                       </td>
                     </tr>
                   )}
-                </>
+                </Fragment>
               ))
             )}
           </tbody>

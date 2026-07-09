@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { BrandLogo } from "@/components/ui/brand-logo";
-import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export default function OnboardingPage() {
   return (
@@ -44,12 +44,24 @@ export default function OnboardingPage() {
           Join communities that matter to you — from spiritual groups to neighbourhood networks.
         </p>
         <div className="flex gap-3">
-          <Button variant="dark" size="lg" fullWidth>
-            <Link href="/signup" className="w-full">Sign up</Link>
-          </Button>
-          <Button variant="ghost" size="lg" fullWidth>
-            <Link href="/login" className="w-full">Login</Link>
-          </Button>
+          <Link
+            href="/signup"
+            className={cn(
+              "inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-all duration-200 select-none w-full px-8 py-4 text-base",
+              "bg-[#1E2952] text-white hover:bg-[#16203D] active:scale-[0.98] shadow-sm"
+            )}
+          >
+            Sign up
+          </Link>
+          <Link
+            href="/login"
+            className={cn(
+              "inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-all duration-200 select-none w-full px-8 py-4 text-base",
+              "bg-transparent text-[#6B7280] border border-[#E5E7EB] hover:bg-gray-50 active:scale-[0.98]"
+            )}
+          >
+            Login
+          </Link>
         </div>
       </div>
     </div>
