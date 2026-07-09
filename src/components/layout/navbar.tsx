@@ -20,6 +20,7 @@ export function Navbar() {
   const supabase = createClient();
   const [navUser, setNavUser] = useState<NavUser | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const hideBottomNav = pathname.startsWith("/services/matrimonial/chat/");
 
   useEffect(() => {
     if (DEV_MODE) {
@@ -184,7 +185,11 @@ export function Navbar() {
         </div>
       )}
 
-      {/* ── Bottom floating nav ── */}
+      {/* ── Bottom floating nav ──
+          Hidden on the matrimonial chat thread — it already has its own
+          fixed compose bar at the bottom, which would otherwise compete
+          with this for the same screen space. */}
+      {!hideBottomNav && (
       <nav className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-sm">
         <div className="bg-white/95 backdrop-blur-xl rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.12)] border border-gray-100 px-2 py-2 flex items-center justify-around">
           {navItems.map(({ href, icon: Icon, label, isCreate }) => {
@@ -209,6 +214,7 @@ export function Navbar() {
           })}
         </div>
       </nav>
+      )}
     </>
   );
 }

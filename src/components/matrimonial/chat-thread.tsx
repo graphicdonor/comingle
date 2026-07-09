@@ -87,7 +87,7 @@ export function ChatThread({ currentUserId, currentUserAvatar, partner, initialM
   const partnerName = partner.full_name || partner.username;
 
   return (
-    <div className="flex flex-col h-[calc(100vh-220px)] min-h-[400px]">
+    <div className="flex flex-col h-[calc(100vh-140px)] min-h-[400px]">
       <div className="flex items-center gap-3 mb-4">
         <Link href="/services/matrimonial/chat" className="w-9 h-9 rounded-full bg-orange-100 flex items-center justify-center flex-shrink-0">
           <ChevronLeft className="h-5 w-5 text-orange-500" />
