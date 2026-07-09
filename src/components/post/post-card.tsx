@@ -69,7 +69,7 @@ export function PostCard({ post, currentUserId, liked: initialLiked = false, can
   const community = post.communities;
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 p-5 hover:shadow-sm transition-shadow">
+    <div className="bg-white rounded-2xl p-5 hover:shadow-sm transition-shadow">
       <div className="flex items-start gap-3">
         {author && (
           <Link href={`/profile/${author.username}`}>
@@ -152,7 +152,7 @@ export function PostCard({ post, currentUserId, liked: initialLiked = false, can
             {menuOpen && (
               <>
                 <div className="fixed inset-0 z-10" onClick={() => { setMenuOpen(false); setConfirmingDelete(false); }} />
-                <div className="absolute right-0 top-9 z-20 bg-white rounded-xl shadow-lg border border-gray-100 py-1 w-48">
+                <div className="absolute right-0 top-9 z-20 bg-white rounded-xl shadow-lg py-1 w-48">
                   {!confirmingDelete ? (
                     <button
                       onClick={() => setConfirmingDelete(true)}

@@ -19,7 +19,7 @@ type SortValue = (typeof SORT_OPTIONS)[number]["value"];
 export default async function MatrimonialBrowsePage({ searchParams }: { searchParams: Promise<{ sort?: string }> }) {
   if (DEV_MODE) {
     return (
-      <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-8 text-center">
+      <div className="bg-white rounded-3xl shadow-sm p-8 text-center">
         <p className="text-sm text-gray-500 mb-3">
           Browsing requires two real accounts to be meaningful, so it&apos;s only available against the live backend.
         </p>
@@ -152,7 +152,7 @@ export default async function MatrimonialBrowsePage({ searchParams }: { searchPa
       </div>
 
       {sorted.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-gray-100 p-8 text-center text-sm text-gray-400">
+        <div className="bg-white rounded-2xl p-8 text-center text-sm text-gray-400">
           No matching profiles yet in your communities. Only members of communities you&apos;ve joined who have created a matrimonial profile appear here.
         </div>
       ) : (

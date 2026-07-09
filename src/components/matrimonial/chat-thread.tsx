@@ -104,7 +104,7 @@ export function ChatThread({ currentUserId, currentUserAvatar, partner, initialM
           {menuOpen && (
             <>
               <div className="fixed inset-0 z-10" onClick={() => setMenuOpen(false)} />
-              <div className="absolute right-0 top-9 z-20 bg-white rounded-xl shadow-lg border border-gray-100 py-1 w-40">
+              <div className="absolute right-0 top-9 z-20 bg-white rounded-xl shadow-lg py-1 w-40">
                 <button
                   onClick={() => router.push(`/services/matrimonial/${partner.id}`)}
                   className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
@@ -117,7 +117,7 @@ export function ChatThread({ currentUserId, currentUserAvatar, partner, initialM
         </div>
       </div>
 
-      <div ref={listRef} className="flex-1 overflow-y-auto bg-white rounded-3xl border border-gray-100 p-4 space-y-1">
+      <div ref={listRef} className="flex-1 overflow-y-auto bg-white rounded-3xl p-4 space-y-1">
         {messages.length === 0 ? (
           <p className="flex items-center justify-center gap-1.5 text-sm text-gray-400 mt-8">
             Say hello <Hand className="h-4 w-4" strokeWidth={1.75} />

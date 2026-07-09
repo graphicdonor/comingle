@@ -88,7 +88,7 @@ export default async function CommunitiesPage() {
             ))}
           </div>
         ) : (
-          <div className="text-center py-12 bg-white rounded-2xl border border-gray-100">
+          <div className="text-center py-12 bg-white rounded-2xl">
             <p className="text-gray-400 text-sm">No more communities to discover.</p>
             {isLoggedIn && (
               <Link href="/communities/create" className="text-[#8B1A6B] font-semibold text-sm mt-2 inline-block hover:underline">

@@ -88,7 +88,7 @@ function ProfileView({
   return (
     <div className="max-w-xl mx-auto">
       {/* Profile header card */}
-      <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden mb-5">
+      <div className="bg-white rounded-3xl shadow-sm overflow-hidden mb-5">
         {/* Cover */}
         <div className="h-28 bg-gradient-to-r from-[#8B1A6B]/30 via-purple-100 to-[#2A5C27]/20 relative z-0">
           {isOwn && (
@@ -172,7 +172,7 @@ function ProfileView({
             ))}
           </div>
         ) : (
-          <div className="bg-white rounded-2xl border border-gray-100 p-6 text-center text-sm text-gray-400">
+          <div className="bg-white rounded-2xl p-6 text-center text-sm text-gray-400">
             {isOwn ? "You haven't joined any communities yet." : `@${p.username} hasn't joined any communities.`}
             {isOwn && (
               <Link href="/communities" className="text-[#8B1A6B] font-semibold block mt-2 hover:underline">
@@ -191,7 +191,7 @@ function ProfileView({
         </h2>
         <div className="space-y-3">
           {posts.length === 0 ? (
-            <div className="bg-white rounded-2xl border border-gray-100 p-8 text-center text-sm text-gray-400">
+            <div className="bg-white rounded-2xl p-8 text-center text-sm text-gray-400">
               No posts yet.
             </div>
           ) : (

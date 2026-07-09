@@ -40,7 +40,7 @@ export default function AdminLoginPage() {
           <p className="text-sm text-gray-500 mt-1">Sign in to manage the platform</p>
         </div>
 
-        <form onSubmit={handleLogin} className="bg-[#1A1D27] rounded-2xl border border-white/8 p-6 space-y-4">
+        <form onSubmit={handleLogin} className="bg-[#1A1D27] rounded-2xl p-6 space-y-4">
           <div>
             <label className="block text-xs font-semibold text-gray-400 mb-2 uppercase tracking-wider">
               Admin Password

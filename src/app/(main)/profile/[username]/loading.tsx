@@ -1,7 +1,7 @@
 export default function ProfileLoading() {
   return (
     <div className="max-w-xl mx-auto animate-pulse">
-      <div className="rounded-3xl border border-gray-100 overflow-hidden mb-5">
+      <div className="rounded-3xl overflow-hidden mb-5">
         <div className="h-28 bg-gray-100" />
         <div className="px-5 pb-5">
           <div className="-mt-10 mb-4 h-20 w-20 rounded-full bg-gray-200 ring-4 ring-white" />

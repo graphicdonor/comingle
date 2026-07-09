@@ -21,7 +21,7 @@ export function DevProfilePageShell({ username }: { username: string }) {
   if (!profile) {
     return (
       <div className="max-w-xl mx-auto">
-        <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-10 text-center text-gray-400 text-sm">
+        <div className="bg-white rounded-3xl shadow-sm p-10 text-center text-gray-400 text-sm">
           Profile not found.
         </div>
       </div>
@@ -33,7 +33,7 @@ export function DevProfilePageShell({ username }: { username: string }) {
   return (
     <div className="max-w-xl mx-auto">
       {/* Header card */}
-      <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden mb-5">
+      <div className="bg-white rounded-3xl shadow-sm overflow-hidden mb-5">
         <div className="h-28 bg-gradient-to-r from-[#8B1A6B]/30 via-purple-100 to-[#2A5C27]/20 relative">
           {isOwn && (
             <Link
@@ -100,7 +100,7 @@ export function DevProfilePageShell({ username }: { username: string }) {
         </div>
         <div className="grid grid-cols-2 gap-3">
           {JOINED_COMMUNITIES.map((c) => (
-            <div key={c.id} className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
+            <div key={c.id} className="bg-white rounded-2xl p-4 shadow-sm">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#8B1A6B]/15 to-purple-100 flex items-center justify-center mb-2">
                 <Users className="h-5 w-5 text-[#8B1A6B]" strokeWidth={1.75} />
               </div>
@@ -114,7 +114,7 @@ export function DevProfilePageShell({ username }: { username: string }) {
       {/* Posts */}
       <section>
         <h2 className="text-base font-bold text-gray-900 mb-3">Posts <span className="text-sm font-normal text-gray-400">(0)</span></h2>
-        <div className="bg-white rounded-2xl border border-gray-100 p-8 text-center text-sm text-gray-400">
+        <div className="bg-white rounded-2xl p-8 text-center text-sm text-gray-400">
           No posts yet.
         </div>
       </section>

@@ -69,7 +69,7 @@ export function AdminUsersTable({ users }: { users: UserRow[] }) {
     );
 
   return (
-    <div className="bg-[#1A1D27] border border-white/8 rounded-2xl overflow-hidden">
+    <div className="bg-[#1A1D27] rounded-2xl overflow-hidden">
       {/* Toolbar */}
       <div className="p-4 border-b border-white/8 flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
         <div>

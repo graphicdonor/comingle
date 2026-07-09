@@ -37,7 +37,7 @@ export default function TermsPage() {
       <h1 className="text-xl font-bold text-gray-900 mb-1">Terms & Conditions</h1>
       <p className="text-xs text-gray-400 mb-6">Last updated: July 2026</p>
 
-      <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 space-y-5">
+      <div className="bg-white rounded-3xl shadow-sm p-6 space-y-5">
         {SECTIONS.map((s) => (
           <div key={s.title}>
             <h2 className="font-semibold text-gray-900 text-sm mb-1">{s.title}</h2>

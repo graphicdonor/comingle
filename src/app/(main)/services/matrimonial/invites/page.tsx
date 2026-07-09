@@ -41,7 +41,7 @@ export default async function MatrimonialInvitesPage() {
       <section>
         <h2 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Received</h2>
         {receivedInvites.length === 0 ? (
-          <div className="bg-white rounded-2xl border border-gray-100 p-6 text-center text-sm text-gray-400">
+          <div className="bg-white rounded-2xl p-6 text-center text-sm text-gray-400">
             No invites received yet.
           </div>
         ) : (
@@ -62,7 +62,7 @@ export default async function MatrimonialInvitesPage() {
       <section>
         <h2 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Sent</h2>
         {sentInvites.length === 0 ? (
-          <div className="bg-white rounded-2xl border border-gray-100 p-6 text-center text-sm text-gray-400">
+          <div className="bg-white rounded-2xl p-6 text-center text-sm text-gray-400">
             You haven&apos;t sent any invites yet.
           </div>
         ) : (

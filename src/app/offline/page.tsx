@@ -14,7 +14,7 @@ export default function OfflinePage() {
       </div>
       <p className="text-sm text-[#2A5C27] font-medium mb-8">Uniting Communities</p>
 
-      <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-8 max-w-sm w-full">
+      <div className="bg-white rounded-3xl shadow-sm p-8 max-w-sm w-full">
         <h1 className="text-xl font-bold text-gray-900 mb-2">You&apos;re offline</h1>
         <p className="text-sm text-gray-500 mb-6">
           It looks like you lost your internet connection. Check your network and try again.

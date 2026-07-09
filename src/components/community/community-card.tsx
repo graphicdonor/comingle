@@ -2,7 +2,6 @@ import Link from "next/link";
 import { Users } from "lucide-react";
 import type { Community } from "@/lib/types";
 import { Avatar } from "@/components/ui/avatar";
-import { cn } from "@/lib/utils";
 
 interface CommunityCardProps {
   community: Community;
@@ -12,10 +11,7 @@ interface CommunityCardProps {
 export function CommunityCard({ community, isMember }: CommunityCardProps) {
   return (
     <Link href={`/communities/${community.slug}`} className="block">
-      <div className={cn(
-        "bg-white rounded-2xl border-2 p-4 hover:shadow-md transition-all hover:-translate-y-0.5 flex flex-col items-center text-center gap-2",
-        isMember ? "border-[#8B1A6B]/30" : "border-gray-100"
-      )}>
+      <div className="bg-white rounded-2xl p-4 hover:shadow-md transition-all hover:-translate-y-0.5 flex flex-col items-center text-center gap-2">
         <Avatar src={community.cover_url} name={community.name} size="lg" />
         <div className="min-w-0 w-full">
           <h3 className="font-semibold text-gray-900 text-sm truncate">{community.name}</h3>

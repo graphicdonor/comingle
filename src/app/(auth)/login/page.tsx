@@ -51,7 +51,7 @@ export default function LoginPage() {
     <div className="w-full max-w-sm flex flex-col items-center gap-6">
       <BrandLogo size="md" className="mt-4" withBackdrop />
 
-      <div className="w-full bg-white rounded-3xl shadow-lg border border-gray-100 p-7">
+      <div className="w-full bg-white rounded-3xl shadow-lg p-7">
         <h2 className="text-xl font-bold text-gray-900 text-center mb-1">Sign in with mobile number</h2>
         <p className="text-sm text-gray-500 text-center mb-6">You will receive a 6 digit code to verify your mobile number</p>
 

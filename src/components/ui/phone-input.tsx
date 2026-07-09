@@ -37,7 +37,7 @@ export function PhoneInput({ value, onChange, error }: PhoneInputProps) {
             <ChevronDown className="h-3.5 w-3.5 text-gray-400" />
           </button>
           {open && (
-            <div className="absolute top-full left-0 z-50 mt-1 w-40 bg-white rounded-xl shadow-lg border border-gray-100 py-1 max-h-52 overflow-y-auto">
+            <div className="absolute top-full left-0 z-50 mt-1 w-40 bg-white rounded-xl shadow-lg py-1 max-h-52 overflow-y-auto">
               {COUNTRY_CODES.map((c) => (
                 <button
                   key={c.code}

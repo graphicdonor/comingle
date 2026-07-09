@@ -83,7 +83,7 @@ export default function SelectCommunitiesPage() {
         <h1 className="text-lg font-bold text-gray-900">Register</h1>
       </div>
 
-      <div className="flex-1 bg-white rounded-3xl mx-3 shadow-sm border border-gray-100 p-6">
+      <div className="flex-1 bg-white rounded-3xl mx-3 shadow-sm p-6">
         <h2 className="font-semibold text-gray-900 mb-1">
           Please choose any community in which you belongs to
         </h2>

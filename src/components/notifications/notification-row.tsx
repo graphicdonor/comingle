@@ -26,8 +26,8 @@ export function NotificationRow({ notification }: NotificationRowProps) {
     <a
       href={notification.link}
       className={cn(
-        "flex items-center gap-3 p-3 rounded-2xl border transition-colors",
-        unread ? "bg-[#8B1A6B]/5 border-[#8B1A6B]/10" : "bg-white border-gray-100"
+        "flex items-center gap-3 p-3 rounded-2xl transition-colors",
+        unread ? "bg-[#8B1A6B]/5" : "bg-white"
       )}
     >
       <Avatar src={notification.actor?.avatar_url ?? null} name={name} size="sm" />

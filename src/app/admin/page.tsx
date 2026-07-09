@@ -64,7 +64,7 @@ export default async function AdminDashboard() {
       {/* Stat cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         {stats.map(({ label, value, icon: Icon, color, bg }) => (
-          <div key={label} className="bg-[#1A1D27] border border-white/8 rounded-2xl p-5">
+          <div key={label} className="bg-[#1A1D27] rounded-2xl p-5">
             <div className={`inline-flex items-center justify-center w-9 h-9 rounded-xl border ${bg} mb-3`}>
               <Icon className={`w-4 h-4 ${color}`} />
             </div>
@@ -75,7 +75,7 @@ export default async function AdminDashboard() {
       </div>
 
       {/* Top communities */}
-      <div className="bg-[#1A1D27] border border-white/8 rounded-2xl p-5 mb-6">
+      <div className="bg-[#1A1D27] rounded-2xl p-5 mb-6">
         <h2 className="text-sm font-bold text-white mb-4">Top Communities</h2>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
           {communities.slice(0, 6).map((c) => (

@@ -52,7 +52,7 @@ export default function SettingsPage() {
       <h1 className="text-xl font-bold text-gray-900 mb-4">Settings</h1>
 
       {/* Account */}
-      <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-5 mb-4">
+      <div className="bg-white rounded-3xl shadow-sm p-5 mb-4">
         <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Account</p>
         {profile && (
           <Link href="/profile/edit" className="flex items-center gap-3 -mx-1 px-1 py-1 rounded-xl hover:bg-gray-50 transition-colors">
@@ -67,7 +67,7 @@ export default function SettingsPage() {
       </div>
 
       {/* Legal */}
-      <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-5 mb-4">
+      <div className="bg-white rounded-3xl shadow-sm p-5 mb-4">
         <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Legal</p>
         <Link href="/terms" className="flex items-center justify-between py-2.5 text-sm text-gray-700 hover:text-gray-900">
           Terms & Conditions <ChevronRight className="h-4 w-4 text-gray-300" />
@@ -78,7 +78,7 @@ export default function SettingsPage() {
       </div>
 
       {/* Session */}
-      <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-5">
+      <div className="bg-white rounded-3xl shadow-sm p-5">
         <button
           onClick={handleLogout}
           className="w-full flex items-center gap-3 py-1 text-sm font-semibold text-red-500 hover:text-red-600 transition-colors"

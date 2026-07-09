@@ -43,7 +43,7 @@ export default async function CommunityPage({ params }: { params: Promise<{ id: 
   return (
     <div className="max-w-2xl mx-auto">
       {/* Community header */}
-      <div className="bg-white rounded-3xl border border-gray-100 p-6 mb-6 shadow-sm">
+      <div className="bg-white rounded-3xl p-6 mb-6 shadow-sm">
         <div className="flex items-start gap-4">
           <Avatar src={c.cover_url} name={c.name} size="xl" />
           <div className="flex-1 min-w-0">

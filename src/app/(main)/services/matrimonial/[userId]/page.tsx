@@ -53,7 +53,7 @@ export default async function MatrimonialUserProfilePage({ params }: { params: P
   else if (asReceiver) relationship = { kind: "received", status: asReceiver.status as "declined" | "cancelled" };
 
   return (
-    <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden p-4">
+    <div className="bg-white rounded-3xl shadow-sm overflow-hidden p-4">
       <div className="relative">
         <PhotoCarousel photos={profile.photo_urls} name={profile.full_name} />
         <div className="absolute top-3 right-3">

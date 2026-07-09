@@ -68,7 +68,7 @@ export default function PinPage() {
 
       <h2 className="text-xl font-bold text-gray-900 mb-1">Welcome, {name}</h2>
 
-      <div className="w-full bg-white rounded-3xl shadow-lg border border-gray-100 p-7 mt-4">
+      <div className="w-full bg-white rounded-3xl shadow-lg p-7 mt-4">
         {!done ? (
           <>
             <p className="text-center text-sm text-gray-500 mb-6">Create 4 digit PIN for future login</p>

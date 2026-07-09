@@ -39,7 +39,7 @@ export function InviteRow({ invite, role, otherProfile, otherMatrimonialAge }: I
   const name = otherProfile?.full_name || otherProfile?.username || "Member";
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 p-4 flex items-center gap-3">
+    <div className="bg-white rounded-2xl p-4 flex items-center gap-3">
       <Link href={`/services/matrimonial/${otherUserId}`}>
         <Avatar src={otherProfile?.avatar_url ?? null} name={name} size="md" />
       </Link>

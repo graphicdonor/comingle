@@ -71,7 +71,7 @@ export function MemberRow({ communityId, userId, role: initialRole, profile, vie
   const name = profile.full_name || profile.username;
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 p-3.5">
+    <div className="bg-white rounded-2xl p-3.5">
       <div className="flex items-center gap-3">
         <Avatar src={profile.avatar_url} name={name} size="sm" />
         <div className="flex-1 min-w-0">

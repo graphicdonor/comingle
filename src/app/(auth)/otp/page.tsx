@@ -96,7 +96,7 @@ export default function OtpPage() {
     <div className="w-full max-w-sm flex flex-col items-center gap-6">
       <BrandLogo size="md" className="mt-4" withBackdrop />
 
-      <div className="w-full bg-white rounded-3xl shadow-lg border border-gray-100 p-7">
+      <div className="w-full bg-white rounded-3xl shadow-lg p-7">
         <h2 className="text-xl font-bold text-gray-900 text-center mb-2">
           We have sent a {DEV_MODE ? 4 : 6} digit OTP to
         </h2>

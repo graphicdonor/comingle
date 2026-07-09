@@ -242,7 +242,7 @@ export default function MatrimonialProfileEditPage() {
         <h2 className="text-lg font-bold text-gray-900">Create Matrimony Profile</h2>
       </div>
 
-      <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 space-y-4">
+      <div className="bg-white rounded-3xl shadow-sm p-6 space-y-4">
         <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Personal Information</p>
 
         <Input label="Full Name *" value={form.full_name} onChange={set("full_name")} placeholder="Enter your full name" />

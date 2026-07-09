@@ -142,7 +142,7 @@ export default function EditProfilePage() {
       </div>
 
       {/* Avatar */}
-      <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 mb-4">
+      <div className="bg-white rounded-3xl shadow-sm p-6 mb-4">
         <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">Profile Photo</p>
         <div className="flex items-center gap-5">
           <div className="relative">
@@ -168,7 +168,7 @@ export default function EditProfilePage() {
       </div>
 
       {/* Basic info */}
-      <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 mb-4 space-y-4">
+      <div className="bg-white rounded-3xl shadow-sm p-6 mb-4 space-y-4">
         <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Basic Info</p>
 
         <Field label="Full Name" required>
@@ -206,7 +206,7 @@ export default function EditProfilePage() {
       </div>
 
       {/* Personal details */}
-      <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 mb-4 space-y-4">
+      <div className="bg-white rounded-3xl shadow-sm p-6 mb-4 space-y-4">
         <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Personal Details</p>
 
         <Field label="Date of Birth">
@@ -239,7 +239,7 @@ export default function EditProfilePage() {
       </div>
 
       {/* Location */}
-      <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 mb-6 space-y-4">
+      <div className="bg-white rounded-3xl shadow-sm p-6 mb-6 space-y-4">
         <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Location</p>
 
         <Field label="State">

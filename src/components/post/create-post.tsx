@@ -78,7 +78,7 @@ export function CreatePost({ communityId, authorId }: CreatePostProps) {
     return (
       <button
         onClick={() => setOpen(true)}
-        className="w-full bg-white rounded-2xl border border-gray-100 p-4 text-left text-gray-400 hover:border-indigo-300 hover:text-gray-600 transition-colors"
+        className="w-full bg-white rounded-2xl p-4 text-left text-gray-400 hover:border-indigo-300 hover:text-gray-600 transition-colors"
       >
         Write something in this community...
       </button>
@@ -86,7 +86,7 @@ export function CreatePost({ communityId, authorId }: CreatePostProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white rounded-2xl border border-indigo-200 p-5 space-y-3">
+    <form onSubmit={handleSubmit} className="bg-white rounded-2xl p-5 space-y-3">
       <Input
         placeholder="Post title"
         value={title}
@@ -101,7 +101,7 @@ export function CreatePost({ communityId, authorId }: CreatePostProps) {
         rows={4}
       />
       {imagePreview && (
-        <div className="relative w-full rounded-xl overflow-hidden border border-gray-100">
+        <div className="relative w-full rounded-xl overflow-hidden">
           <img src={imagePreview} alt="Post attachment preview" className="w-full max-h-56 object-cover" />
           <button
             type="button"

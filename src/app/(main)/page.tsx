@@ -74,7 +74,7 @@ export default async function HomePage() {
         <h2 className="text-base font-bold text-gray-900 mb-3">Surveys</h2>
         <div className="flex gap-3 overflow-x-auto pb-1">
           {SURVEYS.map((s) => (
-            <div key={s.id} className="flex-shrink-0 w-60 bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
+            <div key={s.id} className="flex-shrink-0 w-60 bg-white rounded-2xl p-4 shadow-sm">
               <h3 className="font-semibold text-sm text-gray-900 mb-1.5 leading-tight">{s.title}</h3>
               <p className="text-xs text-gray-500 mb-3 line-clamp-2">{s.desc}</p>
               <button className="bg-[#E8355A] text-white text-xs font-bold px-4 py-1.5 rounded-full hover:bg-[#D02E50] transition-colors">
@@ -103,7 +103,7 @@ export default async function HomePage() {
         </section>
       ) : (
         !user && (
-          <section className="bg-white rounded-2xl border border-gray-100 p-6 text-center">
+          <section className="bg-white rounded-2xl p-6 text-center">
             <p className="text-gray-500 text-sm mb-4">Join communities to see posts in your feed</p>
             <div className="flex gap-3 justify-center">
               <Link href="/signup" className="px-5 py-2.5 bg-[#1E2952] text-white rounded-full font-semibold text-sm hover:bg-[#16203D] transition-colors">

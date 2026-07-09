@@ -36,7 +36,7 @@ export function CommunityRules({ communityId, rules: initialRules, canEdit }: Co
 
   if (editing) {
     return (
-      <div className="bg-white rounded-2xl border border-indigo-200 p-5 mb-4 space-y-3">
+      <div className="bg-white rounded-2xl p-5 mb-4 space-y-3">
         <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Community Rules</p>
         <Textarea
           placeholder="e.g. 1. Be respectful. 2. No spam. 3. Stay on topic."
@@ -58,7 +58,7 @@ export function CommunityRules({ communityId, rules: initialRules, canEdit }: Co
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 p-5 mb-4">
+    <div className="bg-white rounded-2xl p-5 mb-4">
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-2">
           <ScrollText className="h-4 w-4 text-indigo-500" />

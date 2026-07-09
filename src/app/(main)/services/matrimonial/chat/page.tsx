@@ -23,7 +23,7 @@ export default async function MatrimonialChatListPage() {
     return (
       <div>
         <ActivitiesSubTabs active="chat" />
-        <div className="bg-white rounded-2xl border border-gray-100 p-8 text-center text-sm text-gray-400">
+        <div className="bg-white rounded-2xl p-8 text-center text-sm text-gray-400">
           No conversations yet — accept an interest to start chatting.
         </div>
       </div>

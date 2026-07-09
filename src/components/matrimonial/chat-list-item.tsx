@@ -15,7 +15,7 @@ export function ChatListItem({ partner, lastMessage }: ChatListItemProps) {
   return (
     <Link
       href={`/services/matrimonial/chat/${partner.id}`}
-      className="flex items-center gap-3 bg-white rounded-2xl border border-gray-100 p-4 hover:shadow-sm transition-shadow"
+      className="flex items-center gap-3 bg-white rounded-2xl p-4 hover:shadow-sm transition-shadow"
     >
       <Avatar src={partner.avatar_url} name={name} size="md" />
       <div className="flex-1 min-w-0">

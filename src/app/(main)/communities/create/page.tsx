@@ -79,7 +79,7 @@ export default function CreateCommunityPage() {
         <h1 className="text-lg font-bold text-gray-900">Create Community</h1>
       </div>
 
-      <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-6">
+      <div className="bg-white rounded-3xl shadow-sm p-6">
         <p className="text-sm text-gray-500 mb-5">Build a space around a shared interest, identity, or purpose.</p>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="flex flex-col items-center gap-2 pb-1">
