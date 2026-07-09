@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ChevronLeft, Send, MoreVertical } from "lucide-react";
+import { ChevronLeft, Send, MoreVertical, Hand } from "lucide-react";
 import Link from "next/link";
 import { Avatar } from "@/components/ui/avatar";
 import { createClient } from "@/lib/supabase/client";
@@ -119,7 +119,9 @@ export function ChatThread({ currentUserId, currentUserAvatar, partner, initialM
 
       <div ref={listRef} className="flex-1 overflow-y-auto bg-white rounded-3xl border border-gray-100 p-4 space-y-1">
         {messages.length === 0 ? (
-          <p className="text-center text-sm text-gray-400 mt-8">Say hello 👋</p>
+          <p className="flex items-center justify-center gap-1.5 text-sm text-gray-400 mt-8">
+            Say hello <Hand className="h-4 w-4" strokeWidth={1.75} />
+          </p>
         ) : (
           messages.map((m, i) => {
             const mine = m.sender_id === currentUserId;

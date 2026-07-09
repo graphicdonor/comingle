@@ -8,6 +8,7 @@ import { PhoneInput } from "@/components/ui/phone-input";
 import { BrandLogo } from "@/components/ui/brand-logo";
 import { DEV_MODE, DEV_PHONE, DEV_OTP, setDevUser } from "@/lib/dev-auth";
 import { GoogleButton } from "@/components/ui/google-button";
+import { Wrench } from "lucide-react";
 
 export default function LoginPage() {
   const [phone, setPhone] = useState("");
@@ -56,7 +57,7 @@ export default function LoginPage() {
 
         {DEV_MODE && (
           <div className="mb-4 px-3 py-2 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-700 flex items-center gap-2">
-            <span>🔧</span>
+            <Wrench className="h-3.5 w-3.5 flex-shrink-0" strokeWidth={2} />
             <span>Dev mode: use <strong>{DEV_PHONE}</strong> → OTP <strong>{DEV_OTP}</strong></span>
           </div>
         )}

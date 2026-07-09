@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ChevronLeft, User, CheckCircle2 } from "lucide-react";
+import { ChevronLeft, User, CheckCircle2, Image as ImageIcon, Camera } from "lucide-react";
 import { DEV_MODE, getDevUser, setDevProfile } from "@/lib/dev-auth";
 
 const GENDERS = ["Male", "Female", "Other", "Prefer not to say"];
@@ -340,13 +340,13 @@ export default function SignupDetailsPage() {
               className="w-full flex items-center gap-3 py-3 px-1 text-sm text-gray-700 hover:bg-gray-50 rounded-xl"
               onClick={() => { fileRef.current?.click(); setShowPhotoSheet(false); }}
             >
-              <span className="text-xl">🖼️</span> Choose from Gallery
+              <ImageIcon className="h-5 w-5 text-gray-500" strokeWidth={1.75} /> Choose from Gallery
             </button>
             <button
               className="w-full flex items-center gap-3 py-3 px-1 text-sm text-gray-700 hover:bg-gray-50 rounded-xl"
               onClick={() => { fileRef.current?.click(); setShowPhotoSheet(false); }}
             >
-              <span className="text-xl">📷</span> Click Photo
+              <Camera className="h-5 w-5 text-gray-500" strokeWidth={1.75} /> Click Photo
             </button>
           </div>
         </div>

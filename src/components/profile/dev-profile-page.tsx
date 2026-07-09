@@ -101,8 +101,8 @@ export function DevProfilePageShell({ username }: { username: string }) {
         <div className="grid grid-cols-2 gap-3">
           {JOINED_COMMUNITIES.map((c) => (
             <div key={c.id} className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#8B1A6B]/15 to-purple-100 flex items-center justify-center text-lg mb-2">
-                🏘️
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#8B1A6B]/15 to-purple-100 flex items-center justify-center mb-2">
+                <Users className="h-5 w-5 text-[#8B1A6B]" strokeWidth={1.75} />
               </div>
               <p className="text-sm font-semibold text-gray-900 leading-tight">{c.name}</p>
               <p className="text-xs text-gray-400 mt-0.5">{c.member_count.toLocaleString()} members</p>

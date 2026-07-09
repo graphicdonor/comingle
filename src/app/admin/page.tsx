@@ -80,7 +80,9 @@ export default async function AdminDashboard() {
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
           {communities.slice(0, 6).map((c) => (
             <div key={c.id} className="flex items-center gap-3 bg-[#0F1117] rounded-xl px-3 py-2.5">
-              <div className="w-8 h-8 rounded-lg bg-[#8B1A6B]/15 flex items-center justify-center text-sm flex-shrink-0">🏘️</div>
+              <div className="w-8 h-8 rounded-lg bg-[#8B1A6B]/15 flex items-center justify-center flex-shrink-0">
+                <Users className="h-4 w-4 text-[#8B1A6B]" strokeWidth={2} />
+              </div>
               <div className="min-w-0">
                 <p className="text-xs font-semibold text-white truncate">{c.name}</p>
                 <p className="text-[10px] text-gray-500">{c.member_count} members</p>

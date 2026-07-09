@@ -1,8 +1,12 @@
 "use client";
+import { WifiOff } from "lucide-react";
+
 export default function OfflinePage() {
   return (
     <div className="min-h-screen bg-[#F7F7F9] flex flex-col items-center justify-center px-6 text-center">
-      <div className="mb-6 text-6xl">📡</div>
+      <div className="mb-6 flex items-center justify-center">
+        <WifiOff className="h-16 w-16 text-gray-400" strokeWidth={1.5} />
+      </div>
 
       <div className="mb-2 font-black text-3xl tracking-tight">
         <span style={{ color: "#8B1A6B" }}>COM</span>
