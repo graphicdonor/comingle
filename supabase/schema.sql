@@ -245,7 +245,22 @@ create policy "Users can update own profile"   on profiles for update  using (au
 -- Communities
 create policy "Communities are public"                     on communities for select  using (true);
 create policy "Authenticated users can create communities" on communities for insert  with check (auth.uid() is not null);
-create policy "Creators can update their community"        on communities for update  using (auth.uid() = creator_id);
+create policy "Admins can update their community" on communities for update using (
+  exists (
+    select 1 from community_members
+    where community_id = communities.id
+      and user_id = auth.uid()
+      and role = 'admin'
+  )
+);
+create policy "Admins can delete their community" on communities for delete using (
+  exists (
+    select 1 from community_members
+    where community_id = communities.id
+      and user_id = auth.uid()
+      and role = 'admin'
+  )
+);
 
 -- Community members
 create policy "Memberships are public"     on community_members for select  using (true);

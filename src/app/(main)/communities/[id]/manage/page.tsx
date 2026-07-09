@@ -3,7 +3,7 @@ import { ChevronLeft } from "lucide-react";
 import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { isCommunityStaff } from "@/lib/community";
-import { MemberRow } from "@/components/community/member-row";
+import { ManagePanelTabs } from "@/components/community/manage-panel-tabs";
 import type { Community, CommunityRole, Profile } from "@/lib/types";
 
 interface MemberWithProfile {
@@ -55,19 +55,13 @@ export default async function ManageCommunityPage({ params }: { params: Promise<
         </div>
       </div>
 
-      <div className="space-y-2">
-        {sortedMembers.map((m) => (
-          <MemberRow
-            key={m.user_id}
-            communityId={c.id}
-            userId={m.user_id}
-            role={m.role}
-            profile={m.profiles}
-            viewerRole={viewerRole as CommunityRole}
-            viewerUserId={user.id}
-          />
-        ))}
-      </div>
+      <ManagePanelTabs
+        community={c}
+        members={sortedMembers.map((m) => ({ userId: m.user_id, role: m.role, profile: m.profiles }))}
+        viewerRole={viewerRole as CommunityRole}
+        viewerUserId={user.id}
+        canEditSettings={viewerRole === "admin"}
+      />
     </div>
   );
 }
