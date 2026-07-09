@@ -97,10 +97,10 @@ export function Navbar() {
     router.refresh();
   };
 
-  const navItems: { href: string; icon: LucideIcon; label: string; isCreate?: boolean }[] = [
+  const navItems: { href: string; icon: LucideIcon; label: string }[] = [
     { href: "/", icon: Home, label: "Home" },
     { href: "/communities", icon: Users, label: "Communities" },
-    { href: "/communities/create", icon: PlusCircle, label: "Create", isCreate: true },
+    { href: "/communities/create", icon: PlusCircle, label: "Create" },
     navUser?.username
       ? { href: `/profile/${navUser.username}`, icon: User, label: "Profile" }
       : { href: "/login", icon: User, label: "Profile" },
@@ -231,23 +231,21 @@ export function Navbar() {
       {!hideBottomNav && (
       <nav className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-sm">
         <div className="bg-white/95 backdrop-blur-xl rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.12)] border border-gray-100 px-2 py-2 flex items-center justify-around">
-          {navItems.map(({ href, icon: Icon, label, isCreate }) => {
+          {navItems.map(({ href, icon: Icon, label }) => {
             const active = pathname === href;
             return (
               <Link
                 key={href}
                 href={href}
                 className={cn(
-                  "flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-all duration-200 min-w-[56px]",
-                  isCreate
-                    ? "bg-[#8B1A6B] text-white shadow-md scale-110 -mt-3"
-                    : active
-                    ? "text-[#8B1A6B]"
-                    : "text-gray-400 hover:text-gray-700"
+                  "flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-full transition-all duration-200 min-w-[56px]",
+                  active
+                    ? "bg-[#8B1A6B]/10 text-[#8B1A6B]"
+                    : "bg-gray-900/[0.03] text-gray-400 hover:bg-gray-900/[0.06] hover:text-gray-600"
                 )}
               >
-                <Icon className={cn("h-5 w-5", isCreate && "h-6 w-6")} strokeWidth={active || isCreate ? 2.5 : 1.8} />
-                <span className={cn("text-[10px] font-medium leading-none", isCreate && "text-[9px]")}>{label}</span>
+                <Icon className="h-5 w-5" strokeWidth={active ? 2.5 : 1.8} />
+                <span className="text-[10px] font-medium leading-none">{label}</span>
               </Link>
             );
           })}
