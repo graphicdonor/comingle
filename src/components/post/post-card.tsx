@@ -62,9 +62,9 @@ export function PostCard({ post, currentUserId, liked: initialLiked = false }: P
             <span className="text-xs text-gray-400">{timeAgo(post.created_at)}</span>
           </div>
 
-          <h3 className="font-semibold text-gray-900 mt-1.5">{post.title}</h3>
+          <h3 className="font-semibold text-gray-900 mt-1.5 line-clamp-2 break-words">{post.title}</h3>
           {post.content && (
-            <p className="text-sm text-gray-600 mt-1 line-clamp-3">{post.content}</p>
+            <p className="text-sm text-gray-600 mt-1 line-clamp-3 break-words">{post.content}</p>
           )}
           {post.image_url && (
             <div className="mt-3 rounded-xl overflow-hidden">
