@@ -38,7 +38,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
   const [{ data: memberships }, { data: posts }, { data: likes }] = await Promise.all([
     supabase.from("community_members").select("communities(*), role, joined_at")
       .eq("user_id", profile.id).order("joined_at", { ascending: false }),
-    supabase.from("posts").select("*, profiles(*), communities(*)")
+    supabase.from("posts").select("*, profiles!posts_author_id_fkey(*), communities(*)")
       .eq("author_id", profile.id).order("created_at", { ascending: false }).limit(20),
     currentUser
       ? supabase.from("post_likes").select("post_id").eq("user_id", currentUser.id)

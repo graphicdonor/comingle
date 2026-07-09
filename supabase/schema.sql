@@ -148,6 +148,9 @@ create index if not exists idx_notifications_user on notifications (user_id, cre
 -- "community-covers" (Public, 5MB file limit, jpg/jpeg/png only) — same
 -- shape as avatars: path is {uploader_uid}/{file}, policies in
 -- supabase/migrations/20260709130000_*.sql, bucket created via Storage API.
+-- "post-images" (Public, 5MB file limit, jpg/jpeg/png only) — same shape
+-- as avatars: path is {author_uid}/{file}, policies in
+-- supabase/migrations/20260709140000_*.sql, bucket created via Storage API.
 -- ============================================================
 
 -- ============================================================

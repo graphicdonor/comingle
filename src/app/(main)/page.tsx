@@ -39,7 +39,7 @@ export default async function HomePage() {
 
     const communityIds = (memberOf ?? []).map((m) => m.community_id);
     if (communityIds.length > 0) {
-      const { data } = await supabase.from("posts").select("*, profiles(*), communities(*)")
+      const { data } = await supabase.from("posts").select("*, profiles!posts_author_id_fkey(*), communities(*)")
         .in("community_id", communityIds).order("created_at", { ascending: false }).limit(20);
       posts = (data as Post[]) ?? [];
     }

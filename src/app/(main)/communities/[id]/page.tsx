@@ -24,7 +24,7 @@ export default async function CommunityPage({ params }: { params: Promise<{ id: 
     user
       ? supabase.from("community_members").select("user_id").eq("community_id", c.id).eq("user_id", user.id).single()
       : Promise.resolve({ data: null }),
-    supabase.from("posts").select("*, profiles(*), communities(*)")
+    supabase.from("posts").select("*, profiles!posts_author_id_fkey(*), communities(*)")
       .eq("community_id", c.id).order("created_at", { ascending: false }).limit(30),
     user
       ? supabase.from("post_likes").select("post_id").eq("user_id", user.id)
