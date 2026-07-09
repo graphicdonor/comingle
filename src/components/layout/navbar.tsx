@@ -9,10 +9,13 @@ import { cn } from "@/lib/utils";
 import { DEV_MODE, getDevProfile, clearDevSession } from "@/lib/dev-auth";
 
 interface NavUser {
+  id: string;
   username: string;
   full_name: string;
   avatar_url: string | null;
 }
+
+const NOTIFICATIONS_POLL_MS = 20000;
 
 export function Navbar() {
   const pathname = usePathname();
@@ -20,6 +23,7 @@ export function Navbar() {
   const supabase = createClient();
   const [navUser, setNavUser] = useState<NavUser | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
   const hideBottomNav = pathname.startsWith("/services/matrimonial/chat/");
 
   useEffect(() => {
@@ -27,6 +31,7 @@ export function Navbar() {
       const profile = getDevProfile();
       if (profile?.username) {
         setNavUser({
+          id: profile.id,
           username: profile.username,
           full_name: profile.full_name || profile.username,
           avatar_url: profile.avatar_url,
@@ -40,7 +45,7 @@ export function Navbar() {
         supabase.from("profiles").select("username, avatar_url, full_name")
           .eq("id", data.user.id).single()
           .then(({ data: p }) => {
-            if (p) setNavUser({ username: p.username, full_name: p.full_name || p.username, avatar_url: p.avatar_url });
+            if (p) setNavUser({ id: data.user.id, username: p.username, full_name: p.full_name || p.username, avatar_url: p.avatar_url });
           });
       }
     });
@@ -50,6 +55,35 @@ export function Navbar() {
     });
     return () => subscription.unsubscribe();
   }, []);
+
+  // Unread notifications badge — DEV_MODE has no real backend to query, same
+  // as the rest of the notifications feature. Polled rather than realtime,
+  // consistent with how chat itself already refreshes.
+  useEffect(() => {
+    if (DEV_MODE || !navUser?.id) {
+      setUnreadCount(0);
+      return;
+    }
+    const userId = navUser.id;
+    let cancelled = false;
+    const fetchUnread = async () => {
+      const { count } = await supabase
+        .from("notifications")
+        .select("id", { count: "exact", head: true })
+        .eq("user_id", userId)
+        .is("read_at", null);
+      if (!cancelled) setUnreadCount(count ?? 0);
+    };
+    fetchUnread();
+    const interval = setInterval(fetchUnread, NOTIFICATIONS_POLL_MS);
+    return () => { cancelled = true; clearInterval(interval); };
+  }, [navUser?.id]);
+
+  // Opening the notifications page itself marks everything read server-side —
+  // clear the badge immediately instead of waiting for the next poll tick.
+  useEffect(() => {
+    if (pathname === "/notifications") setUnreadCount(0);
+  }, [pathname]);
 
   const handleLogout = async () => {
     if (DEV_MODE) {
@@ -97,9 +131,14 @@ export function Navbar() {
             <Link
               href={navUser ? "/notifications" : "/login"}
               aria-label="Notifications"
-              className="w-9 h-9 flex items-center justify-center rounded-full text-gray-600 hover:bg-gray-100 transition-colors"
+              className="relative w-9 h-9 flex items-center justify-center rounded-full text-gray-600 hover:bg-gray-100 transition-colors"
             >
               <Bell className="h-5 w-5" />
+              {unreadCount > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-4 px-1 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center ring-2 ring-white">
+                  {unreadCount > 9 ? "9+" : unreadCount}
+                </span>
+              )}
             </Link>
 
             {!navUser && (

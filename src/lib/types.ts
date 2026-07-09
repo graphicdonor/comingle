@@ -99,3 +99,15 @@ export interface MatrimonialShortlistEntry {
   shortlisted_user_id: string;
   created_at: string;
 }
+
+export interface Notification {
+  id: string;
+  user_id: string;
+  type: "matrimonial_message";
+  actor_id: string | null;
+  link: string;
+  count: number;
+  read_at: string | null;
+  created_at: string;
+  actor?: Profile | null;
+}

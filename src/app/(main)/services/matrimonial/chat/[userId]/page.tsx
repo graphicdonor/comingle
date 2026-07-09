@@ -26,6 +26,13 @@ export default async function MatrimonialChatThreadPage({ params }: { params: Pr
   // itself never renders a compose box for an invalid pairing.
   if (!acceptedInvite || !partner) notFound();
 
+  // Opening the thread directly (not via the notification bell) should
+  // still clear any pending "new message" notification from this sender —
+  // otherwise the unread badge stays stuck until they separately visit
+  // /notifications.
+  await supabase.from("notifications").update({ read_at: new Date().toISOString() })
+    .eq("user_id", user.id).eq("type", "matrimonial_message").eq("actor_id", userId).is("read_at", null);
+
   return (
     <ChatThread
       currentUserId={user.id}
