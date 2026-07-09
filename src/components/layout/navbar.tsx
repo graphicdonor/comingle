@@ -110,24 +110,26 @@ export function Navbar() {
     <>
       {/* ── Top bar: hamburger, logo, notifications, avatar ── */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm">
-        <div className="max-w-xl mx-auto px-4 h-14 flex items-center justify-between">
-          <div className="flex items-center gap-1.5">
-            <button
-              onClick={() => setMenuOpen(true)}
-              aria-label="Open menu"
-              className="w-9 h-9 -ml-1.5 flex items-center justify-center rounded-full text-gray-600 hover:bg-gray-100 transition-colors"
-            >
-              <Menu className="h-5 w-5" />
-            </button>
-            <Link href="/" className="flex items-center">
-              <span className="font-black text-xl tracking-tight">
-                <span style={{ color: "#8B1A6B" }}>COM</span>
-                <span style={{ color: "#2A5C27", fontStyle: "italic", fontFamily: "Georgia, serif" }}>ingle</span>
-              </span>
+        <div className="max-w-xl mx-auto px-4 h-14 flex items-center">
+          <button
+            onClick={() => setMenuOpen(true)}
+            aria-label="Open menu"
+            className="w-9 h-9 -ml-1.5 flex items-center justify-center rounded-full text-gray-600 hover:bg-gray-100 transition-colors flex-shrink-0"
+          >
+            <Menu className="h-5 w-5" />
+          </button>
+
+          {/* flex-1 on both sides of the logo keeps it centered between the
+              hamburger and the right-hand controls, shrinking gracefully
+              instead of overlapping them on narrow screens (unlike
+              absolute-centering, which ignores sibling widths entirely). */}
+          <div className="flex-1 flex justify-center min-w-0">
+            <Link href="/" className="flex items-center min-w-0">
+              <img src="/comingle-logo.svg" alt="Comingle" className="h-7 w-auto max-w-full" />
             </Link>
           </div>
 
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1.5 flex-shrink-0">
             <Link
               href={navUser ? "/notifications" : "/login"}
               aria-label="Notifications"
