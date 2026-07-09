@@ -111,12 +111,6 @@ export function Navbar() {
                 </Link>
               </div>
             )}
-
-            {navUser && (
-              <Link href={`/profile/${navUser.username}`}>
-                <Avatar src={navUser.avatar_url} name={navUser.full_name || "U"} size="sm" />
-              </Link>
-            )}
           </div>
         </div>
       </header>
