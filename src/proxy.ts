@@ -43,12 +43,22 @@ export async function proxy(request: NextRequest) {
     }
   );
 
+  // Refresh the session on every request that could have one, not just
+  // gated ones — otherwise a user who mostly browses public pages (home,
+  // communities, profiles) never triggers a refresh, their access token
+  // expires after its ~1hr lifetime, and they get silently logged out with
+  // no refresh ever attempted. Skip entirely when there's no auth cookie at
+  // all so anonymous visitors don't pay for a round-trip that can't do
+  // anything anyway.
+  const devMode = process.env.NEXT_PUBLIC_DEV_MODE === "true";
+  const hasAuthCookie = request.cookies.getAll().some((c) => c.name.includes("auth-token"));
+  const user = devMode || !hasAuthCookie ? null : (await supabase.auth.getUser()).data.user;
+
   // Protected routes
   const protectedPaths = ["/communities/create", "/settings", "/notifications", "/signup-details", "/pin", "/select-communities", "/profile/edit", "/services/matrimonial"];
   const isProtected = protectedPaths.some((p) => request.nextUrl.pathname.startsWith(p));
 
   if (isProtected) {
-    const devMode = process.env.NEXT_PUBLIC_DEV_MODE === "true";
     if (devMode) {
       // In dev mode, gate on the dev-session cookie set after OTP verify
       const devSession = request.cookies.get("dev-session");
@@ -57,13 +67,10 @@ export async function proxy(request: NextRequest) {
         url.pathname = "/signup";
         return NextResponse.redirect(url);
       }
-    } else {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        const url = request.nextUrl.clone();
-        url.pathname = "/signup";
-        return NextResponse.redirect(url);
-      }
+    } else if (!user) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/signup";
+      return NextResponse.redirect(url);
     }
   }
 
