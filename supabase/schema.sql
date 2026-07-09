@@ -127,9 +127,9 @@ create table if not exists matrimonial_shortlist (
 -- ============================================================
 -- Storage buckets
 -- Run in Supabase dashboard: Storage > New Bucket > "avatars" (Public)
--- "matrimonial-photos" (Public, 200KB file limit, jpg/jpeg/png only) —
+-- "matrimonial-photos" (Public, 5MB file limit, jpg/jpeg/png only) —
 -- bucket policies are in supabase/migrations/20260708100100_*.sql; the
--- bucket itself was created via the Storage API (public, 200KB limit).
+-- bucket itself was created via the Storage API (public, 5MB limit).
 -- ============================================================
 
 -- ============================================================
