@@ -78,12 +78,20 @@ export function usePhysicsChain({ count, dock, onDockChange }: UsePhysicsChainAr
   const modeRef = useRef<FloatingNavMode>("idle");
   const previousModeRef = useRef<FloatingNavMode>("idle");
   const modeChangedAtRef = useRef(0);
+  // Framer Motion's useAnimationFrame reports `time` relative to its own
+  // first tick, not performance.now() — stamping modeChangedAtRef with
+  // performance.now() and later diffing it against that `time` mixes two
+  // different clocks. The gap between navigation start and this hook's
+  // first frame is negligible on localhost but can be seconds on a real
+  // network, which is exactly what made this only surface after deploy.
+  // Tracking the RAF loop's own latest `time` keeps both sides on one clock.
+  const latestFrameTimeRef = useRef(0);
 
   const setModeSafe = useCallback((next: FloatingNavMode) => {
     if (modeRef.current === next) return;
     previousModeRef.current = modeRef.current;
     modeRef.current = next;
-    modeChangedAtRef.current = performance.now();
+    modeChangedAtRef.current = latestFrameTimeRef.current;
     setMode(next);
   }, []);
 
@@ -173,6 +181,7 @@ export function usePhysicsChain({ count, dock, onDockChange }: UsePhysicsChainAr
   }, [setModeSafe]);
 
   useAnimationFrame((time, delta) => {
+    latestFrameTimeRef.current = time;
     if (!hasPlacedRef.current) return;
     const dt = clampDt(delta);
     const currentMode = modeRef.current;
