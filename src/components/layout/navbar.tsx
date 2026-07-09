@@ -118,7 +118,7 @@ export function Navbar() {
   return (
     <>
       {/* ── Top bar: hamburger, logo, notifications, avatar ── */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-[#F7F7F8]/90 backdrop-blur-md border-b border-gray-100 shadow-sm">
         <div className="max-w-xl mx-auto px-4 h-14 flex items-center">
           <button
             onClick={() => setMenuOpen(true)}
