@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { AnimatePresence } from "framer-motion";
 import { Heart, MessageCircle, MoreVertical, Play, Trash2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import type { Post } from "@/lib/types";
@@ -8,6 +9,7 @@ import { Avatar } from "@/components/ui/avatar";
 import { cn, timeAgo } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
 import { ModerationStatusNotice } from "@/components/moderation/moderation-status-notice";
+import { ImagePreviewModal } from "@/components/post/image-preview-modal";
 
 interface PostCardProps {
   post: Post;
@@ -26,6 +28,7 @@ export function PostCard({ post, currentUserId, liked: initialLiked = false, can
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState("");
   const [deleted, setDeleted] = useState(false);
+  const [imagePreviewOpen, setImagePreviewOpen] = useState(false);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const contentRef = useRef<HTMLParagraphElement>(null);
   const router = useRouter();
@@ -119,9 +122,14 @@ export function PostCard({ post, currentUserId, liked: initialLiked = false, can
             </button>
           )}
           {post.image_url && (
-            <div className="mt-3 rounded-xl overflow-hidden">
-              <img src={post.image_url} alt={post.title} className="w-full max-h-80 object-cover" />
-            </div>
+            <button
+              type="button"
+              onClick={() => setImagePreviewOpen(true)}
+              aria-label="View full screen"
+              className="mt-3 block w-full rounded-xl overflow-hidden"
+            >
+              <img src={post.image_url} alt={post.title} className="w-full max-h-80 object-cover hover:opacity-95 transition-opacity" />
+            </button>
           )}
           {post.video_url && (
             <Link href={`/reels/${post.id}`} className="mt-3 relative block rounded-xl overflow-hidden bg-black group">
@@ -206,6 +214,11 @@ export function PostCard({ post, currentUserId, liked: initialLiked = false, can
           </div>
         )}
       </div>
+      <AnimatePresence>
+        {imagePreviewOpen && post.image_url && (
+          <ImagePreviewModal src={post.image_url} alt={post.title} onClose={() => setImagePreviewOpen(false)} />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
