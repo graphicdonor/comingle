@@ -21,7 +21,11 @@ export async function POST(req: NextRequest) {
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
     maxAge: 60 * 60 * 8, // 8 hours
-    path: "/admin",
+    // Scoped site-wide, not just "/admin" — admin Route Handlers that need
+    // to check this cookie live under /api/admin/..., which is a sibling
+    // path, not a sub-path of /admin, so a browser wouldn't attach a
+    // path=/admin cookie to those requests at all.
+    path: "/",
   });
   return res;
 }
