@@ -8,6 +8,7 @@ import { PhotoCarousel } from "@/components/matrimonial/photo-carousel";
 import { DeleteProfileButton } from "@/components/matrimonial/delete-profile-button";
 import { MatrimonialProfileFields } from "@/components/matrimonial/matrimonial-profile-fields";
 import { DevMatrimonialProfilePageShell } from "@/components/matrimonial/dev-matrimonial-profile-page";
+import { ModerationStatusNotice } from "@/components/moderation/moderation-status-notice";
 
 export default async function MyMatrimonialProfilePage() {
   if (DEV_MODE) return <DevMatrimonialProfilePageShell />;
@@ -53,6 +54,12 @@ export default async function MyMatrimonialProfilePage() {
           <DeleteProfileButton />
         </div>
       </div>
+
+      {profile.moderation_status !== "published" && (
+        <div className="mt-3">
+          <ModerationStatusNotice status={profile.moderation_status} contentType="matrimonial_profile" contentId={profile.user_id} />
+        </div>
+      )}
 
       <div className="mt-4">
         <MatrimonialProfileFields profile={profile} communityName={communityName} />

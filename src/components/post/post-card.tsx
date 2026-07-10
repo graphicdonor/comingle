@@ -7,6 +7,7 @@ import type { Post } from "@/lib/types";
 import { Avatar } from "@/components/ui/avatar";
 import { cn, timeAgo } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
+import { ModerationStatusNotice } from "@/components/moderation/moderation-status-notice";
 
 interface PostCardProps {
   post: Post;
@@ -120,6 +121,12 @@ export function PostCard({ post, currentUserId, liked: initialLiked = false, can
           {post.image_url && (
             <div className="mt-3 rounded-xl overflow-hidden">
               <img src={post.image_url} alt={post.title} className="w-full max-h-80 object-cover" />
+            </div>
+          )}
+
+          {currentUserId === post.author_id && (
+            <div className="mt-3">
+              <ModerationStatusNotice status={post.moderation_status} contentType="post" contentId={post.id} />
             </div>
           )}
 

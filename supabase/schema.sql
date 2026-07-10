@@ -48,15 +48,18 @@ create table if not exists community_members (
 
 -- Posts
 create table if not exists posts (
-  id            uuid primary key default gen_random_uuid(),
-  title         text not null,
-  content       text,
-  image_url     text,
-  author_id     uuid references profiles(id) on delete cascade,
-  community_id  uuid references communities(id) on delete cascade,
-  like_count    integer default 0 not null,
-  comment_count integer default 0 not null,
-  created_at    timestamptz default now() not null
+  id                uuid primary key default gen_random_uuid(),
+  title             text not null,
+  content           text,
+  image_url         text,
+  author_id         uuid references profiles(id) on delete cascade,
+  community_id      uuid references communities(id) on delete cascade,
+  like_count        integer default 0 not null,
+  comment_count     integer default 0 not null,
+  -- 'pending_review' until the AI moderation check (or a human reviewer)
+  -- marks it 'published'; RLS only shows non-published rows to their author.
+  moderation_status text default 'pending_review' not null check (moderation_status in ('pending_review', 'published', 'blocked')),
+  created_at        timestamptz default now() not null
 );
 
 -- Post likes
@@ -93,6 +96,7 @@ create table if not exists matrimonial_profiles (
   created_by        text check (created_by in ('Self', 'Parents', 'Sibling', 'Relative', 'Friend')),
   about_me          text,
   photo_urls        text[] default '{}' not null,
+  moderation_status text default 'pending_review' not null check (moderation_status in ('pending_review', 'published', 'blocked')),
   created_at        timestamptz default now() not null,
   updated_at        timestamptz default now() not null
 );
@@ -134,7 +138,7 @@ create table if not exists matrimonial_shortlist (
 create table if not exists notifications (
   id          uuid primary key default gen_random_uuid(),
   user_id     uuid references profiles(id) on delete cascade not null,
-  type        text not null check (type in ('matrimonial_message')),
+  type        text not null check (type in ('matrimonial_message', 'moderation_decision', 'appeal_outcome')),
   actor_id    uuid references profiles(id) on delete cascade,
   link        text not null,
   count       integer default 1 not null,
@@ -143,6 +147,67 @@ create table if not exists notifications (
 );
 
 create index if not exists idx_notifications_user on notifications (user_id, created_at desc);
+
+-- AI content moderation. Naming avoids overlap with community_members.role
+-- = 'moderator' (an unrelated, pre-existing per-community staff concept) —
+-- these tables are about platform-wide AI review of user-submitted content.
+-- Nothing here is ever written by client code — only trusted server-side
+-- Route Handlers using the service-role client (src/lib/supabase/admin.ts),
+-- the same bypass-RLS pattern already used elsewhere in this schema.
+create table if not exists moderation_logs (
+  id                 uuid primary key default gen_random_uuid(),
+  content_type       text not null check (content_type in (
+                       'post', 'matrimonial_profile', 'profile_bio',
+                       'community_description', 'community_rules',
+                       'avatar', 'community_cover'
+                     )),
+  content_id         text,
+  user_id            uuid references profiles(id) on delete cascade not null,
+  input_text         text,
+  input_image_urls   text[] not null default '{}',
+  scores             jsonb not null default '{}',
+  flagged_categories text[] not null default '{}',
+  decision           text not null check (decision in ('allow', 'hold_for_review', 'block')),
+  context_link       text not null default '/',
+  api_error          text,
+  created_at         timestamptz default now() not null
+);
+create index if not exists idx_moderation_logs_user on moderation_logs (user_id, created_at desc);
+create index if not exists idx_moderation_logs_decision on moderation_logs (decision, created_at desc);
+
+create table if not exists moderation_queue (
+  id          uuid primary key default gen_random_uuid(),
+  log_id      uuid references moderation_logs(id) on delete cascade not null,
+  status      text not null default 'pending' check (status in ('pending', 'approved', 'rejected')),
+  reviewed_at timestamptz,
+  created_at  timestamptz default now() not null
+);
+create index if not exists idx_moderation_queue_status on moderation_queue (status, created_at);
+
+-- Rolling violation tracking for the auto-suspend rule — the rolling-window
+-- check itself (N blocks in the last 30 days) is computed from
+-- moderation_logs timestamps by the app at decision-time; this table
+-- records the outcome, it doesn't decide it.
+create table if not exists user_trust_scores (
+  user_id            uuid primary key references profiles(id) on delete cascade,
+  violation_count    integer not null default 0,
+  window_started_at  timestamptz not null default now(),
+  suspended          boolean not null default false,
+  suspended_at       timestamptz,
+  updated_at         timestamptz not null default now()
+);
+
+create table if not exists moderation_appeals (
+  id             uuid primary key default gen_random_uuid(),
+  log_id         uuid references moderation_logs(id) on delete cascade not null,
+  user_id        uuid references profiles(id) on delete cascade not null,
+  reason         text not null,
+  status         text not null default 'pending' check (status in ('pending', 'approved', 'denied')),
+  reviewer_notes text,
+  created_at     timestamptz default now() not null,
+  resolved_at    timestamptz
+);
+create index if not exists idx_moderation_appeals_status on moderation_appeals (status, created_at);
 
 -- ============================================================
 -- Storage buckets
@@ -217,6 +282,54 @@ begin
 end;
 $$;
 
+-- A held item leaving 'pending' (approved or rejected by a human reviewer)
+-- notifies the author of the outcome.
+create or replace function notify_moderation_decision()
+returns trigger language plpgsql security definer as $$
+declare
+  v_user_id uuid;
+  v_link text;
+begin
+  if new.status = old.status or new.status = 'pending' then
+    return new;
+  end if;
+
+  select user_id, context_link into v_user_id, v_link
+    from moderation_logs where id = new.log_id;
+
+  insert into notifications (user_id, type, link)
+  values (v_user_id, 'moderation_decision', v_link);
+
+  return new;
+end;
+$$;
+
+drop trigger if exists trg_notify_moderation_decision on moderation_queue;
+create trigger trg_notify_moderation_decision
+  after update on moderation_queue
+  for each row execute function notify_moderation_decision();
+
+-- An appeal being resolved (approved or denied) notifies the appellant.
+create or replace function notify_appeal_outcome()
+returns trigger language plpgsql security definer as $$
+begin
+  if new.status = old.status or new.status = 'pending' then
+    return new;
+  end if;
+
+  insert into notifications (user_id, type, link)
+  select new.user_id, 'appeal_outcome', context_link
+    from moderation_logs where id = new.log_id;
+
+  return new;
+end;
+$$;
+
+drop trigger if exists trg_notify_appeal_outcome on moderation_appeals;
+create trigger trg_notify_appeal_outcome
+  after update on moderation_appeals
+  for each row execute function notify_appeal_outcome();
+
 drop trigger if exists trg_notify_new_matrimonial_message on matrimonial_messages;
 create trigger trg_notify_new_matrimonial_message
   after insert on matrimonial_messages
@@ -236,6 +349,10 @@ alter table matrimonial_invites enable row level security;
 alter table matrimonial_messages enable row level security;
 alter table matrimonial_shortlist enable row level security;
 alter table notifications enable row level security;
+alter table moderation_logs enable row level security;
+alter table moderation_queue enable row level security;
+alter table user_trust_scores enable row level security;
+alter table moderation_appeals enable row level security;
 
 -- Profiles
 create policy "Profiles are public"            on profiles for select  using (true);
@@ -299,11 +416,18 @@ create policy "Moderators can remove members" on community_members for delete us
   )
 );
 
--- Posts
-create policy "Posts are public" on posts for select using (true);
+-- Posts. moderation_status gates visibility: authors always see their own
+-- regardless of status (so a pending/blocked post is visible to the person
+-- who wrote it, e.g. to appeal), everyone else only sees published ones.
+-- The insert WITH CHECK means a client literally cannot set its own post to
+-- 'published' — only a subsequent service-role update (post-moderation) can.
+create policy "Published posts are public, authors always see their own" on posts for select using (
+  moderation_status = 'published' or auth.uid() = author_id
+);
 create policy "Members can post" on posts for insert with check (
-  auth.uid() = author_id and
-  exists (select 1 from community_members where community_id = posts.community_id and user_id = auth.uid())
+  auth.uid() = author_id
+  and moderation_status = 'pending_review'
+  and exists (select 1 from community_members where community_id = posts.community_id and user_id = auth.uid())
 );
 create policy "Authors can delete posts" on posts for delete using (auth.uid() = author_id);
 create policy "Moderators can delete any post" on posts for delete using (
@@ -324,11 +448,17 @@ create policy "Comments are public"     on comments for select using (true);
 create policy "Users can comment"       on comments for insert with check (auth.uid() = author_id);
 create policy "Authors can delete"      on comments for delete using (auth.uid() = author_id);
 
--- Matrimonial profiles: visible to self, or to opposite-gender members of a
--- shared community; only Male/Female profiles.gender may create one.
+-- Matrimonial profiles: visible to self regardless of moderation_status
+-- (own pending/blocked profile is still visible to its owner), or to
+-- published profiles of opposite-gender members of a shared community;
+-- only Male/Female profiles.gender may create one. Insert/update WITH
+-- CHECK mirrors the posts pattern: a client can only ever write its own
+-- profile as 'pending_review' — the flip to 'published' is a separate
+-- service-role update after the AI check resolves.
 create policy "Users can view own matrimonial profile" on matrimonial_profiles for select using (auth.uid() = user_id);
 create policy "Eligible opposite-gender community members are visible" on matrimonial_profiles for select using (
-  exists (
+  moderation_status = 'published'
+  and exists (
     select 1 from profiles me, profiles them
     where me.id = auth.uid() and them.id = matrimonial_profiles.user_id
       and me.gender in ('Male', 'Female') and them.gender in ('Male', 'Female')
@@ -342,9 +472,12 @@ create policy "Eligible opposite-gender community members are visible" on matrim
 );
 create policy "Eligible users can create own matrimonial profile" on matrimonial_profiles for insert with check (
   auth.uid() = user_id
+  and moderation_status = 'pending_review'
   and exists (select 1 from profiles where id = auth.uid() and gender in ('Male', 'Female'))
 );
-create policy "Users can update own matrimonial profile" on matrimonial_profiles for update using (auth.uid() = user_id);
+create policy "Users can update own matrimonial profile" on matrimonial_profiles for update
+  using (auth.uid() = user_id)
+  with check (auth.uid() = user_id and moderation_status = 'pending_review');
 create policy "Users can delete own matrimonial profile" on matrimonial_profiles for delete using (auth.uid() = user_id);
 
 -- Matrimonial invites: directional connection requests, gated by the same
@@ -394,6 +527,14 @@ create policy "Users can remove from own shortlist" on matrimonial_shortlist for
 create policy "Users can view own notifications" on notifications for select using (auth.uid() = user_id);
 create policy "Users can mark own notifications read" on notifications for update
   using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
+-- Moderation: users can see their own AI-review history and file/view their
+-- own appeals. moderation_queue and user_trust_scores have no end-user
+-- policies at all — deliberately internal, only ever touched by the
+-- service-role admin client.
+create policy "Users can view own moderation logs" on moderation_logs for select using (auth.uid() = user_id);
+create policy "Users can view own appeals" on moderation_appeals for select using (auth.uid() = user_id);
+create policy "Users can file own appeals" on moderation_appeals for insert with check (auth.uid() = user_id);
 
 -- ============================================================
 -- Enable Phone Auth in Supabase Dashboard:

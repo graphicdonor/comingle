@@ -1,9 +1,17 @@
 "use client";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { ShieldCheck, LogOut } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+const NAV_LINKS = [
+  { href: "/admin", label: "Dashboard" },
+  { href: "/admin/moderation", label: "Moderation" },
+];
 
 export function AdminNav() {
   const router = useRouter();
+  const pathname = usePathname();
 
   const handleLogout = async () => {
     await fetch("/api/admin/logout", { method: "POST" });
@@ -21,6 +29,20 @@ export function AdminNav() {
         <span className="text-[10px] bg-[#8B1A6B]/20 text-[#8B1A6B] border border-[#8B1A6B]/30 px-1.5 py-0.5 rounded-full font-semibold uppercase tracking-wide">
           Staff Only
         </span>
+        <div className="flex items-center gap-1 ml-4">
+          {NAV_LINKS.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={cn(
+                "text-xs font-medium px-3 py-1.5 rounded-full transition-colors",
+                pathname === link.href ? "bg-white/10 text-white" : "text-gray-400 hover:text-white"
+              )}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </div>
       </div>
       <button
         onClick={handleLogout}

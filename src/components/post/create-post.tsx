@@ -20,6 +20,7 @@ export function CreatePost({ communityId, authorId }: CreatePostProps) {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [statusMessage, setStatusMessage] = useState("");
   const router = useRouter();
   const supabase = createClient();
   const fileRef = useRef<HTMLInputElement>(null);
@@ -55,33 +56,36 @@ export function CreatePost({ communityId, authorId }: CreatePostProps) {
       image_url = urlData.publicUrl;
     }
 
-    const { error: insertError } = await supabase.from("posts").insert({
-      title: title.trim(),
-      content: content.trim() || null,
-      image_url,
-      community_id: communityId,
-      author_id: authorId,
+    const res = await fetch("/api/moderation/posts", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ communityId, title: title.trim(), content: content.trim() || null, imageUrl: image_url }),
     });
+    const body = await res.json().catch(() => ({}));
     setLoading(false);
-    if (insertError) {
-      setError(insertError.message);
+    if (!res.ok) {
+      setError(body.error || "Something went wrong posting this.");
       return;
     }
     setTitle("");
     setContent("");
     removeImage();
     setOpen(false);
+    setStatusMessage(body.message);
     router.refresh();
   };
 
   if (!open) {
     return (
-      <button
-        onClick={() => setOpen(true)}
-        className="w-full bg-white rounded-2xl p-4 text-left text-gray-400 hover:border-indigo-300 hover:text-gray-600 transition-colors"
-      >
-        Write something in this community...
-      </button>
+      <div className="space-y-2">
+        {statusMessage && <p className="text-sm text-gray-600 bg-white rounded-2xl px-4 py-3">{statusMessage}</p>}
+        <button
+          onClick={() => { setStatusMessage(""); setOpen(true); }}
+          className="w-full bg-white rounded-2xl p-4 text-left text-gray-400 hover:border-indigo-300 hover:text-gray-600 transition-colors"
+        >
+          Write something in this community...
+        </button>
+      </div>
     );
   }
 

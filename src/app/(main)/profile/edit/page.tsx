@@ -100,6 +100,15 @@ export default function EditProfilePage() {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) { setLoading(false); return; }
 
+    if (form.bio.trim()) {
+      const bioPrecheck = await fetch("/api/moderation/precheck", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ contentType: "profile_bio", text: form.bio.trim(), contextLink: `/profile/${form.username}` }),
+      }).then((r) => r.json());
+      if (bioPrecheck.decision && bioPrecheck.decision !== "allow") { setLoading(false); setError(bioPrecheck.message); return; }
+    }
+
     let avatar_url: string | null = avatarPreview;
     if (avatarFile) {
       const ext = avatarFile.name.split(".").pop();
@@ -109,6 +118,13 @@ export default function EditProfilePage() {
       if (!uploadErr) {
         const { data: urlData } = supabase.storage.from("avatars").getPublicUrl(path);
         avatar_url = urlData.publicUrl;
+
+        const avatarPrecheck = await fetch("/api/moderation/precheck", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ contentType: "avatar", imageUrl: avatar_url, contextLink: `/profile/${form.username}` }),
+        }).then((r) => r.json());
+        if (avatarPrecheck.decision && avatarPrecheck.decision !== "allow") { setLoading(false); setError(avatarPrecheck.message); return; }
       }
     }
 

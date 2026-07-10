@@ -35,6 +35,8 @@ export interface CommunityMember {
   profiles?: Profile;
 }
 
+export type ModerationStatus = "pending_review" | "published" | "blocked";
+
 export interface Post {
   id: string;
   title: string;
@@ -44,6 +46,7 @@ export interface Post {
   community_id: string;
   like_count: number;
   comment_count: number;
+  moderation_status: ModerationStatus;
   created_at: string;
   profiles?: Profile;
   communities?: Community;
@@ -74,6 +77,7 @@ export interface MatrimonialProfile {
   created_by: "Self" | "Parents" | "Sibling" | "Relative" | "Friend" | null;
   about_me: string | null;
   photo_urls: string[];
+  moderation_status: ModerationStatus;
   created_at: string;
   updated_at: string;
   profiles?: Profile;

@@ -51,6 +51,15 @@ export function CommunitySettingsForm({ community }: CommunitySettingsFormProps)
     if (form.name.trim().length < 3) { setSaveError("Community name must be at least 3 characters"); return; }
     setSaving(true);
 
+    if (form.description.trim()) {
+      const precheck = await fetch("/api/moderation/precheck", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ contentType: "community_description", text: form.description.trim(), contextLink: `/communities/${community.slug}` }),
+      }).then((r) => r.json());
+      if (precheck.decision && precheck.decision !== "allow") { setSaving(false); setSaveError(precheck.message); return; }
+    }
+
     let cover_url = community.cover_url;
     if (coverFile) {
       const { data: { user } } = await supabase.auth.getUser();
@@ -61,6 +70,13 @@ export function CommunitySettingsForm({ community }: CommunitySettingsFormProps)
       if (uploadErr) { setSaveError(uploadErr.message); setSaving(false); return; }
       const { data: urlData } = supabase.storage.from("community-covers").getPublicUrl(path);
       cover_url = urlData.publicUrl;
+
+      const coverPrecheck = await fetch("/api/moderation/precheck", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ contentType: "community_cover", imageUrl: cover_url, contextLink: `/communities/${community.slug}` }),
+      }).then((r) => r.json());
+      if (coverPrecheck.decision && coverPrecheck.decision !== "allow") { setSaving(false); setSaveError(coverPrecheck.message); return; }
     }
 
     // Same reasoning as handleDelete: RLS blocks show up as zero affected

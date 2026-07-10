@@ -202,9 +202,10 @@ export default function MatrimonialProfileEditPage() {
       uploadedUrls.push(urlData.publicUrl);
     }
 
-    const { error: saveError } = await supabase.from("matrimonial_profiles").upsert(
-      {
-        user_id: user.id,
+    const res = await fetch("/api/moderation/matrimonial-profile", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
         full_name: form.full_name.trim(),
         date_of_birth: form.date_of_birth,
         time_of_birth: form.time_of_birth || null,
@@ -219,12 +220,11 @@ export default function MatrimonialProfileEditPage() {
         created_by: form.created_by || null,
         about_me: form.about_me.trim() || null,
         photo_urls: [...existingPhotoUrls, ...uploadedUrls].slice(0, MAX_PHOTOS),
-      },
-      { onConflict: "user_id" }
-    );
-
+      }),
+    });
+    const resBody = await res.json().catch(() => ({}));
     setLoading(false);
-    if (saveError) { setError(saveError.message); return; }
+    if (!res.ok) { setError(resBody.error || "Something went wrong saving this."); return; }
     window.location.href = "/services/matrimonial/profile";
   };
 

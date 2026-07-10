@@ -22,6 +22,20 @@ export function CommunityRules({ communityId, rules: initialRules, canEdit }: Co
   const handleSave = async () => {
     setSaving(true);
     setError("");
+
+    if (draft.trim()) {
+      const precheck = await fetch("/api/moderation/precheck", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ contentType: "community_rules", text: draft.trim(), contextLink: "/communities" }),
+      }).then((r) => r.json());
+      if (precheck.decision && precheck.decision !== "allow") {
+        setSaving(false);
+        setError(precheck.message);
+        return;
+      }
+    }
+
     const { error: updateError } = await supabase
       .from("communities")
       .update({ rules: draft.trim() || null })
