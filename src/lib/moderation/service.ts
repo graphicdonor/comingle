@@ -1,6 +1,7 @@
 import OpenAI from "openai";
 import type { ModerationMultiModalInput } from "openai/resources/moderations";
 import { getBlockThreshold, getReviewThreshold } from "./config";
+import { normalizeForModeration } from "./normalize";
 import type { ModerationInput, ModerationResult } from "./types";
 
 let cachedClient: OpenAI | null | undefined;
@@ -9,6 +10,20 @@ function getClient(): OpenAI | null {
   if (cachedClient !== undefined) return cachedClient;
   cachedClient = process.env.OPENAI_API_KEY ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY }) : null;
   return cachedClient;
+}
+
+// OpenAI's SDK error class carries the actual API error body (type/code),
+// which is far more actionable than the bare HTTP status text — e.g.
+// "insufficient_quota" (billing) vs "rate_limit_exceeded" (throttling)
+// need completely different fixes, and a plain err.message collapses that
+// distinction into "429 Too Many Requests" either way.
+function extractApiError(err: unknown): string {
+  let apiError = err instanceof Error ? err.message : String(err);
+  if (err && typeof err === "object" && "error" in err) {
+    const body = (err as { error?: { type?: string; code?: string; message?: string } }).error;
+    if (body) apiError = [body.type, body.code, body.message].filter(Boolean).join(" / ") || apiError;
+  }
+  return apiError;
 }
 
 /**
@@ -32,8 +47,28 @@ export async function checkContent(input: ModerationInput): Promise<ModerationRe
     };
   }
 
+  // Translate/normalize to English first — see normalize.ts for why this
+  // step exists (the moderation endpoint's own Hinglish detection is
+  // effectively blind). Failing this step fails the whole check closed,
+  // same as any other API error: skipping straight to checking the raw
+  // text would silently reopen the exact gap this exists to close.
+  let normalizedText = input.text;
+  if (input.text?.trim()) {
+    try {
+      normalizedText = await normalizeForModeration(openai, input.text);
+    } catch (err) {
+      return {
+        decision: "hold_for_review",
+        scores: {},
+        flaggedCategories: [],
+        reason: "Text normalization for moderation failed — held for manual review as a safe default.",
+        apiError: extractApiError(err),
+      };
+    }
+  }
+
   const moderationInput: ModerationMultiModalInput[] = [];
-  if (input.text?.trim()) moderationInput.push({ type: "text", text: input.text });
+  if (normalizedText?.trim()) moderationInput.push({ type: "text", text: normalizedText });
   for (const url of input.imageUrls ?? []) moderationInput.push({ type: "image_url", image_url: { url } });
 
   if (moderationInput.length === 0) {
@@ -82,22 +117,12 @@ export async function checkContent(input: ModerationInput): Promise<ModerationRe
           : `Flagged categories: ${[...flagged].join(", ") || "elevated category scores"}`,
     };
   } catch (err) {
-    // OpenAI's SDK error class carries the actual API error body (type/code),
-    // which is far more actionable than the bare HTTP status text — e.g.
-    // "insufficient_quota" (billing) vs "rate_limit_exceeded" (throttling)
-    // need completely different fixes, and a plain err.message collapses
-    // that distinction into "429 Too Many Requests" either way.
-    let apiError = err instanceof Error ? err.message : String(err);
-    if (err && typeof err === "object" && "error" in err) {
-      const body = (err as { error?: { type?: string; code?: string; message?: string } }).error;
-      if (body) apiError = [body.type, body.code, body.message].filter(Boolean).join(" / ") || apiError;
-    }
     return {
       decision: "hold_for_review",
       scores: {},
       flaggedCategories: [],
       reason: "Moderation API call failed — held for manual review as a safe default.",
-      apiError,
+      apiError: extractApiError(err),
     };
   }
 }

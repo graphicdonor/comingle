@@ -146,6 +146,35 @@ only line of defense for that category in production.
 key — all resolve to `hold_for_review`, never `allow`. An outage should
 never be the reason something unsafe gets published.
 
+## Language handling
+
+Every text input is translated/normalized to English (`normalize.ts`, via
+a `gpt-4o-mini` chat completion) before it reaches the moderation
+endpoint. This exists because of a confirmed, serious gap: the moderation
+model handles Hindi written in Devanagari script about as well as English,
+but has almost no effective detection for **Hinglish** (Romanized,
+code-mixed Hindi/English) — verified directly by submitting identical
+harassment content in all three: it scored 0.98 in English, 0.88 in Hindi,
+and **0.006** in Hinglish, letting it straight through. Normalizing to
+English first closes that gap for any language or script the moderation
+model itself is weaker on, not just Hinglish specifically.
+
+`moderation_logs.input_text` still stores the **original**, untranslated
+text — the normalization only affects what gets sent to the moderation
+call itself, so a human reviewer always sees what the user actually
+wrote. If normalization itself fails (a timeout, a bad response), the
+whole check fails closed to `hold_for_review` exactly like a moderation
+API failure — skipping straight to checking the raw, un-normalized text
+on a translation failure would silently reopen the exact gap this step
+exists to close.
+
+This runs on every text submission, not just ones that look like
+Hindi/Hinglish — there's no language-detection heuristic gating it, since
+a heuristic that misses a case reopens the same silent gap. The tradeoff
+is real: every full-pipeline and precheck text check now makes two OpenAI
+calls instead of one, roughly doubling both latency and per-submission
+cost.
+
 ## Auto-suspend
 
 Tracked in `user_trust_scores`. After every `block` decision (automatic or
