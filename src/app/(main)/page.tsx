@@ -2,9 +2,10 @@ import { createClient } from "@/lib/supabase/server";
 import { PostCard } from "@/components/post/post-card";
 import type { Post, Profile, CommunityRole } from "@/lib/types";
 import { isCommunityStaff } from "@/lib/community";
+import { SURVEYS } from "@/lib/surveys";
 import Link from "next/link";
 import { HomeGreeting } from "@/components/layout/home-greeting";
-import { Heart, Stethoscope, GraduationCap, Home, Store, Scale, Briefcase, PartyPopper } from "lucide-react";
+import { Heart, Stethoscope, GraduationCap, Home, Store, Scale, Briefcase, PartyPopper, CheckCircle2 } from "lucide-react";
 
 const COMMUNITY_SERVICES = [
   { icon: Heart, label: "Matrimonial", href: "/services/matrimonial", color: "from-pink-100 to-rose-100" },
@@ -17,11 +18,6 @@ const COMMUNITY_SERVICES = [
   { icon: PartyPopper, label: "Events", href: "/services/events", color: "from-lime-100 to-green-100" },
 ];
 
-const SURVEYS = [
-  { id: 1, title: "Help us improve community services", desc: "Share your feedback on our current offerings and help us serve you better." },
-  { id: 2, title: "Community needs assessment 2025", desc: "Tell us what resources and support your community needs most right now." },
-];
-
 export default async function HomePage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -30,16 +26,19 @@ export default async function HomePage() {
   let posts: Post[] = [];
   let likedPostIds: Set<string> = new Set();
   let roleByCommunityId = new Map<string, CommunityRole>();
+  let submittedSurveyIds: Set<number> = new Set();
 
   if (user) {
-    const [{ data: p }, { data: memberOf }, { data: likes }] = await Promise.all([
+    const [{ data: p }, { data: memberOf }, { data: likes }, { data: surveyResponses }] = await Promise.all([
       supabase.from("profiles").select("*").eq("id", user.id).single(),
       supabase.from("community_members").select("community_id, role").eq("user_id", user.id),
       supabase.from("post_likes").select("post_id").eq("user_id", user.id),
+      supabase.from("survey_responses").select("survey_id").eq("user_id", user.id),
     ]);
     profile = p as Profile;
     likedPostIds = new Set((likes ?? []).map((l) => l.post_id));
     roleByCommunityId = new Map((memberOf ?? []).map((m) => [m.community_id, m.role as CommunityRole]));
+    submittedSurveyIds = new Set((surveyResponses ?? []).map((r) => r.survey_id));
 
     const communityIds = [...roleByCommunityId.keys()];
     if (communityIds.length > 0) {
@@ -73,15 +72,27 @@ export default async function HomePage() {
       <section className="mb-6">
         <h2 className="text-base font-bold text-gray-900 mb-3">Surveys</h2>
         <div className="flex gap-3 overflow-x-auto pb-1">
-          {SURVEYS.map((s) => (
-            <div key={s.id} className="flex-shrink-0 w-60 bg-white rounded-2xl p-4 shadow-sm">
-              <h3 className="font-semibold text-sm text-gray-900 mb-1.5 leading-tight">{s.title}</h3>
-              <p className="text-xs text-gray-500 mb-3 line-clamp-2">{s.desc}</p>
-              <button className="bg-[#E8355A] text-white text-xs font-bold px-4 py-1.5 rounded-full hover:bg-[#D02E50] transition-colors">
-                let&apos;s begin
-              </button>
-            </div>
-          ))}
+          {SURVEYS.map((s) => {
+            const done = submittedSurveyIds.has(s.id);
+            return (
+              <div key={s.id} className="flex-shrink-0 w-60 bg-white rounded-2xl p-4 shadow-sm">
+                <h3 className="font-semibold text-sm text-gray-900 mb-1.5 leading-tight">{s.title}</h3>
+                <p className="text-xs text-gray-500 mb-3 line-clamp-2">{s.desc}</p>
+                {done ? (
+                  <span className="inline-flex items-center gap-1.5 text-xs font-bold text-[#2A5C27]">
+                    <CheckCircle2 className="h-4 w-4" /> Submitted
+                  </span>
+                ) : (
+                  <Link
+                    href={`/surveys/${s.id}`}
+                    className="inline-block bg-[#E8355A] text-white text-xs font-bold px-4 py-1.5 rounded-full hover:bg-[#D02E50] transition-colors"
+                  >
+                    let&apos;s begin
+                  </Link>
+                )}
+              </div>
+            );
+          })}
         </div>
       </section>
 

@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 const NAV_LINKS = [
   { href: "/admin", label: "Dashboard" },
   { href: "/admin/moderation", label: "Moderation" },
+  { href: "/admin/surveys", label: "Surveys" },
 ];
 
 export function AdminNav() {

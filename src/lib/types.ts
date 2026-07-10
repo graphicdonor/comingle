@@ -119,3 +119,12 @@ export interface Notification {
   created_at: string;
   actor?: Profile | null;
 }
+
+export interface SurveyResponse {
+  id: string;
+  survey_id: number;
+  user_id: string;
+  answers: Record<string, string | string[] | number>;
+  created_at: string;
+  profiles?: Profile;
+}

@@ -209,6 +209,18 @@ create table if not exists moderation_appeals (
 );
 create index if not exists idx_moderation_appeals_status on moderation_appeals (status, created_at);
 
+-- Survey responses. Survey questions/definitions live in application code
+-- (src/lib/surveys.ts) — only submitted answers need a database row.
+create table if not exists survey_responses (
+  id          uuid primary key default gen_random_uuid(),
+  survey_id   int not null check (survey_id in (1, 2)),
+  user_id     uuid references profiles(id) on delete cascade not null,
+  answers     jsonb not null default '{}'::jsonb,
+  created_at  timestamptz default now() not null,
+  unique (survey_id, user_id)
+);
+create index if not exists survey_responses_survey_id_idx on survey_responses (survey_id);
+
 -- ============================================================
 -- Storage buckets
 -- Run in Supabase dashboard: Storage > New Bucket > "avatars" (Public)
@@ -353,6 +365,7 @@ alter table moderation_logs enable row level security;
 alter table moderation_queue enable row level security;
 alter table user_trust_scores enable row level security;
 alter table moderation_appeals enable row level security;
+alter table survey_responses enable row level security;
 
 -- Profiles
 create policy "Profiles are public"            on profiles for select  using (true);
@@ -535,6 +548,11 @@ create policy "Users can mark own notifications read" on notifications for updat
 create policy "Users can view own moderation logs" on moderation_logs for select using (auth.uid() = user_id);
 create policy "Users can view own appeals" on moderation_appeals for select using (auth.uid() = user_id);
 create policy "Users can file own appeals" on moderation_appeals for insert with check (auth.uid() = user_id);
+
+-- Surveys: users see and submit only their own response. Admin visibility
+-- goes through the service-role client (bypasses RLS) — no admin policy needed.
+create policy "Users can view own survey responses" on survey_responses for select using (auth.uid() = user_id);
+create policy "Users can submit own survey response" on survey_responses for insert with check (auth.uid() = user_id);
 
 -- ============================================================
 -- Enable Phone Auth in Supabase Dashboard:
