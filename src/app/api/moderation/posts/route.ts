@@ -59,7 +59,10 @@ export async function POST(req: NextRequest) {
 
   // Video has no moderation modality of its own on OpenAI's endpoint, so a
   // video post is moderated via its extracted preview frame instead — the
-  // same image-moderation path a photo post already goes through.
+  // same image-moderation path a photo post already goes through. A block
+  // still blocks either way; a video specifically skips the review queue
+  // on a hold outcome and publishes immediately instead of waiting on a
+  // human reviewer (see ModerationPipelineOptions.autoApproveHolds).
   const admin = createAdminClient();
   const result = await runModerationPipeline(
     admin,
@@ -70,7 +73,8 @@ export async function POST(req: NextRequest) {
       imageUrls: videoThumbnailUrl ? [videoThumbnailUrl] : imageUrl ? [imageUrl] : [],
       contextLink: community?.slug ? `/communities/${community.slug}` : "/communities",
     },
-    post.id
+    post.id,
+    { autoApproveHolds: !!videoUrl }
   );
 
   const moderation_status = result.decision === "allow" ? "published" : result.decision === "block" ? "blocked" : "pending_review";

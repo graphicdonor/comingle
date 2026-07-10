@@ -25,6 +25,27 @@ image-moderation path a photo post already goes through — no separate
 pipeline. This means the check inspects a single representative frame, not
 every frame and not the audio track; see "Known limitations" below.
 
+Video also gets one policy carve-out the other full-pipeline content
+doesn't: a `hold_for_review` outcome **skips the admin queue and publishes
+immediately** instead of waiting on a human reviewer
+(`ModerationPipelineOptions.autoApproveHolds` in `pipeline.ts`, set from
+`api/moderation/posts/route.ts` whenever the post has a video). A `block`
+is completely unaffected by this — the strict `sexual/minors` threshold and
+every other block-level protection still apply exactly as they do for
+photos, and still counts toward auto-suspension. So does a suspended
+user's forced hold: that's an account-level restriction, not a signal
+about this specific upload, and letting it auto-approve would make
+suspension trivially bypassable by switching content type. A fail-closed
+hold (missing `OPENAI_API_KEY`, a timed-out or errored call — anything
+carrying an `apiError`) is excluded the same way: that's "we couldn't
+check," not "the AI looked and it's borderline," and auto-approving it
+would mean an OpenAI outage silently publishes every video with zero check
+at all. Only a genuine, real-AI-check `hold_for_review` gets fast-tracked.
+This trades away human review of borderline video content in exchange for
+videos never
+sitting stuck in an unattended queue — reasonable for a small app without
+an active moderation team; revisit if that changes.
+
 **Deliberately not covered:**
 - **Comments.** The `comments` table and RLS policies exist in the schema,
   but there is no comment-creation UI anywhere in the app — nothing to hook
