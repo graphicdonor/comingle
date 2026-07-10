@@ -82,12 +82,22 @@ export async function checkContent(input: ModerationInput): Promise<ModerationRe
           : `Flagged categories: ${[...flagged].join(", ") || "elevated category scores"}`,
     };
   } catch (err) {
+    // OpenAI's SDK error class carries the actual API error body (type/code),
+    // which is far more actionable than the bare HTTP status text — e.g.
+    // "insufficient_quota" (billing) vs "rate_limit_exceeded" (throttling)
+    // need completely different fixes, and a plain err.message collapses
+    // that distinction into "429 Too Many Requests" either way.
+    let apiError = err instanceof Error ? err.message : String(err);
+    if (err && typeof err === "object" && "error" in err) {
+      const body = (err as { error?: { type?: string; code?: string; message?: string } }).error;
+      if (body) apiError = [body.type, body.code, body.message].filter(Boolean).join(" / ") || apiError;
+    }
     return {
       decision: "hold_for_review",
       scores: {},
       flaggedCategories: [],
       reason: "Moderation API call failed — held for manual review as a safe default.",
-      apiError: err instanceof Error ? err.message : String(err),
+      apiError,
     };
   }
 }
