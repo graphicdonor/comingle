@@ -22,6 +22,11 @@ export function Navbar() {
   const router = useRouter();
   const supabase = createClient();
   const [navUser, setNavUser] = useState<NavUser | null>(null);
+  // Distinct from navUser === null — that's ambiguous between "logged out"
+  // and "haven't checked yet". Without this, the header defaults to showing
+  // Log in/Sign up on every page load and flashes them away a beat later
+  // once an already-logged-in user's session resolves.
+  const [authChecked, setAuthChecked] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
   const hideBottomNav = pathname.startsWith("/services/matrimonial/chat/");
@@ -37,21 +42,40 @@ export function Navbar() {
           avatar_url: profile.avatar_url,
         });
       }
+      setAuthChecked(true);
       return;
     }
 
-    supabase.auth.getUser().then(({ data }) => {
-      if (data.user) {
-        supabase.from("profiles").select("username, avatar_url, full_name")
-          .eq("id", data.user.id).single()
-          .then(({ data: p }) => {
-            if (p) setNavUser({ id: data.user.id, username: p.username, full_name: p.full_name || p.username, avatar_url: p.avatar_url });
-          });
+    // getSession() reads the persisted session from local storage — no
+    // network round-trip — so this resolves fast enough to avoid a visible
+    // flash. getUser() (which does hit the network to revalidate) still runs
+    // for anything security-sensitive; this is just UI state.
+    supabase.auth.getSession().then(({ data }) => {
+      const user = data.session?.user;
+      if (!user) {
+        setAuthChecked(true);
+        return;
       }
+      supabase.from("profiles").select("username, avatar_url, full_name")
+        .eq("id", user.id).single()
+        .then(({ data: p }) => {
+          if (p) setNavUser({ id: user.id, username: p.username, full_name: p.full_name || p.username, avatar_url: p.avatar_url });
+          setAuthChecked(true);
+        });
     });
 
+    // A logout is the only case that's immediately final here (no further
+    // async work to wait on) — a session appearing is already handled by the
+    // getSession() chain above, which gates authChecked on the profile fetch
+    // too. Setting authChecked unconditionally in this listener would race
+    // that chain: this fires as soon as the session is known, which can be
+    // before the profile row has loaded, reintroducing the same flash this
+    // effect exists to prevent.
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
-      if (!session) setNavUser(null);
+      if (!session) {
+        setNavUser(null);
+        setAuthChecked(true);
+      }
     });
     return () => subscription.unsubscribe();
   }, []);
@@ -152,7 +176,7 @@ export function Navbar() {
               )}
             </Link>
 
-            {!navUser && (
+            {authChecked && !navUser && (
               <div className="flex items-center gap-2">
                 <Link href="/login" className="text-xs font-medium text-gray-600 px-3 py-1.5 hover:text-gray-900">
                   Log in
@@ -187,7 +211,7 @@ export function Navbar() {
                     <p className="text-xs text-gray-400 truncate">@{navUser.username}</p>
                   </div>
                 </Link>
-              ) : (
+              ) : authChecked ? (
                 <div>
                   <p className="font-bold text-gray-900 text-sm mb-2">Welcome to Comingle</p>
                   <div className="flex gap-2">
@@ -199,7 +223,7 @@ export function Navbar() {
                     </Link>
                   </div>
                 </div>
-              )}
+              ) : null}
               <button
                 onClick={() => setMenuOpen(false)}
                 aria-label="Close menu"
