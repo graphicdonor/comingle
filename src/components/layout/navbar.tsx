@@ -234,6 +234,14 @@ export function Navbar() {
             </div>
 
             <nav className="flex-1 overflow-y-auto py-2">
+              {/* Same four destinations as the floating bottom nav, reusing
+                  its own route list — the drawer is a second, conventional
+                  way to reach them for anyone who doesn't discover the
+                  drag/tap gestures on the floating dock. */}
+              {floatingNavRoutes.map((route) => (
+                <DrawerLink key={route.id} href={route.href} icon={route.icon} label={route.label} onNavigate={() => setMenuOpen(false)} />
+              ))}
+              <div className="my-2 border-t border-gray-100" />
               {navUser && (
                 <>
                   <DrawerLink href="/profile/edit" icon={UserCog} label="Edit Profile" onNavigate={() => setMenuOpen(false)} />
