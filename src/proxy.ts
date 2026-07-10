@@ -55,7 +55,7 @@ export async function proxy(request: NextRequest) {
   const user = devMode || !hasAuthCookie ? null : (await supabase.auth.getUser()).data.user;
 
   // Protected routes
-  const protectedPaths = ["/communities/create", "/settings", "/notifications", "/signup-details", "/pin", "/select-communities", "/profile/edit", "/services/matrimonial"];
+  const protectedPaths = ["/communities/create", "/settings", "/notifications", "/signup-details", "/pin", "/select-communities", "/profile/edit", "/services/matrimonial", "/reels"];
   const isManageRoute = pathname.startsWith("/communities/") && pathname.endsWith("/manage");
   const isProtected = isManageRoute || protectedPaths.some((p) => pathname.startsWith(p));
 

@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Heart, MessageCircle, MoreVertical, Trash2 } from "lucide-react";
+import { Heart, MessageCircle, MoreVertical, Play, Trash2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import type { Post } from "@/lib/types";
 import { Avatar } from "@/components/ui/avatar";
@@ -122,6 +122,18 @@ export function PostCard({ post, currentUserId, liked: initialLiked = false, can
             <div className="mt-3 rounded-xl overflow-hidden">
               <img src={post.image_url} alt={post.title} className="w-full max-h-80 object-cover" />
             </div>
+          )}
+          {post.video_url && (
+            <Link href={`/reels/${post.id}`} className="mt-3 relative block rounded-xl overflow-hidden bg-black group">
+              {post.video_thumbnail_url && (
+                <img src={post.video_thumbnail_url} alt={post.title} className="w-full max-h-80 object-cover opacity-90" />
+              )}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-12 h-12 rounded-full bg-black/50 group-hover:bg-black/65 transition-colors flex items-center justify-center">
+                  <Play className="h-5 w-5 text-white fill-white ml-0.5" />
+                </div>
+              </div>
+            </Link>
           )}
 
           {currentUserId === post.author_id && (

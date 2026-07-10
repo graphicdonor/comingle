@@ -52,6 +52,8 @@ create table if not exists posts (
   title             text not null,
   content           text,
   image_url         text,
+  video_url         text,
+  video_thumbnail_url text,
   author_id         uuid references profiles(id) on delete cascade,
   community_id      uuid references communities(id) on delete cascade,
   like_count        integer default 0 not null,
@@ -233,6 +235,12 @@ create index if not exists survey_responses_survey_id_idx on survey_responses (s
 -- "post-images" (Public, 5MB file limit, jpg/jpeg/png only) — same shape
 -- as avatars: path is {author_uid}/{file}, policies in
 -- supabase/migrations/20260709140000_*.sql, bucket created via Storage API.
+-- "post-videos" (Public, 25MB file limit, mp4/mov/webm only) — same shape
+-- as avatars: path is {author_uid}/{file}, policies in
+-- supabase/migrations/20260711100000_*.sql, bucket created via Storage API.
+-- Video posts also store an extracted preview frame in "post-images" at
+-- {author_uid}/{file}-thumb.jpg, used both as the feed thumbnail and as
+-- the moderation input (see MODERATION.md).
 -- ============================================================
 
 -- ============================================================

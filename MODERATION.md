@@ -7,7 +7,7 @@ visible to anyone but its author — never after.
 ## Scope
 
 Covered, with a full pending → published/blocked pipeline:
-- **Posts** (title, content, image)
+- **Posts** (title, content, image, or a 15-second video)
 - **Matrimonial profiles** (about-me text, photos)
 
 Covered, with a synchronous precheck (see "Two enforcement tiers" below):
@@ -17,11 +17,15 @@ Covered, with a synchronous precheck (see "Two enforcement tiers" below):
 - Avatar upload
 - Community cover upload
 
+**Video posts, specifically:** OpenAI's moderation endpoint has no video
+input modality, so a video post is moderated via one extracted preview
+frame (captured client-side around the same moment used for the feed
+thumbnail, see `src/lib/video.ts`) run through the exact same
+image-moderation path a photo post already goes through — no separate
+pipeline. This means the check inspects a single representative frame, not
+every frame and not the audio track; see "Known limitations" below.
+
 **Deliberately not covered:**
-- **Video.** There is no video upload feature anywhere in this app today —
-  building a frame-extraction/transcription pipeline for a content type
-  that doesn't exist would be speculative, untestable code. Add it if/when
-  video upload is actually built.
 - **Comments.** The `comments` table and RLS policies exist in the schema,
   but there is no comment-creation UI anywhere in the app — nothing to hook
   moderation into. Wire it in if a comment feature is ever built.
@@ -151,6 +155,15 @@ following the same DB-trigger pattern already used for chat notifications
 
 ## Known limitations
 
+- **Video posts are checked via one representative frame, not the whole
+  clip.** There's no server-side video pipeline in this app (no ffmpeg, no
+  frame-sampling worker) and OpenAI's moderation endpoint doesn't accept
+  video input at all — so a single frame extracted client-side stands in
+  for the full 15 seconds. Content that's only unsafe in a frame other than
+  the sampled one, or in the audio track, isn't caught by this check.
+  Tightening this would mean sampling multiple frames server-side (and,
+  for audio, adding a transcription step) — a real video pipeline, not a
+  client-side approximation.
 - **Images already in a public bucket become reachable at their exact URL
   the moment they're uploaded**, before moderation ever runs — the
   `post-images`/`matrimonial-photos` buckets are fully public. This system

@@ -42,6 +42,8 @@ export interface Post {
   title: string;
   content: string | null;
   image_url: string | null;
+  video_url: string | null;
+  video_thumbnail_url: string | null;
   author_id: string;
   community_id: string;
   like_count: number;

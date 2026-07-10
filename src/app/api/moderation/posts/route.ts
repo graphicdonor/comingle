@@ -13,14 +13,21 @@ import { runModerationPipeline } from "@/lib/moderation";
  * resolves, which is why that part alone uses the admin client.
  */
 export async function POST(req: NextRequest) {
-  let body: { communityId?: string; title?: string; content?: string; imageUrl?: string | null };
+  let body: {
+    communityId?: string;
+    title?: string;
+    content?: string;
+    imageUrl?: string | null;
+    videoUrl?: string | null;
+    videoThumbnailUrl?: string | null;
+  };
   try {
     body = await req.json();
   } catch {
     return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
   }
 
-  const { communityId, title, content, imageUrl } = body;
+  const { communityId, title, content, imageUrl, videoUrl, videoThumbnailUrl } = body;
   if (!communityId || !title?.trim()) {
     return NextResponse.json({ error: "communityId and title are required" }, { status: 400 });
   }
@@ -39,6 +46,8 @@ export async function POST(req: NextRequest) {
       title: title.trim(),
       content: content?.trim() || null,
       image_url: imageUrl || null,
+      video_url: videoUrl || null,
+      video_thumbnail_url: videoThumbnailUrl || null,
       community_id: communityId,
       author_id: user.id,
       moderation_status: "pending_review",
@@ -48,6 +57,9 @@ export async function POST(req: NextRequest) {
 
   if (insertError) return NextResponse.json({ error: insertError.message }, { status: 400 });
 
+  // Video has no moderation modality of its own on OpenAI's endpoint, so a
+  // video post is moderated via its extracted preview frame instead — the
+  // same image-moderation path a photo post already goes through.
   const admin = createAdminClient();
   const result = await runModerationPipeline(
     admin,
@@ -55,7 +67,7 @@ export async function POST(req: NextRequest) {
       contentType: "post",
       userId: user.id,
       text: [title, content].filter(Boolean).join("\n\n"),
-      imageUrls: imageUrl ? [imageUrl] : [],
+      imageUrls: videoThumbnailUrl ? [videoThumbnailUrl] : imageUrl ? [imageUrl] : [],
       contextLink: community?.slug ? `/communities/${community.slug}` : "/communities",
     },
     post.id
