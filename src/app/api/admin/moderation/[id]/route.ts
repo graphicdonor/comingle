@@ -12,6 +12,7 @@ function isAuthed(req: NextRequest): boolean {
 const CONTENT_TABLE: Record<string, { table: string; idColumn: string }> = {
   post: { table: "posts", idColumn: "id" },
   matrimonial_profile: { table: "matrimonial_profiles", idColumn: "user_id" },
+  business_listing: { table: "business_listings", idColumn: "id" },
 };
 
 /** Approve or reject a held item. Route Handlers aren't covered by proxy.ts's /admin page guard (that only matches page paths, not /api/*), so the same admin-token cookie check happens here directly. */

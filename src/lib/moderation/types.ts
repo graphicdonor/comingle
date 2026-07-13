@@ -5,7 +5,8 @@ export type ContentType =
   | "community_description"
   | "community_rules"
   | "avatar"
-  | "community_cover";
+  | "community_cover"
+  | "business_listing";
 
 export type ModerationDecision = "allow" | "hold_for_review" | "block";
 

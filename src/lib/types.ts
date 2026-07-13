@@ -123,6 +123,32 @@ export interface Notification {
   actor?: Profile | null;
 }
 
+export interface BusinessListing {
+  id: string;
+  owner_id: string;
+  name: string;
+  pin_code: string | null;
+  address_line1: string | null;
+  address_line2: string | null;
+  street: string | null;
+  landmark: string | null;
+  area: string | null;
+  city: string | null;
+  state: string | null;
+  poc_name: string | null;
+  mobile_number: string | null;
+  whatsapp_number: string | null;
+  email: string | null;
+  categories: string[];
+  open_days: string[];
+  open_time: string | null;
+  close_time: string | null;
+  photo_urls: string[];
+  moderation_status: ModerationStatus;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface SurveyResponse {
   id: string;
   survey_id: number;

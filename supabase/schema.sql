@@ -127,6 +127,39 @@ create index if not exists idx_matrimonial_messages_pair_a on matrimonial_messag
 create index if not exists idx_matrimonial_messages_pair_b on matrimonial_messages (receiver_id, sender_id, created_at);
 create index if not exists idx_matrimonial_invites_receiver on matrimonial_invites (receiver_id, status);
 
+-- Business listings ("Register your Business", linked from the home page's
+-- Businesses community-service tile). One owner can list more than one
+-- business, unlike matrimonial_profiles' one-row-per-user shape, so this
+-- gets its own generated id + owner_id foreign key instead of a user_id PK.
+create table if not exists business_listings (
+  id                uuid primary key default gen_random_uuid(),
+  owner_id          uuid not null references profiles(id) on delete cascade,
+  name              text not null,
+  pin_code          text,
+  address_line1     text,
+  address_line2     text,
+  street            text,
+  landmark          text,
+  area              text,
+  city              text,
+  state             text,
+  poc_name          text,
+  mobile_number     text,
+  whatsapp_number   text,
+  email             text,
+  categories        text[] not null default '{}',
+  open_days         text[] not null default '{}',
+  open_time         time,
+  close_time        time,
+  photo_urls        text[] not null default '{}',
+  moderation_status text not null default 'pending_review' check (moderation_status in ('pending_review', 'published', 'blocked')),
+  created_at        timestamptz not null default now(),
+  updated_at        timestamptz not null default now()
+);
+
+create index if not exists idx_business_listings_owner on business_listings(owner_id);
+create index if not exists idx_business_listings_status on business_listings(moderation_status);
+
 -- Shortlist: a personal bookmark of another profile, independent of invites.
 create table if not exists matrimonial_shortlist (
   user_id             uuid references profiles(id) on delete cascade,
@@ -162,7 +195,7 @@ create table if not exists moderation_logs (
   content_type       text not null check (content_type in (
                        'post', 'matrimonial_profile', 'profile_bio',
                        'community_description', 'community_rules',
-                       'avatar', 'community_cover'
+                       'avatar', 'community_cover', 'business_listing'
                      )),
   content_id         text,
   user_id            uuid references profiles(id) on delete cascade not null,
@@ -242,6 +275,9 @@ create index if not exists survey_responses_survey_id_idx on survey_responses (s
 -- Video posts also store an extracted preview frame in "post-images" at
 -- {author_uid}/{file}-thumb.jpg, used both as the feed thumbnail and as
 -- the moderation input (see MODERATION.md).
+-- "business-photos" (Public, 5MB file limit, jpg/jpeg/png only) — same
+-- shape as avatars: path is {owner_uid}/{file}, policies in
+-- supabase/migrations/20260713130100_*.sql, bucket created via Storage API.
 -- ============================================================
 
 -- ============================================================
@@ -280,6 +316,20 @@ drop trigger if exists trg_matrimonial_profiles_updated_at on matrimonial_profil
 create trigger trg_matrimonial_profiles_updated_at
   before update on matrimonial_profiles
   for each row execute function set_matrimonial_profile_updated_at();
+
+-- updated_at on business_listings is DB-owned so app code never sets it
+create or replace function set_business_listing_updated_at()
+returns trigger language plpgsql as $$
+begin
+  new.updated_at = now();
+  return new;
+end;
+$$;
+
+drop trigger if exists trg_business_listings_updated_at on business_listings;
+create trigger trg_business_listings_updated_at
+  before update on business_listings
+  for each row execute function set_business_listing_updated_at();
 
 -- New chat message -> notify the receiver. If they already have an unread
 -- notification for a message from the same sender, bump its count and
@@ -375,6 +425,7 @@ alter table moderation_queue enable row level security;
 alter table user_trust_scores enable row level security;
 alter table moderation_appeals enable row level security;
 alter table survey_responses enable row level security;
+alter table business_listings enable row level security;
 
 -- Profiles
 create policy "Profiles are public"            on profiles for select  using (true);
@@ -501,6 +552,17 @@ create policy "Users can update own matrimonial profile" on matrimonial_profiles
   using (auth.uid() = user_id)
   with check (auth.uid() = user_id and moderation_status = 'pending_review');
 create policy "Users can delete own matrimonial profile" on matrimonial_profiles for delete using (auth.uid() = user_id);
+
+-- Business listings: same shape as matrimonial_profiles' moderation gating,
+-- but visible to anyone once published (no shared-community restriction) —
+-- a business listing is a platform-wide directory, not a matchmaking pool.
+create policy "Published listings are publicly visible" on business_listings for select using (moderation_status = 'published');
+create policy "Owners can view own listings" on business_listings for select using (auth.uid() = owner_id);
+create policy "Owners can create own listings" on business_listings for insert with check (auth.uid() = owner_id and moderation_status = 'pending_review');
+create policy "Owners can update own listings" on business_listings for update
+  using (auth.uid() = owner_id)
+  with check (auth.uid() = owner_id and moderation_status = 'pending_review');
+create policy "Owners can delete own listings" on business_listings for delete using (auth.uid() = owner_id);
 
 -- Matrimonial invites: directional connection requests, gated by the same
 -- gender + shared-community eligibility rule as profile visibility.
