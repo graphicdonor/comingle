@@ -54,6 +54,23 @@ export async function proxy(request: NextRequest) {
   const hasAuthCookie = request.cookies.getAll().some((c) => c.name.includes("auth-token"));
   const user = devMode || !hasAuthCookie ? null : (await supabase.auth.getUser()).data.user;
 
+  // A deactivated account (admin-set profiles.is_active = false) is signed
+  // out on its next request rather than at the moment it's deactivated —
+  // there's no live-session revocation here, just a block on continuing to
+  // use the still-valid session token. Skipped for /api/* so route handlers
+  // keep making their own auth decisions unchanged.
+  if (user && !pathname.startsWith("/api/") && pathname !== "/account-disabled") {
+    const { data: profile } = await supabase.from("profiles").select("is_active").eq("id", user.id).maybeSingle();
+    if (profile && profile.is_active === false) {
+      await supabase.auth.signOut();
+      const url = request.nextUrl.clone();
+      url.pathname = "/account-disabled";
+      const redirectResponse = NextResponse.redirect(url);
+      supabaseResponse.cookies.getAll().forEach((cookie) => redirectResponse.cookies.set(cookie));
+      return redirectResponse;
+    }
+  }
+
   // Protected routes
   const protectedPaths = ["/communities/create", "/posts/create", "/settings", "/notifications", "/signup-details", "/pin", "/select-communities", "/profile/edit", "/services/matrimonial", "/reels"];
   const isManageRoute = pathname.startsWith("/communities/") && pathname.endsWith("/manage");

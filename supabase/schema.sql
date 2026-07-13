@@ -17,6 +17,7 @@ create table if not exists profiles (
   pin_hash        text,
   phone           text,
   last_active_at  timestamptz,
+  is_active       boolean default true not null,
   created_at      timestamptz default now() not null
 );
 

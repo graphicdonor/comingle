@@ -6,6 +6,7 @@ import { ChevronRight, LogOut } from "lucide-react";
 import { Avatar } from "@/components/ui/avatar";
 import { DEV_MODE, getDevProfile, clearDevSession } from "@/lib/dev-auth";
 import { createClient } from "@/lib/supabase/client";
+import { DeleteAccountButton } from "@/components/settings/delete-account-button";
 
 interface SettingsProfile {
   username: string;
@@ -78,13 +79,19 @@ export default function SettingsPage() {
       </div>
 
       {/* Session */}
-      <div className="bg-white rounded-3xl shadow-sm p-5">
+      <div className="bg-white rounded-3xl shadow-sm p-5 mb-4">
         <button
           onClick={handleLogout}
           className="w-full flex items-center gap-3 py-1 text-sm font-semibold text-red-500 hover:text-red-600 transition-colors"
         >
           <LogOut className="h-4 w-4" /> Logout
         </button>
+      </div>
+
+      {/* Danger zone */}
+      <div className="bg-white rounded-3xl shadow-sm p-5">
+        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Danger Zone</p>
+        <DeleteAccountButton />
       </div>
     </div>
   );

@@ -6,8 +6,28 @@ import type { Profile } from "@/lib/types";
 export const revalidate = 0;
 
 interface ProfileRow extends Profile {
+  email?: string;
   phone?: string;
   community_count?: number;
+}
+
+// profiles.phone is an unused legacy column — real users authenticate by
+// phone OTP or Google, so phone/email only ever live on auth.users. Paginate
+// through the Auth Admin API rather than assuming one page covers everyone.
+async function fetchAuthContactInfo(supabase: ReturnType<typeof createAdminClient>) {
+  const byId: Record<string, { email?: string; phone?: string }> = {};
+  let page = 1;
+  const perPage = 1000;
+  for (;;) {
+    const { data, error } = await supabase.auth.admin.listUsers({ page, perPage });
+    if (error || !data) break;
+    for (const u of data.users) {
+      byId[u.id] = { email: u.email ?? undefined, phone: u.phone ?? undefined };
+    }
+    if (data.users.length < perPage) break;
+    page += 1;
+  }
+  return byId;
 }
 
 interface CommunitySummary {
@@ -21,10 +41,11 @@ export default async function AdminDashboard() {
   const supabase = createAdminClient();
 
   // Fetch all data in parallel
-  const [profilesRes, communitiesRes, postsRes] = await Promise.all([
+  const [profilesRes, communitiesRes, postsRes, authContactInfo] = await Promise.all([
     supabase.from("profiles").select("*").order("created_at", { ascending: false }),
     supabase.from("communities").select("id, name, member_count, created_at").order("member_count", { ascending: false }),
     supabase.from("posts").select("id, created_at"),
+    fetchAuthContactInfo(supabase),
   ]);
 
   const profiles = (profilesRes.data ?? []) as ProfileRow[];
@@ -38,7 +59,12 @@ export default async function AdminDashboard() {
     membershipCounts[m.user_id] = (membershipCounts[m.user_id] ?? 0) + 1;
   });
 
-  const enriched = profiles.map((p) => ({ ...p, community_count: membershipCounts[p.id] ?? 0 }));
+  const enriched = profiles.map((p) => ({
+    ...p,
+    community_count: membershipCounts[p.id] ?? 0,
+    email: authContactInfo[p.id]?.email,
+    phone: authContactInfo[p.id]?.phone,
+  }));
 
   // Stats
   const today = new Date(); today.setHours(0, 0, 0, 0);

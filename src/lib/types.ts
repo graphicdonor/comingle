@@ -10,6 +10,7 @@ export interface Profile {
   city: string | null;
   pin_hash: string | null;
   last_active_at: string | null;
+  is_active: boolean;
   created_at: string;
 }
 

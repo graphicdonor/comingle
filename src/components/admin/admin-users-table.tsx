@@ -1,10 +1,12 @@
 "use client";
 import { Fragment, useState, useMemo } from "react";
-import { Search, ChevronUp, ChevronDown, Users, MapPin, Calendar, Filter } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Search, ChevronUp, ChevronDown, Users, MapPin, Calendar, Filter, Power, Trash2 } from "lucide-react";
 import type { Profile } from "@/lib/types";
 import { Avatar } from "@/components/ui/avatar";
 
 interface UserRow extends Profile {
+  email?: string;
   phone?: string;
   community_count?: number;
 }
@@ -19,7 +21,35 @@ export function AdminUsersTable({ users }: { users: UserRow[] }) {
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
   const [page, setPage] = useState(1);
   const [expanded, setExpanded] = useState<string | null>(null);
+  const [actingId, setActingId] = useState<string | null>(null);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
+  const router = useRouter();
   const PER_PAGE = 20;
+
+  const toggleActive = async (e: React.MouseEvent, user: UserRow) => {
+    e.stopPropagation();
+    setActingId(user.id);
+    const res = await fetch(`/api/admin/users/${user.id}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: user.is_active ? "deactivate" : "activate" }),
+    });
+    setActingId(null);
+    if (res.ok) router.refresh();
+  };
+
+  const deleteUser = async (e: React.MouseEvent, id: string) => {
+    e.stopPropagation();
+    setActingId(id);
+    const res = await fetch(`/api/admin/users/${id}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "delete" }),
+    });
+    setActingId(null);
+    setConfirmDeleteId(null);
+    if (res.ok) router.refresh();
+  };
 
   const genders = useMemo(() => {
     const g = new Set(users.map((u) => u.gender).filter(Boolean) as string[]);
@@ -35,6 +65,7 @@ export function AdminUsersTable({ users }: { users: UserRow[] }) {
           u.full_name?.toLowerCase().includes(q) ||
           u.username.toLowerCase().includes(q) ||
           u.phone?.toLowerCase().includes(q) ||
+          u.email?.toLowerCase().includes(q) ||
           u.city?.toLowerCase().includes(q) ||
           u.state?.toLowerCase().includes(q)
       );
@@ -131,12 +162,14 @@ export function AdminUsersTable({ users }: { users: UserRow[] }) {
                   Joined {sortIcon("created_at")}
                 </button>
               </th>
+              <th className="text-left px-4 py-3 font-semibold">Status</th>
+              <th className="text-left px-4 py-3 font-semibold">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-white/4">
             {pageUsers.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-4 py-12 text-center text-gray-500">
+                <td colSpan={8} className="px-4 py-12 text-center text-gray-500">
                   No users found.
                 </td>
               </tr>
@@ -186,14 +219,64 @@ export function AdminUsersTable({ users }: { users: UserRow[] }) {
                         {new Date(user.created_at).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
                       </span>
                     </td>
+                    <td className="px-4 py-3">
+                      <span
+                        className={`px-2 py-0.5 rounded-full font-semibold ${
+                          user.is_active ? "bg-green-500/15 text-green-400" : "bg-red-500/15 text-red-400"
+                        }`}
+                      >
+                        {user.is_active ? "Active" : "Inactive"}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3">
+                      {confirmDeleteId === user.id ? (
+                        <div className="flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
+                          <span className="text-gray-400">Delete?</span>
+                          <button
+                            onClick={() => setConfirmDeleteId(null)}
+                            className="px-2 py-1 rounded-lg bg-white/6 hover:bg-white/10 text-gray-300 transition-colors"
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            disabled={actingId === user.id}
+                            onClick={(e) => deleteUser(e, user.id)}
+                            className="px-2 py-1 rounded-lg bg-red-500/20 hover:bg-red-500/30 text-red-400 font-semibold transition-colors disabled:opacity-50"
+                          >
+                            Confirm
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-1">
+                          <button
+                            disabled={actingId === user.id}
+                            onClick={(e) => toggleActive(e, user)}
+                            title={user.is_active ? "Deactivate user" : "Activate user"}
+                            className="w-7 h-7 flex items-center justify-center rounded-lg bg-white/6 hover:bg-white/10 text-gray-300 transition-colors disabled:opacity-50"
+                          >
+                            <Power className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            disabled={actingId === user.id}
+                            onClick={(e) => { e.stopPropagation(); setConfirmDeleteId(user.id); }}
+                            title="Delete user"
+                            className="w-7 h-7 flex items-center justify-center rounded-lg bg-white/6 hover:bg-red-500/20 text-gray-300 hover:text-red-400 transition-colors disabled:opacity-50"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      )}
+                    </td>
                   </tr>
                   {/* Expanded row */}
                   {expanded === user.id && (
                     <tr className="bg-[#0F1117]/60">
-                      <td colSpan={6} className="px-4 py-4">
+                      <td colSpan={8} className="px-4 py-4">
                         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 text-xs">
                           <Detail label="Full name" value={user.full_name} />
                           <Detail label="Username" value={`@${user.username}`} />
+                          <Detail label="Email" value={user.email} />
+                          <Detail label="Phone" value={user.phone} />
                           <Detail label="Gender" value={user.gender} />
                           <Detail label="Date of birth" value={user.date_of_birth ? new Date(user.date_of_birth).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }) : null} />
                           <Detail label="City" value={user.city} />
