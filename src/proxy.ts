@@ -52,16 +52,28 @@ export async function proxy(request: NextRequest) {
   // anything anyway.
   const devMode = process.env.NEXT_PUBLIC_DEV_MODE === "true";
   const hasAuthCookie = request.cookies.getAll().some((c) => c.name.includes("auth-token"));
-  const user = devMode || !hasAuthCookie ? null : (await supabase.auth.getUser()).data.user;
 
-  // A deactivated account (admin-set profiles.is_active = false) is signed
-  // out on its next request rather than at the moment it's deactivated —
-  // there's no live-session revocation here, just a block on continuing to
-  // use the still-valid session token. Skipped for /api/* so route handlers
-  // keep making their own auth decisions unchanged.
-  if (user && !pathname.startsWith("/api/") && pathname !== "/account-disabled") {
-    const { data: profile } = await supabase.from("profiles").select("is_active").eq("id", user.id).maybeSingle();
-    if (profile && profile.is_active === false) {
+  let user = null;
+  if (!devMode && hasAuthCookie) {
+    // getUser() (Auth server) and the is_active RPC (PostgREST, resolving
+    // auth.uid() from the same JWT locally in Postgres — no GoTrue round
+    // trip of its own) hit different backends, so running them concurrently
+    // instead of sequentially roughly halves this middleware's network time
+    // on every authenticated request.
+    const [{ data: userData }, { data: isActive, error: isActiveError }] = await Promise.all([
+      supabase.auth.getUser(),
+      supabase.rpc("current_user_is_active"),
+    ]);
+    user = userData.user;
+
+    // A deactivated account (admin-set profiles.is_active = false) is signed
+    // out on its next request rather than at the moment it's deactivated —
+    // there's no live-session revocation here, just a block on continuing to
+    // use the still-valid session token. Skipped for /api/* so route
+    // handlers keep making their own auth decisions unchanged, and skipped
+    // on an RPC error (e.g. the token was mid-refresh) rather than failing
+    // closed — the next request tries again.
+    if (user && !isActiveError && isActive === false && !pathname.startsWith("/api/") && pathname !== "/account-disabled") {
       await supabase.auth.signOut();
       const url = request.nextUrl.clone();
       url.pathname = "/account-disabled";

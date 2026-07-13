@@ -283,6 +283,18 @@ create index if not exists survey_responses_survey_id_idx on survey_responses (s
 -- ============================================================
 -- Utility RPC functions
 -- ============================================================
+
+-- Lets proxy.ts check the deactivated-account gate without first waiting on
+-- auth.getUser()'s round trip to the Auth server: auth.uid() resolves from
+-- the request's own JWT locally in Postgres (no network hop to GoTrue), so
+-- this can run in parallel with getUser() instead of after it. security
+-- invoker (the default) is correct here, not security definer — profiles
+-- select is already public via RLS, so no elevated privilege is needed.
+create or replace function current_user_is_active()
+returns boolean language sql stable as $$
+  select coalesce((select is_active from profiles where id = auth.uid()), true);
+$$;
+
 create or replace function increment_member_count(community_id uuid)
 returns void language sql security definer as $$
   update communities set member_count = member_count + 1 where id = community_id;
