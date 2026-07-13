@@ -8,23 +8,9 @@ import { Input } from "@/components/ui/input";
 import { createClient } from "@/lib/supabase/client";
 import { DEV_MODE } from "@/lib/dev-auth";
 import { cn } from "@/lib/utils";
+import { BUSINESS_DAYS as DAYS, BUSINESS_CATEGORIES as CATEGORIES } from "@/lib/business";
 
 const STEPS = ["Business Details", "Contact", "Timing", "Category", "Photos"];
-
-const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-
-const CATEGORIES = [
-  "Printing Shop",
-  "T Shirt Printing Services",
-  "Grocery Store",
-  "Restaurant",
-  "Salon & Spa",
-  "Electronics",
-  "Clothing & Apparel",
-  "Home Services",
-  "Tutoring",
-  "Other",
-];
 
 interface FormState {
   name: string;

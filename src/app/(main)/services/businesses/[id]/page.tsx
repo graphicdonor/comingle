@@ -4,19 +4,25 @@ import { ChevronLeft } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { BusinessPhotoCarousel } from "@/components/business/business-photo-carousel";
 import { BusinessListingFields } from "@/components/business/business-listing-fields";
+import { BusinessListingOwnerActions } from "@/components/business/business-listing-owner-actions";
 import type { BusinessListing } from "@/lib/types";
 
 export default async function BusinessListingPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const supabase = await createClient();
 
+  const [{ data }, { data: { user } }] = await Promise.all([
+    supabase.from("business_listings").select("*").eq("id", id).maybeSingle(),
+    supabase.auth.getUser(),
+  ]);
+
   // RLS already enforces visibility (published listings are public, pending/
   // blocked ones only to their owner), so a missing row here means either it
   // doesn't exist or the viewer isn't eligible to see it — both render as 404.
-  const { data } = await supabase.from("business_listings").select("*").eq("id", id).maybeSingle();
   if (!data) notFound();
 
   const listing = data as BusinessListing;
+  const isOwner = user?.id === listing.owner_id;
 
   return (
     <div>
@@ -31,7 +37,10 @@ export default async function BusinessListingPage({ params }: { params: Promise<
         <BusinessPhotoCarousel photos={listing.photo_urls} name={listing.name} />
 
         <div className="pt-4">
-          <h2 className="text-lg font-bold text-gray-900">{listing.name}</h2>
+          <div className="flex items-start justify-between gap-3">
+            <h2 className="text-lg font-bold text-gray-900">{listing.name}</h2>
+            {isOwner && <BusinessListingOwnerActions listingId={listing.id} />}
+          </div>
           {listing.categories.length > 0 && (
             <div className="flex flex-wrap gap-1.5 mt-2">
               {listing.categories.map((cat) => (

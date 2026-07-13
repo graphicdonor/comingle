@@ -4,12 +4,14 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { runModerationPipeline } from "@/lib/moderation";
 import { sanitizeBusinessListingBody, businessListingModerationText, type BusinessListingBody } from "@/lib/business";
 
-/** Same shape as the matrimonial-profile route: the insert goes through the
- * user's own session (so the owner-only RLS check still applies unchanged),
- * moderation_status is forced to 'pending_review' by the insert WITH CHECK
- * regardless of what's sent, and only the follow-up status flip after the
- * AI check resolves uses the service-role client. */
-export async function POST(req: NextRequest) {
+/** Editing a listing goes through the owner's own session, same as create —
+ * the update WITH CHECK forces moderation_status back to 'pending_review'
+ * regardless of what's sent, and the owner_id = auth.uid() USING clause is
+ * what makes a non-owner's edit affect zero rows (surfaced below as the
+ * "not found" error from .single(), same authorization check as any other
+ * owner-scoped update in this codebase). */
+export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   let body: BusinessListingBody;
   try {
     body = await req.json();
@@ -27,13 +29,16 @@ export async function POST(req: NextRequest) {
   } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Not signed in" }, { status: 401 });
 
-  const { data: listing, error: insertError } = await supabase
+  const { data: listing, error: updateError } = await supabase
     .from("business_listings")
-    .insert({ ...sanitizeBusinessListingBody(body), owner_id: user.id, moderation_status: "pending_review" })
+    .update({ ...sanitizeBusinessListingBody(body), moderation_status: "pending_review" })
+    .eq("id", id)
     .select("id")
     .single();
 
-  if (insertError) return NextResponse.json({ error: insertError.message }, { status: 400 });
+  if (updateError || !listing) {
+    return NextResponse.json({ error: updateError?.message || "Listing not found" }, { status: 404 });
+  }
 
   const admin = createAdminClient();
   const result = await runModerationPipeline(
@@ -58,9 +63,9 @@ export async function POST(req: NextRequest) {
     decision: result.decision,
     message:
       result.decision === "allow"
-        ? "Listing published."
+        ? "Listing updated and published."
         : result.decision === "hold_for_review"
-          ? "Your listing is awaiting review before it's visible to others."
-          : "Your listing doesn't meet community guidelines and wasn't published.",
+          ? "Your changes are awaiting review before they're visible to others."
+          : "Your changes don't meet community guidelines and weren't published.",
   });
 }
