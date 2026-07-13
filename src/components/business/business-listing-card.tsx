@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { MapPin, Phone, Clock } from "lucide-react";
 import { Avatar } from "@/components/ui/avatar";
 import type { BusinessListing } from "@/lib/types";
@@ -6,7 +7,10 @@ export function BusinessListingCard({ listing }: { listing: BusinessListing }) {
   const location = [listing.area, listing.city].filter(Boolean).join(", ");
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm p-4 flex gap-3">
+    <Link
+      href={`/services/businesses/${listing.id}`}
+      className="bg-white rounded-2xl shadow-sm p-4 flex gap-3 hover:shadow-md transition-shadow"
+    >
       <Avatar src={listing.photo_urls[0] ?? null} name={listing.name} size="lg" className="rounded-2xl" />
       <div className="flex-1 min-w-0">
         <p className="font-semibold text-gray-900 truncate">{listing.name}</p>
@@ -39,6 +43,6 @@ export function BusinessListingCard({ listing }: { listing: BusinessListing }) {
           </p>
         )}
       </div>
-    </div>
+    </Link>
   );
 }
