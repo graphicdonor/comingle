@@ -1,5 +1,4 @@
 import { redirect, notFound } from "next/navigation";
-import Link from "next/link";
 import { generateMemberCode, formatLastSeen } from "@/lib/matrimonial";
 import { PhotoCarousel } from "@/components/matrimonial/photo-carousel";
 import { MatrimonialProfileFields } from "@/components/matrimonial/matrimonial-profile-fields";
@@ -66,11 +65,6 @@ export default async function MatrimonialUserProfilePage({ params }: { params: P
         <p className="text-xs text-gray-400 mt-0.5">
           {generateMemberCode(profile.full_name, profile.user_id)} · {formatLastSeen(profile.profiles?.last_active_at)}
         </p>
-        {profile.profiles?.username && (
-          <Link href={`/profile/${profile.profiles.username}`} className="text-xs text-[#8B1A6B] hover:underline">
-            View main profile →
-          </Link>
-        )}
         <div className="mt-3">
           <InviteButton targetUserId={userId} hasOwnProfile={!!myMatrimonialProfile} relationship={relationship} />
         </div>
