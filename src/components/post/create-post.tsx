@@ -11,14 +11,16 @@ import { readVideoMetadata, MAX_POST_VIDEO_SECONDS, MAX_POST_VIDEO_BYTES } from 
 interface CreatePostProps {
   communityId: string;
   authorId: string;
+  defaultOpen?: boolean;
+  onPosted?: () => void;
 }
 
 type Media =
   | { type: "image"; file: File; previewUrl: string }
   | { type: "video"; file: File; previewUrl: string; thumbnailBlob: Blob };
 
-export function CreatePost({ communityId, authorId }: CreatePostProps) {
-  const [open, setOpen] = useState(false);
+export function CreatePost({ communityId, authorId, defaultOpen = false, onPosted }: CreatePostProps) {
+  const [open, setOpen] = useState(defaultOpen);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [media, setMedia] = useState<Media | null>(null);
@@ -129,6 +131,10 @@ export function CreatePost({ communityId, authorId }: CreatePostProps) {
     setTitle("");
     setContent("");
     removeMedia();
+    if (onPosted) {
+      onPosted();
+      return;
+    }
     setOpen(false);
     setStatusMessage(body.message);
     router.refresh();

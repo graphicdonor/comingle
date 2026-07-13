@@ -124,7 +124,7 @@ export function Navbar() {
   const floatingNavRoutes = [
     { id: "home", href: "/", icon: Home, label: "Home", color: { from: "#60A5FA", to: "#2563EB" } },
     { id: "communities", href: "/communities", icon: Users, label: "Communities", color: { from: "#C084FC", to: "#7E22CE" } },
-    { id: "create", href: "/communities/create", icon: PlusCircle, label: "Create", color: { from: "#4ADE80", to: "#15803D" } },
+    { id: "create", href: "/posts/create", icon: PlusCircle, label: "Post", color: { from: "#4ADE80", to: "#15803D" } },
     {
       id: "profile",
       href: navUser?.username ? `/profile/${navUser.username}` : "/login",
