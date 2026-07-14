@@ -2,6 +2,7 @@ import OpenAI from "openai";
 import type { ModerationMultiModalInput } from "openai/resources/moderations";
 import { getBlockThreshold, getReviewThreshold } from "./config";
 import { normalizeForModeration } from "./normalize";
+import { fetchImageAsDataUrl } from "./image";
 import type { ModerationInput, ModerationResult } from "./types";
 
 let cachedClient: OpenAI | null | undefined;
@@ -69,7 +70,23 @@ export async function checkContent(input: ModerationInput): Promise<ModerationRe
 
   const moderationInput: ModerationMultiModalInput[] = [];
   if (normalizedText?.trim()) moderationInput.push({ type: "text", text: normalizedText });
-  for (const url of input.imageUrls ?? []) moderationInput.push({ type: "image_url", image_url: { url } });
+
+  // Fetched and re-encoded as data URLs ourselves rather than handing OpenAI
+  // the raw Supabase Storage URL to fetch — see fetchImageAsDataUrl for why.
+  for (const url of input.imageUrls ?? []) {
+    try {
+      const dataUrl = await fetchImageAsDataUrl(url);
+      moderationInput.push({ type: "image_url", image_url: { url: dataUrl } });
+    } catch (err) {
+      return {
+        decision: "hold_for_review",
+        scores: {},
+        flaggedCategories: [],
+        reason: "Could not fetch an attached image for moderation — held for manual review as a safe default.",
+        apiError: err instanceof Error ? err.message : String(err),
+      };
+    }
+  }
 
   if (moderationInput.length === 0) {
     return { decision: "allow", scores: {}, flaggedCategories: [], reason: "Nothing to check." };
