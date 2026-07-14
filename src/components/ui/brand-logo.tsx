@@ -7,10 +7,12 @@ interface BrandLogoProps {
   withBackdrop?: boolean;
 }
 
+// The logo file is 839×205 (~4.09:1) — widths below keep that ratio rather
+// than fixing a height, so the mark never looks squashed or stretched.
 const sizeMap = {
-  sm: { com: "text-2xl", ingle: "text-2xl", tagline: "text-xs" },
-  md: { com: "text-4xl", ingle: "text-4xl", tagline: "text-sm" },
-  lg: { com: "text-5xl", ingle: "text-5xl", tagline: "text-base" },
+  sm: { width: 132, tagline: "text-xs" },
+  md: { width: 176, tagline: "text-sm" },
+  lg: { width: 224, tagline: "text-base" },
 };
 
 export function BrandLogo({ size = "md", className, showTagline = true, withBackdrop = false }: BrandLogoProps) {
@@ -26,19 +28,8 @@ export function BrandLogo({ size = "md", className, showTagline = true, withBack
         className
       )}
     >
-      <div className={cn("font-black tracking-tight leading-none", s.com)}>
-        <span style={{ color: "#8B1A6B" }}>COM</span>
-        <span
-          style={{
-            color: "#2A5C27",
-            fontStyle: "italic",
-            fontFamily: "'Georgia', serif",
-            fontWeight: 700,
-          }}
-        >
-          ingle
-        </span>
-      </div>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/comingle-logo.svg" alt="Comingle" width={s.width} height={Math.round((s.width * 205) / 839)} />
       {showTagline && (
         <span className={cn("font-medium mt-0.5", s.tagline)} style={{ color: "#2A5C27" }}>
           Uniting Communities
