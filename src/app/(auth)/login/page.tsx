@@ -48,10 +48,16 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="w-full max-w-sm flex flex-col items-center gap-6">
-      <BrandLogo size="md" className="mt-4" withBackdrop />
+    // Fixed to the viewport, same bottom-sheet treatment as /onboarding —
+    // the logo takes the remaining flex space above the card instead of the
+    // whole block centering together, so the card sits flush at the bottom.
+    <div className="fixed inset-0 flex flex-col items-center px-4">
+      <div className="flex-1 w-full max-w-sm flex items-center justify-center min-h-0">
+        <BrandLogo size="md" withBackdrop />
+      </div>
 
-      <div className="w-full bg-white rounded-3xl shadow-lg p-7">
+      <div className="w-full max-w-sm bg-white rounded-t-3xl shadow-xl pt-3 pb-8 px-6 relative">
+        <div className="w-10 h-1 rounded-full bg-gray-200 mx-auto mb-6" />
         <h2 className="text-xl font-bold text-gray-900 text-center mb-1">Sign in with mobile number</h2>
         <p className="text-sm text-gray-500 text-center mb-6">You will receive a 6 digit code to verify your mobile number</p>
 
