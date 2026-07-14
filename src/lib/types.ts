@@ -149,6 +149,30 @@ export interface BusinessListing {
   updated_at: string;
 }
 
+export interface JobListing {
+  id: string;
+  owner_id: string;
+  title: string;
+  company_name: string | null;
+  job_type: string | null;
+  categories: string[];
+  city: string | null;
+  state: string | null;
+  is_remote: boolean;
+  salary_min: number | null;
+  salary_max: number | null;
+  description: string | null;
+  poc_name: string | null;
+  email: string | null;
+  mobile_number: string | null;
+  whatsapp_number: string | null;
+  application_link: string | null;
+  photo_urls: string[];
+  moderation_status: ModerationStatus;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface SurveyResponse {
   id: string;
   survey_id: number;

@@ -12,6 +12,7 @@ const CONTENT_TABLE: Record<string, { table: string; idColumn: string }> = {
   post: { table: "posts", idColumn: "id" },
   matrimonial_profile: { table: "matrimonial_profiles", idColumn: "user_id" },
   business_listing: { table: "business_listings", idColumn: "id" },
+  job_listing: { table: "job_listings", idColumn: "id" },
 };
 
 /** Approving an appeal restores the content and decrements the violation count it had contributed to; denying just records the outcome. */
