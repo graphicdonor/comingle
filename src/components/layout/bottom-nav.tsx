@@ -25,7 +25,7 @@ export function BottomNav({ items, activeId }: { items: BottomNavItem[]; activeI
               key={item.id}
               href={item.href}
               aria-current={isActive ? "page" : undefined}
-              className="relative flex-1 flex flex-col items-center justify-center gap-1 py-2.5 min-w-0"
+              className="relative flex-1 flex flex-col items-center justify-center gap-1 pt-2.5 pb-[20px] min-w-0"
             >
               {isActive && <span aria-hidden className="absolute top-0 left-1/2 -translate-x-1/2 w-10 h-[3px] bg-gray-900" />}
               <Icon className={cn("h-6 w-6", isActive ? "text-gray-900" : "text-gray-400")} strokeWidth={isActive ? 2.4 : 2} />
