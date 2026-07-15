@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/client";
 import { useEffect, useState } from "react";
 import { Avatar } from "@/components/ui/avatar";
 import { DEV_MODE, getDevProfile, clearDevSession } from "@/lib/dev-auth";
-import { FloatingNav, type FloatingNavItem } from "@/components/floating-nav";
+import { BottomNav } from "@/components/layout/bottom-nav";
 
 interface NavUser {
   id: string;
@@ -121,23 +121,13 @@ export function Navbar() {
     router.refresh();
   };
 
-  const floatingNavRoutes = [
-    { id: "home", href: "/", icon: Home, label: "Home", color: { from: "#60A5FA", to: "#2563EB" } },
-    { id: "communities", href: "/communities", icon: Users, label: "Communities", color: { from: "#C084FC", to: "#7E22CE" } },
-    { id: "create", href: "/posts/create", icon: PlusCircle, label: "Post", color: { from: "#4ADE80", to: "#15803D" } },
-    {
-      id: "profile",
-      href: navUser?.username ? `/profile/${navUser.username}` : "/login",
-      icon: User,
-      label: "Profile",
-      color: { from: "#F472B6", to: "#BE185D" },
-    },
+  const bottomNavRoutes = [
+    { id: "home", href: "/", icon: Home, label: "Home" },
+    { id: "communities", href: "/communities", icon: Users, label: "Communities" },
+    { id: "create", href: "/posts/create", icon: PlusCircle, label: "Post" },
+    { id: "profile", href: navUser?.username ? `/profile/${navUser.username}` : "/login", icon: User, label: "Profile" },
   ];
-  const activeNavId = floatingNavRoutes.find((route) => route.href === pathname)?.id;
-  const floatingNavItems: FloatingNavItem[] = floatingNavRoutes.map(({ href, ...item }) => ({
-    ...item,
-    onSelect: () => router.push(href),
-  }));
+  const activeNavId = bottomNavRoutes.find((route) => route.href === pathname)?.id;
 
   return (
     <>
@@ -234,11 +224,9 @@ export function Navbar() {
             </div>
 
             <nav className="flex-1 overflow-y-auto py-2">
-              {/* Same four destinations as the floating bottom nav, reusing
-                  its own route list — the drawer is a second, conventional
-                  way to reach them for anyone who doesn't discover the
-                  drag/tap gestures on the floating dock. */}
-              {floatingNavRoutes.map((route) => (
+              {/* Same four destinations as the bottom nav, reusing its own
+                  route list. */}
+              {bottomNavRoutes.map((route) => (
                 <DrawerLink key={route.id} href={route.href} icon={route.icon} label={route.label} onNavigate={() => setMenuOpen(false)} />
               ))}
               <div className="my-2 border-t border-gray-100" />
@@ -267,11 +255,11 @@ export function Navbar() {
         </div>
       )}
 
-      {/* ── Floating nav ──
+      {/* ── Bottom nav ──
           Hidden on the matrimonial chat thread — it already has its own
           fixed compose bar at the bottom, which would otherwise compete
           with this for the same screen space. */}
-      {!hideBottomNav && <FloatingNav items={floatingNavItems} activeId={activeNavId} storageKey="comingle-floating-nav-dock" />}
+      {!hideBottomNav && <BottomNav items={bottomNavRoutes} activeId={activeNavId} />}
     </>
   );
 }
