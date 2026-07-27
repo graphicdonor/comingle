@@ -100,7 +100,7 @@ export default async function HomePage() {
       {posts.length > 0 ? (
         <section>
           <h2 className="text-base font-bold text-gray-900 mb-3">Your Feed</h2>
-          <div className="space-y-3">
+          <div className="-mx-4 divide-y-8 divide-gray-100">
             {posts.map((post) => (
               <PostCard
                 key={post.id}
@@ -108,6 +108,7 @@ export default async function HomePage() {
                 currentUserId={user?.id}
                 liked={likedPostIds.has(post.id)}
                 canModerate={isCommunityStaff(roleByCommunityId.get(post.community_id))}
+                variant="feed"
               />
             ))}
           </div>

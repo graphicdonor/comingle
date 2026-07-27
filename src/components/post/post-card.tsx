@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AnimatePresence } from "framer-motion";
-import { Heart, MessageCircle, MoreVertical, Play, Trash2 } from "lucide-react";
+import { Heart, MessageCircle, MoreVertical, Play, ThumbsUp, Trash2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import type { Post } from "@/lib/types";
 import { Avatar } from "@/components/ui/avatar";
@@ -35,9 +35,13 @@ interface PostCardProps {
   currentUserId?: string;
   liked?: boolean;
   canModerate?: boolean;
+  /** "card": the original floating rounded card (community/profile pages).
+   * "feed": edge-to-edge with full-bleed media, for the home page feed. */
+  variant?: "card" | "feed";
 }
 
-export function PostCard({ post, currentUserId, liked: initialLiked = false, canModerate = false }: PostCardProps) {
+export function PostCard({ post, currentUserId, liked: initialLiked = false, canModerate = false, variant = "card" }: PostCardProps) {
+  const isFeed = variant === "feed";
   const [liked, setLiked] = useState(initialLiked);
   const [likeCount, setLikeCount] = useState(post.like_count);
   const [expanded, setExpanded] = useState(false);
@@ -94,7 +98,7 @@ export function PostCard({ post, currentUserId, liked: initialLiked = false, can
   const href = detailHref(post);
 
   return (
-    <div className="bg-white rounded-2xl p-5 hover:shadow-sm transition-shadow">
+    <div className={isFeed ? "bg-white p-4" : "bg-white rounded-2xl p-5 hover:shadow-sm transition-shadow"}>
       <div className="flex items-start gap-3">
         {author && (
           <Link href={`/profile/${author.username}`}>
@@ -102,25 +106,49 @@ export function PostCard({ post, currentUserId, liked: initialLiked = false, can
           </Link>
         )}
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 flex-wrap">
-            {author && (
-              <Link href={`/profile/${author.username}`} className="font-semibold text-gray-900 hover:underline text-sm">
-                {author.full_name || author.username}
-              </Link>
-            )}
-            {community && (
-              <>
-                <span className="text-gray-400 text-xs">in</span>
-                <Link href={`/communities/${community.slug}`} className="text-xs text-indigo-600 hover:underline font-medium bg-indigo-50 px-2 py-0.5 rounded-full">
-                  {community.name}
+          {isFeed ? (
+            <div>
+              {author && (
+                <Link href={`/profile/${author.username}`} className="font-semibold text-gray-900 hover:underline text-sm block">
+                  {author.full_name || author.username}
                 </Link>
-              </>
-            )}
-            {kindBadge && (
-              <span className={cn("text-xs font-medium px-2 py-0.5 rounded-full", kindBadge.className)}>{kindBadge.label}</span>
-            )}
-            <span className="text-xs text-gray-400">{timeAgo(post.created_at)}</span>
-          </div>
+              )}
+              <div className="flex items-center gap-1.5 flex-wrap mt-0.5">
+                {community && (
+                  <>
+                    <Link href={`/communities/${community.slug}`} className="text-xs text-gray-500 hover:underline">
+                      {community.name}
+                    </Link>
+                    <span className="text-gray-300 text-xs">·</span>
+                  </>
+                )}
+                {kindBadge && (
+                  <span className={cn("text-xs font-medium px-2 py-0.5 rounded-full", kindBadge.className)}>{kindBadge.label}</span>
+                )}
+                <span className="text-xs text-gray-400">{timeAgo(post.created_at)}</span>
+              </div>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2 flex-wrap">
+              {author && (
+                <Link href={`/profile/${author.username}`} className="font-semibold text-gray-900 hover:underline text-sm">
+                  {author.full_name || author.username}
+                </Link>
+              )}
+              {community && (
+                <>
+                  <span className="text-gray-400 text-xs">in</span>
+                  <Link href={`/communities/${community.slug}`} className="text-xs text-indigo-600 hover:underline font-medium bg-indigo-50 px-2 py-0.5 rounded-full">
+                    {community.name}
+                  </Link>
+                </>
+              )}
+              {kindBadge && (
+                <span className={cn("text-xs font-medium px-2 py-0.5 rounded-full", kindBadge.className)}>{kindBadge.label}</span>
+              )}
+              <span className="text-xs text-gray-400">{timeAgo(post.created_at)}</span>
+            </div>
+          )}
 
           <h3
             ref={titleRef}
@@ -150,13 +178,16 @@ export function PostCard({ post, currentUserId, liked: initialLiked = false, can
               type="button"
               onClick={() => setImagePreviewOpen(true)}
               aria-label="View full screen"
-              className="mt-3 block w-full rounded-xl overflow-hidden"
+              className={cn("mt-3 block w-full overflow-hidden", isFeed ? "-mx-4 w-[calc(100%+2rem)]" : "rounded-xl")}
             >
               <img src={post.image_url} alt={post.title} className="w-full max-h-80 object-cover hover:opacity-95 transition-opacity" />
             </button>
           )}
           {post.video_url && (
-            <Link href={`/reels/${post.id}`} className="mt-3 relative block rounded-xl overflow-hidden bg-black group">
+            <Link
+              href={`/reels/${post.id}`}
+              className={cn("mt-3 relative block overflow-hidden bg-black group", isFeed ? "-mx-4 w-[calc(100%+2rem)]" : "rounded-xl")}
+            >
               {post.video_thumbnail_url && (
                 <img src={post.video_thumbnail_url} alt={post.title} className="w-full max-h-80 object-cover opacity-90" />
               )}
@@ -180,18 +211,28 @@ export function PostCard({ post, currentUserId, liked: initialLiked = false, can
             </div>
           )}
 
-          <div className="flex items-center gap-4 mt-3">
-            <button
-              onClick={handleLike}
-              className={`flex items-center gap-1.5 text-sm transition-colors ${
-                liked ? "text-red-500" : "text-gray-500 hover:text-red-500"
-              }`}
-            >
-              <Heart className={`h-4 w-4 ${liked ? "fill-current" : ""}`} />
-              <span>{likeCount}</span>
-            </button>
-            <div className="flex items-center gap-1.5 text-sm text-gray-500">
-              <MessageCircle className="h-4 w-4" />
+          <div className={cn("flex items-center mt-3", isFeed ? "gap-5 pt-3 border-t border-gray-100" : "gap-4")}>
+            {isFeed ? (
+              <button
+                onClick={handleLike}
+                className={cn("flex items-center gap-1.5 text-sm font-medium transition-colors", liked ? "text-[#1E2952]" : "text-gray-500 hover:text-[#1E2952]")}
+              >
+                <ThumbsUp className={cn("h-[18px] w-[18px]", liked && "fill-current")} />
+                <span>{likeCount}</span>
+              </button>
+            ) : (
+              <button
+                onClick={handleLike}
+                className={`flex items-center gap-1.5 text-sm transition-colors ${
+                  liked ? "text-red-500" : "text-gray-500 hover:text-red-500"
+                }`}
+              >
+                <Heart className={`h-4 w-4 ${liked ? "fill-current" : ""}`} />
+                <span>{likeCount}</span>
+              </button>
+            )}
+            <div className={cn("flex items-center gap-1.5 text-gray-500", isFeed ? "text-sm font-medium" : "text-sm")}>
+              <MessageCircle className={isFeed ? "h-[18px] w-[18px]" : "h-4 w-4"} />
               <span>{post.comment_count}</span>
             </div>
           </div>
