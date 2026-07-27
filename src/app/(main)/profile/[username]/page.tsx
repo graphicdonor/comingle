@@ -168,7 +168,7 @@ function ProfileView({
             No posts yet.
           </div>
         ) : (
-          <ProfilePostsGrid posts={posts} />
+          <ProfilePostsGrid posts={posts} username={p.username} />
         )}
       </section>
     </div>
