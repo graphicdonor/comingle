@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { runModerationPipeline } from "@/lib/moderation";
+import { isCommunityMember, matrimonialFeedPostContent, upsertCommunityFeedPost } from "@/lib/community-feed-post";
 
 interface MatrimonialProfileBody {
   full_name: string;
@@ -18,6 +19,7 @@ interface MatrimonialProfileBody {
   created_by?: string | null;
   about_me?: string | null;
   photo_urls: string[];
+  communityId: string;
 }
 
 /** Replaces the direct .upsert() in the matrimonial profile edit page — same reasoning as the posts route. */
@@ -32,12 +34,20 @@ export async function POST(req: NextRequest) {
   if (!body.full_name?.trim() || !body.date_of_birth) {
     return NextResponse.json({ error: "full_name and date_of_birth are required" }, { status: 400 });
   }
+  if (!body.communityId) {
+    return NextResponse.json({ error: "communityId is required" }, { status: 400 });
+  }
 
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Not signed in" }, { status: 401 });
+
+  const admin = createAdminClient();
+  if (!(await isCommunityMember(admin, body.communityId, user.id))) {
+    return NextResponse.json({ error: "You must be a member of that community to publish there" }, { status: 403 });
+  }
 
   const { error: upsertError } = await supabase.from("matrimonial_profiles").upsert(
     {
@@ -63,7 +73,6 @@ export async function POST(req: NextRequest) {
 
   if (upsertError) return NextResponse.json({ error: upsertError.message }, { status: 400 });
 
-  const admin = createAdminClient();
   const result = await runModerationPipeline(
     admin,
     {
@@ -80,6 +89,19 @@ export async function POST(req: NextRequest) {
   if (moderation_status !== "pending_review") {
     await admin.from("matrimonial_profiles").update({ moderation_status }).eq("user_id", user.id);
   }
+
+  const feedContent = matrimonialFeedPostContent({ full_name: body.full_name, about_me: body.about_me, city: body.city, photo_urls: body.photo_urls });
+  await upsertCommunityFeedPost(admin, {
+    postType: "matrimonial_profile",
+    refColumn: "matrimonial_profile_id",
+    refId: user.id,
+    communityId: body.communityId,
+    authorId: user.id,
+    moderationStatus: moderation_status,
+    title: feedContent.title,
+    content: feedContent.content,
+    imageUrl: feedContent.imageUrl,
+  });
 
   return NextResponse.json({
     decision: result.decision,

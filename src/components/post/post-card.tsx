@@ -11,6 +11,25 @@ import { createClient } from "@/lib/supabase/client";
 import { ModerationStatusNotice } from "@/components/moderation/moderation-status-notice";
 import { ImagePreviewModal } from "@/components/post/image-preview-modal";
 
+const KIND_BADGES: Partial<Record<Post["post_type"], { label: string; className: string }>> = {
+  matrimonial_profile: { label: "Matrimonial", className: "bg-rose-50 text-rose-600" },
+  business_listing: { label: "Business", className: "bg-amber-50 text-amber-700" },
+  job_listing: { label: "Job", className: "bg-teal-50 text-teal-700" },
+};
+
+function detailHref(post: Post): string | null {
+  switch (post.post_type) {
+    case "matrimonial_profile":
+      return post.matrimonial_profile_id ? `/services/matrimonial/${post.matrimonial_profile_id}` : null;
+    case "business_listing":
+      return post.business_listing_id ? `/services/businesses/${post.business_listing_id}` : null;
+    case "job_listing":
+      return post.job_listing_id ? `/services/jobs/${post.job_listing_id}` : null;
+    default:
+      return null;
+  }
+}
+
 interface PostCardProps {
   post: Post;
   currentUserId?: string;
@@ -71,6 +90,8 @@ export function PostCard({ post, currentUserId, liked: initialLiked = false, can
 
   const author = post.profiles;
   const community = post.communities;
+  const kindBadge = KIND_BADGES[post.post_type];
+  const href = detailHref(post);
 
   return (
     <div className="bg-white rounded-2xl p-5 hover:shadow-sm transition-shadow">
@@ -94,6 +115,9 @@ export function PostCard({ post, currentUserId, liked: initialLiked = false, can
                   {community.name}
                 </Link>
               </>
+            )}
+            {kindBadge && (
+              <span className={cn("text-xs font-medium px-2 py-0.5 rounded-full", kindBadge.className)}>{kindBadge.label}</span>
             )}
             <span className="text-xs text-gray-400">{timeAgo(post.created_at)}</span>
           </div>
@@ -141,6 +165,12 @@ export function PostCard({ post, currentUserId, liked: initialLiked = false, can
                   <Play className="h-5 w-5 text-white fill-white ml-0.5" />
                 </div>
               </div>
+            </Link>
+          )}
+
+          {href && (
+            <Link href={href} className="inline-flex items-center gap-1 mt-3 text-xs font-semibold text-[#1E2952] hover:underline">
+              View details →
             </Link>
           )}
 

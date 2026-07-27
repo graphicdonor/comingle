@@ -8,6 +8,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { createClient } from "@/lib/supabase/client";
 import { DEV_MODE, getDevUser } from "@/lib/dev-auth";
 import { getDevMatrimonialProfile, setDevMatrimonialProfile } from "@/lib/dev-matrimonial";
+import { useUserCommunities } from "@/lib/hooks/use-user-communities";
+import { CommunityPicker } from "@/components/community/community-picker";
 import {
   MARITAL_STATUSES,
   INCOME_BRACKETS,
@@ -63,6 +65,9 @@ export default function MatrimonialProfileEditPage() {
   const [loading, setLoading] = useState(false);
   const [ready, setReady] = useState(false);
   const [error, setError] = useState("");
+  const [userId, setUserId] = useState<string | null>(null);
+  const [communityId, setCommunityId] = useState("");
+  const { communities, loading: communitiesLoading } = useUserCommunities(userId);
 
   useEffect(() => {
     if (DEV_MODE) {
@@ -92,16 +97,20 @@ export default function MatrimonialProfileEditPage() {
     const supabase = createClient();
     supabase.auth.getUser().then(async ({ data }) => {
       if (!data.user) { router.push("/login"); return; }
+      setUserId(data.user.id);
 
-      const [{ data: mainProfile }, { data: matProfile }] = await Promise.all([
+      const [{ data: mainProfile }, { data: matProfile }, { data: feedPost }] = await Promise.all([
         supabase.from("profiles").select("full_name, date_of_birth, gender").eq("id", data.user.id).single(),
         supabase.from("matrimonial_profiles").select("*").eq("user_id", data.user.id).maybeSingle(),
+        supabase.from("posts").select("community_id").eq("matrimonial_profile_id", data.user.id).maybeSingle(),
       ]);
 
       if (!isMatrimonialEligible(mainProfile?.gender)) {
         router.push("/services/matrimonial");
         return;
       }
+
+      if (feedPost?.community_id) setCommunityId(feedPost.community_id);
 
       if (matProfile) {
         setForm({
@@ -131,6 +140,10 @@ export default function MatrimonialProfileEditPage() {
       setReady(true);
     });
   }, []);
+
+  useEffect(() => {
+    if (!communityId && communities.length > 0) setCommunityId(communities[0].id);
+  }, [communities, communityId]);
 
   const set = (key: keyof FormState) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setError("");
@@ -166,6 +179,7 @@ export default function MatrimonialProfileEditPage() {
   const validate = (): boolean => {
     if (!form.full_name.trim()) { setError("Full name is required"); return false; }
     if (!form.date_of_birth) { setError("Date of birth is required"); return false; }
+    if (!DEV_MODE && !communityId) { setError("Select a community to publish this profile to"); return false; }
     return true;
   };
 
@@ -220,6 +234,7 @@ export default function MatrimonialProfileEditPage() {
         created_by: form.created_by || null,
         about_me: form.about_me.trim() || null,
         photo_urls: [...existingPhotoUrls, ...uploadedUrls].slice(0, MAX_PHOTOS),
+        communityId,
       }),
     });
     const resBody = await res.json().catch(() => ({}));
@@ -281,6 +296,10 @@ export default function MatrimonialProfileEditPage() {
         <SelectField label="Education" value={form.education} onChange={set("education")} options={EDUCATION_OPTIONS} />
         <SelectField label="Employment" value={form.employment_status} onChange={set("employment_status")} options={EMPLOYMENT_OPTIONS} />
         <SelectField label="Profile Created by" value={form.created_by} onChange={set("created_by")} options={CREATED_BY_OPTIONS} />
+
+        {!DEV_MODE && !communitiesLoading && (
+          <CommunityPicker communities={communities} value={communityId} onChange={setCommunityId} />
+        )}
 
         <div className="flex flex-col gap-1.5">
           <label className="text-sm font-medium text-gray-700">Profile pic</label>

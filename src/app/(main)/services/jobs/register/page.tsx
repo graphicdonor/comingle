@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ChevronLeft, CheckCircle2, ImagePlus, X } from "lucide-react";
@@ -10,8 +10,10 @@ import { createClient } from "@/lib/supabase/client";
 import { DEV_MODE } from "@/lib/dev-auth";
 import { cn } from "@/lib/utils";
 import { JOB_TYPES, JOB_CATEGORIES } from "@/lib/job";
+import { useUserCommunities } from "@/lib/hooks/use-user-communities";
+import { CommunityPicker } from "@/components/community/community-picker";
 
-const STEPS = ["Job Details", "Contact", "Salary", "Category", "Description"];
+const STEPS = ["Job Details", "Contact", "Salary", "Category", "Description", "Community"];
 
 interface FormState {
   title: string;
@@ -62,9 +64,20 @@ export default function RegisterJobPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [statusMessage, setStatusMessage] = useState<{ text: string; ok: boolean } | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [communityId, setCommunityId] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const supabase = createClient();
+  const { communities, loading: communitiesLoading } = useUserCommunities(userId);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => setUserId(data.user?.id ?? null));
+  }, []);
+
+  useEffect(() => {
+    if (!communityId && communities.length > 0) setCommunityId(communities[0].id);
+  }, [communities, communityId]);
 
   if (DEV_MODE) {
     return (
@@ -117,6 +130,10 @@ export default function RegisterJobPage() {
     if (step === 1) {
       if (!form.mobileNumber.trim()) { setError("Mobile number is required"); return false; }
     }
+    if (step === 5 && !communityId) {
+      setError("Select a community to publish this listing to");
+      return false;
+    }
     return true;
   };
 
@@ -134,6 +151,7 @@ export default function RegisterJobPage() {
 
   const handleSubmit = async () => {
     setError("");
+    if (!communityId) { setError("Select a community to publish this listing to"); return; }
     setLoading(true);
 
     const { data: { user } } = await supabase.auth.getUser();
@@ -169,6 +187,7 @@ export default function RegisterJobPage() {
         categories: form.categories,
         description: form.description.trim() || null,
         photo_urls: photoUrls,
+        communityId,
       }),
     });
     const body = await res.json().catch(() => ({}));
@@ -374,6 +393,17 @@ export default function RegisterJobPage() {
               onChange={handlePhotoChange}
             />
             {photoError && <p className="text-xs text-red-500">{photoError}</p>}
+          </div>
+        )}
+
+        {/* ── Step 5: Community ── */}
+        {step === 5 && (
+          <div className="space-y-4">
+            <div>
+              <h2 className="font-bold text-gray-900 mb-0.5">Publish to a community</h2>
+              <p className="text-sm text-gray-500">Choose which community feed this job appears in</p>
+            </div>
+            {!communitiesLoading && <CommunityPicker communities={communities} value={communityId} onChange={setCommunityId} label="Community" />}
           </div>
         )}
 

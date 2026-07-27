@@ -38,6 +38,8 @@ export interface CommunityMember {
 
 export type ModerationStatus = "pending_review" | "published" | "blocked";
 
+export type PostType = "standard" | "matrimonial_profile" | "business_listing" | "job_listing";
+
 export interface Post {
   id: string;
   title: string;
@@ -51,6 +53,10 @@ export interface Post {
   comment_count: number;
   moderation_status: ModerationStatus;
   created_at: string;
+  post_type: PostType;
+  matrimonial_profile_id: string | null;
+  business_listing_id: string | null;
+  job_listing_id: string | null;
   profiles?: Profile;
   communities?: Community;
 }

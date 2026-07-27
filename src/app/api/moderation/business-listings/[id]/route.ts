@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { runModerationPipeline } from "@/lib/moderation";
 import { sanitizeBusinessListingBody, businessListingModerationText, type BusinessListingBody } from "@/lib/business";
+import { businessFeedPostContent, syncCommunityFeedPostIfExists } from "@/lib/community-feed-post";
 
 /** Editing a listing goes through the owner's own session, same as create —
  * the update WITH CHECK forces moderation_status back to 'pending_review'
@@ -57,6 +58,16 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   if (moderation_status !== "pending_review") {
     await admin.from("business_listings").update({ moderation_status }).eq("id", listing.id);
   }
+
+  const feedContent = businessFeedPostContent({ name: body.name, categories: body.categories, area: body.area, city: body.city, photo_urls: body.photo_urls });
+  await syncCommunityFeedPostIfExists(admin, {
+    refColumn: "business_listing_id",
+    refId: listing.id,
+    moderationStatus: moderation_status,
+    title: feedContent.title,
+    content: feedContent.content,
+    imageUrl: feedContent.imageUrl,
+  });
 
   return NextResponse.json({
     id: listing.id,
