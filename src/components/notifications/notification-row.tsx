@@ -12,6 +12,13 @@ function messageFor(notification: Notification, name: string): string {
       ? `${name} sent you ${notification.count} new messages`
       : `${name} sent you a new message`;
   }
+  if (notification.type === "post_comment") {
+    return notification.count > 1
+      ? `${name} left ${notification.count} new comments on your post`
+      : `${name} commented on your post`;
+  }
+  if (notification.type === "moderation_decision") return "There's an update on something you posted";
+  if (notification.type === "appeal_outcome") return "Your appeal has been reviewed";
   return `New activity from ${name}`;
 }
 

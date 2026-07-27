@@ -25,21 +25,24 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
   const { createClient } = await import("@/lib/supabase/server");
   const supabase = await createClient();
 
-  const [{ data: { user: currentUser } }, { data: p }] = await Promise.all([
+  // Filtering community_members/posts by the joined profile's username
+  // (via !inner, which is required for PostgREST to let a filter target an
+  // embedded resource) means these don't have to wait on a first query to
+  // resolve profile.id — all four queries run in one parallel batch instead
+  // of two sequential round trips. getUser() is answered from cookies
+  // already verified by middleware (see lib/supabase/server.ts), not a
+  // network round trip, so it rides along here at effectively no cost.
+  const [{ data: { user: currentUser } }, { data: p }, { data: memberships }, { data: posts }] = await Promise.all([
     supabase.auth.getUser(),
     supabase.from("profiles").select("*").eq("username", username).single(),
+    supabase.from("community_members").select("communities(*), role, joined_at, profiles!inner(username)")
+      .eq("profiles.username", username).order("joined_at", { ascending: false }),
+    supabase.from("posts").select("*, profiles!posts_author_id_fkey!inner(*), communities(*)")
+      .eq("profiles.username", username).order("created_at", { ascending: false }).limit(20),
   ]);
   if (!p) notFound();
   profile = p as Profile;
-
   isOwn = currentUser?.id === profile.id;
-
-  const [{ data: memberships }, { data: posts }] = await Promise.all([
-    supabase.from("community_members").select("communities(*), role, joined_at")
-      .eq("user_id", profile.id).order("joined_at", { ascending: false }),
-    supabase.from("posts").select("*, profiles!posts_author_id_fkey(*), communities(*)")
-      .eq("author_id", profile.id).order("created_at", { ascending: false }).limit(20),
-  ]);
   communities = (memberships ?? []).map((m) => m.communities as unknown as Community).filter(Boolean);
   userPosts = (posts ?? []) as Post[];
 

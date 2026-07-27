@@ -232,7 +232,7 @@ create table if not exists matrimonial_shortlist (
 create table if not exists notifications (
   id          uuid primary key default gen_random_uuid(),
   user_id     uuid references profiles(id) on delete cascade not null,
-  type        text not null check (type in ('matrimonial_message', 'moderation_decision', 'appeal_outcome')),
+  type        text not null check (type in ('matrimonial_message', 'moderation_decision', 'appeal_outcome', 'post_comment')),
   actor_id    uuid references profiles(id) on delete cascade,
   link        text not null,
   count       integer default 1 not null,
@@ -503,6 +503,57 @@ drop trigger if exists trg_notify_new_matrimonial_message on matrimonial_message
 create trigger trg_notify_new_matrimonial_message
   after insert on matrimonial_messages
   for each row execute function notify_new_matrimonial_message();
+
+-- Notifies a post's author when a comment on it is published — not at
+-- insert time (comments always insert as 'pending_review') but on the
+-- transition to 'published', whether that happens immediately (an "allow"
+-- decision flips it in the same request) or later via the admin queue.
+-- Batches repeated comments from the same commenter on the same post into
+-- one unread notification's count, same as notify_new_matrimonial_message,
+-- except the batching key also includes the post (via `link`) since the
+-- same commenter on two different posts by this author are unrelated.
+create or replace function notify_new_comment()
+returns trigger language plpgsql security definer as $$
+declare
+  v_post_author_id uuid;
+  v_post_author_username text;
+  v_link text;
+begin
+  if new.moderation_status <> 'published' or old.moderation_status = 'published' then
+    return new;
+  end if;
+
+  select p.author_id, pr.username into v_post_author_id, v_post_author_username
+  from posts p join profiles pr on pr.id = p.author_id
+  where p.id = new.post_id;
+
+  if v_post_author_id is null or v_post_author_id = new.author_id then
+    return new;
+  end if;
+
+  v_link := '/profile/' || v_post_author_username || '/posts/' || new.post_id;
+
+  update notifications
+    set count = count + 1, created_at = now()
+    where user_id = v_post_author_id
+      and type = 'post_comment'
+      and actor_id = new.author_id
+      and link = v_link
+      and read_at is null;
+
+  if not found then
+    insert into notifications (user_id, type, actor_id, link)
+    values (v_post_author_id, 'post_comment', new.author_id, v_link);
+  end if;
+
+  return new;
+end;
+$$;
+
+drop trigger if exists trg_notify_new_comment on comments;
+create trigger trg_notify_new_comment
+  after update on comments
+  for each row execute function notify_new_comment();
 
 -- ============================================================
 -- Row Level Security

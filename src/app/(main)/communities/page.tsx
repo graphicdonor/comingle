@@ -21,15 +21,20 @@ export default async function CommunitiesPage() {
     const { createClient } = await import("@/lib/supabase/server");
     const supabase = await createClient();
 
-    const [{ data: { user } }, { data: communities }] = await Promise.all([
-      supabase.auth.getUser(),
-      supabase.from("communities").select("*").order("member_count", { ascending: false }),
-    ]);
+    // getUser() is answered from cookies already verified by middleware (see
+    // lib/supabase/server.ts), not a network round trip, so awaiting it
+    // alone first — rather than bundling it into the Promise.all below the
+    // way a real network call would need to be — still lets both data
+    // queries below run fully in parallel.
+    const { data: { user } } = await supabase.auth.getUser();
     isLoggedIn = !!user;
 
-    const { data: memberships } = user
-      ? await supabase.from("community_members").select("community_id").eq("user_id", user.id)
-      : { data: null as { community_id: string }[] | null };
+    const [{ data: communities }, { data: memberships }] = await Promise.all([
+      supabase.from("communities").select("*").order("member_count", { ascending: false }),
+      user
+        ? supabase.from("community_members").select("community_id").eq("user_id", user.id)
+        : Promise.resolve({ data: null as { community_id: string }[] | null }),
+    ]);
     const memberCommunityIds = new Set((memberships ?? []).map((m) => m.community_id));
 
     allCommunities = (communities ?? []) as Community[];

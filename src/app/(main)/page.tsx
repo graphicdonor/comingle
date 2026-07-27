@@ -29,23 +29,22 @@ export default async function HomePage() {
   let submittedSurveyIds: Set<number> = new Set();
 
   if (user) {
-    const [{ data: p }, { data: memberOf }, { data: likes }, { data: surveyResponses }] = await Promise.all([
+    // get_home_feed does the "posts in my communities" join server-side in
+    // one round trip — a plain .from("posts").in("community_id", ids) needs
+    // the id list first, which would make this a second query sequenced
+    // after community_members instead of running alongside it here.
+    const [{ data: p }, { data: memberOf }, { data: likes }, { data: surveyResponses }, { data: feedPosts }] = await Promise.all([
       supabase.from("profiles").select("*").eq("id", user.id).single(),
       supabase.from("community_members").select("community_id, role").eq("user_id", user.id),
       supabase.from("post_likes").select("post_id").eq("user_id", user.id),
       supabase.from("survey_responses").select("survey_id").eq("user_id", user.id),
+      supabase.rpc("get_home_feed", { p_user_id: user.id, p_limit: 20 }).select("*, profiles!posts_author_id_fkey(*), communities(*)"),
     ]);
     profile = p as Profile;
     likedPostIds = new Set((likes ?? []).map((l) => l.post_id));
     roleByCommunityId = new Map((memberOf ?? []).map((m) => [m.community_id, m.role as CommunityRole]));
     submittedSurveyIds = new Set((surveyResponses ?? []).map((r) => r.survey_id));
-
-    const communityIds = [...roleByCommunityId.keys()];
-    if (communityIds.length > 0) {
-      const { data } = await supabase.from("posts").select("*, profiles!posts_author_id_fkey(*), communities(*)")
-        .in("community_id", communityIds).order("created_at", { ascending: false }).limit(20);
-      posts = (data as Post[]) ?? [];
-    }
+    posts = (feedPosts as Post[]) ?? [];
   }
 
   return (

@@ -121,7 +121,7 @@ export interface MatrimonialShortlistEntry {
 export interface Notification {
   id: string;
   user_id: string;
-  type: "matrimonial_message";
+  type: "matrimonial_message" | "moderation_decision" | "appeal_outcome" | "post_comment";
   actor_id: string | null;
   link: string;
   count: number;
