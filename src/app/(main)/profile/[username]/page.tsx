@@ -1,10 +1,9 @@
 import { Avatar } from "@/components/ui/avatar";
-import type { Post, Community, Profile, CommunityRole } from "@/lib/types";
-import { isCommunityStaff } from "@/lib/community";
+import type { Post, Community, Profile } from "@/lib/types";
 import { notFound } from "next/navigation";
 import { MapPin, Calendar, Users, Pencil } from "lucide-react";
 import Link from "next/link";
-import { PostCard } from "@/components/post/post-card";
+import { ProfilePostsGrid } from "@/components/profile/profile-posts-grid";
 import { CommunityCard } from "@/components/community/community-card";
 
 const DEV_MODE = process.env.NEXT_PUBLIC_DEV_MODE === "true";
@@ -16,7 +15,6 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
   let communities: Community[] = [];
   let userPosts: Post[] = [];
   let isOwn = false;
-  let likedPostIds: Set<string> = new Set();
 
   if (DEV_MODE) {
     // Dev profile is read client-side; we render a shell that hydrates via client component
@@ -36,52 +34,28 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
 
   isOwn = currentUser?.id === profile.id;
 
-  const [{ data: memberships }, { data: posts }, { data: likes }, { data: viewerMemberships }] = await Promise.all([
+  const [{ data: memberships }, { data: posts }] = await Promise.all([
     supabase.from("community_members").select("communities(*), role, joined_at")
       .eq("user_id", profile.id).order("joined_at", { ascending: false }),
     supabase.from("posts").select("*, profiles!posts_author_id_fkey(*), communities(*)")
       .eq("author_id", profile.id).order("created_at", { ascending: false }).limit(20),
-    currentUser
-      ? supabase.from("post_likes").select("post_id").eq("user_id", currentUser.id)
-      : Promise.resolve({ data: null as { post_id: string }[] | null }),
-    currentUser
-      ? supabase.from("community_members").select("community_id, role").eq("user_id", currentUser.id)
-      : Promise.resolve({ data: null as { community_id: string; role: CommunityRole }[] | null }),
   ]);
   communities = (memberships ?? []).map((m) => m.communities as unknown as Community).filter(Boolean);
   userPosts = (posts ?? []) as Post[];
-  likedPostIds = new Set((likes ?? []).map((l) => l.post_id));
-  const roleByCommunityId = new Map((viewerMemberships ?? []).map((m) => [m.community_id, m.role]));
 
-  return (
-    <ProfileView
-      profile={profile}
-      communities={communities}
-      posts={userPosts}
-      likedPostIds={likedPostIds}
-      isOwn={isOwn}
-      currentUserId={currentUser?.id}
-      roleByCommunityId={roleByCommunityId}
-    />
-  );
+  return <ProfileView profile={profile} communities={communities} posts={userPosts} isOwn={isOwn} />;
 }
 
 function ProfileView({
   profile: p,
   communities,
   posts,
-  likedPostIds,
   isOwn,
-  currentUserId,
-  roleByCommunityId,
 }: {
   profile: Profile;
   communities: Community[];
   posts: Post[];
-  likedPostIds: Set<string>;
   isOwn: boolean;
-  currentUserId?: string;
-  roleByCommunityId: Map<string, CommunityRole>;
 }) {
   const name = p.full_name || p.username;
 
@@ -189,23 +163,13 @@ function ProfileView({
           Posts
           <span className="text-sm font-normal text-gray-400">({posts.length})</span>
         </h2>
-        <div className="space-y-3">
-          {posts.length === 0 ? (
-            <div className="bg-white rounded-2xl p-8 text-center text-sm text-gray-400">
-              No posts yet.
-            </div>
-          ) : (
-            posts.map((post) => (
-              <PostCard
-                key={post.id}
-                post={post}
-                currentUserId={currentUserId}
-                liked={likedPostIds.has(post.id)}
-                canModerate={isCommunityStaff(roleByCommunityId.get(post.community_id))}
-              />
-            ))
-          )}
-        </div>
+        {posts.length === 0 ? (
+          <div className="bg-white rounded-2xl p-8 text-center text-sm text-gray-400">
+            No posts yet.
+          </div>
+        ) : (
+          <ProfilePostsGrid posts={posts} />
+        )}
       </section>
     </div>
   );

@@ -14,6 +14,7 @@ const CONTENT_TABLE: Record<string, { table: string; idColumn: string }> = {
   matrimonial_profile: { table: "matrimonial_profiles", idColumn: "user_id" },
   business_listing: { table: "business_listings", idColumn: "id" },
   job_listing: { table: "job_listings", idColumn: "id" },
+  comment: { table: "comments", idColumn: "id" },
 };
 
 // Matrimonial/business/job content can have a companion `posts` row (see
@@ -56,6 +57,13 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
 
   if (mapping && log.content_id) {
     await admin.from(mapping.table).update({ moderation_status: newStatus }).eq(mapping.idColumn, log.content_id);
+  }
+  // A comment held for review was never counted in its post's comment_count
+  // (only published comments are) — approving it here is the first time it
+  // becomes visible to anyone but its author, so bump the count now.
+  if (log.content_type === "comment" && newStatus === "published" && log.content_id) {
+    const { data: comment } = await admin.from("comments").select("post_id").eq("id", log.content_id).single();
+    if (comment) await admin.rpc("increment_comment_count", { post_id: comment.post_id });
   }
   const companionColumn = COMPANION_POST_COLUMN[log.content_type];
   if (companionColumn && log.content_id) {

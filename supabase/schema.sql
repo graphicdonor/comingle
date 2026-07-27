@@ -75,12 +75,16 @@ create table if not exists post_likes (
 
 -- Comments
 create table if not exists comments (
-  id         uuid primary key default gen_random_uuid(),
-  content    text not null,
-  author_id  uuid references profiles(id) on delete cascade,
-  post_id    uuid references posts(id) on delete cascade,
-  created_at timestamptz default now() not null
+  id                uuid primary key default gen_random_uuid(),
+  content           text not null,
+  author_id         uuid references profiles(id) on delete cascade,
+  post_id           uuid references posts(id) on delete cascade,
+  -- 'pending_review' until the AI moderation check (or a human reviewer)
+  -- marks it 'published'; RLS only shows non-published rows to their author.
+  moderation_status text default 'pending_review' not null check (moderation_status in ('pending_review', 'published', 'blocked')),
+  created_at        timestamptz default now() not null
 );
+create index if not exists idx_comments_post_id on comments (post_id, created_at);
 
 -- Matrimonial service
 create table if not exists matrimonial_profiles (
@@ -249,7 +253,8 @@ create table if not exists moderation_logs (
   content_type       text not null check (content_type in (
                        'post', 'matrimonial_profile', 'profile_bio',
                        'community_description', 'community_rules',
-                       'avatar', 'community_cover', 'business_listing', 'job_listing'
+                       'avatar', 'community_cover', 'business_listing', 'job_listing',
+                       'comment'
                      )),
   content_id         text,
   user_id            uuid references profiles(id) on delete cascade not null,
@@ -370,6 +375,16 @@ $$;
 create or replace function decrement_like_count(post_id uuid)
 returns void language sql security definer as $$
   update posts set like_count = greatest(0, like_count - 1) where id = post_id;
+$$;
+
+create or replace function increment_comment_count(post_id uuid)
+returns void language sql security definer as $$
+  update posts set comment_count = comment_count + 1 where id = post_id;
+$$;
+
+create or replace function decrement_comment_count(post_id uuid)
+returns void language sql security definer as $$
+  update posts set comment_count = greatest(0, comment_count - 1) where id = post_id;
 $$;
 
 -- updated_at on matrimonial_profiles is DB-owned so app code never sets it
@@ -601,9 +616,22 @@ create policy "Users can like"          on post_likes for insert with check (aut
 create policy "Users can unlike"        on post_likes for delete using (auth.uid() = user_id);
 
 -- Comments
-create policy "Comments are public"     on comments for select using (true);
-create policy "Users can comment"       on comments for insert with check (auth.uid() = author_id);
-create policy "Authors can delete"      on comments for delete using (auth.uid() = author_id);
+create policy "Published comments are public, authors always see their own" on comments for select using (
+  moderation_status = 'published' or auth.uid() = author_id
+);
+create policy "Users can comment" on comments for insert with check (
+  auth.uid() = author_id and moderation_status = 'pending_review'
+);
+create policy "Authors can delete" on comments for delete using (auth.uid() = author_id);
+create policy "Moderators can delete any comment" on comments for delete using (
+  exists (
+    select 1 from posts
+    join community_members on community_members.community_id = posts.community_id
+    where posts.id = comments.post_id
+      and community_members.user_id = auth.uid()
+      and community_members.role in ('moderator', 'admin')
+  )
+);
 
 -- Matrimonial profiles: visible to self regardless of moderation_status
 -- (own pending/blocked profile is still visible to its owner), or to

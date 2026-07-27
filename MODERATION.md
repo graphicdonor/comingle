@@ -8,6 +8,7 @@ visible to anyone but its author — never after.
 
 Covered, with a full pending → published/blocked pipeline:
 - **Posts** (title, content, image, or a 15-second video)
+- **Comments** (text only)
 - **Matrimonial profiles** (about-me text, photos)
 
 Covered, with a synchronous precheck (see "Two enforcement tiers" below):

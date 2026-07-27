@@ -66,6 +66,7 @@ export interface Comment {
   content: string;
   author_id: string;
   post_id: string;
+  moderation_status: ModerationStatus;
   created_at: string;
   profiles?: Profile;
 }

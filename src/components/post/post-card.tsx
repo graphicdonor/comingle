@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AnimatePresence } from "framer-motion";
-import { Heart, MessageCircle, MoreVertical, Play, ThumbsUp, Trash2 } from "lucide-react";
+import { Heart, MessageCircle, MoreVertical, Play, Trash2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import type { Post } from "@/lib/types";
 import { Avatar } from "@/components/ui/avatar";
@@ -10,6 +10,7 @@ import { cn, timeAgo } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
 import { ModerationStatusNotice } from "@/components/moderation/moderation-status-notice";
 import { ImagePreviewModal } from "@/components/post/image-preview-modal";
+import { PostComments } from "@/components/post/post-comments";
 
 const KIND_BADGES: Partial<Record<Post["post_type"], { label: string; className: string }>> = {
   matrimonial_profile: { label: "Matrimonial", className: "bg-rose-50 text-rose-600" },
@@ -44,6 +45,9 @@ export function PostCard({ post, currentUserId, liked: initialLiked = false, can
   const isFeed = variant === "feed";
   const [liked, setLiked] = useState(initialLiked);
   const [likeCount, setLikeCount] = useState(post.like_count);
+  const [liking, setLiking] = useState(false);
+  const [commentCount, setCommentCount] = useState(post.comment_count);
+  const [commentsOpen, setCommentsOpen] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [canExpand, setCanExpand] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -66,18 +70,29 @@ export function PostCard({ post, currentUserId, liked: initialLiked = false, can
   }, [post.title, post.content]);
 
   const handleLike = async () => {
-    if (!currentUserId) return;
+    // Guards against a double-click (or a second tap before this resolves)
+    // firing two inserts — post_likes' (post_id, user_id) primary key would
+    // reject the second at the DB level anyway, but without this guard the
+    // like_count RPC below would still fire twice and drift out of sync
+    // with the actual number of post_likes rows.
+    if (!currentUserId || liking) return;
+    setLiking(true);
     if (liked) {
-      await supabase.from("post_likes").delete().eq("post_id", post.id).eq("user_id", currentUserId);
-      await supabase.rpc("decrement_like_count", { post_id: post.id });
-      setLikeCount((c) => c - 1);
-      setLiked(false);
+      const { error } = await supabase.from("post_likes").delete().eq("post_id", post.id).eq("user_id", currentUserId);
+      if (!error) {
+        await supabase.rpc("decrement_like_count", { post_id: post.id });
+        setLikeCount((c) => c - 1);
+        setLiked(false);
+      }
     } else {
-      await supabase.from("post_likes").insert({ post_id: post.id, user_id: currentUserId });
-      await supabase.rpc("increment_like_count", { post_id: post.id });
-      setLikeCount((c) => c + 1);
-      setLiked(true);
+      const { error } = await supabase.from("post_likes").insert({ post_id: post.id, user_id: currentUserId });
+      if (!error) {
+        await supabase.rpc("increment_like_count", { post_id: post.id });
+        setLikeCount((c) => c + 1);
+        setLiked(true);
+      }
     }
+    setLiking(false);
   };
 
   const handleDeletePost = async () => {
@@ -157,31 +172,35 @@ export function PostCard({ post, currentUserId, liked: initialLiked = false, can
 
   const actionBar = (
     <div className={cn("flex items-center", isFeed ? "gap-5 pt-3 border-t border-gray-100" : "gap-4")}>
-      {isFeed ? (
-        <button
-          onClick={handleLike}
-          className={cn("flex items-center gap-1.5 text-sm font-medium transition-colors", liked ? "text-[#1E2952]" : "text-gray-500 hover:text-[#1E2952]")}
-        >
-          <ThumbsUp className={cn("h-[18px] w-[18px]", liked && "fill-current")} />
-          <span>{likeCount}</span>
-        </button>
-      ) : (
-        <button
-          onClick={handleLike}
-          className={`flex items-center gap-1.5 text-sm transition-colors ${
-            liked ? "text-red-500" : "text-gray-500 hover:text-red-500"
-          }`}
-        >
-          <Heart className={`h-4 w-4 ${liked ? "fill-current" : ""}`} />
-          <span>{likeCount}</span>
-        </button>
-      )}
-      <div className={cn("flex items-center gap-1.5 text-gray-500", isFeed ? "text-sm font-medium" : "text-sm")}>
+      <button
+        onClick={handleLike}
+        disabled={liking}
+        className={cn(
+          "flex items-center gap-1.5 transition-colors disabled:opacity-60",
+          isFeed ? "text-sm font-medium" : "text-sm",
+          liked ? "text-red-500" : "text-gray-500 hover:text-red-500"
+        )}
+      >
+        <Heart className={cn(isFeed ? "h-[18px] w-[18px]" : "h-4 w-4", liked && "fill-current")} />
+        <span>{likeCount}</span>
+      </button>
+      <button
+        onClick={() => setCommentsOpen((v) => !v)}
+        className={cn(
+          "flex items-center gap-1.5 transition-colors",
+          isFeed ? "text-sm font-medium" : "text-sm",
+          commentsOpen ? "text-[#1E2952]" : "text-gray-500 hover:text-[#1E2952]"
+        )}
+      >
         <MessageCircle className={isFeed ? "h-[18px] w-[18px]" : "h-4 w-4"} />
-        <span>{post.comment_count}</span>
-      </div>
+        <span>{commentCount}</span>
+      </button>
     </div>
   );
+
+  const commentsPanel = commentsOpen ? (
+    <PostComments postId={post.id} currentUserId={currentUserId} canModerate={canModerate} onCountChange={(delta) => setCommentCount((c) => c + delta)} />
+  ) : null;
 
   return (
     <div className={isFeed ? "bg-white p-4" : "bg-white rounded-2xl p-5 hover:shadow-sm transition-shadow"}>
@@ -243,6 +262,7 @@ export function PostCard({ post, currentUserId, liked: initialLiked = false, can
               {viewDetails && <div className="mt-3">{viewDetails}</div>}
               {moderationNotice && <div className="mt-3">{moderationNotice}</div>}
               <div className="mt-3">{actionBar}</div>
+              {commentsPanel}
             </>
           )}
         </div>
@@ -306,6 +326,7 @@ export function PostCard({ post, currentUserId, liked: initialLiked = false, can
             </div>
           )}
           <div className="mt-3">{actionBar}</div>
+          {commentsPanel}
         </>
       )}
 
