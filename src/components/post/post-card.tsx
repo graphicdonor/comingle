@@ -97,6 +97,71 @@ export function PostCard({ post, currentUserId, liked: initialLiked = false, can
   const kindBadge = KIND_BADGES[post.post_type];
   const href = detailHref(post);
 
+  // Feed-variant media renders as a sibling of the avatar/text row (not
+  // nested inside it) so it can bleed to both card edges — nested inside
+  // that row, the avatar's own width would still indent its left edge.
+  const media = post.image_url ? (
+    <button
+      type="button"
+      onClick={() => setImagePreviewOpen(true)}
+      aria-label="View full screen"
+      className={cn("block w-full overflow-hidden", isFeed ? "-mx-4 w-[calc(100%+2rem)]" : "mt-3 rounded-xl")}
+    >
+      <img src={post.image_url} alt={post.title} className="w-full max-h-80 object-cover hover:opacity-95 transition-opacity" />
+    </button>
+  ) : post.video_url ? (
+    <Link
+      href={`/reels/${post.id}`}
+      className={cn("block relative overflow-hidden bg-black group", isFeed ? "-mx-4 w-[calc(100%+2rem)]" : "mt-3 rounded-xl")}
+    >
+      {post.video_thumbnail_url && (
+        <img src={post.video_thumbnail_url} alt={post.title} className="w-full max-h-80 object-cover opacity-90" />
+      )}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="w-12 h-12 rounded-full bg-black/50 group-hover:bg-black/65 transition-colors flex items-center justify-center">
+          <Play className="h-5 w-5 text-white fill-white ml-0.5" />
+        </div>
+      </div>
+    </Link>
+  ) : null;
+
+  const viewDetails = href ? (
+    <Link href={href} className="inline-flex items-center gap-1 text-xs font-semibold text-[#1E2952] hover:underline">
+      View details →
+    </Link>
+  ) : null;
+
+  const moderationNotice =
+    currentUserId === post.author_id ? <ModerationStatusNotice status={post.moderation_status} contentType="post" contentId={post.id} /> : null;
+
+  const actionBar = (
+    <div className={cn("flex items-center", isFeed ? "gap-5 pt-3 border-t border-gray-100" : "gap-4")}>
+      {isFeed ? (
+        <button
+          onClick={handleLike}
+          className={cn("flex items-center gap-1.5 text-sm font-medium transition-colors", liked ? "text-[#1E2952]" : "text-gray-500 hover:text-[#1E2952]")}
+        >
+          <ThumbsUp className={cn("h-[18px] w-[18px]", liked && "fill-current")} />
+          <span>{likeCount}</span>
+        </button>
+      ) : (
+        <button
+          onClick={handleLike}
+          className={`flex items-center gap-1.5 text-sm transition-colors ${
+            liked ? "text-red-500" : "text-gray-500 hover:text-red-500"
+          }`}
+        >
+          <Heart className={`h-4 w-4 ${liked ? "fill-current" : ""}`} />
+          <span>{likeCount}</span>
+        </button>
+      )}
+      <div className={cn("flex items-center gap-1.5 text-gray-500", isFeed ? "text-sm font-medium" : "text-sm")}>
+        <MessageCircle className={isFeed ? "h-[18px] w-[18px]" : "h-4 w-4"} />
+        <span>{post.comment_count}</span>
+      </div>
+    </div>
+  );
+
   return (
     <div className={isFeed ? "bg-white p-4" : "bg-white rounded-2xl p-5 hover:shadow-sm transition-shadow"}>
       <div className="flex items-start gap-3">
@@ -173,69 +238,14 @@ export function PostCard({ post, currentUserId, liked: initialLiked = false, can
               {expanded ? "Show less" : "Show more"}
             </button>
           )}
-          {post.image_url && (
-            <button
-              type="button"
-              onClick={() => setImagePreviewOpen(true)}
-              aria-label="View full screen"
-              className={cn("mt-3 block w-full overflow-hidden", isFeed ? "-mx-4 w-[calc(100%+2rem)]" : "rounded-xl")}
-            >
-              <img src={post.image_url} alt={post.title} className="w-full max-h-80 object-cover hover:opacity-95 transition-opacity" />
-            </button>
+          {!isFeed && (
+            <>
+              {media}
+              {viewDetails && <div className="mt-3">{viewDetails}</div>}
+              {moderationNotice && <div className="mt-3">{moderationNotice}</div>}
+              <div className="mt-3">{actionBar}</div>
+            </>
           )}
-          {post.video_url && (
-            <Link
-              href={`/reels/${post.id}`}
-              className={cn("mt-3 relative block overflow-hidden bg-black group", isFeed ? "-mx-4 w-[calc(100%+2rem)]" : "rounded-xl")}
-            >
-              {post.video_thumbnail_url && (
-                <img src={post.video_thumbnail_url} alt={post.title} className="w-full max-h-80 object-cover opacity-90" />
-              )}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-12 h-12 rounded-full bg-black/50 group-hover:bg-black/65 transition-colors flex items-center justify-center">
-                  <Play className="h-5 w-5 text-white fill-white ml-0.5" />
-                </div>
-              </div>
-            </Link>
-          )}
-
-          {href && (
-            <Link href={href} className="inline-flex items-center gap-1 mt-3 text-xs font-semibold text-[#1E2952] hover:underline">
-              View details →
-            </Link>
-          )}
-
-          {currentUserId === post.author_id && (
-            <div className="mt-3">
-              <ModerationStatusNotice status={post.moderation_status} contentType="post" contentId={post.id} />
-            </div>
-          )}
-
-          <div className={cn("flex items-center mt-3", isFeed ? "gap-5 pt-3 border-t border-gray-100" : "gap-4")}>
-            {isFeed ? (
-              <button
-                onClick={handleLike}
-                className={cn("flex items-center gap-1.5 text-sm font-medium transition-colors", liked ? "text-[#1E2952]" : "text-gray-500 hover:text-[#1E2952]")}
-              >
-                <ThumbsUp className={cn("h-[18px] w-[18px]", liked && "fill-current")} />
-                <span>{likeCount}</span>
-              </button>
-            ) : (
-              <button
-                onClick={handleLike}
-                className={`flex items-center gap-1.5 text-sm transition-colors ${
-                  liked ? "text-red-500" : "text-gray-500 hover:text-red-500"
-                }`}
-              >
-                <Heart className={`h-4 w-4 ${liked ? "fill-current" : ""}`} />
-                <span>{likeCount}</span>
-              </button>
-            )}
-            <div className={cn("flex items-center gap-1.5 text-gray-500", isFeed ? "text-sm font-medium" : "text-sm")}>
-              <MessageCircle className={isFeed ? "h-[18px] w-[18px]" : "h-4 w-4"} />
-              <span>{post.comment_count}</span>
-            </div>
-          </div>
         </div>
 
         {canDelete && (
@@ -285,6 +295,20 @@ export function PostCard({ post, currentUserId, liked: initialLiked = false, can
           </div>
         )}
       </div>
+
+      {isFeed && (
+        <>
+          {media && <div className="mt-3">{media}</div>}
+          {(viewDetails || moderationNotice) && (
+            <div className="mt-3 space-y-3">
+              {viewDetails}
+              {moderationNotice}
+            </div>
+          )}
+          <div className="mt-3">{actionBar}</div>
+        </>
+      )}
+
       <AnimatePresence>
         {imagePreviewOpen && post.image_url && (
           <ImagePreviewModal src={post.image_url} alt={post.title} onClose={() => setImagePreviewOpen(false)} />
