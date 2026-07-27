@@ -125,6 +125,27 @@ export function PostCard({ post, currentUserId, liked: initialLiked = false, can
     </Link>
   ) : null;
 
+  // Feed-variant title/content also render as a sibling of the avatar row
+  // (not nested inside it) — same reasoning as media: nested there, they'd
+  // stay indented under the name instead of spanning the full card width.
+  const textBlock = (
+    <>
+      <h3 ref={titleRef} className={cn("font-semibold text-gray-900 break-words", !expanded && "line-clamp-2", isFeed ? "mt-3" : "mt-1.5")}>
+        {post.title}
+      </h3>
+      {post.content && (
+        <p ref={contentRef} className={cn("text-sm text-gray-600 mt-1 break-words", !expanded && "line-clamp-3")}>
+          {post.content}
+        </p>
+      )}
+      {canExpand && (
+        <button type="button" onClick={() => setExpanded((v) => !v)} className="text-xs font-semibold text-indigo-600 hover:underline mt-1">
+          {expanded ? "Show less" : "Show more"}
+        </button>
+      )}
+    </>
+  );
+
   const viewDetails = href ? (
     <Link href={href} className="inline-flex items-center gap-1 text-xs font-semibold text-[#1E2952] hover:underline">
       View details →
@@ -215,31 +236,9 @@ export function PostCard({ post, currentUserId, liked: initialLiked = false, can
             </div>
           )}
 
-          <h3
-            ref={titleRef}
-            className={cn("font-semibold text-gray-900 mt-1.5 break-words", !expanded && "line-clamp-2")}
-          >
-            {post.title}
-          </h3>
-          {post.content && (
-            <p
-              ref={contentRef}
-              className={cn("text-sm text-gray-600 mt-1 break-words", !expanded && "line-clamp-3")}
-            >
-              {post.content}
-            </p>
-          )}
-          {canExpand && (
-            <button
-              type="button"
-              onClick={() => setExpanded((v) => !v)}
-              className="text-xs font-semibold text-indigo-600 hover:underline mt-1"
-            >
-              {expanded ? "Show less" : "Show more"}
-            </button>
-          )}
           {!isFeed && (
             <>
+              {textBlock}
               {media}
               {viewDetails && <div className="mt-3">{viewDetails}</div>}
               {moderationNotice && <div className="mt-3">{moderationNotice}</div>}
@@ -298,6 +297,7 @@ export function PostCard({ post, currentUserId, liked: initialLiked = false, can
 
       {isFeed && (
         <>
+          {textBlock}
           {media && <div className="mt-3">{media}</div>}
           {(viewDetails || moderationNotice) && (
             <div className="mt-3 space-y-3">
