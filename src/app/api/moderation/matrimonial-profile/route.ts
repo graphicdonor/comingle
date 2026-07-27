@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { runModerationPipeline } from "@/lib/moderation";
 import { isCommunityMember, matrimonialFeedPostContent, upsertCommunityFeedPost } from "@/lib/community-feed-post";
+import { MIN_MATRIMONIAL_AGE, ageValidationError } from "@/lib/age";
 
 interface MatrimonialProfileBody {
   full_name: string;
@@ -33,6 +34,10 @@ export async function POST(req: NextRequest) {
 
   if (!body.full_name?.trim() || !body.date_of_birth) {
     return NextResponse.json({ error: "full_name and date_of_birth are required" }, { status: 400 });
+  }
+  const dobError = ageValidationError(body.date_of_birth, MIN_MATRIMONIAL_AGE);
+  if (dobError) {
+    return NextResponse.json({ error: dobError }, { status: 400 });
   }
   if (!body.communityId) {
     return NextResponse.json({ error: "communityId is required" }, { status: 400 });

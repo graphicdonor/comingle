@@ -3,6 +3,8 @@
 
 import { timeAgo } from "@/lib/utils";
 
+export { calculateAge } from "@/lib/age";
+
 export const MARITAL_STATUSES = ["Never Married", "Divorced", "Widowed", "Separated"] as const;
 
 export const INCOME_BRACKETS = [
@@ -43,19 +45,6 @@ export function isMatrimonialEligible(gender: string | null | undefined): gender
 
 export function oppositeGender(gender: EligibleGender): EligibleGender {
   return gender === "Male" ? "Female" : "Male";
-}
-
-export function calculateAge(dob: string | null | undefined): number | null {
-  if (!dob) return null;
-  const birth = new Date(dob);
-  if (Number.isNaN(birth.getTime())) return null;
-  const today = new Date();
-  let age = today.getFullYear() - birth.getFullYear();
-  const hasHadBirthdayThisYear =
-    today.getMonth() > birth.getMonth() ||
-    (today.getMonth() === birth.getMonth() && today.getDate() >= birth.getDate());
-  if (!hasHadBirthdayThisYear) age--;
-  return age;
 }
 
 // A short, stable, display-only "member code" (e.g. "JYO876767") derived

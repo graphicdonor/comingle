@@ -5,6 +5,7 @@ import { Camera, ChevronLeft, Check, Loader2 } from "lucide-react";
 import { Avatar } from "@/components/ui/avatar";
 import { DEV_MODE, getDevProfile, setDevProfile } from "@/lib/dev-auth";
 import { createClient } from "@/lib/supabase/client";
+import { MIN_SIGNUP_AGE, ageValidationError, maxDobForAge } from "@/lib/age";
 
 const GENDERS = ["Male", "Female", "Non-binary", "Prefer not to say"];
 
@@ -79,6 +80,10 @@ export default function EditProfilePage() {
   const handleSave = async () => {
     if (!form.full_name.trim()) { setError("Full name is required"); return; }
     if (!form.username.trim()) { setError("Username is required"); return; }
+    if (form.date_of_birth) {
+      const dobError = ageValidationError(form.date_of_birth, MIN_SIGNUP_AGE);
+      if (dobError) { setError(dobError); return; }
+    }
     setError("");
     setLoading(true);
 
@@ -230,6 +235,7 @@ export default function EditProfilePage() {
             type="date"
             value={form.date_of_birth}
             onChange={(e) => set("date_of_birth", e.target.value)}
+            max={maxDobForAge(MIN_SIGNUP_AGE)}
             className="input-field"
           />
         </Field>

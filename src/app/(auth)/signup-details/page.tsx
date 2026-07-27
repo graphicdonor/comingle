@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ChevronLeft, User, CheckCircle2, Image as ImageIcon, Camera } from "lucide-react";
 import { DEV_MODE, getDevUser, setDevProfile } from "@/lib/dev-auth";
+import { MIN_SIGNUP_AGE, ageValidationError, maxDobForAge } from "@/lib/age";
 
 const GENDERS = ["Male", "Female", "Other", "Prefer not to say"];
 
@@ -58,7 +59,8 @@ export default function SignupDetailsPage() {
       if (!form.fullName.trim()) { setError("Full name is required"); return false; }
       if (!form.username || form.username.length < 3) { setError("Username must be at least 3 characters"); return false; }
       if (!/^[a-z0-9_]+$/.test(form.username)) { setError("Username: only letters, numbers, underscores"); return false; }
-      if (!form.dob) { setError("Date of birth is required"); return false; }
+      const dobError = ageValidationError(form.dob, MIN_SIGNUP_AGE);
+      if (dobError) { setError(dobError); return false; }
     }
     if (step === 1) {
       if (!form.state.trim()) { setError("State is required"); return false; }
@@ -215,6 +217,7 @@ export default function SignupDetailsPage() {
               type="date"
               value={form.dob}
               onChange={set("dob")}
+              max={maxDobForAge(MIN_SIGNUP_AGE)}
             />
 
             <div className="flex flex-col gap-1.5">

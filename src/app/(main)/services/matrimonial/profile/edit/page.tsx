@@ -21,6 +21,7 @@ import {
   MAX_PHOTO_SIZE_BYTES,
   isMatrimonialEligible,
 } from "@/lib/matrimonial";
+import { MIN_MATRIMONIAL_AGE, ageValidationError, maxDobForAge } from "@/lib/age";
 
 interface FormState {
   full_name: string;
@@ -178,7 +179,8 @@ export default function MatrimonialProfileEditPage() {
 
   const validate = (): boolean => {
     if (!form.full_name.trim()) { setError("Full name is required"); return false; }
-    if (!form.date_of_birth) { setError("Date of birth is required"); return false; }
+    const dobError = ageValidationError(form.date_of_birth, MIN_MATRIMONIAL_AGE);
+    if (dobError) { setError(dobError); return false; }
     if (!DEV_MODE && !communityId) { setError("Select a community to publish this profile to"); return false; }
     return true;
   };
@@ -274,7 +276,7 @@ export default function MatrimonialProfileEditPage() {
           <p className="text-right text-xs text-gray-400">{form.about_me.length}/{ABOUT_ME_MAX_LENGTH} characters</p>
         </div>
 
-        <Input label="Date of Birth *" type="date" value={form.date_of_birth} onChange={set("date_of_birth")} />
+        <Input label="Date of Birth *" type="date" value={form.date_of_birth} onChange={set("date_of_birth")} max={maxDobForAge(MIN_MATRIMONIAL_AGE)} />
         <Input label="Time of Birth" type="time" value={form.time_of_birth} onChange={set("time_of_birth")} />
         <Input label="Place of Birth" value={form.place_of_birth} onChange={set("place_of_birth")} placeholder="e.g. Hissar, Haryana" />
         <Input label="City living in" value={form.city} onChange={set("city")} placeholder="e.g. Gurugram" />
