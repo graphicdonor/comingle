@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AnimatePresence } from "framer-motion";
-import { Heart, MessageCircle, MoreVertical, Play, Trash2 } from "lucide-react";
+import { Flag, Heart, MessageCircle, MoreVertical, Play, Trash2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import type { Post } from "@/lib/types";
 import { Avatar } from "@/components/ui/avatar";
@@ -11,6 +11,7 @@ import { createClient } from "@/lib/supabase/client";
 import { ModerationStatusNotice } from "@/components/moderation/moderation-status-notice";
 import { ImagePreviewModal } from "@/components/post/image-preview-modal";
 import { PostComments } from "@/components/post/post-comments";
+import { ReportPostModal } from "@/components/post/report-post-modal";
 
 const KIND_BADGES: Partial<Record<Post["post_type"], { label: string; className: string }>> = {
   matrimonial_profile: { label: "Matrimonial", className: "bg-rose-50 text-rose-600" },
@@ -56,11 +57,13 @@ export function PostCard({ post, currentUserId, liked: initialLiked = false, can
   const [deleteError, setDeleteError] = useState("");
   const [deleted, setDeleted] = useState(false);
   const [imagePreviewOpen, setImagePreviewOpen] = useState(false);
+  const [reportModalOpen, setReportModalOpen] = useState(false);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const contentRef = useRef<HTMLParagraphElement>(null);
   const router = useRouter();
   const supabase = createClient();
   const canDelete = currentUserId === post.author_id || canModerate;
+  const canReport = !!currentUserId && currentUserId !== post.author_id;
 
   useEffect(() => {
     // Measured once against the initial (clamped) layout — whether text
@@ -267,7 +270,7 @@ export function PostCard({ post, currentUserId, liked: initialLiked = false, can
           )}
         </div>
 
-        {canDelete && (
+        {(canDelete || canReport) && (
           <div className="relative flex-shrink-0">
             <button
               onClick={() => setMenuOpen((v) => !v)}
@@ -281,12 +284,24 @@ export function PostCard({ post, currentUserId, liked: initialLiked = false, can
                 <div className="fixed inset-0 z-10" onClick={() => { setMenuOpen(false); setConfirmingDelete(false); }} />
                 <div className="absolute right-0 top-9 z-20 bg-white rounded-xl shadow-lg py-1 w-48">
                   {!confirmingDelete ? (
-                    <button
-                      onClick={() => setConfirmingDelete(true)}
-                      className="w-full flex items-center gap-2 text-left px-4 py-2 text-sm text-red-500 hover:bg-red-50"
-                    >
-                      <Trash2 className="h-3.5 w-3.5" /> Delete Post
-                    </button>
+                    <>
+                      {canReport && (
+                        <button
+                          onClick={() => { setMenuOpen(false); setReportModalOpen(true); }}
+                          className="w-full flex items-center gap-2 text-left px-4 py-2 text-sm text-gray-600 hover:bg-gray-50"
+                        >
+                          <Flag className="h-3.5 w-3.5" /> Report Post
+                        </button>
+                      )}
+                      {canDelete && (
+                        <button
+                          onClick={() => setConfirmingDelete(true)}
+                          className="w-full flex items-center gap-2 text-left px-4 py-2 text-sm text-red-500 hover:bg-red-50"
+                        >
+                          <Trash2 className="h-3.5 w-3.5" /> Delete Post
+                        </button>
+                      )}
+                    </>
                   ) : (
                     <div className="px-4 py-2.5 space-y-2">
                       <p className="text-xs text-gray-500">Delete this post?</p>
@@ -335,6 +350,7 @@ export function PostCard({ post, currentUserId, liked: initialLiked = false, can
           <ImagePreviewModal src={post.image_url} alt={post.title} onClose={() => setImagePreviewOpen(false)} />
         )}
       </AnimatePresence>
+      {reportModalOpen && <ReportPostModal postId={post.id} onClose={() => setReportModalOpen(false)} />}
     </div>
   );
 }

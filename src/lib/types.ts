@@ -61,6 +61,19 @@ export interface Post {
   communities?: Community;
 }
 
+export type ReportReason = "spam" | "harassment" | "inappropriate" | "misinformation" | "other";
+
+export interface PostReport {
+  id: string;
+  post_id: string;
+  reporter_id: string;
+  reason: ReportReason;
+  details: string | null;
+  status: "pending" | "resolved" | "dismissed";
+  created_at: string;
+  reviewed_at: string | null;
+}
+
 export interface Comment {
   id: string;
   content: string;

@@ -69,6 +69,17 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
   if (companionColumn && log.content_id) {
     await admin.from("posts").update({ moderation_status: newStatus }).eq(companionColumn, log.content_id);
   }
+  // Close the loop on any viewer reports that led to this review — approve
+  // means the report didn't hold up (dismissed), reject means it did
+  // (resolved). This queue item might not have come from a report at all
+  // (an AI hold has none), in which case this just affects zero rows.
+  if (log.content_type === "post" && log.content_id) {
+    await admin
+      .from("post_reports")
+      .update({ status: body.action === "approve" ? "dismissed" : "resolved", reviewed_at: new Date().toISOString() })
+      .eq("post_id", log.content_id)
+      .eq("status", "pending");
+  }
   if (body.action === "reject") {
     await recordViolationAndMaybeSuspend(admin, log.user_id);
   }
