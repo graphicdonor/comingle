@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Eye, EyeOff, ShieldCheck, Loader2 } from "lucide-react";
 
 export default function AdminLoginPage() {
@@ -8,7 +7,6 @@ export default function AdminLoginPage() {
   const [show, setShow] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,12 +18,16 @@ export default function AdminLoginPage() {
       body: JSON.stringify({ password }),
     });
     setLoading(false);
-    if (res.ok) {
-      router.push("/admin");
-      router.refresh();
-    } else {
+    if (!res.ok) {
       setError("Invalid password. Try again.");
+      return;
     }
+    // Hard navigation, not router.push() — same soft-navigation commit bug
+    // worked around elsewhere in this app (see matrimonial-nav-tabs.tsx and
+    // the matrimonial profile edit save flow): router.push() right after an
+    // async fetch intermittently never commits, leaving the login form
+    // rendered even though the admin-token cookie was set successfully.
+    window.location.href = "/admin";
   };
 
   return (
