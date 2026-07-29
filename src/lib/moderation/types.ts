@@ -8,7 +8,8 @@ export type ContentType =
   | "community_cover"
   | "business_listing"
   | "job_listing"
-  | "comment";
+  | "comment"
+  | "event_listing";
 
 export type ModerationDecision = "allow" | "hold_for_review" | "block";
 

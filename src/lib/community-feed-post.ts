@@ -1,8 +1,8 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { ModerationStatus } from "./types";
 
-type ListingPostType = "matrimonial_profile" | "business_listing" | "job_listing";
-type ListingRefColumn = "matrimonial_profile_id" | "business_listing_id" | "job_listing_id";
+type ListingPostType = "matrimonial_profile" | "business_listing" | "job_listing" | "event_listing";
+type ListingRefColumn = "matrimonial_profile_id" | "business_listing_id" | "job_listing_id" | "event_listing_id";
 
 export async function isCommunityMember(admin: SupabaseClient, communityId: string, userId: string): Promise<boolean> {
   const { data } = await admin
@@ -57,7 +57,7 @@ export async function upsertCommunityFeedPost(
 export async function syncCommunityFeedPostIfExists(
   admin: SupabaseClient,
   args: {
-    refColumn: "business_listing_id" | "job_listing_id";
+    refColumn: "business_listing_id" | "job_listing_id" | "event_listing_id";
     refId: string;
     moderationStatus: ModerationStatus;
     title: string;
@@ -103,6 +103,23 @@ export function jobFeedPostContent(input: {
   return {
     title: `New job opening: ${input.title}${input.company_name ? ` at ${input.company_name}` : ""}`,
     content: [input.job_type, where, salary].filter(Boolean).join(" • ") || null,
+    imageUrl: input.photo_urls[0] ?? null,
+  };
+}
+
+export function eventFeedPostContent(input: {
+  title: string;
+  event_date: string;
+  venue_name?: string | null;
+  city?: string | null;
+  is_online: boolean;
+  photo_urls: string[];
+}) {
+  const when = new Date(input.event_date).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
+  const where = input.is_online ? "Online" : [input.venue_name, input.city].filter(Boolean).join(", ");
+  return {
+    title: `New event: ${input.title}`,
+    content: [when, where].filter(Boolean).join(" • ") || null,
     imageUrl: input.photo_urls[0] ?? null,
   };
 }

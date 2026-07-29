@@ -17,6 +17,7 @@ const KIND_BADGES: Partial<Record<Post["post_type"], { label: string; className:
   matrimonial_profile: { label: "Matrimonial", className: "bg-rose-50 text-rose-600" },
   business_listing: { label: "Business", className: "bg-amber-50 text-amber-700" },
   job_listing: { label: "Job", className: "bg-teal-50 text-teal-700" },
+  event_listing: { label: "Event", className: "bg-lime-50 text-lime-700" },
 };
 
 function detailHref(post: Post): string | null {
@@ -27,6 +28,8 @@ function detailHref(post: Post): string | null {
       return post.business_listing_id ? `/services/businesses/${post.business_listing_id}` : null;
     case "job_listing":
       return post.job_listing_id ? `/services/jobs/${post.job_listing_id}` : null;
+    case "event_listing":
+      return post.event_listing_id ? `/services/events/${post.event_listing_id}` : null;
     default:
       return null;
   }

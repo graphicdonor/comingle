@@ -212,29 +212,65 @@ create table if not exists job_listings (
 create index if not exists idx_job_listings_owner on job_listings(owner_id);
 create index if not exists idx_job_listings_status on job_listings(moderation_status);
 
--- Lets a published matrimonial profile, business listing, or job listing
--- also appear as a card in the community feed the author chooses to share
--- it to. Reuses the posts table wholesale (feed queries, likes, comments,
--- moderation-status visibility, and delete all keep working unchanged) —
--- post_type is a discriminator for PostCard to render a listing-style card
--- instead of a plain text/media post, and the (at most one) non-null FK
--- column points back to whichever source row the post represents
--- ('standard' posts leave all three null). Added here via alter rather than
--- in the posts table's own create statement above because these three
--- referenced tables are declared later in this file. Plain (non-partial)
--- unique indexes so a listing's companion post can be looked up/upserted
--- by its ref column via ON CONFLICT — Postgres unique indexes don't count
--- NULLs against each other, so 'standard' posts (all three null) are
--- unaffected.
+-- Events service ("Register an Event", linked from the home page's Events
+-- community-service tile). Same shape as business_listings/job_listings:
+-- one organizer can list more than one event, and it's a public directory,
+-- not a matching pool.
+create table if not exists events (
+  id                uuid primary key default gen_random_uuid(),
+  organizer_id      uuid not null references profiles(id) on delete cascade,
+  title             text not null,
+  description       text,
+  categories        text[] not null default '{}',
+  event_date        date not null,
+  start_time        time,
+  end_time          time,
+  is_online         boolean not null default false,
+  online_link       text,
+  venue_name        text,
+  address           text,
+  city              text,
+  state             text,
+  poc_name          text,
+  mobile_number     text,
+  whatsapp_number   text,
+  email             text,
+  registration_link text,
+  photo_urls        text[] not null default '{}',
+  moderation_status text not null default 'pending_review' check (moderation_status in ('pending_review', 'published', 'blocked')),
+  created_at        timestamptz not null default now(),
+  updated_at        timestamptz not null default now()
+);
+
+create index if not exists idx_events_organizer on events(organizer_id);
+create index if not exists idx_events_status on events(moderation_status);
+create index if not exists idx_events_date on events(event_date);
+
+-- Lets a published matrimonial profile, business listing, job listing, or
+-- event also appear as a card in the community feed the author chooses to
+-- share it to. Reuses the posts table wholesale (feed queries, likes,
+-- comments, moderation-status visibility, and delete all keep working
+-- unchanged) — post_type is a discriminator for PostCard to render a
+-- listing-style card instead of a plain text/media post, and the (at most
+-- one) non-null FK column points back to whichever source row the post
+-- represents ('standard' posts leave all four null). Added here via alter
+-- rather than in the posts table's own create statement above because
+-- these referenced tables are declared later in this file. Plain
+-- (non-partial) unique indexes so a listing's companion post can be
+-- looked up/upserted by its ref column via ON CONFLICT — Postgres unique
+-- indexes don't count NULLs against each other, so 'standard' posts (all
+-- four null) are unaffected.
 alter table posts add column if not exists post_type text not null default 'standard'
-  check (post_type in ('standard', 'matrimonial_profile', 'business_listing', 'job_listing'));
+  check (post_type in ('standard', 'matrimonial_profile', 'business_listing', 'job_listing', 'event_listing'));
 alter table posts add column if not exists matrimonial_profile_id uuid references matrimonial_profiles(user_id) on delete cascade;
 alter table posts add column if not exists business_listing_id uuid references business_listings(id) on delete cascade;
 alter table posts add column if not exists job_listing_id uuid references job_listings(id) on delete cascade;
+alter table posts add column if not exists event_listing_id uuid references events(id) on delete cascade;
 
 create unique index if not exists posts_matrimonial_profile_id_key on posts(matrimonial_profile_id);
 create unique index if not exists posts_business_listing_id_key on posts(business_listing_id);
 create unique index if not exists posts_job_listing_id_key on posts(job_listing_id);
+create unique index if not exists posts_event_listing_id_key on posts(event_listing_id);
 
 -- Shortlist: a personal bookmark of another profile, independent of invites.
 create table if not exists matrimonial_shortlist (
@@ -272,7 +308,7 @@ create table if not exists moderation_logs (
                        'post', 'matrimonial_profile', 'profile_bio',
                        'community_description', 'community_rules',
                        'avatar', 'community_cover', 'business_listing', 'job_listing',
-                       'comment'
+                       'comment', 'event_listing'
                      )),
   content_id         text,
   user_id            uuid references profiles(id) on delete cascade not null,
@@ -358,6 +394,9 @@ create index if not exists survey_responses_survey_id_idx on survey_responses (s
 -- "job-photos" (Public, 5MB file limit, jpg/jpeg/png only) — same shape as
 -- avatars: path is {owner_uid}/{file}, policies in
 -- supabase/migrations/20260714100100_*.sql, bucket created via Storage API.
+-- "event-photos" (Public, 5MB file limit, jpg/jpeg/png only) — same shape
+-- as avatars: path is {organizer_uid}/{file}, policies in
+-- supabase/migrations/20260729100100_*.sql, bucket created via Storage API.
 -- ============================================================
 
 -- ============================================================
@@ -446,6 +485,20 @@ drop trigger if exists trg_job_listings_updated_at on job_listings;
 create trigger trg_job_listings_updated_at
   before update on job_listings
   for each row execute function set_job_listing_updated_at();
+
+-- updated_at on events is DB-owned so app code never sets it
+create or replace function set_event_updated_at()
+returns trigger language plpgsql as $$
+begin
+  new.updated_at = now();
+  return new;
+end;
+$$;
+
+drop trigger if exists trg_events_updated_at on events;
+create trigger trg_events_updated_at
+  before update on events
+  for each row execute function set_event_updated_at();
 
 -- New chat message -> notify the receiver. If they already have an unread
 -- notification for a message from the same sender, bump its count and
@@ -685,6 +738,7 @@ alter table moderation_appeals enable row level security;
 alter table survey_responses enable row level security;
 alter table business_listings enable row level security;
 alter table job_listings enable row level security;
+alter table events enable row level security;
 
 -- Profiles
 create policy "Profiles are public"            on profiles for select  using (true);
@@ -849,6 +903,16 @@ create policy "Owners can update own job listings" on job_listings for update
   using (auth.uid() = owner_id)
   with check (auth.uid() = owner_id and moderation_status = 'pending_review');
 create policy "Owners can delete own job listings" on job_listings for delete using (auth.uid() = owner_id);
+
+-- Events: same shape as business_listings' moderation gating and public
+-- directory visibility.
+create policy "Published events are publicly visible" on events for select using (moderation_status = 'published');
+create policy "Organizers can view own events" on events for select using (auth.uid() = organizer_id);
+create policy "Organizers can create own events" on events for insert with check (auth.uid() = organizer_id and moderation_status = 'pending_review');
+create policy "Organizers can update own events" on events for update
+  using (auth.uid() = organizer_id)
+  with check (auth.uid() = organizer_id and moderation_status = 'pending_review');
+create policy "Organizers can delete own events" on events for delete using (auth.uid() = organizer_id);
 
 -- Matrimonial invites: directional connection requests, gated by the same
 -- gender + shared-community eligibility rule as profile visibility.

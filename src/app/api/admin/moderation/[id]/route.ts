@@ -15,16 +15,18 @@ const CONTENT_TABLE: Record<string, { table: string; idColumn: string }> = {
   business_listing: { table: "business_listings", idColumn: "id" },
   job_listing: { table: "job_listings", idColumn: "id" },
   comment: { table: "comments", idColumn: "id" },
+  event_listing: { table: "events", idColumn: "id" },
 };
 
-// Matrimonial/business/job content can have a companion `posts` row (see
-// src/lib/community-feed-post.ts) mirroring it into a community feed — keep
-// that row's visibility in sync with the human decision made here too, not
-// just the automated-moderation path.
-const COMPANION_POST_COLUMN: Record<string, "matrimonial_profile_id" | "business_listing_id" | "job_listing_id"> = {
+// Matrimonial/business/job/event content can have a companion `posts` row
+// (see src/lib/community-feed-post.ts) mirroring it into a community feed —
+// keep that row's visibility in sync with the human decision made here
+// too, not just the automated-moderation path.
+const COMPANION_POST_COLUMN: Record<string, "matrimonial_profile_id" | "business_listing_id" | "job_listing_id" | "event_listing_id"> = {
   matrimonial_profile: "matrimonial_profile_id",
   business_listing: "business_listing_id",
   job_listing: "job_listing_id",
+  event_listing: "event_listing_id",
 };
 
 /** Approve or reject a held item. Route Handlers aren't covered by proxy.ts's /admin page guard (that only matches page paths, not /api/*), so the same admin-token cookie check happens here directly. */

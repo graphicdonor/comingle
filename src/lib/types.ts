@@ -38,7 +38,7 @@ export interface CommunityMember {
 
 export type ModerationStatus = "pending_review" | "published" | "blocked";
 
-export type PostType = "standard" | "matrimonial_profile" | "business_listing" | "job_listing";
+export type PostType = "standard" | "matrimonial_profile" | "business_listing" | "job_listing" | "event_listing";
 
 export interface Post {
   id: string;
@@ -57,6 +57,7 @@ export interface Post {
   matrimonial_profile_id: string | null;
   business_listing_id: string | null;
   job_listing_id: string | null;
+  event_listing_id: string | null;
   profiles?: Profile;
   communities?: Community;
 }
@@ -187,6 +188,32 @@ export interface JobListing {
   mobile_number: string | null;
   whatsapp_number: string | null;
   application_link: string | null;
+  photo_urls: string[];
+  moderation_status: ModerationStatus;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface EventListing {
+  id: string;
+  organizer_id: string;
+  title: string;
+  description: string | null;
+  categories: string[];
+  event_date: string;
+  start_time: string | null;
+  end_time: string | null;
+  is_online: boolean;
+  online_link: string | null;
+  venue_name: string | null;
+  address: string | null;
+  city: string | null;
+  state: string | null;
+  poc_name: string | null;
+  mobile_number: string | null;
+  whatsapp_number: string | null;
+  email: string | null;
+  registration_link: string | null;
   photo_urls: string[];
   moderation_status: ModerationStatus;
   created_at: string;
