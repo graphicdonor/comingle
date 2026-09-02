@@ -1,6 +1,9 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Heart, Play, FileText } from "lucide-react";
 import type { Post } from "@/lib/types";
+
+const GRID_SIZES = "(max-width: 640px) 33vw, 192px";
 
 /** Instagram-style thumbnail grid for a profile's posts. Every tile opens
  * the same post viewer (see profile/[username]/posts/[postId]), scrolled to
@@ -15,7 +18,7 @@ export function ProfilePostsGrid({ posts, username }: { posts: Post[]; username:
         if (post.image_url) {
           return (
             <Link key={post.id} href={href} className="relative aspect-square overflow-hidden bg-gray-100 group">
-              <img src={post.image_url} alt={post.title} className="w-full h-full object-cover" />
+              <Image src={post.image_url} alt={post.title} fill sizes={GRID_SIZES} className="object-cover" />
               <LikeOverlay count={post.like_count} />
             </Link>
           );
@@ -24,7 +27,7 @@ export function ProfilePostsGrid({ posts, username }: { posts: Post[]; username:
           return (
             <Link key={post.id} href={href} className="relative aspect-square overflow-hidden bg-black group">
               {post.video_thumbnail_url && (
-                <img src={post.video_thumbnail_url} alt={post.title} className="w-full h-full object-cover opacity-90" />
+                <Image src={post.video_thumbnail_url} alt={post.title} fill sizes={GRID_SIZES} className="object-cover opacity-90" />
               )}
               <Play className="absolute top-1.5 right-1.5 h-4 w-4 text-white fill-white drop-shadow" />
               <LikeOverlay count={post.like_count} />

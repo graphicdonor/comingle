@@ -3,10 +3,12 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { ServiceWorkerRegister } from "@/components/pwa/sw-register";
 import { InstallPrompt } from "@/components/pwa/install-prompt";
+import { SITE_URL } from "@/lib/site-url";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "Comingle — Uniting Communities",
   description: "Connect with your community — matrimonial, health, education, housing and more.",
   applicationName: "Comingle",
@@ -20,9 +22,15 @@ export const metadata: Metadata = {
   formatDetection: { telephone: false },
   openGraph: {
     type: "website",
+    url: "/",
     title: "Comingle — Uniting Communities",
     description: "Connect with your community.",
     siteName: "Comingle",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Comingle — Uniting Communities",
+    description: "Connect with your community.",
   },
   icons: {
     icon: [

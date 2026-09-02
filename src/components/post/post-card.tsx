@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AnimatePresence } from "framer-motion";
@@ -126,17 +127,29 @@ export function PostCard({ post, currentUserId, liked: initialLiked = false, can
       type="button"
       onClick={() => setImagePreviewOpen(true)}
       aria-label="View full screen"
-      className={cn("block w-full overflow-hidden", isFeed ? "-mx-4 w-[calc(100%+2rem)]" : "mt-3 rounded-xl")}
+      className={cn("relative block w-full h-80 overflow-hidden", isFeed ? "-mx-4 w-[calc(100%+2rem)]" : "mt-3 rounded-xl")}
     >
-      <img src={post.image_url} alt={post.title} className="w-full max-h-80 object-cover hover:opacity-95 transition-opacity" />
+      <Image
+        src={post.image_url}
+        alt={post.title}
+        fill
+        sizes="(max-width: 640px) 100vw, 576px"
+        className="object-cover hover:opacity-95 transition-opacity"
+      />
     </button>
   ) : post.video_url ? (
     <Link
       href={`/reels/${post.id}`}
-      className={cn("block relative overflow-hidden bg-black group", isFeed ? "-mx-4 w-[calc(100%+2rem)]" : "mt-3 rounded-xl")}
+      className={cn("relative block h-80 w-full overflow-hidden bg-black group", isFeed ? "-mx-4 w-[calc(100%+2rem)]" : "mt-3 rounded-xl")}
     >
       {post.video_thumbnail_url && (
-        <img src={post.video_thumbnail_url} alt={post.title} className="w-full max-h-80 object-cover opacity-90" />
+        <Image
+          src={post.video_thumbnail_url}
+          alt={post.title}
+          fill
+          sizes="(max-width: 640px) 100vw, 576px"
+          className="object-cover opacity-90"
+        />
       )}
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="w-12 h-12 rounded-full bg-black/50 group-hover:bg-black/65 transition-colors flex items-center justify-center">

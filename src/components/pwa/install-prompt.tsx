@@ -9,27 +9,30 @@ interface BeforeInstallPromptEvent extends Event {
 
 export function InstallPrompt() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-  const [isIOS, setIsIOS] = useState(false);
-  const [isStandalone, setIsStandalone] = useState(false);
-  const [dismissed, setDismissed] = useState(false);
+  // All of these read a synchronous external condition that's already known
+  // at mount (UA, display-mode, sessionStorage) — computed as lazy
+  // initializers rather than set from inside an effect, so mounting this
+  // component never triggers an extra cascading render.
+  const [isIOS] = useState(
+    () =>
+      typeof navigator !== "undefined" &&
+      /iPad|iPhone|iPod/.test(navigator.userAgent) &&
+      !(window as unknown as { MSStream?: unknown }).MSStream
+  );
+  const [isAndroid] = useState(() => typeof navigator !== "undefined" && /Android/.test(navigator.userAgent));
+  const [isStandalone] = useState(
+    () => typeof window !== "undefined" && window.matchMedia("(display-mode: standalone)").matches
+  );
+  const [dismissed, setDismissed] = useState(
+    () => typeof window !== "undefined" && !!sessionStorage.getItem("pwa-dismissed")
+  );
   const [showIOSGuide, setShowIOSGuide] = useState(false);
 
   useEffect(() => {
-    // Already installed as PWA
-    if (window.matchMedia("(display-mode: standalone)").matches) {
-      setIsStandalone(true);
-      return;
-    }
-
-    // Previously dismissed
-    if (sessionStorage.getItem("pwa-dismissed")) {
-      setDismissed(true);
-      return;
-    }
-
-    // Detect iOS
-    const ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
-    setIsIOS(ios);
+    // Desktop stays a plain website — no install nudging there. Chrome/Edge
+    // on desktop can also fire `beforeinstallprompt`, so this has to be an
+    // explicit device check, not just "did the browser offer it."
+    if (isStandalone || dismissed || (!isIOS && !isAndroid)) return;
 
     // Android / Chrome — capture beforeinstallprompt
     const handler = (e: Event) => {
@@ -38,7 +41,7 @@ export function InstallPrompt() {
     };
     window.addEventListener("beforeinstallprompt", handler);
     return () => window.removeEventListener("beforeinstallprompt", handler);
-  }, []);
+  }, [isStandalone, dismissed, isIOS, isAndroid]);
 
   const handleInstall = async () => {
     if (!deferredPrompt) return;
