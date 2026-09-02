@@ -2,11 +2,12 @@
 
 A Next.js 16 + Supabase social/community platform: users join topic-based
 communities, post into them, build a profile, optionally create a
-matrimonial (matchmaking) profile, and are protected by a pre-publish AI
-content moderation layer reviewed through an internal admin console. This
-doc is the map of how all of that actually fits together — conventions,
-data model, feature-by-feature logic, and the gaps/inconsistencies worth
-knowing about before touching a given area.
+matrimonial (matchmaking) profile or a business/job/event directory
+listing, and are protected by a pre-publish AI content moderation layer
+(backed up by viewer-initiated reports) reviewed through an internal admin
+console. This doc is the map of how all of that actually fits together —
+conventions, data model, feature-by-feature logic, and the
+gaps/inconsistencies worth knowing about before touching a given area.
 
 Feature-specific docs that already exist stand on their own and aren't
 duplicated here: **`MODERATION.md`** covers the content moderation system
@@ -71,6 +72,58 @@ users' data with no owning session (admin panel) or to perform the one step
 in a pipeline that a real user's own RLS grants could never allow. Default
 to the server/browser client otherwise.
 
+**`server.ts`'s `getUser()` is not the real Auth-server call.** It's
+wrapped to delegate to `getSession()` (which just decodes the JWT already
+sitting in the request's cookies) whenever it's called with no explicit
+token argument. `proxy.ts` already makes the one real `getUser()`
+network round-trip that validates the session against the Auth server for
+every request that needs it — every Server Component and Route Handler
+downstream of that middleware would otherwise redundantly re-validate the
+same token over the network again, which was costing every server-rendered
+page an extra ~300-400ms. Server Components and Route Handlers trust that
+middleware already ran; the one place that still needs the real network
+check is `proxy.ts` itself, which is why it wasn't touched by this change.
+Don't "fix" this wrapper back to a real network call without checking
+whether that reintroduces the exact page-load regression it was added to
+remove.
+
+### Hard navigation after an async mutation, not `router.push()`
+
+A recurring, confirmed bug in this app/Next.js version: calling
+`router.push(...)` immediately after an `await fetch(...)`/Supabase mutation
+intermittently never commits the navigation — the URL doesn't change and
+the old page just sits there, with no thrown error to catch. It's shown up
+independently in the matrimonial profile edit flow and the admin login
+page. The established workaround, applied both times, is a hard navigation
+instead: `window.location.href = "..."` rather than `router.push(...)`.
+If you're adding a redirect that immediately follows an async mutation and
+it seems to intermittently "just not fire," reach for this before assuming
+your own logic is wrong.
+
+### Community feed companion posts
+
+Matrimonial profiles, business listings, job listings, and event listings
+can each optionally publish a real row into the shared `posts` table, into
+a community the author picks — reusing posts' existing likes, comments,
+moderation, and deletion machinery for free instead of building a parallel
+engagement system per listing type. `posts.post_type` (`standard |
+matrimonial_profile | business_listing | job_listing | event_listing`)
+discriminates the row, paired with one nullable FK column per type
+(`matrimonial_profile_id`, `business_listing_id`, `job_listing_id`,
+`event_listing_id`) rather than a single polymorphic reference column, so
+each FK can still point at its target table with real referential
+integrity. `src/lib/community-feed-post.ts` centralizes this: per-type
+content-formatting helpers (`matrimonialFeedPostContent`,
+`businessFeedPostContent`, `jobFeedPostContent`, `eventFeedPostContent`),
+`isCommunityMember` (the author must actually belong to the community
+they're posting into), and `upsertCommunityFeedPost`/
+`syncCommunityFeedPostIfExists` — the latter keeps the companion post's
+content in sync if the underlying listing is edited later, rather than
+leaving a stale snapshot in the feed. `post-card.tsx` renders a
+type-specific badge and links "Details" through to the listing's own page
+(`/services/{businesses,jobs,events}/[id]` or the matrimonial profile
+view) rather than treating it as a plain text/image post.
+
 ### RLS is the actual enforcement layer — and it fails silently
 
 Every real permission check in this app lives in a Postgres RLS policy, not
@@ -113,7 +166,8 @@ decision-logic writeup.
 The `notifications` table has no INSERT policy for regular users at all —
 rows only ever come from `SECURITY DEFINER` trigger functions
 (`notify_new_matrimonial_message`, `notify_moderation_decision`,
-`notify_appeal_outcome` — all in `schema.sql`), which bypass RLS by design.
+`notify_appeal_outcome`, `notify_new_comment`, `notify_new_like` — all in
+`schema.sql`), which bypass RLS by design.
 `increment_member_count`/`decrement_member_count`/`increment_like_count`/
 `decrement_like_count` are the same pattern applied to counters: no general
 UPDATE policy grants a plain member the ability to bump `member_count` or
@@ -199,8 +253,10 @@ Two independent gates, checked in order:
 
 The protected-path list is explicit and short:
 ```
-/communities/create, /settings, /notifications, /signup-details, /pin,
-/select-communities, /profile/edit, /services/matrimonial
+/communities/create, /posts/create, /settings, /notifications,
+/signup-details, /pin, /select-communities, /profile/edit,
+/services/matrimonial, /services/businesses/register,
+/services/jobs/register, /services/events/register, /reels
 ```
 plus any `/communities/*/manage` route. **Failing the check always
 redirects to `/signup`, never `/login`** — worth remembering since it's an
@@ -249,14 +305,18 @@ than repeated here.
 | `profiles` | 1:1 with `auth.users`. Username, name, avatar, bio, DOB, gender, state/city, `pin_hash`, phone, `last_active_at`. |
 | `communities` | Name, slug, description, cover, rules, `creator_id`, `member_count`. |
 | `community_members` | `(community_id, user_id, role)` — role is `member \| moderator \| admin`. |
-| `posts` | Title, content, image, `community_id`, `author_id`, `like_count`, `comment_count`, `moderation_status`. |
+| `posts` | Title, content, image or video, `community_id`, `author_id`, `like_count`, `comment_count`, `moderation_status`, `post_type` + 4 nullable listing FK columns (see Community feed companion posts). |
 | `post_likes` | `(post_id, user_id)`. |
-| `comments` | Exists in schema with RLS, but **no application code anywhere creates, reads, or displays a comment** — see Known gaps. |
+| `comments` | Text, `post_id`, `author_id`, `moderation_status` — full moderated comments feature, see Comments below. |
+| `post_reports` | `(post_id, reporter_id)` unique, `reason`, `status` (`pending \| resolved \| dismissed`) — viewer-initiated reports, see Post reports below. |
 | `matrimonial_profiles` | 1:1 per user (PK `user_id`). Full matchmaking field set — see the Matrimonial service section. |
 | `matrimonial_invites` | Directional connection requests between two users. |
 | `matrimonial_messages` | 1:1 chat, only after an accepted invite. |
 | `matrimonial_shortlist` | Private per-user bookmark list. |
-| `notifications` | In-app notification center — DB-trigger-populated only, see above. |
+| `business_listings` | Directory listing for a business — see Directory listings below. |
+| `job_listings` | Directory listing for a job opening — see Directory listings below. |
+| `events` | Directory listing for an event — see Directory listings below. |
+| `notifications` | In-app notification center — DB-trigger-populated only, see above. Now 5 `type` values, see Notifications below. |
 | `moderation_logs` / `moderation_queue` / `user_trust_scores` / `moderation_appeals` | Full detail in `MODERATION.md`. |
 | `survey_responses` | `(survey_id, user_id)` unique, `answers` jsonb. Survey *questions* live in code (`src/lib/surveys.ts`), not the DB. |
 
@@ -336,15 +396,66 @@ client's perspective; the only thing that ever changes post-insert is
 `posts` means `like_count` can only move through the `security definer`
 `increment_like_count`/`decrement_like_count` RPCs.
 
-### Comments — schema exists, feature doesn't
+`post-card.tsx` guards the like toggle with an in-flight `liking` boolean
+so a fast double-click can't fire two overlapping increment/decrement calls
+and leave the count and the viewer's own `post_likes` row out of sync (the
+bug this replaced) — the heart icon is filled/unfilled from the viewer's
+own like row, not just from `like_count`. A per-post "•••" menu (rendered
+for every signed-in viewer, not just the author) offers Report Post to a
+non-author and Delete Post to the author or a community moderator/admin.
 
-`comments` has a full table definition and RLS in `schema.sql`, but a
-repo-wide search turns up zero application code that ever inserts, selects,
-or displays one. The `Comment` TypeScript interface is dead code. The only
-comment-adjacent UI is a static, non-interactive count next to a
-`MessageCircle` icon on each post card — and it will always read `0`, since
-there's no `increment_comment_count` RPC either. Treat this as schema laid
-down ahead of a feature that hasn't been built yet, not a bug to fix.
+The home feed is rendered by a single Postgres RPC (added as part of the
+page-load performance work) rather than the app issuing several sequential
+queries per page — see Performance below.
+
+On a profile, a user's own published posts render as an Instagram-style
+grid (`profile/[username]`); clicking a tile opens
+`/profile/[username]/posts/[postId]`, a full-screen post viewer that
+continues scrolling into the rest of that user's post grid from that
+point, rather than being a dead-end single-post page.
+
+### Comments
+
+Full moderated comments feature, following the same shape as posts: the
+comment textbox in `post-comments.tsx` POSTs to a moderation Route Handler
+rather than inserting into `comments` directly, forcing `pending_review`
+per the `WITH CHECK` convention and running the standard moderation
+pipeline. `posts.comment_count` only increments when a comment actually
+becomes visible (published immediately, or later approved out of the
+queue) — never at the moment of submission — so the on-card count can't
+run ahead of what a viewer can actually see. A `notify_new_comment`
+`SECURITY DEFINER` trigger notifies the post's author, following the same
+dedup-on-unread pattern as the matrimonial-message trigger described
+above (a burst of comments from the same commenter collapses into one
+notification row rather than one per comment). Held/blocked comments
+behave exactly like held/blocked posts: visible only to their own author
+until a human reviewer or the AI resolves them.
+
+### Post reports
+
+A viewer can report any post they don't author from its "•••" menu, giving
+the same admin moderation queue a second way for content to arrive besides
+an AI hold — see `MODERATION.md`'s "Reviewing content" section for the
+full mechanics (the `post_reports` table, its unique-per-reporter-per-post
+constraint, and the `enqueue_post_report_for_review` trigger). A report
+never auto-hides or auto-blocks a post by itself; it only guarantees a
+human looks at it.
+
+### Directory listings (business, jobs, events)
+
+Three parallel directory verticals living under `/services/{businesses,
+jobs,events}`, all following the identical shape: a listing table
+(`business_listings` / `job_listings` / `events`) owned by its creator,
+a public browse/detail view, an edit page gated to the listing's owner
+(`organizer_id`/equivalent, checked server-side — see
+`services/events/[id]/edit/page.tsx` for the canonical shape: redirect to
+the detail page if the viewer isn't the owner), full-pipeline moderation
+on text fields and photos exactly like posts and matrimonial profiles, and
+an optional companion post into a community feed via the shared
+`community-feed-post.ts` module (see Community feed companion posts
+above). Events additionally register `/services/events/register` as a
+protected route (`proxy.ts`) and get their own photo storage bucket
+(`event_photos_storage` migration).
 
 ### Profiles
 
@@ -365,38 +476,37 @@ every 20 seconds (`NOTIFICATIONS_POLL_MS`), a `head:true, count:"exact"`
 query that fetches zero rows. Simply visiting `/notifications` marks
 everything read server-side before the page renders (no explicit "mark
 read" action needed); the navbar badge also clears instantly on navigating
-there rather than waiting for the next poll tick. All three notification
-types (new matrimonial message, moderation decision, appeal outcome) are
-inserted exclusively by `SECURITY DEFINER` DB triggers, never app code —
-see the pattern above.
+there rather than waiting for the next poll tick.
 
-### Floating navigation
+Five notification types now exist (new matrimonial message, moderation
+decision, appeal outcome, post comment, post like), all inserted
+exclusively by `SECURITY DEFINER` DB triggers, never app code — see the
+pattern above. The two post-engagement types batch differently, and the
+difference is deliberate, not an inconsistency: a comment notification
+dedups per **same commenter** (someone leaving several comments in a row
+collapses to one unread row, updating its count/timestamp), while a like
+notification dedups per **post**, not per liker — the row's `actor_id`
+updates to whoever liked most recently regardless of who liked before, so
+"Alice and 3 others liked your post" always names the latest liker rather
+than the first one. `Notification.type` in `src/lib/types.ts` is a proper
+union of all five string literals, matching the DB check constraint.
 
-The bottom nav (`src/components/floating-nav/`) is a custom
-drag-to-dock, tap-to-expand physics widget, not a static tab bar. It uses
-Framer Motion for primitives (`motionValue`, `useAnimationFrame`,
-`useReducedMotion`) but drives its own hand-rolled damped-spring
-integrator (`springStep` — a semi-implicit Euler step of a
-mass-spring-damper system) inside one shared `requestAnimationFrame` loop,
-rather than one Framer Motion `useSpring` per bubble — necessary because
-the Rules of Hooks forbid a variable number of hook calls for a variable
-number of nav items, and cheaper at 60fps for N bubbles regardless.
+### Bottom navigation
 
-Three modes: idle (a gently breathing stacked cluster), dragging (the
-lead bubble follows the pointer; every following bubble chases the bubble
-one position ahead of it through the same underdamped spring, one frame
-behind — that one-frame lag is what produces the "snake" trailing visual),
-and expanded (a radial fan-out menu, arced rather than a full circle so it
-can't spill off-screen, with the arc's center angle adapting to which
-screen quadrant the dock currently sits in). Dock position persists to
-`localStorage` per a `storageKey` prop (the production call site in
-`navbar.tsx` passes its own app-specific key, distinct from the demo page's
-key below) via `useSyncExternalStore` rather than effect+state,
-specifically because server and client legitimately disagree on the first
-read of `localStorage`. Fully respects
-`prefers-reduced-motion` (positions set directly, no spring/idle-bob/pulse
-animation when true). A standalone playground exists at
-`/dev/floating-nav-demo`, not linked from anywhere user-facing.
+`src/components/layout/bottom-nav.tsx` is a static, flat tab bar (icon +
+label, fixed to the viewport bottom), styled after LinkedIn's mobile nav.
+This is the nav rendered everywhere in the live app today.
+
+The original bottom nav, `src/components/floating-nav/`, was a custom
+drag-to-dock, tap-to-expand physics widget — Framer Motion primitives
+(`motionValue`, `useAnimationFrame`) driving a hand-rolled damped-spring
+integrator, three modes (idle/dragging/expanded), position persisted to
+`localStorage`. It's **no longer used by any production route** — it still
+exists in the tree, still works, and is still reachable at the standalone
+`/dev/floating-nav-demo` playground, but nothing user-facing renders it
+anymore. Left in place as dead code rather than deleted, in case the
+physics-dock interaction is revisited later; don't be misled by its
+continued presence into thinking it's still live.
 
 ### Matrimonial service
 
@@ -437,13 +547,51 @@ current on its own.
 ### Admin console
 
 `/admin/*` — Dashboard (user tracking), Moderation (pending review +
-appeals queue), Surveys (response viewer). Entirely separate chrome from
-the main app (`admin/layout.tsx`'s own dark-themed shell + `AdminNav`), and
-entirely separate auth (the shared-secret cookie model above, not Supabase
-Auth). Every admin page is a Server Component calling the service-role
-client directly — no separate Route Handler needed for read-only views;
-Route Handlers only exist for the actual mutations (approve/reject a
-queued item, approve/deny an appeal).
+appeals queue), Communities (list + delete any community), Surveys
+(response viewer). Entirely separate chrome from the main app
+(`admin/layout.tsx`'s own dark-themed shell + `AdminNav`), and entirely
+separate auth (the shared-secret cookie model above, not Supabase Auth).
+Every admin page is a Server Component calling the service-role client
+directly — no separate Route Handler needed for read-only views; Route
+Handlers only exist for the actual mutations (approve/reject a queued
+item, approve/deny an appeal, delete a community). Deleting a community
+here uses the service-role client specifically because an admin has no
+`community_members` row (and thus no RLS-granted delete right) of their
+own on an arbitrary community — cascades the same way a self-service
+delete by the community's own admin would (posts, memberships, likes,
+comments via `on delete cascade`).
+
+### Performance
+
+Two distinct fixes, both aimed at cutting redundant network round trips
+rather than changing what any page renders:
+
+- **`getUser()` → `getSession()` delegation.** See "Three Supabase
+  clients" above — the short version is `server.ts`'s `getUser()` now
+  reads the already-validated session out of cookies instead of making its
+  own Auth-server round trip, since `proxy.ts` already made that real call
+  earlier in the same request.
+- **Fewer sequential round trips per page.** PostgREST can't express "rows
+  whose FK is in the result of a subquery" as a single `.from(...)`
+  filter, so a few pages used to fetch an intermediate ID list first and
+  then a second, dependent query — a waterfall, not a single request. Two
+  fixes for the same underlying shape: the home feed now calls a Postgres
+  RPC, `get_home_feed(p_user_id, p_limit)` (`security invoker`, so RLS on
+  `posts` still applies as the calling user), which does the "communities
+  I've joined → posts in those communities" join server-side in one
+  statement; the profile page and the matrimonial browse page instead use
+  an `!inner` embed (e.g. `posts` filtered via
+  `profiles!posts_author_id_fkey!inner(*)` + `.eq("profiles.username",
+  ...)`), which lets PostgREST filter on a joined table's column within a
+  single query. Either way, the page's independent queries (profile, posts,
+  memberships, likes, etc.) now all fire together inside one `Promise.all`
+  instead of some of them waiting on an earlier one to resolve first.
+
+Measured combined effect: roughly a 30% reduction in server-rendered
+page load time. Netlify's own serverless cold-start/warm-request overhead
+(observed separately, roughly 5s cold / 700-900ms warm) is a hosting
+characteristic, not an application bottleneck, and was deliberately left
+uninvestigated further as out of scope for this pass.
 
 ### Surveys
 
@@ -469,9 +617,6 @@ each feature section above:
 - **Phone OTP delivery isn't configured** — `supabase/config.toml` has
   SMS/Twilio explicitly disabled. `DEV_MODE` is the only way to exercise
   phone signup today.
-- **Comments table/RLS exist with zero application code using them** —
-  no create, read, or display path anywhere. The on-card comment count is
-  static UI that will always show 0.
 - **Community role escalation via direct API call** — the
   `community_members` insert policy doesn't constrain the `role` column,
   only `user_id`. The UI never sends anything but `"member"`, but nothing
@@ -483,11 +628,6 @@ each feature section above:
   that every other settings mutation uses (no `.select()` + row-count
   check) — currently harmless only because the edit control itself is
   admin-gated client-side.
-- **`Notification.type` in `src/lib/types.ts` is stale** — still typed as
-  the single literal it started as, not widened to match the DB check
-  constraint's three values. Harmless at runtime (the row component falls
-  through to a generic message for the newer types) but worth fixing if
-  you're touching that file anyway.
 - **Avatar upload can leave an orphaned file in public storage** — the
   file uploads before the moderation precheck resolves; a blocked result
   skips the `profiles.avatar_url` update but not the upload itself.
@@ -495,6 +635,15 @@ each feature section above:
   `defaultChecked`, wired to nothing.
 - **The community search box is visually present but non-functional**
   (`readOnly`).
+- **Post reporting has no rate limit beyond the unique-per-reporter-per-post
+  constraint** — a single user can still report many different posts in
+  quick succession; nothing throttles report volume itself, only duplicate
+  reports of the same post by the same reporter.
+- **The original `FloatingNav` physics dock is unused dead code** —
+  superseded by the static `BottomNav` (see Bottom navigation above) but
+  left in the tree, still reachable at `/dev/floating-nav-demo`, in case
+  the interaction is revisited. Don't assume it's live; check which
+  component a given layout actually renders.
 
 ## Deployment & operations
 

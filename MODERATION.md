@@ -49,9 +49,6 @@ sitting stuck in an unattended queue — reasonable for a small app without
 an active moderation team; revisit if that changes.
 
 **Deliberately not covered:**
-- **Comments.** The `comments` table and RLS policies exist in the schema,
-  but there is no comment-creation UI anywhere in the app — nothing to hook
-  moderation into. Wire it in if a comment feature is ever built.
 - **Matrimonial chat messages.** These are private 1:1 messages, not
   published content in the sense the rest of this system deals with, and a
   synchronous per-message AI check would add real latency to a real-time
@@ -198,6 +195,18 @@ the original spec's "reviewer id," there's no individual reviewer identity
 to record, only the outcome and timestamp). Two tabs: Pending Review and
 Appeals. Each entry shows the flagged categories with their scores, the
 input text/images, and Approve/Reject (or Restore/Deny for appeals).
+
+Pending Review isn't fed only by the AI pipeline — a viewer can also
+manually report a published post from the feed ("•••" menu → Report Post).
+That insert goes into its own `post_reports` table (one row per
+reporter/post pair, so the same viewer reporting twice doesn't double-queue
+it) and a `security definer` trigger (`enqueue_post_report_for_review`)
+enqueues the post into the same `moderation_queue` an AI hold would use,
+tagged `content_type = 'post'`. A report never auto-hides or auto-blocks
+the post on its own — it only guarantees a human looks at it. Actioning
+that queue entry (approve/reject) also updates the underlying
+`post_reports` rows for that post to `resolved`/`dismissed`, so the report
+history stays in sync with the moderation outcome.
 
 Users are notified of both outcomes (held item resolved, appeal resolved)
 through the existing in-app notification system — see
