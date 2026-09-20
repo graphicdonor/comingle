@@ -1,15 +1,21 @@
 import { CommunityCard } from "@/components/community/community-card";
+import { CommunitySearchInput } from "@/components/community/community-search-input";
 import type { Community } from "@/lib/types";
 import { DEV_COMMUNITIES } from "@/lib/dev-data";
+import { orConditions } from "@/lib/search";
 import Link from "next/link";
-import { PlusCircle, Search } from "lucide-react";
+import { PlusCircle } from "lucide-react";
 
 const DEV_MODE = process.env.NEXT_PUBLIC_DEV_MODE === "true";
 
-export default async function CommunitiesPage() {
+export default async function CommunitiesPage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
+  const { q } = await searchParams;
+  const query = (q ?? "").trim();
+
   let allCommunities: Community[] = [];
   let joined: Community[] = [];
   let discover: Community[] = [];
+  let searchResults: Community[] = [];
   let isLoggedIn = false;
 
   if (DEV_MODE) {
@@ -17,6 +23,12 @@ export default async function CommunitiesPage() {
     joined = DEV_COMMUNITIES.slice(0, 2);
     discover = DEV_COMMUNITIES.slice(2);
     isLoggedIn = true;
+    if (query) {
+      const lower = query.toLowerCase();
+      searchResults = allCommunities.filter(
+        (c) => c.name.toLowerCase().includes(lower) || c.description?.toLowerCase().includes(lower)
+      );
+    }
   } else {
     const { createClient } = await import("@/lib/supabase/server");
     const supabase = await createClient();
@@ -29,17 +41,27 @@ export default async function CommunitiesPage() {
     const { data: { user } } = await supabase.auth.getUser();
     isLoggedIn = !!user;
 
-    const [{ data: communities }, { data: memberships }] = await Promise.all([
-      supabase.from("communities").select("*").order("member_count", { ascending: false }),
-      user
-        ? supabase.from("community_members").select("community_id").eq("user_id", user.id)
-        : Promise.resolve({ data: null as { community_id: string }[] | null }),
-    ]);
-    const memberCommunityIds = new Set((memberships ?? []).map((m) => m.community_id));
+    if (query) {
+      const { data: results } = await supabase
+        .from("communities")
+        .select("*")
+        .or(orConditions(query, ["name", "description"]))
+        .order("member_count", { ascending: false })
+        .limit(30);
+      searchResults = (results ?? []) as Community[];
+    } else {
+      const [{ data: communities }, { data: memberships }] = await Promise.all([
+        supabase.from("communities").select("*").order("member_count", { ascending: false }),
+        user
+          ? supabase.from("community_members").select("community_id").eq("user_id", user.id)
+          : Promise.resolve({ data: null as { community_id: string }[] | null }),
+      ]);
+      const memberCommunityIds = new Set((memberships ?? []).map((m) => m.community_id));
 
-    allCommunities = (communities ?? []) as Community[];
-    joined = allCommunities.filter((c) => memberCommunityIds.has(c.id));
-    discover = allCommunities.filter((c) => !memberCommunityIds.has(c.id));
+      allCommunities = (communities ?? []) as Community[];
+      joined = allCommunities.filter((c) => memberCommunityIds.has(c.id));
+      discover = allCommunities.filter((c) => !memberCommunityIds.has(c.id));
+    }
   }
 
   return (
@@ -60,49 +82,64 @@ export default async function CommunitiesPage() {
         )}
       </div>
 
-      {/* Search */}
-      <div className="flex items-center gap-2 bg-white rounded-full px-4 py-2.5 border border-gray-200 mb-5 shadow-sm">
-        <Search className="h-4 w-4 text-gray-400" />
-        <input
-          type="text"
-          placeholder="Search communities..."
-          className="flex-1 text-sm bg-transparent focus:outline-none text-gray-700 placeholder:text-gray-400"
-          readOnly
-        />
-      </div>
+      <CommunitySearchInput defaultValue={query} />
 
-      {joined.length > 0 && (
-        <section className="mb-6">
-          <h2 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Your Communities</h2>
-          <div className="grid grid-cols-2 gap-3">
-            {joined.map((c) => (
-              <CommunityCard key={c.id} community={c} isMember />
-            ))}
-          </div>
-        </section>
-      )}
-
-      <section>
-        <h2 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">
-          {joined.length > 0 ? "Discover More" : "All Communities"}
-        </h2>
-        {discover.length > 0 ? (
-          <div className="grid grid-cols-2 gap-3">
-            {discover.map((c) => (
-              <CommunityCard key={c.id} community={c} />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-12 bg-white rounded-2xl">
-            <p className="text-gray-400 text-sm">No more communities to discover.</p>
-            {isLoggedIn && (
-              <Link href="/communities/create" className="text-[#8B1A6B] font-semibold text-sm mt-2 inline-block hover:underline">
-                Create the first one!
+      {query ? (
+        <section>
+          <h2 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">
+            {searchResults.length > 0 ? `Results for "${query}"` : `No results for "${query}"`}
+          </h2>
+          {searchResults.length > 0 ? (
+            <div className="grid grid-cols-2 gap-3">
+              {searchResults.map((c) => (
+                <CommunityCard key={c.id} community={c} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12 bg-white rounded-2xl">
+              <p className="text-gray-400 text-sm">Try a different name or keyword.</p>
+              <Link href="/communities" className="text-[#8B1A6B] font-semibold text-sm mt-2 inline-block hover:underline">
+                Clear search
               </Link>
+            </div>
+          )}
+        </section>
+      ) : (
+        <>
+          {joined.length > 0 && (
+            <section className="mb-6">
+              <h2 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Your Communities</h2>
+              <div className="grid grid-cols-2 gap-3">
+                {joined.map((c) => (
+                  <CommunityCard key={c.id} community={c} isMember />
+                ))}
+              </div>
+            </section>
+          )}
+
+          <section>
+            <h2 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">
+              {joined.length > 0 ? "Discover More" : "All Communities"}
+            </h2>
+            {discover.length > 0 ? (
+              <div className="grid grid-cols-2 gap-3">
+                {discover.map((c) => (
+                  <CommunityCard key={c.id} community={c} />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12 bg-white rounded-2xl">
+                <p className="text-gray-400 text-sm">No more communities to discover.</p>
+                {isLoggedIn && (
+                  <Link href="/communities/create" className="text-[#8B1A6B] font-semibold text-sm mt-2 inline-block hover:underline">
+                    Create the first one!
+                  </Link>
+                )}
+              </div>
             )}
-          </div>
-        )}
-      </section>
+          </section>
+        </>
+      )}
     </div>
   );
 }

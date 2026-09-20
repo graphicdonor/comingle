@@ -1,7 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Search } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { Avatar } from "@/components/ui/avatar";
+import { SearchField } from "@/components/search/search-field";
 import { DEV_MODE, getDevProfile } from "@/lib/dev-auth";
 import type { Profile } from "@/lib/types";
 import Link from "next/link";
@@ -12,6 +13,7 @@ interface HomeGreetingProps {
 }
 
 export function HomeGreeting({ serverProfile, serverUserId }: HomeGreetingProps) {
+  const router = useRouter();
   const [devProfile, setDevProfile] = useState<{ full_name: string; username: string; avatar_url: string | null } | null>(null);
 
   useEffect(() => {
@@ -58,15 +60,13 @@ export function HomeGreeting({ serverProfile, serverUserId }: HomeGreetingProps)
         )}
       </div>
 
-      <div className="flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-full px-4 py-2.5 border border-white shadow-sm">
-        <Search className="h-4 w-4 text-gray-400 flex-shrink-0" />
-        <input
-          type="text"
-          placeholder="Try searching Community services..."
-          className="flex-1 text-sm bg-transparent focus:outline-none text-gray-700 placeholder:text-gray-400"
-          readOnly
-        />
-      </div>
+      <SearchField
+        placeholder="Try searching Community services..."
+        className="flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-full px-4 py-2.5 border border-white shadow-sm"
+        onSubmit={(value) => {
+          if (value) router.push(`/search?q=${encodeURIComponent(value)}`);
+        }}
+      />
     </div>
   );
 }

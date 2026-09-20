@@ -383,6 +383,45 @@ description/cover), while *editing* those same fields later through
 settings is — an inconsistency worth resolving if it matters for your use
 case.
 
+### Search
+
+`/search?q=...` is a server component that fans out `ILIKE` queries in
+parallel across `communities`, `posts`, `business_listings`, `job_listings`,
+and `events`, then renders one section per entity type using each type's
+existing card component (`CommunityCard`, `PostCard`,
+`BusinessListingCard`, `JobListingCard`, `EventListingCard`) — no new
+rendering logic, just reuse. No Postgres full-text search infrastructure
+exists (no `tsvector` columns, no GIN indexes); this deliberately uses
+plain `ILIKE '%term%'` instead, since standing up FTS wasn't warranted for
+the data volume this app has today. RLS is relied on entirely for
+visibility — the same policies that already scope `posts`/listings to
+`published`-or-own apply unchanged to search results, so no extra
+`moderation_status` filtering happens client-side.
+
+The query text is never interpolated into a PostgREST `.or()` filter string
+raw — `.or()` parses its argument as a small filter DSL (commas separate
+conditions, `.` separates column/operator/value), so raw user text in it is
+both a correctness bug (literal `%`/`_` wildcards, embedded commas
+splitting into unintended extra conditions) and a filter-injection risk.
+`src/lib/search.ts`'s `ilikeCondition`/`orConditions` escape both layers —
+backslash-escaping ILIKE wildcards, then double-quoting the value per
+PostgREST's own escaping rules — before building any `.or()` string. Reuse
+that helper for any new `.or()` filter built from user input; don't
+interpolate directly.
+
+Matching one of the 8 `COMMUNITY_SERVICES` labels (substring match, either
+direction — see `src/lib/community-services.ts`, extracted from the home
+page specifically so `/search` could reuse the same array) surfaces a
+"Jump to service" quick-link row above the result sections, since the home
+page's search placeholder specifically promises "searching Community
+services."
+
+The `/communities` page has its own, narrower search (community
+name/description only) that filters that page in place via a `?q=` param
+rather than navigating to `/search` — a deliberate UX difference, not an
+oversight: the home page's search is global-intent, the communities page's
+is scoped to what's already being browsed there.
+
 ### Posts & feed
 
 `create-post.tsx` never inserts into `posts` directly — it POSTs to
@@ -633,8 +672,9 @@ each feature section above:
   skips the `profiles.avatar_url` update but not the upload itself.
 - **The "Remember me" checkbox on login/signup is inert** — rendered
   `defaultChecked`, wired to nothing.
-- **The community search box is visually present but non-functional**
-  (`readOnly`).
+- **Search uses `ILIKE`, not Postgres full-text search** — see the Search
+  section above. Fine at current data volume; revisit if result quality or
+  query latency becomes a problem as tables grow.
 - **Post reporting has no rate limit beyond the unique-per-reporter-per-post
   constraint** — a single user can still report many different posts in
   quick succession; nothing throttles report volume itself, only duplicate
