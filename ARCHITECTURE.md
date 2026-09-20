@@ -547,6 +547,36 @@ anymore. Left in place as dead code rather than deleted, in case the
 physics-dock interaction is revisited later; don't be misled by its
 continued presence into thinking it's still live.
 
+### Splash screen
+
+`src/components/splash/splash-screen.tsx`, mounted once in the root layout
+alongside `ServiceWorkerRegister`/`InstallPrompt` — since the root layout
+persists across client-side `<Link>` navigations, this only ever plays on
+a fresh page load (hard refresh or first visit), never on internal
+navigation. A full-screen `position: fixed` overlay in `#8B1A6B` — chosen
+to exactly match `manifest.ts`'s `background_color`/`theme_color`, which is
+the color Android paints for the native OS-level splash before any JS
+runs, so this continues it seamlessly instead of flashing a different
+shade underneath — showing the app icon, wordmark, and tagline with a
+staggered entrance, then fading out after a short hold.
+
+Its render output is intentionally identical on every render (server,
+first client hydration, and afterward) — it always starts at
+`phase: "visible"` and transitions via a mount effect's timers, never a
+render-time branch on `useReducedMotion()`. That's not a style choice:
+this version of `useReducedMotion()` resolves synchronously during the
+client's first render (unlike most hooks reading a browser API, it's not
+deferred to an effect), while SSR always renders with it unresolved. An
+earlier version of this component branched the JSX itself on that value
+(returning `null` early for reduced motion) — since the server and the
+client's first render then disagreed on whole-subtree presence, not just a
+prop, React's hydration-mismatch recovery left the component in a broken
+state where the mount effect never reliably committed, and the splash
+stuck on screen indefinitely rather than the few extra milliseconds
+intended. Reduced motion instead just collapses the hold/fade durations to
+near-zero inside the same effect, so the shape of what's rendered never
+depends on when/where it's evaluated — only the timing does.
+
 ### Matrimonial service
 
 An opt-in matchmaking feature layered on top of the base profile system.

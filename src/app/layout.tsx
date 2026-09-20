@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { ServiceWorkerRegister } from "@/components/pwa/sw-register";
 import { InstallPrompt } from "@/components/pwa/install-prompt";
+import { SplashScreen } from "@/components/splash/splash-screen";
 import { SITE_URL } from "@/lib/site-url";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -57,6 +58,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className={inter.className}>
         {children}
+        <SplashScreen />
         <ServiceWorkerRegister />
         <InstallPrompt />
       </body>
