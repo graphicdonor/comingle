@@ -120,22 +120,31 @@ export default function EditProfilePage() {
       const path = `${user.id}/avatar.${ext}`;
       const { error: uploadErr } = await supabase.storage
         .from("avatars").upload(path, avatarFile, { upsert: true });
-      if (!uploadErr) {
-        const { data: urlData } = supabase.storage.from("avatars").getPublicUrl(path);
-        avatar_url = urlData.publicUrl;
+      // A failed upload used to fall through silently here, leaving
+      // avatar_url set to the local blob: preview URL from handlePhoto —
+      // that then got saved to profiles.avatar_url below, which looks like
+      // a successful save but is a dead link the moment this tab closes.
+      if (uploadErr) { setLoading(false); setError(uploadErr.message); return; }
 
-        const avatarPrecheck = await fetch("/api/moderation/precheck", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ contentType: "avatar", imageUrl: avatar_url, contextLink: `/profile/${form.username}` }),
-        }).then((r) => r.json());
-        if (avatarPrecheck.decision && avatarPrecheck.decision !== "allow") { setLoading(false); setError(avatarPrecheck.message); return; }
-      }
+      const { data: urlData } = supabase.storage.from("avatars").getPublicUrl(path);
+      avatar_url = urlData.publicUrl;
+
+      const avatarPrecheck = await fetch("/api/moderation/precheck", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ contentType: "avatar", imageUrl: avatar_url, contextLink: `/profile/${form.username}` }),
+      }).then((r) => r.json());
+      if (avatarPrecheck.decision && avatarPrecheck.decision !== "allow") { setLoading(false); setError(avatarPrecheck.message); return; }
     }
 
     const { error: updateErr } = await supabase
       .from("profiles")
-      .update({ ...form, avatar_url })
+      // date_of_birth is optional here (unlike signup/matrimonial, which
+      // require it) — Postgres's `date` column rejects an empty string
+      // outright ("invalid input syntax for type date"), so a blank field
+      // has to become null, not "", or the whole update 400s and nothing
+      // saves, avatar included.
+      .update({ ...form, date_of_birth: form.date_of_birth || null, avatar_url })
       .eq("id", user.id);
 
     setLoading(false);
