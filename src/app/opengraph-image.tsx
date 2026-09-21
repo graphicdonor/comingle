@@ -19,7 +19,7 @@ export default function OpengraphImage() {
           fontFamily: "sans-serif",
         }}
       >
-        <div style={{ fontSize: 96, fontWeight: 700, letterSpacing: -2 }}>Comingle</div>
+        <div style={{ fontSize: 96, fontWeight: 700, letterSpacing: -2 }}>WePray</div>
         <div style={{ fontSize: 32, fontWeight: 400, marginTop: 16, opacity: 0.85 }}>
           Uniting Communities
         </div>

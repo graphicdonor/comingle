@@ -10,27 +10,27 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "Comingle — Uniting Communities",
+  title: "WePray — Uniting Communities",
   description: "Connect with your community — matrimonial, health, education, housing and more.",
-  applicationName: "Comingle",
+  applicationName: "WePray",
   keywords: ["community", "social", "matrimonial", "health", "education", "housing"],
-  authors: [{ name: "Comingle" }],
+  authors: [{ name: "WePray" }],
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "Comingle",
+    title: "WePray",
   },
   formatDetection: { telephone: false },
   openGraph: {
     type: "website",
     url: "/",
-    title: "Comingle — Uniting Communities",
+    title: "WePray — Uniting Communities",
     description: "Connect with your community.",
-    siteName: "Comingle",
+    siteName: "WePray",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Comingle — Uniting Communities",
+    title: "WePray — Uniting Communities",
     description: "Connect with your community.",
   },
   icons: {

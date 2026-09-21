@@ -72,7 +72,7 @@ export function SplashScreen() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: EASE, delay: 0.25 }}
           >
-            Comingle
+            WePray
           </motion.h1>
 
           <motion.p

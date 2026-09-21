@@ -1,6 +1,6 @@
 const CACHE_VERSION = "v3";
-const STATIC_CACHE  = `comingle-static-${CACHE_VERSION}`;
-const DYNAMIC_CACHE = `comingle-dynamic-${CACHE_VERSION}`;
+const STATIC_CACHE  = `wepray-static-${CACHE_VERSION}`;
+const DYNAMIC_CACHE = `wepray-dynamic-${CACHE_VERSION}`;
 
 // Assets to pre-cache on install
 const PRECACHE_ASSETS = [
@@ -77,10 +77,10 @@ self.addEventListener("fetch", (event) => {
 self.addEventListener("push", (event) => {
   if (!event.data) return;
   let data;
-  try { data = event.data.json(); } catch { data = { title: "Comingle", body: event.data.text() }; }
+  try { data = event.data.json(); } catch { data = { title: "WePray", body: event.data.text() }; }
 
   event.waitUntil(
-    self.registration.showNotification(data.title || "Comingle", {
+    self.registration.showNotification(data.title || "WePray", {
       body: data.body || "You have a new notification",
       icon: data.icon || "/icons/icon-192.png",
       badge: "/icons/icon-72.png",

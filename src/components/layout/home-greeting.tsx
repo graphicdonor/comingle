@@ -36,14 +36,14 @@ export function HomeGreeting({ serverProfile, serverUserId }: HomeGreetingProps)
           {isLoggedIn && name ? (
             <>
               <p className="text-xs text-gray-500 font-medium">Hi, {name}</p>
-              <h1 className="text-lg font-bold text-gray-900">You are welcome to Comingle</h1>
+              <h1 className="text-lg font-bold text-gray-900">You are welcome to WePray</h1>
             </>
           ) : (
             <>
               <p className="text-xs text-gray-500 font-medium">Welcome to</p>
               <h1 className="text-xl font-bold">
-                <span style={{ color: "#8B1A6B" }}>COM</span>
-                <span style={{ color: "#2A5C27", fontStyle: "italic" }}>ingle</span>
+                <span style={{ color: "#8B1A6B" }}>We</span>
+                <span style={{ color: "#2A5C27", fontStyle: "italic" }}>Pray</span>
               </h1>
             </>
           )}

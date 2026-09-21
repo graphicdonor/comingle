@@ -2,8 +2,8 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Comingle — Uniting Communities",
-    short_name: "Comingle",
+    name: "WePray — Uniting Communities",
+    short_name: "WePray",
     description: "Connect with your community — matrimonial, health, education, housing and more.",
     start_url: "/",
     display: "standalone",

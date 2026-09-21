@@ -9,8 +9,8 @@ export default function OfflinePage() {
       </div>
 
       <div className="mb-2 font-black text-3xl tracking-tight">
-        <span style={{ color: "#8B1A6B" }}>COM</span>
-        <span style={{ color: "#2A5C27", fontStyle: "italic", fontFamily: "Georgia, serif" }}>ingle</span>
+        <span style={{ color: "#8B1A6B" }}>We</span>
+        <span style={{ color: "#2A5C27", fontStyle: "italic", fontFamily: "Georgia, serif" }}>Pray</span>
       </div>
       <p className="text-sm text-[#2A5C27] font-medium mb-8">Uniting Communities</p>
 

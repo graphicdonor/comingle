@@ -29,7 +29,7 @@ export function BrandLogo({ size = "md", className, showTagline = true, withBack
       )}
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/comingle-logo.svg" alt="Comingle" width={s.width} height={Math.round((s.width * 205) / 839)} />
+      <img src="/comingle-logo.svg" alt="WePray" width={s.width} height={Math.round((s.width * 205) / 839)} />
       {showTagline && (
         <span className={cn("font-medium mt-0.5", s.tagline)} style={{ color: "#2A5C27" }}>
           Uniting Communities

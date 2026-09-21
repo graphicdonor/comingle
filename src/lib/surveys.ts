@@ -43,7 +43,7 @@ export const SURVEYS: SurveyDefinition[] = [
     title: "Help us improve community services",
     desc: "Share your feedback on our current offerings and help us serve you better.",
     questions: [
-      { id: "satisfaction", type: "rating", max: 5, label: "How satisfied are you with Comingle so far?" },
+      { id: "satisfaction", type: "rating", max: 5, label: "How satisfied are you with WePray so far?" },
       { id: "used_services", type: "multi_choice", label: "Which community services have you used?", options: [...SERVICE_LABELS, "None yet"] },
       { id: "improve_most", type: "single_choice", label: "Which service would you most like to see improved?", options: SERVICE_LABELS },
       { id: "feedback", type: "text", label: "Anything specific you'd like us to improve?", required: false },

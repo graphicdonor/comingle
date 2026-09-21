@@ -1,5 +1,5 @@
 -- ============================================================
--- Comingle — Supabase Schema v2
+-- WePray — Supabase Schema v2
 -- Run this in your Supabase SQL editor
 -- ============================================================
 

@@ -7,11 +7,11 @@ const SECTIONS = [
   },
   {
     title: "2. How We Use It",
-    body: "We use your information to run and improve Comingle: authenticating you, showing your profile and posts to other members, connecting you with communities, and keeping the platform safe.",
+    body: "We use your information to run and improve WePray: authenticating you, showing your profile and posts to other members, connecting you with communities, and keeping the platform safe.",
   },
   {
     title: "3. What's Public",
-    body: "Your profile, posts, and community memberships are visible to other users by default, since Comingle is a social platform built around communities.",
+    body: "Your profile, posts, and community memberships are visible to other users by default, since WePray is a social platform built around communities.",
   },
   {
     title: "4. Sharing",

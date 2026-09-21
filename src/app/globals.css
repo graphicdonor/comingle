@@ -38,8 +38,8 @@ body {
 }
 
 /* Brand logo text */
-.brand-com { color: var(--brand-purple); }
-.brand-ingle { color: var(--brand-green); }
+.brand-we { color: var(--brand-purple); }
+.brand-pray { color: var(--brand-green); }
 
 /* PIN input boxes */
 .pin-box {

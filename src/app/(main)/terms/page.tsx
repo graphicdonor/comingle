@@ -3,7 +3,7 @@ export const metadata = { title: "Terms & Conditions" };
 const SECTIONS = [
   {
     title: "1. Acceptance of Terms",
-    body: "By creating an account or using Comingle, you agree to these Terms & Conditions. If you do not agree, please do not use the app.",
+    body: "By creating an account or using WePray, you agree to these Terms & Conditions. If you do not agree, please do not use the app.",
   },
   {
     title: "2. Your Account",
@@ -23,7 +23,7 @@ const SECTIONS = [
   },
   {
     title: "6. Changes to These Terms",
-    body: "We may update these terms from time to time. Continued use of Comingle after changes means you accept the updated terms.",
+    body: "We may update these terms from time to time. Continued use of WePray after changes means you accept the updated terms.",
   },
   {
     title: "7. Contact",

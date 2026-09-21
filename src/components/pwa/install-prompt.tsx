@@ -64,9 +64,9 @@ export function InstallPrompt() {
       {deferredPrompt && (
         <div className="fixed bottom-20 left-3 right-3 z-50 animate-in slide-in-from-bottom-4">
           <div className="bg-[#1E2952] rounded-2xl shadow-xl px-4 py-3 flex items-center gap-3">
-            <img src="/icons/icon-72.png" alt="Comingle" className="w-10 h-10 rounded-xl flex-shrink-0" />
+            <img src="/icons/icon-72.png" alt="WePray" className="w-10 h-10 rounded-xl flex-shrink-0" />
             <div className="flex-1 min-w-0">
-              <p className="text-white font-semibold text-sm">Install Comingle</p>
+              <p className="text-white font-semibold text-sm">Install WePray</p>
               <p className="text-blue-200 text-xs">Add to home screen for offline access</p>
             </div>
             <button
@@ -88,9 +88,9 @@ export function InstallPrompt() {
         <>
           <div className="fixed bottom-20 left-3 right-3 z-50 animate-in slide-in-from-bottom-4">
             <div className="bg-[#1E2952] rounded-2xl shadow-xl px-4 py-3 flex items-center gap-3">
-              <img src="/icons/icon-72.png" alt="Comingle" className="w-10 h-10 rounded-xl flex-shrink-0" />
+              <img src="/icons/icon-72.png" alt="WePray" className="w-10 h-10 rounded-xl flex-shrink-0" />
               <div className="flex-1 min-w-0">
-                <p className="text-white font-semibold text-sm">Install Comingle</p>
+                <p className="text-white font-semibold text-sm">Install WePray</p>
                 <p className="text-blue-200 text-xs">Add to your home screen</p>
               </div>
               <button
@@ -112,7 +112,7 @@ export function InstallPrompt() {
               <div className="absolute inset-0 bg-black/50" />
               <div className="relative w-full bg-white rounded-t-3xl p-6 pb-10" onClick={(e) => e.stopPropagation()}>
                 <div className="w-10 h-1 rounded-full bg-gray-200 mx-auto mb-5" />
-                <h3 className="font-bold text-gray-900 text-lg mb-4">Add Comingle to Home Screen</h3>
+                <h3 className="font-bold text-gray-900 text-lg mb-4">Add WePray to Home Screen</h3>
                 <div className="space-y-4">
                   {[
                     { step: "1", icon: Share, text: 'Tap the Share button at the bottom of Safari' },

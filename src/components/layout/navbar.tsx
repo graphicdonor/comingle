@@ -148,7 +148,7 @@ export function Navbar() {
               absolute-centering, which ignores sibling widths entirely). */}
           <div className="flex-1 flex justify-center min-w-0">
             <Link href="/" className="flex items-center min-w-0">
-              <img src="/comingle-logo.svg" alt="Comingle" className="h-7 w-auto max-w-full" />
+              <img src="/comingle-logo.svg" alt="WePray" className="h-7 w-auto max-w-full" />
             </Link>
           </div>
 
@@ -203,7 +203,7 @@ export function Navbar() {
                 </Link>
               ) : authChecked ? (
                 <div>
-                  <p className="font-bold text-gray-900 text-sm mb-2">Welcome to Comingle</p>
+                  <p className="font-bold text-gray-900 text-sm mb-2">Welcome to WePray</p>
                   <div className="flex gap-2">
                     <Link href="/login" onClick={() => setMenuOpen(false)} className="text-xs font-semibold px-3 py-1.5 rounded-full border border-gray-200 hover:bg-gray-50">
                       Log in
