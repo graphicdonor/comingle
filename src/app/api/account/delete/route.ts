@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { NextRequest, NextResponse } from "next/server";
+import { getAuthedSupabase } from "@/lib/supabase/api-auth";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 /** A user can't call the Auth Admin API themselves, so this verifies the
@@ -7,9 +7,8 @@ import { createAdminClient } from "@/lib/supabase/admin";
  * delete their auth.users row — which cascades to profiles and everything
  * that FKs to it (posts, community_members, moderation history, etc.) per
  * the `on delete cascade` set up in schema.sql. */
-export async function POST() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+export async function POST(req: NextRequest) {
+  const { user } = await getAuthedSupabase(req);
   if (!user) return NextResponse.json({ error: "Not signed in" }, { status: 401 });
 
   const admin = createAdminClient();
