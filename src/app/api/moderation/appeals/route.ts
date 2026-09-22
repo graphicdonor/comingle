@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { getAuthedSupabase } from "@/lib/supabase/api-auth";
 
 /**
  * Users can also insert directly via RLS (moderation_appeals has its own
@@ -19,10 +19,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "logId and reason are required" }, { status: 400 });
   }
 
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { supabase, user } = await getAuthedSupabase(req);
   if (!user) return NextResponse.json({ error: "Not signed in" }, { status: 401 });
 
   const { data: log } = await supabase

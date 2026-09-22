@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { getAuthedSupabase } from "@/lib/supabase/api-auth";
 import type { ReportReason } from "@/lib/types";
 
 const VALID_REASONS: ReportReason[] = ["spam", "harassment", "inappropriate", "misinformation", "other"];
@@ -22,10 +22,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "postId and a valid reason are required" }, { status: 400 });
   }
 
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { supabase, user } = await getAuthedSupabase(req);
   if (!user) return NextResponse.json({ error: "Not signed in" }, { status: 401 });
 
   const { error: insertError } = await supabase.from("post_reports").insert({
