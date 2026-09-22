@@ -15,9 +15,9 @@ const FADE_MS = 400;
  * hydrates; a mount-time effect then times its own dismissal.
  *
  * The background color intentionally matches manifest.ts's
- * background_color/theme_color (#8B1A6B) exactly — that's the color Android
- * paints for the native OS-level splash before any JS runs, so this overlay
- * continues it seamlessly instead of flashing a different shade underneath.
+ * background_color (white) exactly — that's the color Android paints for
+ * the native OS-level splash before any JS runs, so this overlay continues
+ * it seamlessly instead of flashing a different shade underneath.
  */
 export function SplashScreen() {
   const [phase, setPhase] = useState<"visible" | "hiding" | "done">("visible");
@@ -51,7 +51,7 @@ export function SplashScreen() {
     <AnimatePresence>
       {phase !== "done" && (
         <motion.div
-          className="fixed inset-0 z-[999] flex flex-col items-center justify-center bg-[#8B1A6B]"
+          className="fixed inset-0 z-[999] flex flex-col items-center justify-center bg-white"
           initial={{ opacity: 1 }}
           animate={{ opacity: phase === "hiding" ? 0 : 1 }}
           exit={{ opacity: 0 }}
@@ -67,7 +67,7 @@ export function SplashScreen() {
           </motion.div>
 
           <motion.h1
-            className="mt-5 text-2xl font-bold tracking-tight text-white"
+            className="mt-5 text-2xl font-bold tracking-tight text-[#201D1E]"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: EASE, delay: 0.25 }}
@@ -76,7 +76,7 @@ export function SplashScreen() {
           </motion.h1>
 
           <motion.p
-            className="mt-1 text-xs font-medium tracking-wide text-white/70"
+            className="mt-1 text-xs font-medium tracking-wide text-[#201D1E]/60"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, ease: EASE, delay: 0.45 }}
@@ -93,7 +93,7 @@ export function SplashScreen() {
             {[0, 1, 2].map((i) => (
               <motion.span
                 key={i}
-                className="h-1.5 w-1.5 rounded-full bg-white/80"
+                className="h-1.5 w-1.5 rounded-full bg-[#201D1E]/60"
                 animate={{ opacity: [0.3, 1, 0.3] }}
                 transition={{ duration: 1.1, repeat: Infinity, ease: "easeInOut", delay: i * 0.15 }}
               />
