@@ -63,7 +63,7 @@ export function SplashScreen() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, ease: EASE, delay: 0.05 }}
           >
-            <Image src="/icons/icon-192.png" alt="" width={88} height={88} priority className="rounded-3xl shadow-lg" />
+            <Image src="/icons/icon-192.png" alt="" width={88} height={88} priority />
           </motion.div>
 
           <motion.h1
