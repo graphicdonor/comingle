@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "in.wepray.twa",
+      "sha256_cert_fingerprints": [
+        "1F:07:A4:6B:39:87:98:7F:57:9F:E8:96:B4:68:34:EB:DB:38:94:4D:C6:2B:75:BD:AF:F8:31:FA:33:BE:CF:8F"
+      ]
+    }
+  }
+]
