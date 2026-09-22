@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { getAuthedSupabase } from "@/lib/supabase/api-auth";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { runModerationPipeline } from "@/lib/moderation";
 
@@ -22,10 +22,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "postId and content are required" }, { status: 400 });
   }
 
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { supabase, user } = await getAuthedSupabase(req);
   if (!user) return NextResponse.json({ error: "Not signed in" }, { status: 401 });
 
   const { data: post } = await supabase.from("posts").select("communities(slug)").eq("id", postId).maybeSingle();
