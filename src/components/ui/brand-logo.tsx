@@ -7,7 +7,7 @@ interface BrandLogoProps {
   withBackdrop?: boolean;
 }
 
-// The logo file is 839×205 (~4.09:1) — widths below keep that ratio rather
+// The logo file is 774×235 (~3.29:1) — widths below keep that ratio rather
 // than fixing a height, so the mark never looks squashed or stretched.
 const sizeMap = {
   sm: { width: 132, tagline: "text-xs" },
@@ -29,7 +29,7 @@ export function BrandLogo({ size = "md", className, showTagline = true, withBack
       )}
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/comingle-logo.svg" alt="WePray" width={s.width} height={Math.round((s.width * 205) / 839)} />
+      <img src="/wepray-logo.svg" alt="WePray" width={s.width} height={Math.round((s.width * 235) / 774)} />
       {showTagline && (
         <span className={cn("font-medium mt-0.5", s.tagline)} style={{ color: "#2A5C27" }}>
           Uniting Communities

@@ -148,7 +148,7 @@ export function Navbar() {
               absolute-centering, which ignores sibling widths entirely). */}
           <div className="flex-1 flex justify-center min-w-0">
             <Link href="/" className="flex items-center min-w-0">
-              <img src="/comingle-logo.svg" alt="WePray" className="h-7 w-auto max-w-full" />
+              <img src="/wepray-logo.svg" alt="WePray" className="h-7 w-auto max-w-full" />
             </Link>
           </div>
 
