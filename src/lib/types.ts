@@ -38,7 +38,14 @@ export interface CommunityMember {
 
 export type ModerationStatus = "pending_review" | "published" | "blocked";
 
-export type PostType = "standard" | "matrimonial_profile" | "business_listing" | "job_listing" | "event_listing" | "housing_listing";
+export type PostType =
+  | "standard"
+  | "matrimonial_profile"
+  | "business_listing"
+  | "job_listing"
+  | "event_listing"
+  | "housing_listing"
+  | "education_listing";
 
 export interface Post {
   id: string;
@@ -59,8 +66,33 @@ export interface Post {
   job_listing_id: string | null;
   event_listing_id: string | null;
   housing_listing_id: string | null;
+  education_listing_id: string | null;
   profiles?: Profile;
   communities?: Community;
+}
+
+export interface EducationListing {
+  id: string;
+  owner_id: string;
+  title: string;
+  provider_name: string | null;
+  service_type: string | null;
+  subject: string | null;
+  level: string | null;
+  mode: "Online" | "Offline" | "Hybrid";
+  fee: number | null;
+  fee_period: string | null;
+  address_line1: string | null;
+  city: string | null;
+  state: string | null;
+  description: string | null;
+  poc_name: string | null;
+  email: string | null;
+  mobile_number: string | null;
+  whatsapp_number: string | null;
+  photo_urls: string[];
+  moderation_status: ModerationStatus;
+  created_at: string;
 }
 
 export interface HousingListing {

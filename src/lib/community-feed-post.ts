@@ -1,8 +1,14 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { ModerationStatus } from "./types";
 
-type ListingPostType = "matrimonial_profile" | "business_listing" | "job_listing" | "event_listing" | "housing_listing";
-type ListingRefColumn = "matrimonial_profile_id" | "business_listing_id" | "job_listing_id" | "event_listing_id" | "housing_listing_id";
+type ListingPostType = "matrimonial_profile" | "business_listing" | "job_listing" | "event_listing" | "housing_listing" | "education_listing";
+type ListingRefColumn =
+  | "matrimonial_profile_id"
+  | "business_listing_id"
+  | "job_listing_id"
+  | "event_listing_id"
+  | "housing_listing_id"
+  | "education_listing_id";
 
 export async function isCommunityMember(admin: SupabaseClient, communityId: string, userId: string): Promise<boolean> {
   const { data } = await admin
@@ -57,7 +63,7 @@ export async function upsertCommunityFeedPost(
 export async function syncCommunityFeedPostIfExists(
   admin: SupabaseClient,
   args: {
-    refColumn: "business_listing_id" | "job_listing_id" | "event_listing_id" | "housing_listing_id";
+    refColumn: "business_listing_id" | "job_listing_id" | "event_listing_id" | "housing_listing_id" | "education_listing_id";
     refId: string;
     moderationStatus: ModerationStatus;
     title: string;
@@ -122,6 +128,23 @@ export function housingFeedPostContent(input: {
   return {
     title: `${input.listing_type}: ${input.title}`,
     content: [input.property_type, input.city, priceText].filter(Boolean).join(" • ") || null,
+    imageUrl: input.photo_urls[0] ?? null,
+  };
+}
+
+export function educationFeedPostContent(input: {
+  title: string;
+  provider_name?: string | null;
+  service_type?: string | null;
+  subject?: string | null;
+  mode: "Online" | "Offline" | "Hybrid";
+  city?: string | null;
+  photo_urls: string[];
+}) {
+  const where = input.mode === "Online" ? "Online" : input.city;
+  return {
+    title: `New ${input.service_type?.toLowerCase() || "class"}: ${input.title}${input.provider_name ? ` by ${input.provider_name}` : ""}`,
+    content: [input.subject, where].filter(Boolean).join(" • ") || null,
     imageUrl: input.photo_urls[0] ?? null,
   };
 }

@@ -6,11 +6,12 @@ import { BusinessListingCard } from "@/components/business/business-listing-card
 import { JobListingCard } from "@/components/job/job-listing-card";
 import { EventListingCard } from "@/components/event/event-listing-card";
 import { HousingListingCard } from "@/components/housing/housing-listing-card";
+import { EducationListingCard } from "@/components/education/education-listing-card";
 import { SearchPageField } from "@/components/search/search-page-field";
 import { COMMUNITY_SERVICES } from "@/lib/community-services";
 import { isCommunityStaff } from "@/lib/community";
 import { orConditions, SEARCH_RESULT_LIMIT } from "@/lib/search";
-import type { Community, Post, CommunityRole, BusinessListing, JobListing, EventListing, HousingListing } from "@/lib/types";
+import type { Community, Post, CommunityRole, BusinessListing, JobListing, EventListing, HousingListing, EducationListing } from "@/lib/types";
 import { SearchX } from "lucide-react";
 
 function matchesService(label: string, query: string): boolean {
@@ -31,6 +32,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
   let jobs: JobListing[] = [];
   let events: EventListing[] = [];
   let housing: HousingListing[] = [];
+  let education: EducationListing[] = [];
   let likedPostIds: Set<string> = new Set();
   let roleByCommunityId = new Map<string, CommunityRole>();
   let currentUserId: string | undefined;
@@ -47,6 +49,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
       { data: jobResults },
       { data: eventResults },
       { data: housingResults },
+      { data: educationResults },
       { data: memberOf },
     ] = await Promise.all([
       supabase.from("communities").select("*").or(orConditions(query, ["name", "description"])).order("member_count", { ascending: false }).limit(SEARCH_RESULT_LIMIT),
@@ -60,6 +63,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
       supabase.from("job_listings").select("*").or(orConditions(query, ["title", "company_name", "description", "city"])).order("created_at", { ascending: false }).limit(SEARCH_RESULT_LIMIT),
       supabase.from("events").select("*").or(orConditions(query, ["title", "description", "venue_name", "city"])).order("event_date", { ascending: true }).limit(SEARCH_RESULT_LIMIT),
       supabase.from("housing_listings").select("*").or(orConditions(query, ["title", "description", "city", "property_type"])).order("created_at", { ascending: false }).limit(SEARCH_RESULT_LIMIT),
+      supabase.from("education_listings").select("*").or(orConditions(query, ["title", "description", "provider_name", "subject"])).order("created_at", { ascending: false }).limit(SEARCH_RESULT_LIMIT),
       user ? supabase.from("community_members").select("community_id, role").eq("user_id", user.id) : Promise.resolve({ data: null as { community_id: string; role: string }[] | null }),
     ]);
 
@@ -69,6 +73,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
     jobs = (jobResults ?? []) as JobListing[];
     events = (eventResults ?? []) as EventListing[];
     housing = (housingResults ?? []) as HousingListing[];
+    education = (educationResults ?? []) as EducationListing[];
     roleByCommunityId = new Map((memberOf ?? []).map((m) => [m.community_id, m.role as CommunityRole]));
 
     if (user && posts.length > 0) {
@@ -81,7 +86,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
     }
   }
 
-  const totalResults = communities.length + posts.length + businesses.length + jobs.length + events.length + housing.length;
+  const totalResults = communities.length + posts.length + businesses.length + jobs.length + events.length + housing.length + education.length;
 
   return (
     <div className="max-w-xl mx-auto">
@@ -185,6 +190,17 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
           <div className="space-y-3">
             {housing.map((h) => (
               <HousingListingCard key={h.id} listing={h} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {education.length > 0 && (
+        <section className="mb-6">
+          <h2 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Education ({education.length})</h2>
+          <div className="space-y-3">
+            {education.map((e) => (
+              <EducationListingCard key={e.id} listing={e} />
             ))}
           </div>
         </section>
