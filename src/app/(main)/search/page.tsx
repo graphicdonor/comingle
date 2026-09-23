@@ -5,11 +5,12 @@ import { PostCard } from "@/components/post/post-card";
 import { BusinessListingCard } from "@/components/business/business-listing-card";
 import { JobListingCard } from "@/components/job/job-listing-card";
 import { EventListingCard } from "@/components/event/event-listing-card";
+import { HousingListingCard } from "@/components/housing/housing-listing-card";
 import { SearchPageField } from "@/components/search/search-page-field";
 import { COMMUNITY_SERVICES } from "@/lib/community-services";
 import { isCommunityStaff } from "@/lib/community";
 import { orConditions, SEARCH_RESULT_LIMIT } from "@/lib/search";
-import type { Community, Post, CommunityRole, BusinessListing, JobListing, EventListing } from "@/lib/types";
+import type { Community, Post, CommunityRole, BusinessListing, JobListing, EventListing, HousingListing } from "@/lib/types";
 import { SearchX } from "lucide-react";
 
 function matchesService(label: string, query: string): boolean {
@@ -29,6 +30,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
   let businesses: BusinessListing[] = [];
   let jobs: JobListing[] = [];
   let events: EventListing[] = [];
+  let housing: HousingListing[] = [];
   let likedPostIds: Set<string> = new Set();
   let roleByCommunityId = new Map<string, CommunityRole>();
   let currentUserId: string | undefined;
@@ -38,26 +40,35 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
     const { data: { user } } = await supabase.auth.getUser();
     currentUserId = user?.id;
 
-    const [{ data: communityResults }, { data: postResults }, { data: businessResults }, { data: jobResults }, { data: eventResults }, { data: memberOf }] =
-      await Promise.all([
-        supabase.from("communities").select("*").or(orConditions(query, ["name", "description"])).order("member_count", { ascending: false }).limit(SEARCH_RESULT_LIMIT),
-        supabase
-          .from("posts")
-          .select("*, profiles!posts_author_id_fkey(*), communities(*)")
-          .or(orConditions(query, ["title", "content"]))
-          .order("created_at", { ascending: false })
-          .limit(SEARCH_RESULT_LIMIT),
-        supabase.from("business_listings").select("*").or(orConditions(query, ["name", "city", "poc_name"])).order("created_at", { ascending: false }).limit(SEARCH_RESULT_LIMIT),
-        supabase.from("job_listings").select("*").or(orConditions(query, ["title", "company_name", "description", "city"])).order("created_at", { ascending: false }).limit(SEARCH_RESULT_LIMIT),
-        supabase.from("events").select("*").or(orConditions(query, ["title", "description", "venue_name", "city"])).order("event_date", { ascending: true }).limit(SEARCH_RESULT_LIMIT),
-        user ? supabase.from("community_members").select("community_id, role").eq("user_id", user.id) : Promise.resolve({ data: null as { community_id: string; role: string }[] | null }),
-      ]);
+    const [
+      { data: communityResults },
+      { data: postResults },
+      { data: businessResults },
+      { data: jobResults },
+      { data: eventResults },
+      { data: housingResults },
+      { data: memberOf },
+    ] = await Promise.all([
+      supabase.from("communities").select("*").or(orConditions(query, ["name", "description"])).order("member_count", { ascending: false }).limit(SEARCH_RESULT_LIMIT),
+      supabase
+        .from("posts")
+        .select("*, profiles!posts_author_id_fkey(*), communities(*)")
+        .or(orConditions(query, ["title", "content"]))
+        .order("created_at", { ascending: false })
+        .limit(SEARCH_RESULT_LIMIT),
+      supabase.from("business_listings").select("*").or(orConditions(query, ["name", "city", "poc_name"])).order("created_at", { ascending: false }).limit(SEARCH_RESULT_LIMIT),
+      supabase.from("job_listings").select("*").or(orConditions(query, ["title", "company_name", "description", "city"])).order("created_at", { ascending: false }).limit(SEARCH_RESULT_LIMIT),
+      supabase.from("events").select("*").or(orConditions(query, ["title", "description", "venue_name", "city"])).order("event_date", { ascending: true }).limit(SEARCH_RESULT_LIMIT),
+      supabase.from("housing_listings").select("*").or(orConditions(query, ["title", "description", "city", "property_type"])).order("created_at", { ascending: false }).limit(SEARCH_RESULT_LIMIT),
+      user ? supabase.from("community_members").select("community_id, role").eq("user_id", user.id) : Promise.resolve({ data: null as { community_id: string; role: string }[] | null }),
+    ]);
 
     communities = (communityResults ?? []) as Community[];
     posts = (postResults as Post[]) ?? [];
     businesses = (businessResults ?? []) as BusinessListing[];
     jobs = (jobResults ?? []) as JobListing[];
     events = (eventResults ?? []) as EventListing[];
+    housing = (housingResults ?? []) as HousingListing[];
     roleByCommunityId = new Map((memberOf ?? []).map((m) => [m.community_id, m.role as CommunityRole]));
 
     if (user && posts.length > 0) {
@@ -70,7 +81,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
     }
   }
 
-  const totalResults = communities.length + posts.length + businesses.length + jobs.length + events.length;
+  const totalResults = communities.length + posts.length + businesses.length + jobs.length + events.length + housing.length;
 
   return (
     <div className="max-w-xl mx-auto">
@@ -163,6 +174,17 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
           <div className="space-y-3">
             {events.map((e) => (
               <EventListingCard key={e.id} event={e} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {housing.length > 0 && (
+        <section className="mb-6">
+          <h2 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Housing ({housing.length})</h2>
+          <div className="space-y-3">
+            {housing.map((h) => (
+              <HousingListingCard key={h.id} listing={h} />
             ))}
           </div>
         </section>

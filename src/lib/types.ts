@@ -38,7 +38,7 @@ export interface CommunityMember {
 
 export type ModerationStatus = "pending_review" | "published" | "blocked";
 
-export type PostType = "standard" | "matrimonial_profile" | "business_listing" | "job_listing" | "event_listing";
+export type PostType = "standard" | "matrimonial_profile" | "business_listing" | "job_listing" | "event_listing" | "housing_listing";
 
 export interface Post {
   id: string;
@@ -58,8 +58,35 @@ export interface Post {
   business_listing_id: string | null;
   job_listing_id: string | null;
   event_listing_id: string | null;
+  housing_listing_id: string | null;
   profiles?: Profile;
   communities?: Community;
+}
+
+export interface HousingListing {
+  id: string;
+  owner_id: string;
+  title: string;
+  listing_type: "For Sale" | "For Rent";
+  property_type: string | null;
+  price: number | null;
+  rent_frequency: string | null;
+  bedrooms: number | null;
+  bathrooms: number | null;
+  area_sqft: number | null;
+  address_line1: string | null;
+  city: string | null;
+  state: string | null;
+  pin_code: string | null;
+  amenities: string[];
+  description: string | null;
+  poc_name: string | null;
+  email: string | null;
+  mobile_number: string | null;
+  whatsapp_number: string | null;
+  photo_urls: string[];
+  moderation_status: ModerationStatus;
+  created_at: string;
 }
 
 export type ReportReason = "spam" | "harassment" | "inappropriate" | "misinformation" | "other";

@@ -1,8 +1,8 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { ModerationStatus } from "./types";
 
-type ListingPostType = "matrimonial_profile" | "business_listing" | "job_listing" | "event_listing";
-type ListingRefColumn = "matrimonial_profile_id" | "business_listing_id" | "job_listing_id" | "event_listing_id";
+type ListingPostType = "matrimonial_profile" | "business_listing" | "job_listing" | "event_listing" | "housing_listing";
+type ListingRefColumn = "matrimonial_profile_id" | "business_listing_id" | "job_listing_id" | "event_listing_id" | "housing_listing_id";
 
 export async function isCommunityMember(admin: SupabaseClient, communityId: string, userId: string): Promise<boolean> {
   const { data } = await admin
@@ -57,7 +57,7 @@ export async function upsertCommunityFeedPost(
 export async function syncCommunityFeedPostIfExists(
   admin: SupabaseClient,
   args: {
-    refColumn: "business_listing_id" | "job_listing_id" | "event_listing_id";
+    refColumn: "business_listing_id" | "job_listing_id" | "event_listing_id" | "housing_listing_id";
     refId: string;
     moderationStatus: ModerationStatus;
     title: string;
@@ -103,6 +103,25 @@ export function jobFeedPostContent(input: {
   return {
     title: `New job opening: ${input.title}${input.company_name ? ` at ${input.company_name}` : ""}`,
     content: [input.job_type, where, salary].filter(Boolean).join(" • ") || null,
+    imageUrl: input.photo_urls[0] ?? null,
+  };
+}
+
+export function housingFeedPostContent(input: {
+  title: string;
+  listing_type: "For Sale" | "For Rent";
+  property_type?: string | null;
+  price?: number | null;
+  rent_frequency?: string | null;
+  city?: string | null;
+  photo_urls: string[];
+}) {
+  const priceText = input.price
+    ? `₹${input.price.toLocaleString("en-IN")}${input.listing_type === "For Rent" ? `/${(input.rent_frequency || "mo").slice(0, 2).toLowerCase()}` : ""}`
+    : null;
+  return {
+    title: `${input.listing_type}: ${input.title}`,
+    content: [input.property_type, input.city, priceText].filter(Boolean).join(" • ") || null,
     imageUrl: input.photo_urls[0] ?? null,
   };
 }

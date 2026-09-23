@@ -9,7 +9,8 @@ export type ContentType =
   | "business_listing"
   | "job_listing"
   | "comment"
-  | "event_listing";
+  | "event_listing"
+  | "housing_listing";
 
 export type ModerationDecision = "allow" | "hold_for_review" | "block";
 
