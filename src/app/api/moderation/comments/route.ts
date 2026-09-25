@@ -10,14 +10,14 @@ import { runModerationPipeline } from "@/lib/moderation";
  * comment_count bump, which only happens once a comment is actually
  * visible to anyone but its author) uses the service-role client. */
 export async function POST(req: NextRequest) {
-  let body: { postId?: string; content?: string };
+  let body: { postId?: string; content?: string; parentId?: string };
   try {
     body = await req.json();
   } catch {
     return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
   }
 
-  const { postId, content } = body;
+  const { postId, content, parentId } = body;
   if (!postId || !content?.trim()) {
     return NextResponse.json({ error: "postId and content are required" }, { status: 400 });
   }
@@ -28,9 +28,19 @@ export async function POST(req: NextRequest) {
   const { data: post } = await supabase.from("posts").select("communities(slug)").eq("id", postId).maybeSingle();
   const communitySlug = (post?.communities as unknown as { slug: string } | null)?.slug;
 
+  // A reply must target a comment that actually belongs to this post —
+  // otherwise a client could thread a reply onto an unrelated post's
+  // comment by passing an arbitrary parentId.
+  if (parentId) {
+    const { data: parent } = await supabase.from("comments").select("post_id").eq("id", parentId).maybeSingle();
+    if (!parent || parent.post_id !== postId) {
+      return NextResponse.json({ error: "Invalid parent comment" }, { status: 400 });
+    }
+  }
+
   const { data: comment, error: insertError } = await supabase
     .from("comments")
-    .insert({ content: content.trim(), post_id: postId, author_id: user.id, moderation_status: "pending_review" })
+    .insert({ content: content.trim(), post_id: postId, author_id: user.id, parent_id: parentId ?? null, moderation_status: "pending_review" })
     .select("*, profiles!comments_author_id_fkey(*)")
     .single();
 

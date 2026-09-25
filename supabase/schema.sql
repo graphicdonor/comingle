@@ -100,9 +100,13 @@ create table if not exists comments (
   -- 'pending_review' until the AI moderation check (or a human reviewer)
   -- marks it 'published'; RLS only shows non-published rows to their author.
   moderation_status text default 'pending_review' not null check (moderation_status in ('pending_review', 'published', 'blocked')),
-  created_at        timestamptz default now() not null
+  created_at        timestamptz default now() not null,
+  -- Single-level threading: a reply's parent_id points at a top-level
+  -- comment. Nothing enforces that depth beyond client behavior.
+  parent_id         uuid references comments(id) on delete cascade
 );
 create index if not exists idx_comments_post_id on comments (post_id, created_at);
+create index if not exists idx_comments_parent_id on comments (parent_id);
 
 -- Matrimonial service
 create table if not exists matrimonial_profiles (
@@ -286,7 +290,7 @@ create table if not exists matrimonial_shortlist (
 create table if not exists notifications (
   id          uuid primary key default gen_random_uuid(),
   user_id     uuid references profiles(id) on delete cascade not null,
-  type        text not null check (type in ('matrimonial_message', 'moderation_decision', 'appeal_outcome', 'post_comment', 'post_like')),
+  type        text not null check (type in ('matrimonial_message', 'moderation_decision', 'appeal_outcome', 'post_comment', 'post_like', 'comment_reply')),
   actor_id    uuid references profiles(id) on delete cascade,
   link        text not null,
   count       integer default 1 not null,
@@ -583,22 +587,38 @@ create trigger trg_notify_new_matrimonial_message
 -- one unread notification's count, same as notify_new_matrimonial_message,
 -- except the batching key also includes the post (via `link`) since the
 -- same commenter on two different posts by this author are unrelated.
+-- A reply (parent_id set) notifies the parent comment's author instead of
+-- the post's author, under its own 'comment_reply' type — see
+-- 20260925120000_comment_replies.sql. The link is always built from the
+-- *post* author's username regardless of who's being notified, since it
+-- just points at the post detail page.
 create or replace function notify_new_comment()
 returns trigger language plpgsql security definer as $$
 declare
-  v_post_author_id uuid;
+  v_recipient_id uuid;
   v_post_author_username text;
+  v_notification_type text;
   v_link text;
 begin
   if new.moderation_status <> 'published' or old.moderation_status = 'published' then
     return new;
   end if;
 
-  select p.author_id, pr.username into v_post_author_id, v_post_author_username
-  from posts p join profiles pr on pr.id = p.author_id
-  where p.id = new.post_id;
+  if new.parent_id is not null then
+    v_notification_type := 'comment_reply';
+    select c.author_id, pr.username into v_recipient_id, v_post_author_username
+    from comments c
+    join posts p on p.id = c.post_id
+    join profiles pr on pr.id = p.author_id
+    where c.id = new.parent_id;
+  else
+    v_notification_type := 'post_comment';
+    select p.author_id, pr.username into v_recipient_id, v_post_author_username
+    from posts p join profiles pr on pr.id = p.author_id
+    where p.id = new.post_id;
+  end if;
 
-  if v_post_author_id is null or v_post_author_id = new.author_id then
+  if v_recipient_id is null or v_recipient_id = new.author_id then
     return new;
   end if;
 
@@ -606,15 +626,15 @@ begin
 
   update notifications
     set count = count + 1, created_at = now()
-    where user_id = v_post_author_id
-      and type = 'post_comment'
+    where user_id = v_recipient_id
+      and type = v_notification_type
       and actor_id = new.author_id
       and link = v_link
       and read_at is null;
 
   if not found then
     insert into notifications (user_id, type, actor_id, link)
-    values (v_post_author_id, 'post_comment', new.author_id, v_link);
+    values (v_recipient_id, v_notification_type, new.author_id, v_link);
   end if;
 
   return new;

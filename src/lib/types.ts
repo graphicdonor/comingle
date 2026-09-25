@@ -139,6 +139,7 @@ export interface Comment {
   content: string;
   author_id: string;
   post_id: string;
+  parent_id: string | null;
   moderation_status: ModerationStatus;
   created_at: string;
   profiles?: Profile;
@@ -194,7 +195,7 @@ export interface MatrimonialShortlistEntry {
 export interface Notification {
   id: string;
   user_id: string;
-  type: "matrimonial_message" | "moderation_decision" | "appeal_outcome" | "post_comment" | "post_like";
+  type: "matrimonial_message" | "moderation_decision" | "appeal_outcome" | "post_comment" | "post_like" | "comment_reply";
   actor_id: string | null;
   link: string;
   count: number;

@@ -17,6 +17,11 @@ function messageFor(notification: Notification, name: string): string {
       ? `${name} left ${notification.count} new comments on your post`
       : `${name} commented on your post`;
   }
+  if (notification.type === "comment_reply") {
+    return notification.count > 1
+      ? `${name} left ${notification.count} new replies to your comment`
+      : `${name} replied to your comment`;
+  }
   if (notification.type === "post_like") {
     return notification.count > 1
       ? `${name} and ${notification.count - 1} other${notification.count > 2 ? "s" : ""} liked your post`

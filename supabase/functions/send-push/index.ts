@@ -17,7 +17,7 @@ const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 interface NotificationRow {
   id: string;
   user_id: string;
-  type: "matrimonial_message" | "moderation_decision" | "appeal_outcome" | "post_comment" | "post_like";
+  type: "matrimonial_message" | "moderation_decision" | "appeal_outcome" | "post_comment" | "post_like" | "comment_reply";
   actor_id: string | null;
   link: string;
   count: number;
@@ -39,6 +39,10 @@ function messageFor(notification: NotificationRow, name: string): string {
       return notification.count > 1
         ? `${name} left ${notification.count} new comments on your post`
         : `${name} commented on your post`;
+    case "comment_reply":
+      return notification.count > 1
+        ? `${name} left ${notification.count} new replies to your comment`
+        : `${name} replied to your comment`;
     case "post_like":
       return notification.count > 1
         ? `${name} and ${notification.count - 1} other${notification.count > 2 ? "s" : ""} liked your post`
