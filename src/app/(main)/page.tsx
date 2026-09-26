@@ -1,7 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { PostCard } from "@/components/post/post-card";
-import type { Post, Profile, CommunityRole } from "@/lib/types";
-import { isCommunityStaff } from "@/lib/community";
+import type { Profile } from "@/lib/types";
 import { SURVEYS } from "@/lib/surveys";
 import { COMMUNITY_SERVICES } from "@/lib/community-services";
 import Link from "next/link";
@@ -13,28 +11,15 @@ export default async function HomePage() {
   const { data: { user } } = await supabase.auth.getUser();
 
   let profile: Profile | null = null;
-  let posts: Post[] = [];
-  let likedPostIds: Set<string> = new Set();
-  let roleByCommunityId = new Map<string, CommunityRole>();
   let submittedSurveyIds: Set<number> = new Set();
 
   if (user) {
-    // get_home_feed does the "posts in my communities" join server-side in
-    // one round trip — a plain .from("posts").in("community_id", ids) needs
-    // the id list first, which would make this a second query sequenced
-    // after community_members instead of running alongside it here.
-    const [{ data: p }, { data: memberOf }, { data: likes }, { data: surveyResponses }, { data: feedPosts }] = await Promise.all([
+    const [{ data: p }, { data: surveyResponses }] = await Promise.all([
       supabase.from("profiles").select("*").eq("id", user.id).single(),
-      supabase.from("community_members").select("community_id, role").eq("user_id", user.id),
-      supabase.from("post_likes").select("post_id").eq("user_id", user.id),
       supabase.from("survey_responses").select("survey_id").eq("user_id", user.id),
-      supabase.rpc("get_home_feed", { p_user_id: user.id, p_limit: 20 }).select("*, profiles!posts_author_id_fkey(*), communities(*)"),
     ]);
     profile = p as Profile;
-    likedPostIds = new Set((likes ?? []).map((l) => l.post_id));
-    roleByCommunityId = new Map((memberOf ?? []).map((m) => [m.community_id, m.role as CommunityRole]));
     submittedSurveyIds = new Set((surveyResponses ?? []).map((r) => r.survey_id));
-    posts = (feedPosts as Post[]) ?? [];
   }
 
   return (
@@ -84,39 +69,6 @@ export default async function HomePage() {
           })}
         </div>
       </section>
-
-      {/* Feed */}
-      {posts.length > 0 ? (
-        <section>
-          <h2 className="text-base font-bold text-gray-900 mb-3">Your Feed</h2>
-          <div className="-mx-4 divide-y-8 divide-gray-100">
-            {posts.map((post) => (
-              <PostCard
-                key={post.id}
-                post={post}
-                currentUserId={user?.id}
-                liked={likedPostIds.has(post.id)}
-                canModerate={isCommunityStaff(roleByCommunityId.get(post.community_id))}
-                variant="feed"
-              />
-            ))}
-          </div>
-        </section>
-      ) : (
-        !user && (
-          <section className="bg-white rounded-2xl p-6 text-center">
-            <p className="text-gray-500 text-sm mb-4">Join communities to see posts in your feed</p>
-            <div className="flex gap-3 justify-center">
-              <Link href="/signup" className="px-5 py-2.5 bg-[#1E2952] text-white rounded-full font-semibold text-sm hover:bg-[#16203D] transition-colors">
-                Get Started
-              </Link>
-              <Link href="/communities" className="px-5 py-2.5 border border-[#1E2952] text-[#1E2952] rounded-full font-semibold text-sm hover:bg-gray-50 transition-colors">
-                Browse
-              </Link>
-            </div>
-          </section>
-        )
-      )}
     </div>
   );
 }
