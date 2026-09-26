@@ -38,7 +38,7 @@ export default function OtpPage() {
     // Signup always goes to profile creation
     if (otpType === "signup") return "/signup-details";
     // Login: if profile complete go home, else create profile first
-    return hasProfile ? "/" : "/signup-details";
+    return hasProfile ? "/app" : "/signup-details";
   };
 
   const handleVerify = async () => {

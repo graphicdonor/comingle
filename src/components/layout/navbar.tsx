@@ -122,7 +122,7 @@ export function Navbar() {
   };
 
   const bottomNavRoutes = [
-    { id: "home", href: "/", icon: Home, label: "Home" },
+    { id: "home", href: "/app", icon: Home, label: "Home" },
     { id: "feed", href: "/feed", icon: Newspaper, label: "Feed" },
     { id: "create", href: "/posts/create", icon: PlusCircle, label: "Post" },
     { id: "profile", href: navUser?.username ? `/profile/${navUser.username}` : "/login", icon: User, label: "Profile" },
@@ -153,7 +153,7 @@ export function Navbar() {
               instead of overlapping them on narrow screens (unlike
               absolute-centering, which ignores sibling widths entirely). */}
           <div className="flex-1 flex justify-center min-w-0">
-            <Link href="/" className="flex items-center min-w-0">
+            <Link href="/app" className="flex items-center min-w-0">
               <img src="/wepray-logo.svg" alt="WePray" className="h-7 w-auto max-w-full" />
             </Link>
           </div>

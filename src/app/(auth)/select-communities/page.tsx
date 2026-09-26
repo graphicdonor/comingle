@@ -63,12 +63,12 @@ export default function SelectCommunitiesPage() {
         }
       }
       setLoading(false);
-      router.push("/");
+      router.push("/app");
       return;
     }
 
     // Dev bypass — just navigate home
-    setTimeout(() => { setLoading(false); router.push("/"); }, 400);
+    setTimeout(() => { setLoading(false); router.push("/app"); }, 400);
   };
 
   return (

@@ -16,7 +16,7 @@ export function ComingSoon({ label, icon: Icon, color }: ComingSoonProps) {
       <h1 className="text-xl font-bold text-gray-900 mb-1">{label}</h1>
       <p className="text-sm text-gray-500 mb-6">Coming soon</p>
       <Link
-        href="/"
+        href="/app"
         className="inline-block bg-[#1E2952] text-white text-sm font-semibold px-6 py-2.5 rounded-full hover:bg-[#16203D] transition-colors"
       >
         Back to Home

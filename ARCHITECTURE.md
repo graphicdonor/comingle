@@ -118,6 +118,18 @@ If you're adding a redirect that immediately follows an async mutation and
 it seems to intermittently "just not fire," reach for this before assuming
 your own logic is wrong.
 
+### Landing page at `/`, app at `/app`
+
+`/` is a public landing page (`src/app/(marketing)/page.tsx`, no app
+navbar, splash screen skipped). The app's home lives at `/app`
+(`src/app/(main)/app/page.tsx`); every other app page kept its URL
+(`/feed`, `/communities`, `/services/...`), so links and the native app are
+unaffected. Anything that means "go to the app home" (post-login redirects,
+the OAuth callback, the navbar logo/Home tab) points at `/app`. The PWA
+manifest's `start_url` is `/app` with `scope` `/`, and the landing page
+redirects standalone-mode visits to `/app` (`StandaloneRedirect`) so
+copies installed before the move, and the TWA wrapper, still open the app.
+
 ### Media storage (Cloudinary)
 
 All images and videos live on Cloudinary, not Supabase Storage. The client

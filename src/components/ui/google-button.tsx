@@ -21,7 +21,7 @@ export function GoogleButton({ mode = "signin" }: GoogleButtonProps) {
       const hasProfile = !!(getDevProfile()?.username);
       setTimeout(() => {
         setLoading(false);
-        router.push(hasProfile ? "/" : "/signup-details");
+        router.push(hasProfile ? "/app" : "/signup-details");
       }, 700);
       return;
     }

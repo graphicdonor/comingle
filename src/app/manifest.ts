@@ -5,7 +5,10 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "WePray — Uniting Communities",
     short_name: "WePray",
     description: "Connect with your community — matrimonial, health, education, housing and more.",
-    start_url: "/",
+    // The app lives at /app; "/" is the public landing page. Scope stays
+    // "/" because the app's other pages (/feed, /communities, …) sit at the root.
+    start_url: "/app",
+    scope: "/",
     display: "standalone",
     orientation: "portrait",
     background_color: "#ffffff",
@@ -35,7 +38,7 @@ export default function manifest(): MetadataRoute.Manifest {
         name: "My Profile",
         short_name: "Profile",
         description: "View your profile",
-        url: "/",
+        url: "/app",
         icons: [{ src: "/icons/icon-96.png", sizes: "96x96" }],
       },
     ],
