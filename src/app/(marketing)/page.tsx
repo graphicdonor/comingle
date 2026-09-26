@@ -25,6 +25,8 @@ import {
   Users,
 } from "lucide-react";
 import { StandaloneRedirect } from "@/components/landing/standalone-redirect";
+import { HeroBlobs, HeroPhone, PulseDot, Reveal } from "@/components/landing/motion";
+import { GooglePlayBadge, InstallWebAppButton } from "@/components/landing/get-the-app";
 
 export const metadata: Metadata = {
   title: "WePray — One home for your whole community",
@@ -92,10 +94,11 @@ export default function LandingPage() {
         {/* Hero */}
         <section className="relative overflow-hidden">
           <div aria-hidden className="absolute inset-0 bg-gradient-to-br from-[#ffe4f0] via-[#fff5f0] to-white" />
+          <HeroBlobs />
           <div className="relative max-w-6xl mx-auto px-4 sm:px-6 pt-14 pb-20 md:pt-20 md:pb-28 grid md:grid-cols-2 gap-12 items-center">
             <div>
               <p className="inline-flex items-center gap-2 rounded-full bg-white/80 border border-[#8B1A6B]/15 px-3 py-1 text-xs font-semibold text-[#8B1A6B] mb-6">
-                <Users className="h-3.5 w-3.5" /> Uniting communities
+                <PulseDot /> Uniting communities
               </p>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.05]">
                 One home for your <span className="text-[#8B1A6B]">whole community</span>.
@@ -119,14 +122,21 @@ export default function LandingPage() {
                   Read our story
                 </a>
               </div>
+              <div className="mt-6 flex flex-wrap items-start gap-3">
+                <InstallWebAppButton />
+                <GooglePlayBadge />
+              </div>
               <p className="mt-5 text-sm text-gray-500">Free to join. Sign in with your phone number or Google.</p>
             </div>
-            <PhoneFrame src="/landing/app-home.jpg" alt="WePray home screen" priority />
+            <HeroPhone>
+              <PhoneFrame src="/landing/app-home.jpg" alt="WePray home screen" priority />
+            </HeroPhone>
           </div>
         </section>
 
         {/* The challenge */}
         <section id="story" className="scroll-mt-20 py-20 md:py-28">
+          <Reveal>
           <div className="max-w-6xl mx-auto px-4 sm:px-6 grid md:grid-cols-[1fr_1.2fr] gap-12 md:gap-20">
             <div>
               <SectionLabel>The challenge</SectionLabel>
@@ -150,10 +160,12 @@ export default function LandingPage() {
               </p>
             </div>
           </div>
+          </Reveal>
         </section>
 
         {/* Approach */}
         <section className="bg-[#1E2952] text-white py-20 md:py-28">
+          <Reveal>
           <div className="max-w-6xl mx-auto px-4 sm:px-6">
             <SectionLabel>
               <span className="text-[#F7A8C8]">Our approach</span>
@@ -187,10 +199,12 @@ export default function LandingPage() {
               ))}
             </div>
           </div>
+          </Reveal>
         </section>
 
         {/* What you can do */}
         <section id="features" className="scroll-mt-20 py-20 md:py-28">
+          <Reveal>
           <div className="max-w-6xl mx-auto px-4 sm:px-6">
             <div className="max-w-2xl">
               <SectionLabel>What we built</SectionLabel>
@@ -243,10 +257,12 @@ export default function LandingPage() {
               </div>
             </div>
           </div>
+          </Reveal>
         </section>
 
         {/* Screens */}
         <section className="bg-gradient-to-b from-[#fff5f0] to-white py-20 md:py-28">
+          <Reveal>
           <div className="max-w-6xl mx-auto px-4 sm:px-6">
             <div className="text-center max-w-2xl mx-auto">
               <SectionLabel>Inside the app</SectionLabel>
@@ -261,10 +277,12 @@ export default function LandingPage() {
               ))}
             </div>
           </div>
+          </Reveal>
         </section>
 
         {/* Safety */}
         <section id="safety" className="scroll-mt-20 py-20 md:py-28">
+          <Reveal>
           <div className="max-w-6xl mx-auto px-4 sm:px-6 grid md:grid-cols-2 gap-12 md:gap-20 items-start">
             <div>
               <SectionLabel>Keeping it safe</SectionLabel>
@@ -295,10 +313,12 @@ export default function LandingPage() {
               ))}
             </ul>
           </div>
+          </Reveal>
         </section>
 
         {/* How it works */}
         <section id="how" className="scroll-mt-20 bg-gray-50 py-20 md:py-28">
+          <Reveal>
           <div className="max-w-6xl mx-auto px-4 sm:px-6">
             <div className="text-center max-w-2xl mx-auto">
               <SectionLabel>How it works</SectionLabel>
@@ -320,10 +340,12 @@ export default function LandingPage() {
               ))}
             </ol>
           </div>
+          </Reveal>
         </section>
 
         {/* What's next */}
         <section className="py-20 md:py-28">
+          <Reveal>
           <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
             <SectionLabel>What&apos;s next</SectionLabel>
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">Growing with the communities we serve.</h2>
@@ -339,10 +361,12 @@ export default function LandingPage() {
               ))}
             </ul>
           </div>
+          </Reveal>
         </section>
 
         {/* Final CTA */}
         <section className="px-4 sm:px-6 pb-20 md:pb-28">
+          <Reveal>
           <div className="max-w-6xl mx-auto rounded-3xl bg-gradient-to-br from-[#8B1A6B] to-[#5E1148] px-6 py-14 md:py-20 text-center text-white">
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">Find your community on WePray.</h2>
             <p className="mt-4 text-lg text-white/80 max-w-xl mx-auto">
@@ -362,7 +386,12 @@ export default function LandingPage() {
                 Browse communities
               </Link>
             </div>
+            <div className="mt-8 flex flex-wrap justify-center items-start gap-3">
+              <InstallWebAppButton tone="light" />
+              <GooglePlayBadge tone="light" />
+            </div>
           </div>
+          </Reveal>
         </section>
       </main>
 
