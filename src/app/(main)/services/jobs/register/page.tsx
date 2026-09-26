@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 import { JOB_TYPES, JOB_CATEGORIES } from "@/lib/job";
 import { useUserCommunities } from "@/lib/hooks/use-user-communities";
 import { CommunityPicker } from "@/components/community/community-picker";
+import { uploadMedia } from "@/lib/media";
 
 const STEPS = ["Job Details", "Contact", "Salary", "Category", "Description", "Community"];
 
@@ -158,13 +159,14 @@ export default function RegisterJobPage() {
     if (!user) { router.push("/login"); return; }
 
     const photoUrls: string[] = [];
-    for (let i = 0; i < photos.length; i++) {
-      const { file } = photos[i];
-      const ext = file.name.split(".").pop();
-      const path = `${user.id}/photo-${Date.now()}-${i}.${ext}`;
-      const { error: uploadErr } = await supabase.storage.from("job-photos").upload(path, file);
-      if (uploadErr) { setError(uploadErr.message); setLoading(false); return; }
-      photoUrls.push(supabase.storage.from("job-photos").getPublicUrl(path).data.publicUrl);
+    for (const { file } of photos) {
+      try {
+        photoUrls.push(await uploadMedia(file, "job-photo"));
+      } catch (err) {
+        setError((err as Error).message);
+        setLoading(false);
+        return;
+      }
     }
 
     const res = await fetch("/api/moderation/job-listings", {

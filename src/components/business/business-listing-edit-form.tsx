@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 import { BUSINESS_DAYS, BUSINESS_CATEGORIES } from "@/lib/business";
 import type { BusinessListing } from "@/lib/types";
+import { uploadMedia } from "@/lib/media";
 
 interface FormState {
   name: string;
@@ -110,13 +111,14 @@ export function BusinessListingEditForm({ listing }: { listing: BusinessListing 
     if (!user) { router.push("/login"); return; }
 
     const uploadedUrls: string[] = [];
-    for (let i = 0; i < newPhotoFiles.length; i++) {
-      const file = newPhotoFiles[i];
-      const ext = file.name.split(".").pop();
-      const path = `${user.id}/photo-${Date.now()}-${i}.${ext}`;
-      const { error: uploadErr } = await supabase.storage.from("business-photos").upload(path, file);
-      if (uploadErr) { setError(uploadErr.message); setLoading(false); return; }
-      uploadedUrls.push(supabase.storage.from("business-photos").getPublicUrl(path).data.publicUrl);
+    for (const file of newPhotoFiles) {
+      try {
+        uploadedUrls.push(await uploadMedia(file, "business-photo"));
+      } catch (err) {
+        setError((err as Error).message);
+        setLoading(false);
+        return;
+      }
     }
 
     const res = await fetch(`/api/moderation/business-listings/${listing.id}`, {

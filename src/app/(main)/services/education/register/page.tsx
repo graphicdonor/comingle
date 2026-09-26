@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 import { SERVICE_TYPES, SUBJECTS, LEVELS, MODES, FEE_PERIODS } from "@/lib/education";
 import { useUserCommunities } from "@/lib/hooks/use-user-communities";
 import { CommunityPicker } from "@/components/community/community-picker";
+import { uploadMedia } from "@/lib/media";
 
 interface FormState {
   title: string;
@@ -123,15 +124,13 @@ export default function EducationRegisterPage() {
 
     const photoUrls: string[] = [];
     for (const { file } of photos) {
-      const ext = file.name.split(".").pop();
-      const path = `${user.id}/${Date.now()}.${ext}`;
-      const { error: uploadErr } = await supabase.storage.from("education-photos").upload(path, file);
-      if (uploadErr) {
-        setError(uploadErr.message);
+      try {
+        photoUrls.push(await uploadMedia(file, "education-photo"));
+      } catch (err) {
+        setError((err as Error).message);
         setLoading(false);
         return;
       }
-      photoUrls.push(supabase.storage.from("education-photos").getPublicUrl(path).data.publicUrl);
     }
 
     const res = await fetch("/api/moderation/education-listings", {

@@ -2,10 +2,12 @@
 
 A Next.js 16 + Supabase social/community platform: users join topic-based
 communities, post into them, build a profile, optionally create a
-matrimonial (matchmaking) profile or a business/job/event directory
-listing, and are protected by a pre-publish AI content moderation layer
+matrimonial (matchmaking) profile or a business/job/event/housing/education
+directory listing, and are protected by a pre-publish AI content moderation layer
 (backed up by viewer-initiated reports) reviewed through an internal admin
-console. This doc is the map of how all of that actually fits together —
+console. The same backend also serves a separate native (React Native/Expo)
+mobile app, which calls this app's Route Handlers with a Bearer token and
+receives push notifications. This doc is the map of how all of that actually fits together —
 conventions, data model, feature-by-feature logic, and the
 gaps/inconsistencies worth knowing about before touching a given area.
 
@@ -19,7 +21,8 @@ covers everything else, plus how moderation *fits into* the rest of the app.
 | Layer | Choice |
 |---|---|
 | Framework | Next.js 16 (`next@16.2.9`), App Router, React 19 |
-| Backend | Supabase (Postgres + Auth + Storage), no separate API server |
+| Backend | Supabase (Postgres + Auth), no separate API server |
+| Media storage | Cloudinary — signed direct uploads (see Media storage below) |
 | Auth | Supabase Auth — phone OTP (primary) + Google OAuth |
 | AI moderation | OpenAI Moderations API (`omni-moderation-latest`), `openai@^6` SDK |
 | Styling | Tailwind CSS v4 (CSS-first/PostCSS setup) |
@@ -27,6 +30,7 @@ covers everything else, plus how moderation *fits into* the rest of the app.
 | Icons | `lucide-react` |
 | Testing | Playwright (`@playwright/test`) — no unit test runner configured |
 | Deployment | Netlify (`@netlify/plugin-nextjs`) |
+| Push notifications | Expo Push API, sent from a Supabase Edge Function (`supabase/functions/send-push`, Deno) |
 | DB migrations | Supabase CLI (`npx supabase`), linked to the hosted project |
 
 No state-management library, no data-fetching library (no React Query/SWR),
@@ -87,6 +91,20 @@ Don't "fix" this wrapper back to a real network call without checking
 whether that reintroduces the exact page-load regression it was added to
 remove.
 
+### Route Handlers accept cookie *or* Bearer-token auth
+
+The native mobile app has no cookies — it sends its Supabase access token
+as `Authorization: Bearer <token>`. Every user-facing Route Handler
+(`/api/moderation/*`, `/api/account/delete`, `/api/surveys/[id]`) calls
+`getAuthedSupabase(req)` from `src/lib/supabase/api-auth.ts` instead of
+`createClient()` directly. With a Bearer header it builds an anon-key
+client carrying that token (so RLS still applies as the calling user) and
+validates it with a real `getUser(token)` call; without one it falls back
+to the normal cookie-based server client. Any new Route Handler the native
+app might call should use this helper — a handler that only reads cookies
+will 401 every native request. `/api/admin/*` is unaffected (shared-secret
+cookie, web only).
+
 ### Hard navigation after an async mutation, not `router.push()`
 
 A recurring, confirmed bug in this app/Next.js version: calling
@@ -100,28 +118,51 @@ If you're adding a redirect that immediately follows an async mutation and
 it seems to intermittently "just not fire," reach for this before assuming
 your own logic is wrong.
 
+### Media storage (Cloudinary)
+
+All images and videos live on Cloudinary, not Supabase Storage. The client
+asks `POST /api/media/sign` (cookie or Bearer auth) for a one-off signature
+for a given media *kind* (`post-image`, `post-video`, `avatar`,
+`community-cover`, `business-photo`, `job-photo`, `event-photo`,
+`housing-photo`, `education-photo`, `matrimonial-photo` — one per old
+bucket), uploads the file straight to Cloudinary, and stores only the
+resulting URL in the database. The signature pins the folder
+(`<kind>/<user_id>`) and allowed formats; `CLOUDINARY_API_SECRET` never
+leaves the server. Stored URLs already carry delivery transformations —
+images `f_auto,q_auto,c_limit,w_1600`, videos `q_auto` as `.mp4` — see
+`toDeliveryUrl` in `src/lib/media.ts`. The native app uses the same route
+and the same URL rules (`src/lib/media.ts` there).
+
+Size limits (5MB images, 25MB/15s videos) are enforced client-side only;
+Cloudinary's own per-plan upload caps are the server-side backstop. Old
+Supabase Storage URLs from before the move keep working as long as those
+buckets exist — `scripts/migrate-media-to-cloudinary.mjs` copies them over
+and rewrites the URLs.
+
 ### Community feed companion posts
 
-Matrimonial profiles, business listings, job listings, and event listings
-can each optionally publish a real row into the shared `posts` table, into
+Matrimonial profiles and business, job, event, housing, and education
+listings can each optionally publish a real row into the shared `posts` table, into
 a community the author picks — reusing posts' existing likes, comments,
 moderation, and deletion machinery for free instead of building a parallel
 engagement system per listing type. `posts.post_type` (`standard |
-matrimonial_profile | business_listing | job_listing | event_listing`)
-discriminates the row, paired with one nullable FK column per type
-(`matrimonial_profile_id`, `business_listing_id`, `job_listing_id`,
-`event_listing_id`) rather than a single polymorphic reference column, so
+matrimonial_profile | business_listing | job_listing | event_listing |
+housing_listing | education_listing`) discriminates the row, paired with
+one nullable FK column per type (`matrimonial_profile_id`,
+`business_listing_id`, `job_listing_id`, `event_listing_id`,
+`housing_listing_id`, `education_listing_id`) rather than a single polymorphic reference column, so
 each FK can still point at its target table with real referential
 integrity. `src/lib/community-feed-post.ts` centralizes this: per-type
 content-formatting helpers (`matrimonialFeedPostContent`,
-`businessFeedPostContent`, `jobFeedPostContent`, `eventFeedPostContent`),
+`businessFeedPostContent`, `jobFeedPostContent`, `eventFeedPostContent`,
+`housingFeedPostContent`, `educationFeedPostContent`),
 `isCommunityMember` (the author must actually belong to the community
 they're posting into), and `upsertCommunityFeedPost`/
 `syncCommunityFeedPostIfExists` — the latter keeps the companion post's
 content in sync if the underlying listing is edited later, rather than
 leaving a stale snapshot in the feed. `post-card.tsx` renders a
 type-specific badge and links "Details" through to the listing's own page
-(`/services/{businesses,jobs,events}/[id]` or the matrimonial profile
+(`/services/{businesses,jobs,events,housing,education}/[id]` or the matrimonial profile
 view) rather than treating it as a plain text/image post.
 
 ### RLS is the actual enforcement layer — and it fails silently
@@ -167,7 +208,9 @@ The `notifications` table has no INSERT policy for regular users at all —
 rows only ever come from `SECURITY DEFINER` trigger functions
 (`notify_new_matrimonial_message`, `notify_moderation_decision`,
 `notify_appeal_outcome`, `notify_new_comment`, `notify_new_like` — all in
-`schema.sql`), which bypass RLS by design.
+`schema.sql`), which bypass RLS by design. A further `after insert` trigger
+on `notifications` fans each new row out as a device push — see Push
+notifications below.
 `increment_member_count`/`decrement_member_count`/`increment_like_count`/
 `decrement_like_count` are the same pattern applied to counters: no general
 UPDATE policy grants a plain member the ability to bump `member_count` or
@@ -258,7 +301,10 @@ The protected-path list is explicit and short:
 /services/matrimonial, /services/businesses/register,
 /services/jobs/register, /services/events/register, /reels
 ```
-plus any `/communities/*/manage` route. **Failing the check always
+plus any `/communities/*/manage` route. `/services/housing/register` and
+`/services/education/register` are **not** in this list — those pages fall
+back to a client-side `getUser()` check at submit time and redirect to
+`/login` (see Known gaps). **Failing the check always
 redirects to `/signup`, never `/login`** — worth remembering since it's an
 easy default to get backwards.
 
@@ -305,9 +351,9 @@ than repeated here.
 | `profiles` | 1:1 with `auth.users`. Username, name, avatar, bio, DOB, gender, state/city, `pin_hash`, phone, `last_active_at`. |
 | `communities` | Name, slug, description, cover, rules, `creator_id`, `member_count`. |
 | `community_members` | `(community_id, user_id, role)` — role is `member \| moderator \| admin`. |
-| `posts` | Title, content, image or video, `community_id`, `author_id`, `like_count`, `comment_count`, `moderation_status`, `post_type` + 4 nullable listing FK columns (see Community feed companion posts). |
+| `posts` | Title, content, image or video, `community_id`, `author_id`, `like_count`, `comment_count`, `moderation_status`, `post_type` + 6 nullable listing FK columns (see Community feed companion posts). |
 | `post_likes` | `(post_id, user_id)`. |
-| `comments` | Text, `post_id`, `author_id`, `moderation_status` — full moderated comments feature, see Comments below. |
+| `comments` | Text, `post_id`, `author_id`, `parent_id` (nullable self-reference for replies), `moderation_status` — see Comments below. |
 | `post_reports` | `(post_id, reporter_id)` unique, `reason`, `status` (`pending \| resolved \| dismissed`) — viewer-initiated reports, see Post reports below. |
 | `matrimonial_profiles` | 1:1 per user (PK `user_id`). Full matchmaking field set — see the Matrimonial service section. |
 | `matrimonial_invites` | Directional connection requests between two users. |
@@ -316,7 +362,10 @@ than repeated here.
 | `business_listings` | Directory listing for a business — see Directory listings below. |
 | `job_listings` | Directory listing for a job opening — see Directory listings below. |
 | `events` | Directory listing for an event — see Directory listings below. |
-| `notifications` | In-app notification center — DB-trigger-populated only, see above. Now 5 `type` values, see Notifications below. |
+| `housing_listings` | Property for sale or rent, owned by `owner_id` — see Directory listings below. |
+| `education_listings` | Tuition, class, or course, owned by `owner_id` — see Directory listings below. |
+| `notifications` | In-app notification center — DB-trigger-populated only, see above. 6 `type` values, see Notifications below. |
+| `push_tokens` | Expo push tokens for the native app, keyed by token (a user can have several devices), `platform` (`ios \| android`). Users manage only their own rows. |
 | `moderation_logs` / `moderation_queue` / `user_trust_scores` / `moderation_appeals` | Full detail in `MODERATION.md`. |
 | `survey_responses` | `(survey_id, user_id)` unique, `answers` jsonb. Survey *questions* live in code (`src/lib/surveys.ts`), not the DB. |
 
@@ -387,9 +436,10 @@ case.
 
 `/search?q=...` is a server component that fans out `ILIKE` queries in
 parallel across `communities`, `posts`, `business_listings`, `job_listings`,
-and `events`, then renders one section per entity type using each type's
-existing card component (`CommunityCard`, `PostCard`,
-`BusinessListingCard`, `JobListingCard`, `EventListingCard`) — no new
+`events`, `housing_listings`, and `education_listings`, then renders one
+section per entity type using each type's existing card component
+(`CommunityCard`, `PostCard`, `BusinessListingCard`, `JobListingCard`,
+`EventListingCard`, `HousingListingCard`, `EducationListingCard`) — no new
 rendering logic, just reuse. No Postgres full-text search infrastructure
 exists (no `tsvector` columns, no GIN indexes); this deliberately uses
 plain `ILIKE '%term%'` instead, since standing up FTS wasn't warranted for
@@ -470,6 +520,18 @@ notification row rather than one per comment). Held/blocked comments
 behave exactly like held/blocked posts: visible only to their own author
 until a human reviewer or the AI resolves them.
 
+**Replies** are single-level threads: `comments.parent_id` points at a
+top-level comment, and the UI only offers "Reply" on top-level comments.
+The column itself doesn't enforce that depth limit — it's a plain
+self-reference. Replies go through the same `/api/moderation/comments`
+route (with a `parentId` field), which rejects a `parentId` that belongs to
+a different post so a reply can't be threaded onto an unrelated post's
+comment. Deleting a top-level comment cascades to its replies (`on delete
+cascade`); `post-comments.tsx` drops them from local state and decrements
+`comment_count` once per removed published comment. When a reply is
+published, `notify_new_comment` notifies the **parent comment's author**
+with a `comment_reply` notification instead of notifying the post author.
+
 ### Post reports
 
 A viewer can report any post they don't author from its "•••" menu, giving
@@ -480,11 +542,12 @@ constraint, and the `enqueue_post_report_for_review` trigger). A report
 never auto-hides or auto-blocks a post by itself; it only guarantees a
 human looks at it.
 
-### Directory listings (business, jobs, events)
+### Directory listings (business, jobs, events, housing, education)
 
-Three parallel directory verticals living under `/services/{businesses,
-jobs,events}`, all following the identical shape: a listing table
-(`business_listings` / `job_listings` / `events`) owned by its creator,
+Five parallel directory verticals living under `/services/{businesses,
+jobs,events,housing,education}`, all following the identical shape: a
+listing table (`business_listings` / `job_listings` / `events` /
+`housing_listings` / `education_listings`) owned by its creator,
 a public browse/detail view, an edit page gated to the listing's owner
 (`organizer_id`/equivalent, checked server-side — see
 `services/events/[id]/edit/page.tsx` for the canonical shape: redirect to
@@ -493,8 +556,20 @@ on text fields and photos exactly like posts and matrimonial profiles, and
 an optional companion post into a community feed via the shared
 `community-feed-post.ts` module (see Community feed companion posts
 above). Events additionally register `/services/events/register` as a
-protected route (`proxy.ts`) and get their own photo storage bucket
-(`event_photos_storage` migration).
+protected route (`proxy.ts`) and get their own `event-photo` media kind.
+
+Housing ("Post a Property") and Education ("Post a Class/Course") are the
+newest two and are reached from the home page's Housing and Education
+service tiles. Each has its own media kind (`housing-photo`,
+`education-photo`, uploads scoped to a `{user_id}/` folder) and a
+`src/lib/{housing,education}.ts` module holding the option lists, a
+`sanitize*ListingBody` helper (shared column list for create and edit), and
+the text sent to moderation. `updated_at` on both tables is set by a
+`before update` trigger, not app code. Housing clears `rent_frequency` for
+"For Sale" listings; Education clears `address_line1` for Online classes.
+Unlike the other three verticals, these two **don't have an edit page yet**
+(browse, detail, and register only) and their register pages aren't in
+`proxy.ts`'s protected list.
 
 ### Profiles
 
@@ -502,8 +577,8 @@ View (`profile/[username]`) is public; edit (`profile/edit`) covers name,
 username, bio (160 char cap), DOB, gender, state/city, and avatar. Two
 fields are moderation-gated via `/api/moderation/precheck` before saving:
 bio and avatar — see `MODERATION.md`'s "precheck" tier. One loose end: the
-avatar file is uploaded to public storage *before* the precheck call
-resolves, so a blocked avatar can be left sitting in the bucket even though
+avatar file is uploaded to Cloudinary *before* the precheck call
+resolves, so a blocked avatar can be left sitting there even though
 the `profiles.avatar_url` column update itself is skipped (the decision is
 still logged either way).
 
@@ -517,8 +592,8 @@ everything read server-side before the page renders (no explicit "mark
 read" action needed); the navbar badge also clears instantly on navigating
 there rather than waiting for the next poll tick.
 
-Five notification types now exist (new matrimonial message, moderation
-decision, appeal outcome, post comment, post like), all inserted
+Six notification types exist (new matrimonial message, moderation
+decision, appeal outcome, post comment, comment reply, post like), all inserted
 exclusively by `SECURITY DEFINER` DB triggers, never app code — see the
 pattern above. The two post-engagement types batch differently, and the
 difference is deliberate, not an inconsistency: a comment notification
@@ -527,14 +602,47 @@ collapses to one unread row, updating its count/timestamp), while a like
 notification dedups per **post**, not per liker — the row's `actor_id`
 updates to whoever liked most recently regardless of who liked before, so
 "Alice and 3 others liked your post" always names the latest liker rather
-than the first one. `Notification.type` in `src/lib/types.ts` is a proper
-union of all five string literals, matching the DB check constraint.
+than the first one. A reply notification (`comment_reply`) dedups the same
+way as a comment notification — per replier, on the same post link.
+`Notification.type` in `src/lib/types.ts` is a proper union of all six
+string literals, matching the DB check constraint.
+
+### Push notifications (native app)
+
+The web app itself still only polls. Device push exists for the native app:
+
+1. The native app registers its Expo push token by writing to
+   `push_tokens` directly (RLS: own rows only).
+2. `notify_push_on_new_notification()`, an `after insert` trigger on
+   `notifications`, makes a fire-and-forget `net.http_post` (pg_net) to the
+   `send-push` Edge Function with the new row's id. Because pg_net is
+   async, a slow or failed push never blocks or fails the notification
+   insert.
+3. `supabase/functions/send-push/index.ts` checks the `x-webhook-secret`
+   header against its `PUSH_TRIGGER_SECRET` secret (the function is
+   deployed with `--no-verify-jwt`, so this is its only auth), loads the
+   notification, the recipient's tokens, and the actor's name via the
+   service-role key, and sends one message per device to Expo's push API
+   with `data.url` set to the notification's `link`.
+
+`send-push`'s `messageFor()` duplicates the notification wording from
+`notification-row.tsx` (and the native app's notifications screen) by hand
+— it runs in Deno with no shared import. **When adding a notification type,
+update all three**, plus the `notifications_type_check` constraint and
+`Notification.type`.
+
+pg_net on Supabase lives in the `net` schema, so the call is
+`net.http_post(...)`. The first push migration used
+`extensions.net.http_post` and made every notification insert fail until
+`20260922131500_fix_push_trigger_schema.sql` fixed it.
 
 ### Bottom navigation
 
 `src/components/layout/bottom-nav.tsx` is a static, flat tab bar (icon +
 label, fixed to the viewport bottom), styled after LinkedIn's mobile nav.
-This is the nav rendered everywhere in the live app today.
+This is the nav rendered everywhere in the live app today. Tabs: Home,
+Feed, Communities, Post, Profile — the post feed lives on its own `/feed`
+page, while Home holds the greeting, community services, and surveys.
 
 The original bottom nav, `src/components/floating-nav/`, was a custom
 drag-to-dock, tap-to-expand physics widget — Framer Motion primitives
@@ -553,9 +661,9 @@ continued presence into thinking it's still live.
 alongside `ServiceWorkerRegister`/`InstallPrompt` — since the root layout
 persists across client-side `<Link>` navigations, this only ever plays on
 a fresh page load (hard refresh or first visit), never on internal
-navigation. A full-screen `position: fixed` overlay in `#8B1A6B` — chosen
-to exactly match `manifest.ts`'s `background_color`/`theme_color`, which is
-the color Android paints for the native OS-level splash before any JS
+navigation. A full-screen `position: fixed` white overlay — chosen to
+exactly match `manifest.ts`'s `background_color` (`#ffffff`), which is the
+color Android paints for the native OS-level splash before any JS
 runs, so this continues it seamlessly instead of flashing a different
 shade underneath — showing the app icon, wordmark, and tagline with a
 staggered entrance, then fading out after a short hold.
@@ -607,7 +715,7 @@ of truth feeding both display and the RLS eligibility rules.
 
 Fully documented in **`MODERATION.md`** — scope, the two enforcement tiers
 (full pipeline vs. precheck), decision logic and thresholds, auto-suspend,
-appeals, and known limitations (public storage buckets making a
+appeals, and known limitations (public media URLs making a
 not-yet-approved image's exact URL technically reachable before review;
 no per-admin reviewer identity, since admin auth has no individual
 accounts). Read that file directly rather than a summary here — it stays
@@ -697,7 +805,7 @@ each feature section above:
   that every other settings mutation uses (no `.select()` + row-count
   check) — currently harmless only because the edit control itself is
   admin-gated client-side.
-- **Avatar upload can leave an orphaned file in public storage** — the
+- **Avatar upload can leave an orphaned file on Cloudinary** — the
   file uploads before the moderation precheck resolves; a blocked result
   skips the `profiles.avatar_url` update but not the upload itself.
 - **The "Remember me" checkbox on login/signup is inert** — rendered
@@ -714,6 +822,22 @@ each feature section above:
   left in the tree, still reachable at `/dev/floating-nav-demo`, in case
   the interaction is revisited. Don't assume it's live; check which
   component a given layout actually renders.
+- **`supabase/schema.sql` is behind the migrations** — it doesn't yet
+  include `housing_listings`, `education_listings`, `push_tokens`, their
+  storage policies, or the push trigger. The migrations are the source of
+  truth for those until `schema.sql` is caught up.
+- **Housing/Education register pages aren't route-protected** and those
+  two verticals have no edit page — see Directory listings above.
+- **The push trigger hardcodes the project URL and webhook secret** in the
+  migration SQL (and so in git history), rather than reading them from
+  Vault or a config table. Rotating the secret means a new migration plus
+  `supabase secrets set PUSH_TRIGGER_SECRET=...`. `send-push` also skips
+  the secret check entirely if `PUSH_TRIGGER_SECRET` is unset.
+- **Push notification text is duplicated in three places** (web
+  `notification-row.tsx`, `send-push`, the native app) and kept in sync by
+  hand. The push title is also a hardcoded brand string in `send-push`.
+- **Stale push tokens are never pruned** — `send-push` ignores Expo's
+  response, so a token for an uninstalled app stays in `push_tokens`.
 
 ## Deployment & operations
 
@@ -727,6 +851,19 @@ each feature section above:
   it stays a checked-in template). Production env vars are configured
   separately in Netlify's dashboard — entirely disconnected from
   `.env.local`, nothing to sync automatically.
+- **Cloudinary**: `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, and
+  `CLOUDINARY_API_SECRET` must be set in Netlify (and `.env.local`) or
+  every upload fails with "Uploads aren't configured yet." The native app
+  signs through the production site, so this route must be deployed
+  before a native build that uses it ships.
+- **Edge Functions**: `send-push` deploys separately from the Next.js app:
+  `npx supabase functions deploy send-push --no-verify-jwt`, with
+  `PUSH_TRIGGER_SECRET` set via `npx supabase secrets set`. It must match
+  the value in the push trigger.
+- **Android app links**: `public/.well-known/assetlinks.json` holds the
+  native Android app's signing-key SHA-256 fingerprint. It must be updated
+  whenever the signing key is regenerated, or verified links stop opening
+  in the app.
 - **Deploys**: push to `main` → Netlify builds and deploys automatically.
   Verifying a deploy actually went live: for changes that touch
   client-shipped code, a CSS/JS bundle-hash change is a reasonable signal;

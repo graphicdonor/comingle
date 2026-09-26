@@ -8,10 +8,9 @@ import type { Community } from "@/lib/types";
 
 interface CreatePostComposerProps {
   communities: Community[];
-  authorId: string;
 }
 
-export function CreatePostComposer({ communities, authorId }: CreatePostComposerProps) {
+export function CreatePostComposer({ communities }: CreatePostComposerProps) {
   const [communityId, setCommunityId] = useState(communities[0].id);
   const router = useRouter();
   const selected = communities.find((c) => c.id === communityId) ?? communities[0];
@@ -51,7 +50,6 @@ export function CreatePostComposer({ communities, authorId }: CreatePostComposer
       <CreatePost
         key={communityId}
         communityId={communityId}
-        authorId={authorId}
         defaultOpen
         onPosted={() => {
           router.push(`/communities/${selected.slug}`);

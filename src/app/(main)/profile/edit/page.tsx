@@ -6,6 +6,7 @@ import { Avatar } from "@/components/ui/avatar";
 import { DEV_MODE, getDevProfile, setDevProfile } from "@/lib/dev-auth";
 import { createClient } from "@/lib/supabase/client";
 import { MIN_SIGNUP_AGE, ageValidationError, maxDobForAge } from "@/lib/age";
+import { uploadMedia } from "@/lib/media";
 
 const GENDERS = ["Male", "Female", "Non-binary", "Prefer not to say"];
 
@@ -116,18 +117,17 @@ export default function EditProfilePage() {
 
     let avatar_url: string | null = avatarPreview;
     if (avatarFile) {
-      const ext = avatarFile.name.split(".").pop();
-      const path = `${user.id}/avatar.${ext}`;
-      const { error: uploadErr } = await supabase.storage
-        .from("avatars").upload(path, avatarFile, { upsert: true });
       // A failed upload used to fall through silently here, leaving
       // avatar_url set to the local blob: preview URL from handlePhoto —
       // that then got saved to profiles.avatar_url below, which looks like
       // a successful save but is a dead link the moment this tab closes.
-      if (uploadErr) { setLoading(false); setError(uploadErr.message); return; }
-
-      const { data: urlData } = supabase.storage.from("avatars").getPublicUrl(path);
-      avatar_url = urlData.publicUrl;
+      try {
+        avatar_url = await uploadMedia(avatarFile, "avatar");
+      } catch (err) {
+        setLoading(false);
+        setError((err as Error).message);
+        return;
+      }
 
       const avatarPrecheck = await fetch("/api/moderation/precheck", {
         method: "POST",

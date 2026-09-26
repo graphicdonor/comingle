@@ -1,5 +1,5 @@
 /**
- * Fetches a (Supabase Storage) image URL server-side and re-encodes it as a
+ * Fetches an uploaded (Cloudinary) image URL server-side and re-encodes it as a
  * base64 data URL, rather than handing OpenAI's moderation API the raw
  * public URL to fetch itself. Handing over the URL directly was failing
  * intermittently ("Failed to download image from file_url") — almost

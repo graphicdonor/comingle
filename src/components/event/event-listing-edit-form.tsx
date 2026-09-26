@@ -9,6 +9,7 @@ import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 import { EVENT_CATEGORIES } from "@/lib/event";
 import type { EventListing } from "@/lib/types";
+import { uploadMedia } from "@/lib/media";
 
 interface FormState {
   title: string;
@@ -108,13 +109,14 @@ export function EventListingEditForm({ event }: { event: EventListing }) {
     if (!user) { router.push("/login"); return; }
 
     const uploadedUrls: string[] = [];
-    for (let i = 0; i < newPhotoFiles.length; i++) {
-      const file = newPhotoFiles[i];
-      const ext = file.name.split(".").pop();
-      const path = `${user.id}/photo-${Date.now()}-${i}.${ext}`;
-      const { error: uploadErr } = await supabase.storage.from("event-photos").upload(path, file);
-      if (uploadErr) { setError(uploadErr.message); setLoading(false); return; }
-      uploadedUrls.push(supabase.storage.from("event-photos").getPublicUrl(path).data.publicUrl);
+    for (const file of newPhotoFiles) {
+      try {
+        uploadedUrls.push(await uploadMedia(file, "event-photo"));
+      } catch (err) {
+        setError((err as Error).message);
+        setLoading(false);
+        return;
+      }
     }
 
     const res = await fetch(`/api/moderation/events/${event.id}`, {

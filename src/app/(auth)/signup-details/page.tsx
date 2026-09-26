@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { ChevronLeft, User, CheckCircle2, Image as ImageIcon, Camera } from "lucide-react";
 import { DEV_MODE, getDevUser, setDevProfile } from "@/lib/dev-auth";
 import { MIN_SIGNUP_AGE, ageValidationError, maxDobForAge } from "@/lib/age";
+import { uploadMedia } from "@/lib/media";
 
 const GENDERS = ["Male", "Female", "Other", "Prefer not to say"];
 
@@ -109,14 +110,8 @@ export default function SignupDetailsPage() {
 
     let avatar_url: string | null = null;
     if (avatarFile) {
-      const ext = avatarFile.name.split(".").pop();
-      const { data: up, error: upErr } = await supabase.storage
-        .from("avatars")
-        .upload(`${user.id}.${ext}`, avatarFile, { upsert: true });
-      if (!upErr && up) {
-        const { data: { publicUrl } } = supabase.storage.from("avatars").getPublicUrl(up.path);
-        avatar_url = publicUrl;
-      }
+      // Best-effort, as before: a failed avatar upload shouldn't block signup.
+      avatar_url = await uploadMedia(avatarFile, "avatar").catch(() => null);
     }
 
     const { error: profileError } = await supabase.from("profiles").upsert({

@@ -45,8 +45,10 @@ self.addEventListener("fetch", (event) => {
   // Skip non-GET and browser-extension requests
   if (request.method !== "GET" || !url.protocol.startsWith("http")) return;
 
-  // Skip Supabase / auth API calls — always network
-  if (url.hostname.includes("supabase.co") || url.pathname.startsWith("/api/")) {
+  // Skip Supabase / auth API calls and Cloudinary media — always network.
+  // Cloudinary is its own CDN, and routing video through respondWith breaks
+  // the range requests playback relies on.
+  if (url.hostname.includes("supabase.co") || url.hostname.endsWith("cloudinary.com") || url.pathname.startsWith("/api/")) {
     return;
   }
 

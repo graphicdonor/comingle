@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 import { LISTING_TYPES, PROPERTY_TYPES, RENT_FREQUENCIES, AMENITIES } from "@/lib/housing";
 import { useUserCommunities } from "@/lib/hooks/use-user-communities";
 import { CommunityPicker } from "@/components/community/community-picker";
+import { uploadMedia } from "@/lib/media";
 
 interface FormState {
   title: string;
@@ -130,15 +131,13 @@ export default function HousingRegisterPage() {
 
     const photoUrls: string[] = [];
     for (const { file } of photos) {
-      const ext = file.name.split(".").pop();
-      const path = `${user.id}/${Date.now()}.${ext}`;
-      const { error: uploadErr } = await supabase.storage.from("housing-photos").upload(path, file);
-      if (uploadErr) {
-        setError(uploadErr.message);
+      try {
+        photoUrls.push(await uploadMedia(file, "housing-photo"));
+      } catch (err) {
+        setError((err as Error).message);
         setLoading(false);
         return;
       }
-      photoUrls.push(supabase.storage.from("housing-photos").getPublicUrl(path).data.publicUrl);
     }
 
     const res = await fetch("/api/moderation/housing-listings", {

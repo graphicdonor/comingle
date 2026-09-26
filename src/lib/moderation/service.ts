@@ -72,7 +72,7 @@ export async function checkContent(input: ModerationInput): Promise<ModerationRe
   if (normalizedText?.trim()) moderationInput.push({ type: "text", text: normalizedText });
 
   // Fetched and re-encoded as data URLs ourselves rather than handing OpenAI
-  // the raw Supabase Storage URL to fetch — see fetchImageAsDataUrl for why.
+  // the raw media URL to fetch — see fetchImageAsDataUrl for why.
   for (const url of input.imageUrls ?? []) {
     try {
       const dataUrl = await fetchImageAsDataUrl(url);

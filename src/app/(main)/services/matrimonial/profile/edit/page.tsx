@@ -22,6 +22,7 @@ import {
   isMatrimonialEligible,
 } from "@/lib/matrimonial";
 import { MIN_MATRIMONIAL_AGE, ageValidationError, maxDobForAge } from "@/lib/age";
+import { uploadMedia } from "@/lib/media";
 
 interface FormState {
   full_name: string;
@@ -208,14 +209,14 @@ export default function MatrimonialProfileEditPage() {
     if (!user) { setLoading(false); router.push("/login"); return; }
 
     const uploadedUrls: string[] = [];
-    for (let i = 0; i < newPhotoFiles.length; i++) {
-      const file = newPhotoFiles[i];
-      const ext = file.name.split(".").pop();
-      const path = `${user.id}/photo-${Date.now()}-${i}.${ext}`;
-      const { error: uploadError } = await supabase.storage.from("matrimonial-photos").upload(path, file);
-      if (uploadError) { setError(uploadError.message); setLoading(false); return; }
-      const { data: urlData } = supabase.storage.from("matrimonial-photos").getPublicUrl(path);
-      uploadedUrls.push(urlData.publicUrl);
+    for (const file of newPhotoFiles) {
+      try {
+        uploadedUrls.push(await uploadMedia(file, "matrimonial-photo"));
+      } catch (err) {
+        setError((err as Error).message);
+        setLoading(false);
+        return;
+      }
     }
 
     const res = await fetch("/api/moderation/matrimonial-profile", {

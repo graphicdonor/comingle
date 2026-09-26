@@ -5,12 +5,11 @@ import { Image as ImageIcon, Video as VideoIcon, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { createClient } from "@/lib/supabase/client";
 import { readVideoMetadata, MAX_POST_VIDEO_SECONDS, MAX_POST_VIDEO_BYTES } from "@/lib/video";
+import { uploadMedia } from "@/lib/media";
 
 interface CreatePostProps {
   communityId: string;
-  authorId: string;
   defaultOpen?: boolean;
   onPosted?: () => void;
 }
@@ -19,7 +18,7 @@ type Media =
   | { type: "image"; file: File; previewUrl: string }
   | { type: "video"; file: File; previewUrl: string; thumbnailBlob: Blob };
 
-export function CreatePost({ communityId, authorId, defaultOpen = false, onPosted }: CreatePostProps) {
+export function CreatePost({ communityId, defaultOpen = false, onPosted }: CreatePostProps) {
   const [open, setOpen] = useState(defaultOpen);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -30,7 +29,6 @@ export function CreatePost({ communityId, authorId, defaultOpen = false, onPoste
   const [error, setError] = useState("");
   const [statusMessage, setStatusMessage] = useState("");
   const router = useRouter();
-  const supabase = createClient();
   const imageInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
 
@@ -90,24 +88,19 @@ export function CreatePost({ communityId, authorId, defaultOpen = false, onPoste
     let videoUrl: string | null = null;
     let videoThumbnailUrl: string | null = null;
 
-    if (media?.type === "image") {
-      const ext = media.file.name.split(".").pop();
-      const path = `${authorId}/${Date.now()}.${ext}`;
-      const { error: uploadErr } = await supabase.storage.from("post-images").upload(path, media.file);
-      if (uploadErr) { setError(uploadErr.message); setLoading(false); return; }
-      imageUrl = supabase.storage.from("post-images").getPublicUrl(path).data.publicUrl;
-    } else if (media?.type === "video") {
-      const ext = media.file.name.split(".").pop() || "mp4";
-      const timestamp = Date.now();
-      const videoPath = `${authorId}/${timestamp}.${ext}`;
-      const { error: videoUploadErr } = await supabase.storage.from("post-videos").upload(videoPath, media.file);
-      if (videoUploadErr) { setError(videoUploadErr.message); setLoading(false); return; }
-      videoUrl = supabase.storage.from("post-videos").getPublicUrl(videoPath).data.publicUrl;
-
-      const thumbPath = `${authorId}/${timestamp}-thumb.jpg`;
-      const { error: thumbUploadErr } = await supabase.storage.from("post-images").upload(thumbPath, media.thumbnailBlob);
-      if (thumbUploadErr) { setError(thumbUploadErr.message); setLoading(false); return; }
-      videoThumbnailUrl = supabase.storage.from("post-images").getPublicUrl(thumbPath).data.publicUrl;
+    try {
+      if (media?.type === "image") {
+        imageUrl = await uploadMedia(media.file, "post-image");
+      } else if (media?.type === "video") {
+        [videoUrl, videoThumbnailUrl] = await Promise.all([
+          uploadMedia(media.file, "post-video"),
+          uploadMedia(media.thumbnailBlob, "post-image"),
+        ]);
+      }
+    } catch (err) {
+      setError((err as Error).message);
+      setLoading(false);
+      return;
     }
 
     const res = await fetch("/api/moderation/posts", {

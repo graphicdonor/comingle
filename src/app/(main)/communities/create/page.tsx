@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Avatar } from "@/components/ui/avatar";
 import { createClient } from "@/lib/supabase/client";
 import { ChevronLeft, Camera } from "lucide-react";
+import { uploadMedia } from "@/lib/media";
 
 export default function CreateCommunityPage() {
   const [form, setForm] = useState({ name: "", description: "" });
@@ -46,13 +47,13 @@ export default function CreateCommunityPage() {
 
     let cover_url: string | null = null;
     if (coverFile) {
-      const ext = coverFile.name.split(".").pop();
-      const path = `${user.id}/${Date.now()}.${ext}`;
-      const { error: uploadErr } = await supabase.storage
-        .from("community-covers").upload(path, coverFile);
-      if (uploadErr) { setError(uploadErr.message); setLoading(false); return; }
-      const { data: urlData } = supabase.storage.from("community-covers").getPublicUrl(path);
-      cover_url = urlData.publicUrl;
+      try {
+        cover_url = await uploadMedia(coverFile, "community-cover");
+      } catch (err) {
+        setError((err as Error).message);
+        setLoading(false);
+        return;
+      }
     }
 
     const { data, error: insertError } = await supabase.from("communities")

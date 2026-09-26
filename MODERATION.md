@@ -8,9 +8,10 @@ visible to anyone but its author — never after.
 
 Covered, with a full pending → published/blocked pipeline:
 - **Posts** (title, content, image, or a 15-second video)
-- **Comments** (text only)
+- **Comments and replies** (text only)
 - **Matrimonial profiles** (about-me text, photos)
-- **Business listings, job listings, event listings** (text fields, photos)
+- **Business, job, event, housing, and education listings** (text fields,
+  photos)
 
 Covered, with a synchronous precheck (see "Two enforcement tiers" below):
 - Profile bio
@@ -67,18 +68,27 @@ This app has no Server Actions and no middleware layer in the Express
 sense — every existing mutation is a `"use client"` component calling
 Supabase directly from the browser (see `create-post.tsx`,
 `community-settings-form.tsx`, etc). Moderation needs a secret API key
-that can never reach the browser, so the two full-pipeline flows
-(posts, matrimonial profiles) go through **Route Handlers** instead:
+that can never reach the browser, so every full-pipeline flow goes through
+a **Route Handler** instead:
 
 - `POST /api/moderation/posts` — replaces the old direct
   `supabase.from("posts").insert(...)` in `create-post.tsx`.
+- `POST /api/moderation/comments` — comments and replies (`parentId`).
 - `POST /api/moderation/matrimonial-profile` — replaces the direct
   `.upsert(...)` in the matrimonial profile edit page.
+- `POST /api/moderation/{business-listings,job-listings,events,housing-listings,education-listings}`
+  — create a listing; business, job, and event listings also have an
+  `[id]` route for edits.
+- `POST /api/moderation/reports` — a viewer reporting a post.
 - `POST /api/moderation/precheck` — generic synchronous check used by the
   lighter settings-style fields (see below).
 - `POST /api/moderation/appeals` — a user appealing a held/blocked decision.
 - `POST /api/admin/moderation/[id]` — admin approve/reject on a queued item.
 - `POST /api/admin/moderation/appeals/[id]` — admin approve/deny an appeal.
+
+The user-facing routes accept either the web session cookie or a native
+app's `Authorization: Bearer <token>` header, via `getAuthedSupabase()` in
+`src/lib/supabase/api-auth.ts`. The admin routes are web-only.
 
 Core logic lives in `src/lib/moderation/`:
 - `service.ts` — calls the OpenAI moderation endpoint, turns category
@@ -93,7 +103,8 @@ Core logic lives in `src/lib/moderation/`:
 
 ### Enforcement is at the database layer, not just app code
 
-`posts` and `matrimonial_profiles` both have a `moderation_status` column
+`posts`, `comments`, `matrimonial_profiles`, and every listing table have a
+`moderation_status` column
 (`pending_review` | `published` | `blocked`) and RLS policies with a
 `WITH CHECK` clause that only ever lets a user's own insert/update set
 `moderation_status = 'pending_review'` — a client cannot mark its own
@@ -112,7 +123,7 @@ approach avoids that failure mode entirely.
 
 ### Two enforcement tiers
 
-**Full pipeline** (posts, matrimonial profiles): genuine "browse other
+**Full pipeline** (posts, comments, matrimonial profiles, listings): genuine "browse other
 people's content" surfaces. `allow` → published immediately. `hold_for_review`
 → saved as `pending_review`, visible only to its author, queued for a human
 reviewer; approving it flips it to `published`. `block` → saved as
@@ -225,15 +236,15 @@ following the same DB-trigger pattern already used for chat notifications
   Tightening this would mean sampling multiple frames server-side (and,
   for audio, adding a transcription step) — a real video pipeline, not a
   client-side approximation.
-- **Images already in a public bucket become reachable at their exact URL
-  the moment they're uploaded**, before moderation ever runs — the
-  `post-images`/`matrimonial-photos` buckets are fully public. This system
+- **Uploaded images become reachable at their exact URL the moment
+  they're uploaded**, before moderation ever runs — Cloudinary delivery
+  URLs are public. This system
   guarantees a flagged image is never *surfaced or linked* anywhere in the
   app to other users until approved; it does not guarantee the raw file is
   completely unreachable to someone who already has (or guesses) the exact
-  URL. Closing that gap fully would mean uploading to a private staging
-  bucket first and only moving approved files to the public one — a larger
-  storage-architecture change than this pass covers.
+  URL. Closing that gap fully would mean uploading as Cloudinary
+  `authenticated` (non-public) assets and only publishing approved ones — a
+  larger storage-architecture change than this pass covers.
 - **No per-admin reviewer identity.** This app's admin panel is a single
   shared password, not individual accounts, so "who reviewed this" isn't
   tracked, only "was it reviewed and when."

@@ -35,7 +35,7 @@ export default async function CreatePostPage() {
 
   return (
     <div className="max-w-sm mx-auto">
-      <CreatePostComposer communities={communities} authorId={user.id} />
+      <CreatePostComposer communities={communities} />
     </div>
   );
 }

@@ -84,7 +84,7 @@ export default async function CommunityPage({ params }: { params: Promise<{ id: 
       {/* Create post (members only) */}
       {isMember && user && (
         <div className="mb-4">
-          <CreatePost communityId={c.id} authorId={user.id} />
+          <CreatePost communityId={c.id} />
         </div>
       )}
 

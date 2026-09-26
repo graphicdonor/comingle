@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Avatar } from "@/components/ui/avatar";
 import { createClient } from "@/lib/supabase/client";
 import type { Community } from "@/lib/types";
+import { uploadMedia } from "@/lib/media";
 
 interface CommunitySettingsFormProps {
   community: Community;
@@ -62,14 +63,13 @@ export function CommunitySettingsForm({ community }: CommunitySettingsFormProps)
 
     let cover_url = community.cover_url;
     if (coverFile) {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) { setSaveError("Session expired — please sign in again"); setSaving(false); return; }
-      const ext = coverFile.name.split(".").pop();
-      const path = `${user.id}/${Date.now()}.${ext}`;
-      const { error: uploadErr } = await supabase.storage.from("community-covers").upload(path, coverFile);
-      if (uploadErr) { setSaveError(uploadErr.message); setSaving(false); return; }
-      const { data: urlData } = supabase.storage.from("community-covers").getPublicUrl(path);
-      cover_url = urlData.publicUrl;
+      try {
+        cover_url = await uploadMedia(coverFile, "community-cover");
+      } catch (err) {
+        setSaveError((err as Error).message);
+        setSaving(false);
+        return;
+      }
 
       const coverPrecheck = await fetch("/api/moderation/precheck", {
         method: "POST",
