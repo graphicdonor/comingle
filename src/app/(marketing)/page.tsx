@@ -29,26 +29,26 @@ import { HeroBlobs, HeroPhone, PulseDot, Reveal } from "@/components/landing/mot
 import { GooglePlayBadge, InstallWebAppButton } from "@/components/landing/get-the-app";
 
 export const metadata: Metadata = {
-  title: "WePray — One home for your whole community",
+  title: "WePray — A home for your faith community",
   description:
-    "WePray brings your community's conversations and services into one safe place: a shared feed, matrimonial, jobs, events, local businesses, housing and education.",
+    "WePray brings your faith community together in one safe, respectful place: share news and moments, find a match within your faith, and discover jobs, events, housing and education.",
   alternates: { canonical: "/" },
 };
 
 const SERVICES = [
-  { icon: Heart, label: "Matrimonial", desc: "Find a match within your own community, with families in the loop." },
-  { icon: Briefcase, label: "Jobs", desc: "Post openings and find work through people who know you." },
-  { icon: CalendarDays, label: "Events", desc: "Gatherings, festivals and meetups, online or in person." },
-  { icon: Store, label: "Businesses", desc: "Discover and support businesses run by your community." },
-  { icon: Home, label: "Housing", desc: "Homes for sale or rent, listed by people you can trust." },
-  { icon: GraduationCap, label: "Education", desc: "Tuitions, classes and courses, online, offline or hybrid." },
+  { icon: Heart, label: "Matrimonial", desc: "Find a life partner who shares your faith and values, with families involved." },
+  { icon: Briefcase, label: "Jobs", desc: "Find work and hire through people from your own community." },
+  { icon: CalendarDays, label: "Events", desc: "Festivals, prayer gatherings, celebrations and meetups, online or in person." },
+  { icon: Store, label: "Businesses", desc: "Discover and support businesses run by members of your community." },
+  { icon: Home, label: "Housing", desc: "Homes for sale or rent, listed by people from your community." },
+  { icon: GraduationCap, label: "Education", desc: "Tuitions, classes and courses, from school subjects to classes on your traditions." },
   { icon: Stethoscope, label: "Health Care", desc: "Coming soon", soon: true },
   { icon: Scale, label: "Legal Aid", desc: "Coming soon", soon: true },
 ];
 
 const SCREENS = [
   { src: "/landing/app-home.jpg", alt: "WePray home screen with community services and surveys", caption: "Everything your community offers, on one screen" },
-  { src: "/landing/app-communities.jpg", alt: "WePray communities list with join buttons", caption: "Join the communities you belong to" },
+  { src: "/landing/app-communities.jpg", alt: "WePray communities list with join buttons", caption: "Join the communities of your faith" },
   { src: "/landing/app-post.jpg", alt: "WePray create post screen with camera and gallery options", caption: "Share a photo or a short video in seconds" },
 ];
 
@@ -98,15 +98,15 @@ export default function LandingPage() {
           <div className="relative max-w-6xl mx-auto px-4 sm:px-6 pt-14 pb-20 md:pt-20 md:pb-28 grid md:grid-cols-2 gap-12 items-center">
             <div>
               <p className="inline-flex items-center gap-2 rounded-full bg-white/80 border border-[#8B1A6B]/15 px-3 py-1 text-xs font-semibold text-[#8B1A6B] mb-6">
-                <PulseDot /> Uniting communities
+                <PulseDot /> Uniting faith communities
               </p>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.05]">
-                One home for your <span className="text-[#8B1A6B]">whole community</span>.
+                A home for your <span className="text-[#8B1A6B]">faith community</span>.
               </h1>
               <p className="mt-6 text-lg text-gray-600 leading-relaxed max-w-xl">
-                WePray brings your community&apos;s conversations and services into one safe place: a shared feed,
-                matrimonial, jobs, events, local businesses, housing and education, all shared with the people
-                who belong.
+                WePray brings people of the same faith together in one safe, respectful place. Stay close to your
+                community, share celebrations and gatherings, and find the support you need, from a life partner
+                to a job, a home or a class.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <Link
@@ -126,7 +126,7 @@ export default function LandingPage() {
                 <InstallWebAppButton />
                 <GooglePlayBadge />
               </div>
-              <p className="mt-5 text-sm text-gray-500">Free to join. Sign in with your phone number or Google.</p>
+              <p className="mt-5 text-sm text-gray-500">Free to join and open to every faith. Sign in with your phone number or Google.</p>
             </div>
             <HeroPhone>
               <PhoneFrame src="/landing/app-home.jpg" alt="WePray home screen" priority />
@@ -141,22 +141,23 @@ export default function LandingPage() {
             <div>
               <SectionLabel>The challenge</SectionLabel>
               <h2 className="text-3xl sm:text-4xl font-bold tracking-tight leading-tight">
-                Communities are close-knit. Their information isn&apos;t.
+                Faith brings people together. Staying connected is harder.
               </h2>
             </div>
             <div className="space-y-5 text-lg text-gray-600 leading-relaxed">
               <p>
-                When a family looks for a match, a young person looks for a job, or someone needs a home to rent,
-                the first place they turn is their own community. It&apos;s where trust already lives.
+                For many of us, our faith community is where we turn first: to find a life partner for a son or
+                daughter, a job, a home in a new city, or simply people who share our values. It&apos;s where trust
+                already lives.
               </p>
               <p>
-                But that help is scattered across dozens of chat groups, notice boards, phone calls and word of
-                mouth. Important posts get buried under forwards. Newcomers don&apos;t know who to ask. And in open
-                groups there&apos;s little protection against spam, scams or abuse.
+                But that support is scattered across dozens of chat groups, notice boards at places of worship,
+                phone calls and word of mouth. Announcements get buried under forwards. Newcomers don&apos;t know who
+                to ask. And in open groups there&apos;s little protection against spam, scams or disrespect.
               </p>
               <p className="font-semibold text-[#201D1E]">
-                We asked a simple question: what if a community had one place of its own, built for the things
-                communities actually do together?
+                We asked a simple question: what if every faith community had a place of its own, built around the
+                things it does together?
               </p>
             </div>
           </div>
@@ -171,24 +172,24 @@ export default function LandingPage() {
               <span className="text-[#F7A8C8]">Our approach</span>
             </SectionLabel>
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight max-w-2xl leading-tight">
-              Start with the community, not the individual.
+              Built around your faith community, not a feed of strangers.
             </h2>
             <div className="mt-12 grid sm:grid-cols-3 gap-6">
               {[
                 {
                   icon: Users,
-                  title: "Community first",
-                  text: "You join the communities you belong to. Your feed, your services and your conversations are shaped by them, not by strangers or an algorithm.",
+                  title: "Your faith, your community",
+                  text: "Join the communities of your faith. Your feed, your services and your conversations come from them, not from strangers or an algorithm.",
                 },
                 {
                   icon: ShieldCheck,
-                  title: "Safe by default",
-                  text: "Every post, comment, photo and listing is checked before anyone else sees it, so the space stays respectful for every generation.",
+                  title: "Respectful by default",
+                  text: "Every post, comment, photo and listing is checked before anyone else sees it, so the space stays respectful of every belief and every generation.",
                 },
                 {
                   icon: Smartphone,
-                  title: "Made for the phone in your pocket",
-                  text: "Quick to learn, light on data, and ready to install like an app. Built for people who live on their phones, and those just getting started.",
+                  title: "Made for the whole family",
+                  text: "Quick to learn and light on data, for young people and elders alike. Install it like an app on any phone.",
                 },
               ].map((item) => (
                 <div key={item.title} className="rounded-2xl bg-white/5 border border-white/10 p-6">
@@ -209,17 +210,17 @@ export default function LandingPage() {
             <div className="max-w-2xl">
               <SectionLabel>What we built</SectionLabel>
               <h2 className="text-3xl sm:text-4xl font-bold tracking-tight leading-tight">
-                Everything your community does, in one app.
+                Everything your faith community does, in one app.
               </h2>
               <p className="mt-4 text-lg text-gray-600">
-                A shared feed for staying in touch, and community services for the moments that matter.
+                A shared feed to stay close, and community services for life&apos;s important moments.
               </p>
             </div>
 
             <div className="mt-12 grid md:grid-cols-3 gap-5">
               {[
-                { icon: Newspaper, title: "Community feed", text: "See posts from every community you've joined in one feed. Like, comment and reply in threads." },
-                { icon: Camera, title: "Photos and short videos", text: "Share a moment straight from your camera or gallery: a photo, or a video of up to 15 seconds." },
+                { icon: Newspaper, title: "Community feed", text: "Announcements, gatherings and everyday moments from every community you've joined, in one feed. Like, comment and reply." },
+                { icon: Camera, title: "Photos and short videos", text: "Share a festival, a celebration or a quiet moment straight from your camera or gallery: a photo, or a video of up to 15 seconds." },
                 { icon: Bell, title: "Notifications", text: "Know when someone replies to you or something needs your attention, on the web and on Android." },
               ].map((f) => (
                 <div key={f.title} className="rounded-2xl border border-gray-100 bg-gray-50/60 p-6">
@@ -251,8 +252,8 @@ export default function LandingPage() {
               <div>
                 <p className="font-semibold">Surveys that shape what comes next</p>
                 <p className="mt-1 text-gray-600 leading-relaxed">
-                  Members tell us, through short in-app surveys, what their community needs most. That&apos;s how we
-                  decide what to build next.
+                  Members tell us, through short in-app surveys, what their community needs most. That guides what
+                  we build next.
                 </p>
               </div>
             </div>
@@ -266,7 +267,7 @@ export default function LandingPage() {
           <div className="max-w-6xl mx-auto px-4 sm:px-6">
             <div className="text-center max-w-2xl mx-auto">
               <SectionLabel>Inside the app</SectionLabel>
-              <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">Simple enough for everyone at home.</h2>
+              <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">Simple enough for everyone in the family.</h2>
             </div>
             <div className="mt-14 grid sm:grid-cols-3 gap-10">
               {SCREENS.map((s) => (
@@ -287,10 +288,11 @@ export default function LandingPage() {
             <div>
               <SectionLabel>Keeping it safe</SectionLabel>
               <h2 className="text-3xl sm:text-4xl font-bold tracking-tight leading-tight">
-                A space your parents and your children can both use.
+                A respectful space for every faith and every generation.
               </h2>
               <p className="mt-5 text-lg text-gray-600 leading-relaxed">
-                Safety isn&apos;t an add-on. It runs through everything you share on WePray.
+                Faith is personal. WePray is built to keep conversations respectful, and safety runs through
+                everything you share.
               </p>
             </div>
             <ul className="space-y-6">
@@ -298,8 +300,8 @@ export default function LandingPage() {
                 { icon: ShieldCheck, title: "Checked before it's shared", text: "Posts, comments, photos, profiles and listings are reviewed by automated moderation before other members can see them." },
                 { icon: Languages, title: "Understands how we really write", text: "Moderation works across English, Hindi and Hinglish, not just English." },
                 { icon: UserCheck, title: "People make the final call", text: "Anything unclear is held for a human to review, and you can appeal a decision you think was wrong." },
-                { icon: Flag, title: "Report in one tap", text: "See something that doesn't belong? Report it and it goes straight to review." },
-                { icon: MessageCircle, title: "Community admins", text: "Each community has its own admins and moderators, who can set rules and keep conversations on track." },
+                { icon: Flag, title: "Report in one tap", text: "See something disrespectful or out of place? Report it and it goes straight to review." },
+                { icon: MessageCircle, title: "Community admins", text: "Each community has its own admins and moderators, who set its rules and keep conversations in its spirit." },
               ].map((item) => (
                 <li key={item.title} className="flex gap-4">
                   <div className="h-10 w-10 rounded-full bg-[#8B1A6B]/10 flex items-center justify-center flex-shrink-0">
@@ -327,8 +329,8 @@ export default function LandingPage() {
             <ol className="mt-14 grid md:grid-cols-3 gap-6">
               {[
                 { title: "Sign up", text: "Use your phone number with a one-time code, or continue with Google." },
-                { title: "Choose your communities", text: "Pick the communities you belong to. You can join more, or start your own, any time." },
-                { title: "Connect and find help", text: "Post, reply, and use community services for matches, jobs, homes, events and more." },
+                { title: "Choose your communities", text: "Join the communities of your faith. You can join more, or start one for your own group, any time." },
+                { title: "Connect and find support", text: "Share news, reply to others, and use community services for matches, jobs, homes, events and more." },
               ].map((step, i) => (
                 <li key={step.title} className="rounded-2xl bg-white p-7 shadow-sm">
                   <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#E8355A] text-sm font-bold text-white">
@@ -348,10 +350,10 @@ export default function LandingPage() {
           <Reveal>
           <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
             <SectionLabel>What&apos;s next</SectionLabel>
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">Growing with the communities we serve.</h2>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">Growing with the faith communities we serve.</h2>
             <p className="mt-5 text-lg text-gray-600 leading-relaxed">
-              Health Care and Legal Aid are on the way, and survey answers from members guide every new feature.
-              WePray is still early, and the communities using it help shape where it goes.
+              Health Care and Legal Aid are on the way, and member surveys guide every new feature. WePray is still
+              early, and the faith communities using it help shape where it goes.
             </p>
             <ul className="mt-8 inline-flex flex-col sm:flex-row gap-3 sm:gap-6 text-left text-gray-700">
               {["Health Care services", "Legal Aid services", "More ways to connect"].map((item) => (
@@ -368,9 +370,9 @@ export default function LandingPage() {
         <section className="px-4 sm:px-6 pb-20 md:pb-28">
           <Reveal>
           <div className="max-w-6xl mx-auto rounded-3xl bg-gradient-to-br from-[#8B1A6B] to-[#5E1148] px-6 py-14 md:py-20 text-center text-white">
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">Find your community on WePray.</h2>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">Find your faith community on WePray.</h2>
             <p className="mt-4 text-lg text-white/80 max-w-xl mx-auto">
-              Join the people you already trust, in a space built for them.
+              Join people who share your beliefs, in a space built with respect.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-3">
               <Link
