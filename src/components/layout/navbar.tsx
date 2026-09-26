@@ -124,9 +124,14 @@ export function Navbar() {
   const bottomNavRoutes = [
     { id: "home", href: "/", icon: Home, label: "Home" },
     { id: "feed", href: "/feed", icon: Newspaper, label: "Feed" },
-    { id: "communities", href: "/communities", icon: Users, label: "Communities" },
     { id: "create", href: "/posts/create", icon: PlusCircle, label: "Post" },
     { id: "profile", href: navUser?.username ? `/profile/${navUser.username}` : "/login", icon: User, label: "Profile" },
+  ];
+  // The drawer also links Communities, which isn't in the bottom bar.
+  const drawerRoutes = [
+    ...bottomNavRoutes.slice(0, 2),
+    { id: "communities", href: "/communities", icon: Users, label: "Communities" },
+    ...bottomNavRoutes.slice(2),
   ];
   const activeNavId = bottomNavRoutes.find((route) => route.href === pathname)?.id;
 
@@ -225,9 +230,7 @@ export function Navbar() {
             </div>
 
             <nav className="flex-1 overflow-y-auto py-2">
-              {/* Same destinations as the bottom nav, reusing its own
-                  route list. */}
-              {bottomNavRoutes.map((route) => (
+              {drawerRoutes.map((route) => (
                 <DrawerLink key={route.id} href={route.href} icon={route.icon} label={route.label} onNavigate={() => setMenuOpen(false)} />
               ))}
               <div className="my-2 border-t border-gray-100" />
