@@ -42,7 +42,7 @@ const SERVICES = [
   { icon: Store, label: "Businesses", desc: "Discover and support businesses run by members of your community." },
   { icon: Home, label: "Housing", desc: "Homes for sale or rent, listed by people from your community." },
   { icon: GraduationCap, label: "Education", desc: "Tuitions, classes and courses, from school subjects to classes on your traditions." },
-  { icon: Stethoscope, label: "Health Care", desc: "Coming soon", soon: true },
+  { icon: Stethoscope, label: "Health Care", desc: "Find doctors, clinics, pharmacies and labs listed by your community." },
   { icon: Scale, label: "Legal Aid", desc: "Coming soon", soon: true },
 ];
 
@@ -352,8 +352,8 @@ export default function LandingPage() {
             <SectionLabel>What&apos;s next</SectionLabel>
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">Growing with the faith communities we serve.</h2>
             <p className="mt-5 text-lg text-gray-600 leading-relaxed">
-              Health Care and Legal Aid are on the way, and member surveys guide every new feature. WePray is still
-              early, and the faith communities using it help shape where it goes.
+              Legal Aid is on the way, and member surveys guide every new feature. WePray is still early, and the
+              faith communities using it help shape where it goes.
             </p>
             <Link
               href="/survey"
@@ -363,7 +363,7 @@ export default function LandingPage() {
             </Link>
             <br />
             <ul className="mt-8 inline-flex flex-col sm:flex-row gap-3 sm:gap-6 text-left text-gray-700">
-              {["Health Care services", "Legal Aid services", "More ways to connect"].map((item) => (
+              {["Legal Aid services", "More ways to connect"].map((item) => (
                 <li key={item} className="flex items-center gap-2">
                   <Clock className="h-5 w-5 text-[#8B1A6B]" /> {item}
                 </li>

@@ -12,7 +12,8 @@ export type ContentType =
   | "event_listing"
   | "housing_listing"
   | "education_listing"
-  | "fundraiser";
+  | "fundraiser"
+  | "health_listing";
 
 export type ModerationDecision = "allow" | "hold_for_review" | "block";
 

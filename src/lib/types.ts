@@ -45,7 +45,8 @@ export type PostType =
   | "job_listing"
   | "event_listing"
   | "housing_listing"
-  | "education_listing";
+  | "education_listing"
+  | "health_listing";
 
 export interface Post {
   id: string;
@@ -67,6 +68,7 @@ export interface Post {
   event_listing_id: string | null;
   housing_listing_id: string | null;
   education_listing_id: string | null;
+  health_listing_id: string | null;
   profiles?: Profile;
   communities?: Community;
 }
@@ -83,6 +85,32 @@ export interface Fundraiser {
   moderation_status: ModerationStatus;
   created_at: string;
   communities?: { name: string; slug: string } | null;
+}
+
+export interface HealthListing {
+  id: string;
+  owner_id: string;
+  title: string;
+  provider_name: string | null;
+  provider_type: string | null;
+  specialty: string | null;
+  consultation_mode: "In-person" | "Online" | "Both";
+  fee: number | null;
+  fee_period: string | null;
+  timings: string | null;
+  address_line1: string | null;
+  city: string | null;
+  state: string | null;
+  pin_code: string | null;
+  description: string | null;
+  poc_name: string | null;
+  email: string | null;
+  mobile_number: string | null;
+  whatsapp_number: string | null;
+  photo_urls: string[];
+  moderation_status: ModerationStatus;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface EducationListing {

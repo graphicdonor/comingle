@@ -1,0 +1,57 @@
+import Link from "next/link";
+import { MapPin, IndianRupee, Clock, Video } from "lucide-react";
+import { Avatar } from "@/components/ui/avatar";
+import type { HealthListing } from "@/lib/types";
+
+export function formatHealthFee(listing: HealthListing) {
+  if (listing.fee === null || listing.fee === undefined) return null;
+  if (listing.fee === 0) return "Free";
+  const amount = `₹${listing.fee.toLocaleString("en-IN")}`;
+  return listing.fee_period ? `${amount} / ${listing.fee_period.toLowerCase()}` : amount;
+}
+
+export function HealthListingCard({ listing }: { listing: HealthListing }) {
+  const location = listing.consultation_mode === "Online" ? "Online consultations" : [listing.city, listing.state].filter(Boolean).join(", ");
+  const fee = formatHealthFee(listing);
+
+  return (
+    <Link
+      href={`/services/health/${listing.id}`}
+      className="bg-white rounded-2xl shadow-sm p-4 flex gap-3 hover:shadow-md transition-shadow"
+    >
+      <Avatar src={listing.photo_urls[0] ?? null} name={listing.title} size="lg" className="rounded-2xl" />
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-2">
+          <p className="font-semibold text-gray-900 truncate">{listing.title}</p>
+          {listing.provider_type && (
+            <span className="text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full flex-shrink-0">
+              {listing.provider_type}
+            </span>
+          )}
+        </div>
+        {listing.provider_name && <p className="text-xs text-gray-500 truncate">{listing.provider_name}</p>}
+        {listing.specialty && <p className="text-xs text-gray-400 mt-0.5">{listing.specialty}</p>}
+        {location && (
+          <p className="flex items-center gap-1 text-xs text-gray-400 mt-1.5">
+            {listing.consultation_mode === "Online" ? <Video className="w-3 h-3 flex-shrink-0" /> : <MapPin className="w-3 h-3 flex-shrink-0" />}
+            <span className="truncate">{location}</span>
+          </p>
+        )}
+        <div className="flex items-center gap-3 mt-1">
+          {fee && (
+            <p className="flex items-center gap-1 text-xs text-gray-400">
+              <IndianRupee className="w-3 h-3 flex-shrink-0" />
+              {fee}
+            </p>
+          )}
+          {listing.timings && (
+            <p className="flex items-center gap-1 text-xs text-gray-400 min-w-0">
+              <Clock className="w-3 h-3 flex-shrink-0" />
+              <span className="truncate">{listing.timings}</span>
+            </p>
+          )}
+        </div>
+      </div>
+    </Link>
+  );
+}

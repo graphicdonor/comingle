@@ -589,6 +589,14 @@ an optional companion post into a community feed via the shared
 above). Events additionally register `/services/events/register` as a
 protected route (`proxy.ts`) and get their own `event-photo` media kind.
 
+Health Care ("List a Health Service", `/services/health`) follows the
+Education pattern exactly: `health_listings` table, `src/lib/health.ts`
+(provider types, specialties, consultation mode In-person/Online/Both —
+Online clears address and PIN code), `/api/moderation/health-listings`,
+a `health_listing` companion feed post, and a `health-photo` media kind.
+Every health page shows `HEALTH_DISCLAIMER` (credentials aren't verified;
+call 108/112 in an emergency). Its register page is route-protected.
+
 Housing ("Post a Property") and Education ("Post a Class/Course") are the
 newest two and are reached from the home page's Housing and Education
 service tiles. Each has its own media kind (`housing-photo`,
