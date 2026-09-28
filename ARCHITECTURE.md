@@ -130,7 +130,10 @@ hosts (redirects are followed by hand and re-checked at every hop).
 `POST /api/moderation/fundraisers` inserts into `fundraisers` as the user
 (RLS forces `pending_review`), re-fetches the preview itself rather than
 trusting the client's image, and runs the full moderation pipeline on the
-title, note, description and image. `fundraisers` rows are unique per
+title, note, description and image. The og:image is served through a
+Cloudinary fetch URL (≤800px, auto format) via `optimiseRemoteImage`, and
+dropped if it's over Cloudinary's 10MB fetch limit — platform images can be
+huge. `fundraisers` rows are unique per
 community + URL. The native app's Donate tab mirrors this, using the same
 routes via Bearer auth.
 

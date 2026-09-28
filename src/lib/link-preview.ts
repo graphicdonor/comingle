@@ -96,3 +96,28 @@ export async function fetchLinkPreview(rawUrl: string): Promise<LinkPreview> {
   }
   return empty;
 }
+
+/** Cloudinary's fetch limit on the free plan — larger source images fail. */
+const MAX_REMOTE_IMAGE_BYTES = 10_000_000;
+
+/**
+ * Turns a platform's og:image into a small, optimised Cloudinary "fetch" URL
+ * (≤800px wide, auto format/quality) so a fundraiser card never makes
+ * someone download a multi-megabyte original (GoFundMe's can be 17MB+).
+ * Returns null for anything that isn't a reachable image under Cloudinary's
+ * size limit — the card then shows its placeholder instead.
+ */
+export async function optimiseRemoteImage(imageUrl: string | null): Promise<string | null> {
+  if (!imageUrl) return null;
+  const cloud = process.env.CLOUDINARY_CLOUD_NAME;
+  try {
+    const head = await fetch(imageUrl, { method: "HEAD", signal: AbortSignal.timeout(5000) });
+    if (!head.ok || !(head.headers.get("content-type") ?? "").startsWith("image/")) return null;
+    const size = Number(head.headers.get("content-length") ?? 0);
+    if (size > MAX_REMOTE_IMAGE_BYTES) return null;
+  } catch {
+    return null;
+  }
+  if (!cloud) return imageUrl;
+  return `https://res.cloudinary.com/${cloud}/image/fetch/f_auto,q_auto,c_limit,w_800/${encodeURIComponent(imageUrl)}`;
+}

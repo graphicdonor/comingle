@@ -4,7 +4,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { runModerationPipeline } from "@/lib/moderation";
 import { isCommunityMember } from "@/lib/community-feed-post";
 import { platformForUrl } from "@/lib/donations";
-import { fetchLinkPreview } from "@/lib/link-preview";
+import { fetchLinkPreview, optimiseRemoteImage } from "@/lib/link-preview";
 
 /** Share a fundraiser link to a community's Donate tab. Same shape as the
  * listing routes: the insert runs as the user (RLS forces pending_review),
@@ -38,6 +38,7 @@ export async function POST(req: NextRequest) {
   const title = (body.title?.trim() || preview.title || "").slice(0, 200);
   if (!title) return NextResponse.json({ error: "Add a title for this fundraiser" }, { status: 400 });
   const note = body.note?.trim().slice(0, 1000) || null;
+  const imageUrl = await optimiseRemoteImage(preview.imageUrl);
 
   const { data: row, error: insertError } = await supabase
     .from("fundraisers")
@@ -48,7 +49,7 @@ export async function POST(req: NextRequest) {
       platform: platform.id,
       title,
       note,
-      image_url: preview.imageUrl,
+      image_url: imageUrl,
       moderation_status: "pending_review",
     })
     .select("id")
@@ -65,7 +66,7 @@ export async function POST(req: NextRequest) {
       contentType: "fundraiser",
       userId: user.id,
       text: [title, note, preview.description].filter(Boolean).join("\n\n"),
-      imageUrls: preview.imageUrl ? [preview.imageUrl] : [],
+      imageUrls: imageUrl ? [imageUrl] : [],
       contextLink: "/donate",
     },
     row.id

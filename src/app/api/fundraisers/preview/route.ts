@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthedSupabase } from "@/lib/supabase/api-auth";
 import { platformForUrl } from "@/lib/donations";
-import { fetchLinkPreview } from "@/lib/link-preview";
+import { fetchLinkPreview, optimiseRemoteImage } from "@/lib/link-preview";
 
 /** Link preview for the "Share a fundraiser" form. Signed-in only, and only
  * for trusted donation-platform URLs (see lib/donations.ts), so this can't be
@@ -17,5 +17,6 @@ export async function POST(req: NextRequest) {
   }
 
   const preview = await fetchLinkPreview(url);
-  return NextResponse.json({ platform: { id: platform.id, name: platform.name }, ...preview });
+  const imageUrl = await optimiseRemoteImage(preview.imageUrl);
+  return NextResponse.json({ platform: { id: platform.id, name: platform.name }, ...preview, imageUrl });
 }
