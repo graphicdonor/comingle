@@ -118,6 +118,22 @@ If you're adding a redirect that immediately follows an async mutation and
 it seems to intermittently "just not fire," reach for this before assuming
 your own logic is wrong.
 
+### Donate tab (`/donate`)
+
+A bottom-nav tab listing trusted donation platforms (India and Global, from
+`src/lib/donations.ts`) and community fundraisers members have shared. WePray
+never handles money — every card links out to the platform itself. Members
+share a fundraiser at `/donate/share` (protected): only https links on one of
+the trusted platforms' hosts are accepted (`platformForUrl`), which also
+limits the server-side Open Graph fetch in `src/lib/link-preview.ts` to those
+hosts (redirects are followed by hand and re-checked at every hop).
+`POST /api/moderation/fundraisers` inserts into `fundraisers` as the user
+(RLS forces `pending_review`), re-fetches the preview itself rather than
+trusting the client's image, and runs the full moderation pipeline on the
+title, note, description and image. `fundraisers` rows are unique per
+community + URL. The native app's Donate tab mirrors this, using the same
+routes via Bearer auth.
+
 ### Landing page at `/`, app at `/app`
 
 `/` is a public landing page (`src/app/(marketing)/page.tsx`, no app

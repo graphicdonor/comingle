@@ -11,7 +11,8 @@ export type ContentType =
   | "comment"
   | "event_listing"
   | "housing_listing"
-  | "education_listing";
+  | "education_listing"
+  | "fundraiser";
 
 export type ModerationDecision = "allow" | "hold_for_review" | "block";
 

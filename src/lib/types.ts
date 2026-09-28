@@ -71,6 +71,20 @@ export interface Post {
   communities?: Community;
 }
 
+export interface Fundraiser {
+  id: string;
+  owner_id: string;
+  community_id: string;
+  url: string;
+  platform: string;
+  title: string;
+  note: string | null;
+  image_url: string | null;
+  moderation_status: ModerationStatus;
+  created_at: string;
+  communities?: { name: string; slug: string } | null;
+}
+
 export interface EducationListing {
   id: string;
   owner_id: string;

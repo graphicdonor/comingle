@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Home, Newspaper, Users, PlusCircle, User, LogOut, Menu, Bell, Settings, FileText, ShieldCheck, UserCog, X, type LucideIcon } from "lucide-react";
+import { Home, Newspaper, HandHeart, Users, PlusCircle, User, LogOut, Menu, Bell, Settings, FileText, ShieldCheck, UserCog, X, type LucideIcon } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useEffect, useState } from "react";
 import { Avatar } from "@/components/ui/avatar";
@@ -124,14 +124,15 @@ export function Navbar() {
   const bottomNavRoutes = [
     { id: "home", href: "/app", icon: Home, label: "Home" },
     { id: "feed", href: "/feed", icon: Newspaper, label: "Feed" },
+    { id: "donate", href: "/donate", icon: HandHeart, label: "Donate" },
     { id: "create", href: "/posts/create", icon: PlusCircle, label: "Post" },
     { id: "profile", href: navUser?.username ? `/profile/${navUser.username}` : "/login", icon: User, label: "Profile" },
   ];
   // The drawer also links Communities, which isn't in the bottom bar.
   const drawerRoutes = [
-    ...bottomNavRoutes.slice(0, 2),
+    ...bottomNavRoutes.slice(0, 3),
     { id: "communities", href: "/communities", icon: Users, label: "Communities" },
-    ...bottomNavRoutes.slice(2),
+    ...bottomNavRoutes.slice(3),
   ];
   const activeNavId = bottomNavRoutes.find((route) => route.href === pathname)?.id;
 
