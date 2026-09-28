@@ -795,6 +795,17 @@ enforced by a DB unique constraint and checked server-side before insert
 breakdown per question (option percentages, average rating) and every
 individual response with its respondent.
 
+**Public feedback survey (`/survey`).** Separate from the in-app surveys
+above: open to anyone, no account needed, linked from the landing page.
+Questions live in `src/lib/feedback-survey.ts` (`sanitizeFeedback` keeps
+only known question ids and allowed values). `POST /api/feedback` writes to
+`public_feedback` with the service-role client — the table has RLS on and
+no policies, so clients can't read or write it directly. Spam protection is
+a honeypot field plus a limit of 5 submissions per hour per SHA-256-hashed
+IP (the raw IP is never stored). If the submitter is signed in, the row is
+linked to their profile. Admins review responses, per-question summaries,
+and free-text suggestions at `/admin/feedback`, with a CSV download.
+
 ## Known gaps and inconsistencies
 
 Collected here so they're easy to find in one place rather than buried in

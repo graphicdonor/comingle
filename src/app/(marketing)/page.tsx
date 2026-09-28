@@ -355,6 +355,13 @@ export default function LandingPage() {
               Health Care and Legal Aid are on the way, and member surveys guide every new feature. WePray is still
               early, and the faith communities using it help shape where it goes.
             </p>
+            <Link
+              href="/survey"
+              className="mt-6 inline-flex items-center gap-2 font-semibold text-[#8B1A6B] hover:underline"
+            >
+              Tell us what your community needs <ArrowRight className="h-4 w-4" />
+            </Link>
+            <br />
             <ul className="mt-8 inline-flex flex-col sm:flex-row gap-3 sm:gap-6 text-left text-gray-700">
               {["Health Care services", "Legal Aid services", "More ways to connect"].map((item) => (
                 <li key={item} className="flex items-center gap-2">
@@ -402,6 +409,7 @@ export default function LandingPage() {
           <img src="/wepray-logo.svg" alt="WePray" className="h-6 w-auto" />
           <nav className="flex gap-6">
             <Link href="/app" className="hover:text-[#8B1A6B]">Open the app</Link>
+            <Link href="/survey" className="hover:text-[#8B1A6B]">Share feedback</Link>
             <Link href="/terms" className="hover:text-[#8B1A6B]">Terms</Link>
             <Link href="/privacy" className="hover:text-[#8B1A6B]">Privacy</Link>
           </nav>

@@ -9,6 +9,7 @@ const NAV_LINKS = [
   { href: "/admin/moderation", label: "Moderation" },
   { href: "/admin/communities", label: "Communities" },
   { href: "/admin/surveys", label: "Surveys" },
+  { href: "/admin/feedback", label: "Feedback" },
 ];
 
 export function AdminNav() {
