@@ -493,6 +493,7 @@ export default function LandingPage() {
             <Link href="/app" className="hover:text-[#8B1A6B]">Open the app</Link>
             <Link href="/donate" className="hover:text-[#8B1A6B]">Donate</Link>
             <Link href="/survey" className="hover:text-[#8B1A6B]">Share feedback</Link>
+            <Link href="/contact" className="hover:text-[#8B1A6B]">Contact</Link>
             <Link href="/terms" className="hover:text-[#8B1A6B]">Terms</Link>
             <Link href="/privacy" className="hover:text-[#8B1A6B]">Privacy</Link>
           </nav>

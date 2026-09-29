@@ -851,6 +851,18 @@ IP (the raw IP is never stored). If the submitter is signed in, the row is
 linked to their profile. Admins review responses, per-question summaries,
 and free-text suggestions at `/admin/feedback`, with a CSV download.
 
+
+### Terms, Privacy Policy and Contact us
+
+The Terms & Conditions and Privacy Policy text lives in
+`src/lib/legal-docs.ts` (rendered by `/terms` and `/privacy`); the native app
+mirrors it word for word in its `src/lib/legal.ts` — update both together.
+Both documents name the **Contact us** form (`/contact`, linked from Settings
+in both apps; `?topic=privacy` preselects a topic) as the way to reach us.
+`POST /api/contact` accepts messages signed in or not (honeypot + 5/hour per
+hashed IP) into `contact_messages` (service-role only, like
+`public_feedback`), and admins triage them at `/admin/contact` (Messages),
+marking each resolved or reopening it via `PATCH /api/admin/contact/[id]`.
 ## Known gaps and inconsistencies
 
 Collected here so they're easy to find in one place rather than buried in

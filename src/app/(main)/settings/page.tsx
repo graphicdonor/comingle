@@ -67,6 +67,17 @@ export default function SettingsPage() {
         )}
       </div>
 
+      {/* Help */}
+      <div className="bg-white rounded-3xl shadow-sm p-5 mb-4">
+        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Help</p>
+        <Link href="/contact" className="flex items-center justify-between py-2.5 text-sm text-gray-700 hover:text-gray-900">
+          Contact us <ChevronRight className="h-4 w-4 text-gray-300" />
+        </Link>
+        <Link href="/contact?topic=privacy" className="flex items-center justify-between py-2.5 text-sm text-gray-700 hover:text-gray-900">
+          Privacy or data request <ChevronRight className="h-4 w-4 text-gray-300" />
+        </Link>
+      </div>
+
       {/* Legal */}
       <div className="bg-white rounded-3xl shadow-sm p-5 mb-4">
         <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Legal</p>
