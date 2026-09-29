@@ -863,6 +863,23 @@ in both apps; `?topic=privacy` preselects a topic) as the way to reach us.
 hashed IP) into `contact_messages` (service-role only, like
 `public_feedback`), and admins triage them at `/admin/contact` (Messages),
 marking each resolved or reopening it via `PATCH /api/admin/contact/[id]`.
+
+### Blocking, reporting people, and Terms acceptance (Google Play UGC)
+
+Required by Google Play's user-generated-content policy (migration
+`ugc_safety`). **Blocking** is a `user_blocks` row; RESTRICTIVE RLS policies
+(ANDed onto the permissive ones) then hide the blocked person's posts,
+comments, notifications and matrimonial messages from the blocker, stop them
+commenting on the blocker's posts, and stop matrimonial contact both ways
+(`is_blocked_between`, SECURITY DEFINER). Because it's enforced in RLS, the
+SECURITY INVOKER `get_home_feed` and every other query are filtered with no
+app-side filtering — callers just refresh after blocking. **Reporting people
+or a comment** inserts into `user_reports` (post reports keep using
+`post_reports` and the moderation queue); admins triage at `/admin/reports`.
+**Terms acceptance** is `profiles.terms_accepted_at`: set by the signup
+checkbox, and `TermsGate` (web) / `TermsConsentScreen` (native) asks existing
+members once. `/delete-account` is the public account-deletion page Play
+requires in addition to Settings → Delete Account.
 ## Known gaps and inconsistencies
 
 Collected here so they're easy to find in one place rather than buried in
