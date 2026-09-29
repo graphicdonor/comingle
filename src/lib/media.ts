@@ -18,6 +18,7 @@ export const MEDIA_KINDS = {
   "housing-photo": "image",
   "education-photo": "image",
   "health-photo": "image",
+  "legal-photo": "image",
   "matrimonial-photo": "image",
 } as const;
 

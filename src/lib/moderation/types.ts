@@ -13,7 +13,8 @@ export type ContentType =
   | "housing_listing"
   | "education_listing"
   | "fundraiser"
-  | "health_listing";
+  | "health_listing"
+  | "legal_listing";
 
 export type ModerationDecision = "allow" | "hold_for_review" | "block";
 

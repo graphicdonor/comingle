@@ -20,6 +20,7 @@ const CONTENT_TABLE: Record<string, { table: string; idColumn: string }> = {
   education_listing: { table: "education_listings", idColumn: "id" },
   fundraiser: { table: "fundraisers", idColumn: "id" },
   health_listing: { table: "health_listings", idColumn: "id" },
+  legal_listing: { table: "legal_listings", idColumn: "id" },
 };
 
 // Matrimonial/business/job/event content can have a companion `posts` row
@@ -28,7 +29,7 @@ const CONTENT_TABLE: Record<string, { table: string; idColumn: string }> = {
 // too, not just the automated-moderation path.
 const COMPANION_POST_COLUMN: Record<
   string,
-  "matrimonial_profile_id" | "business_listing_id" | "job_listing_id" | "event_listing_id" | "housing_listing_id" | "education_listing_id" | "health_listing_id"
+  "matrimonial_profile_id" | "business_listing_id" | "job_listing_id" | "event_listing_id" | "housing_listing_id" | "education_listing_id" | "health_listing_id" | "legal_listing_id"
 > = {
   matrimonial_profile: "matrimonial_profile_id",
   business_listing: "business_listing_id",
@@ -37,6 +38,7 @@ const COMPANION_POST_COLUMN: Record<
   housing_listing: "housing_listing_id",
   education_listing: "education_listing_id",
   health_listing: "health_listing_id",
+  legal_listing: "legal_listing_id",
 };
 
 /** Approve or reject a held item. Route Handlers aren't covered by proxy.ts's /admin page guard (that only matches page paths, not /api/*), so the same admin-token cookie check happens here directly. */

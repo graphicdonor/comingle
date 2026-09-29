@@ -606,6 +606,14 @@ a `health_listing` companion feed post, and a `health-photo` media kind.
 Every health page shows `HEALTH_DISCLAIMER` (credentials aren't verified;
 call 108/112 in an emergency). Its register page is route-protected.
 
+Legal Aid ("List a Legal Service", `/services/legal`) is the same again,
+copied from Health Care with `practice_area` in place of `specialty`:
+`legal_listings`, `src/lib/legal.ts` (in the native app `src/lib/legal-aid.ts`,
+since `legal.ts` there holds the Terms/Privacy text), `/api/moderation/legal-listings`,
+a `legal_listing` companion feed post and a `legal-photo` media kind. Every
+page shows `LEGAL_DISCLAIMER` (credentials aren't verified, listings aren't
+legal advice, NALSA helpline 15100). A fee of 0 displays as "Free".
+
 Housing ("Post a Property") and Education ("Post a Class/Course") are the
 newest two and are reached from the home page's Housing and Education
 service tiles. Each has its own media kind (`housing-photo`,

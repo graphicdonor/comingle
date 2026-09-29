@@ -43,7 +43,7 @@ const SERVICES = [
   { icon: Home, label: "Housing", desc: "Homes for sale or rent, listed by people from your community." },
   { icon: GraduationCap, label: "Education", desc: "Tuitions, classes and courses, from school subjects to classes on your traditions." },
   { icon: Stethoscope, label: "Health Care", desc: "Find doctors, clinics, pharmacies and labs listed by your community." },
-  { icon: Scale, label: "Legal Aid", desc: "Coming soon", soon: true },
+  { icon: Scale, label: "Legal Aid", desc: "Advocates, legal aid clinics and help with documents, from your community." },
 ];
 
 const SCREENS = [
@@ -236,13 +236,10 @@ export default function LandingPage() {
             <h3 className="mt-16 text-xl font-bold">Community services</h3>
             <div className="mt-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {SERVICES.map((s) => (
-                <div
-                  key={s.label}
-                  className={`rounded-2xl border p-5 ${s.soon ? "border-dashed border-gray-200 bg-white" : "border-gray-100 bg-white shadow-sm"}`}
-                >
-                  <s.icon className={`h-6 w-6 ${s.soon ? "text-gray-400" : "text-[#E8355A]"}`} />
+                <div key={s.label} className="rounded-2xl border border-gray-100 bg-white shadow-sm p-5">
+                  <s.icon className="h-6 w-6 text-[#E8355A]" />
                   <p className="mt-3 font-semibold">{s.label}</p>
-                  <p className={`mt-1 text-sm leading-relaxed ${s.soon ? "text-gray-400 italic" : "text-gray-600"}`}>{s.desc}</p>
+                  <p className="mt-1 text-sm leading-relaxed text-gray-600">{s.desc}</p>
                 </div>
               ))}
             </div>
@@ -352,8 +349,8 @@ export default function LandingPage() {
             <SectionLabel>What&apos;s next</SectionLabel>
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">Growing with the faith communities we serve.</h2>
             <p className="mt-5 text-lg text-gray-600 leading-relaxed">
-              Legal Aid is on the way, and member surveys guide every new feature. WePray is still early, and the
-              faith communities using it help shape where it goes.
+              Member surveys guide every new feature. WePray is still early, and the faith communities using it help
+              shape where it goes next.
             </p>
             <Link
               href="/survey"
@@ -363,7 +360,7 @@ export default function LandingPage() {
             </Link>
             <br />
             <ul className="mt-8 inline-flex flex-col sm:flex-row gap-3 sm:gap-6 text-left text-gray-700">
-              {["Legal Aid services", "More ways to connect"].map((item) => (
+              {["More community services", "More ways to give and connect"].map((item) => (
                 <li key={item} className="flex items-center gap-2">
                   <Clock className="h-5 w-5 text-[#8B1A6B]" /> {item}
                 </li>
