@@ -72,6 +72,29 @@ export default async function DeleteAccountPage() {
           </p>
         </div>
       </div>
+
+      <div id="delete-some-data" className="bg-white rounded-3xl shadow-sm p-6 space-y-4 text-sm text-gray-600 leading-relaxed scroll-mt-20">
+        <div>
+          <h2 className="font-semibold text-gray-900 mb-1">Delete some of your data and keep your account</h2>
+          <p>You can remove individual pieces of your WePray data yourself, in the app or on the website:</p>
+          <ul className="list-disc pl-5 mt-2 space-y-1">
+            <li><strong>Posts:</strong> open your post, tap the menu (⋯) and choose Delete.</li>
+            <li><strong>Comments:</strong> on the website, open the comment&apos;s menu (⋯) and choose Delete.</li>
+            <li><strong>Matrimonial profile:</strong> open Matrimonial, go to your profile and delete it.</li>
+            <li><strong>Profile photo, bio and details:</strong> go to Profile, then Edit profile, and clear or change them.</li>
+            <li><strong>Community memberships:</strong> open the community and choose Leave.</li>
+          </ul>
+        </div>
+        <div>
+          <h2 className="font-semibold text-gray-900 mb-1">Anything else</h2>
+          <p>
+            To have other data deleted, such as a listing, a fundraiser, your phone number, email or activity history, send a request through our{" "}
+            <Link href="/contact?topic=privacy" className="font-semibold text-[#8B1A6B] hover:underline">Contact us form</Link>{" "}
+            (choose &quot;Privacy or data request&quot;) and tell us what you want removed. Deleted items are removed from
+            WePray straight away; uploaded photo and video files and backups may take longer to be fully removed.
+          </p>
+        </div>
+      </div>
     </div>
   );
 }
