@@ -5,6 +5,7 @@ import { MapPin, Calendar, Users, Pencil } from "lucide-react";
 import Link from "next/link";
 import { ProfilePostsGrid } from "@/components/profile/profile-posts-grid";
 import { CommunityCard } from "@/components/community/community-card";
+import { MAX_COMMUNITIES } from "@/lib/community";
 
 const DEV_MODE = process.env.NEXT_PUBLIC_DEV_MODE === "true";
 
@@ -88,10 +89,10 @@ function ProfileView({
                 <p className="text-lg font-bold text-gray-900">{posts.length}</p>
                 <p className="text-[10px] text-gray-400 uppercase tracking-wide">Posts</p>
               </div>
-              <div>
+              <Link href={isOwn ? "/communities" : "#communities"} className="block">
                 <p className="text-lg font-bold text-gray-900">{communities.length}</p>
                 <p className="text-[10px] text-gray-400 uppercase tracking-wide">Communities</p>
-              </div>
+              </Link>
             </div>
           </div>
 
@@ -129,16 +130,18 @@ function ProfileView({
       </div>
 
       {/* Communities */}
-      <section className="mb-5">
+      <section id="communities" className="mb-5 scroll-mt-20">
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-base font-bold text-gray-900 flex items-center gap-2">
             <Users className="w-4 h-4 text-[#8B1A6B]" />
             Communities
-            <span className="text-sm font-normal text-gray-400">({communities.length})</span>
+            <span className="text-sm font-normal text-gray-400">
+              ({isOwn ? `${communities.length} of ${MAX_COMMUNITIES}` : communities.length})
+            </span>
           </h2>
           {isOwn && (
             <Link href="/communities" className="text-xs text-[#8B1A6B] font-semibold hover:underline">
-              Browse →
+              Explore →
             </Link>
           )}
         </div>
