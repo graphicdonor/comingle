@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { CalendarDays, MapPin, Video } from "lucide-react";
+import { CalendarDays, MapPin, Tag, Video } from "lucide-react";
 import { eventDateParts, formatEventTime } from "@/lib/event";
 import type { EventListing } from "@/lib/types";
 
@@ -27,42 +27,49 @@ export function UpcomingEvents({ events }: { events: EventListing[] }) {
           </div>
         </Link>
       ) : (
-        <div className="flex gap-3 overflow-x-auto pb-1 -mx-4 px-4">
+        <div className="flex gap-3.5 overflow-x-auto py-1.5 -mx-4 px-4">
           {events.map((e) => {
-            const { day, month, weekday } = eventDateParts(e.event_date);
+            const { day, month } = eventDateParts(e.event_date);
             const time = formatEventTime(e.start_time);
-            const place = e.is_online ? "Online" : [e.venue_name, e.city].filter(Boolean).join(", ");
+            const place = e.is_online ? "Online" : e.city || e.venue_name;
+            const tagLine = [e.categories[0], time].filter(Boolean).join(" · ");
             return (
               <Link
                 key={e.id}
                 href={`/services/events/${e.id}`}
-                className="flex-shrink-0 w-64 bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+                className="flex-shrink-0 w-72 bg-white rounded-3xl p-2.5 shadow-[0_4px_16px_rgba(139,26,107,0.08)] hover:shadow-[0_6px_20px_rgba(139,26,107,0.14)] transition-shadow"
               >
-                <div className="relative h-32 bg-lime-50">
+                <div className="relative h-40 rounded-[18px] overflow-hidden bg-lime-50 shadow-[0_8px_18px_rgba(0,0,0,0.18)]">
                   {e.photo_urls[0] ? (
-                    <Image src={e.photo_urls[0]} alt="" fill sizes="256px" className="object-cover" />
+                    <Image src={e.photo_urls[0]} alt="" fill sizes="288px" className="object-cover" />
                   ) : (
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <CalendarDays className="h-8 w-8 text-lime-600" />
+                      <CalendarDays className="h-9 w-9 text-lime-600" />
                     </div>
                   )}
-                  <div className="absolute top-2.5 left-2.5 bg-white rounded-xl px-2.5 py-1 text-center min-w-[46px] shadow-sm">
-                    <p className="text-[10px] font-bold uppercase text-[#E8355A] leading-none">{month}</p>
-                    <p className="text-lg font-extrabold text-gray-900 leading-tight">{day}</p>
-                  </div>
                 </div>
-                <div className="p-3">
-                  <p className="font-bold text-sm text-gray-900 leading-snug line-clamp-2">{e.title}</p>
-                  <p className="mt-1 text-xs font-semibold text-[#8B1A6B]">
-                    {weekday}
-                    {time ? ` · ${time}` : ""}
-                  </p>
-                  {place && (
-                    <p className="mt-1 flex items-center gap-1 text-xs text-gray-500">
-                      {e.is_online ? <Video className="h-3 w-3 flex-shrink-0" /> : <MapPin className="h-3 w-3 flex-shrink-0" />}
-                      <span className="truncate">{place}</span>
-                    </p>
-                  )}
+                <div className="flex pt-3.5 pb-1.5 px-1">
+                  <div className="w-14 flex-shrink-0 text-center text-[#8B1A6B]">
+                    <p className="text-[15px] font-medium tracking-wider leading-none mt-0.5">{month.toUpperCase()}</p>
+                    <p className="text-[32px] font-extrabold leading-9">{day}</p>
+                  </div>
+                  <div className="w-px bg-[#E5D3DF] mx-2.5 flex-shrink-0" />
+                  <div className="min-w-0 flex-1 space-y-0.5">
+                    {place && (
+                      <p className="flex items-center gap-1 text-xs text-gray-500">
+                        {e.is_online ? <Video className="h-3.5 w-3.5 flex-shrink-0" /> : <MapPin className="h-3.5 w-3.5 flex-shrink-0" />}
+                        <span className="truncate">{place}</span>
+                      </p>
+                    )}
+                    <p className="font-extrabold text-base text-gray-900 leading-5 line-clamp-2">{e.title}</p>
+                    {e.description && <p className="text-xs text-gray-500 leading-4 line-clamp-2">{e.description}</p>}
+                    {tagLine && (
+                      <p className="flex items-center gap-1.5 pt-1 text-[11px] font-semibold text-gray-500">
+                        <Tag className="h-3 w-3 flex-shrink-0" />
+                        <span className="truncate">{tagLine}</span>
+                      </p>
+                    )}
+                  </div>
                 </div>
               </Link>
             );
