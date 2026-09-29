@@ -8,12 +8,14 @@ import { cn } from "@/lib/utils";
 import { DEV_MODE } from "@/lib/dev-auth";
 import { DEV_COMMUNITIES } from "@/lib/dev-data";
 import type { Community } from "@/lib/types";
-import { MAX_COMMUNITIES } from "@/lib/community";
+import { COMMUNITY_LIMIT_DIALOG, MAX_COMMUNITIES, isCommunityLimitError } from "@/lib/community";
+import { useDialog } from "@/components/ui/dialog";
 
 export default function SelectCommunitiesPage() {
   const [communities, setCommunities] = useState<Community[]>(DEV_MODE ? DEV_COMMUNITIES : []);
   const [fetching, setFetching] = useState(!DEV_MODE);
   const [selected, setSelected] = useState<Set<string>>(new Set());
+  const dialog = useDialog();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -33,7 +35,11 @@ export default function SelectCommunitiesPage() {
 
   const toggle = (id: string) => {
     if (!selected.has(id) && selected.size >= MAX_COMMUNITIES) {
-      setError(`You can choose up to ${MAX_COMMUNITIES} communities.`);
+      dialog.show({
+        variant: "warning",
+        title: `Up to ${MAX_COMMUNITIES} communities`,
+        message: `You can choose up to ${MAX_COMMUNITIES} communities. Unselect one to pick another — you can change them any time later.`,
+      });
       return;
     }
     setError("");
@@ -60,7 +66,8 @@ export default function SelectCommunitiesPage() {
           .from("community_members")
           .upsert(memberships, { onConflict: "community_id,user_id" });
         if (joinError) {
-          setError(joinError.message);
+          if (isCommunityLimitError(joinError)) dialog.show(COMMUNITY_LIMIT_DIALOG);
+          else setError(joinError.message);
           setLoading(false);
           return;
         }

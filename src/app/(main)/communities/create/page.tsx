@@ -8,7 +8,8 @@ import { Avatar } from "@/components/ui/avatar";
 import { createClient } from "@/lib/supabase/client";
 import { ChevronLeft, Camera } from "lucide-react";
 import { uploadMedia } from "@/lib/media";
-import { COMMUNITY_LIMIT_MESSAGE, MAX_COMMUNITIES } from "@/lib/community";
+import { COMMUNITY_LIMIT_DIALOG, MAX_COMMUNITIES } from "@/lib/community";
+import { useDialog } from "@/components/ui/dialog";
 
 export default function CreateCommunityPage() {
   const [form, setForm] = useState({ name: "", description: "" });
@@ -17,6 +18,7 @@ export default function CreateCommunityPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const dialog = useDialog();
   const supabase = createClient();
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -51,7 +53,13 @@ export default function CreateCommunityPage() {
       .from("community_members")
       .select("community_id", { count: "exact", head: true })
       .eq("user_id", user.id);
-    if ((joinedCount ?? 0) >= MAX_COMMUNITIES) { setError(COMMUNITY_LIMIT_MESSAGE); return; }
+    if ((joinedCount ?? 0) >= MAX_COMMUNITIES) {
+      dialog.show({
+        ...COMMUNITY_LIMIT_DIALOG,
+        message: `You're already in ${MAX_COMMUNITIES} communities, and creating one adds you as its admin. Leave a community first to create a new one.`,
+      });
+      return;
+    }
 
     setLoading(true);
 

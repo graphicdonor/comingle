@@ -5,6 +5,7 @@ import { ServiceWorkerRegister } from "@/components/pwa/sw-register";
 import { InstallPrompt } from "@/components/pwa/install-prompt";
 import { SplashScreen } from "@/components/splash/splash-screen";
 import { SITE_URL } from "@/lib/site-url";
+import { DialogProvider } from "@/components/ui/dialog";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -57,7 +58,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className={inter.className}>
-        {children}
+        <DialogProvider>{children}</DialogProvider>
         <SplashScreen />
         <ServiceWorkerRegister />
         <InstallPrompt />

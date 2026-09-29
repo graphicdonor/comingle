@@ -3,6 +3,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
+import { useDialog } from "@/components/ui/dialog";
+import { COMMUNITY_LIMIT_DIALOG, isCommunityLimitError } from "@/lib/community";
 
 interface JoinButtonProps {
   communityId: string;
@@ -14,6 +16,7 @@ export function JoinButton({ communityId, isMember: initialIsMember }: JoinButto
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
+  const dialog = useDialog();
   const supabase = createClient();
 
   const handleClick = async () => {
@@ -41,7 +44,11 @@ export function JoinButton({ communityId, isMember: initialIsMember }: JoinButto
           user_id: user.id,
           role: "member",
         });
-        if (insertError) { setError(insertError.message); return; }
+        if (insertError) {
+          if (isCommunityLimitError(insertError)) dialog.show(COMMUNITY_LIMIT_DIALOG);
+          else setError(insertError.message);
+          return;
+        }
         await supabase.rpc("increment_member_count", { community_id: communityId });
         setIsMember(true);
       }
