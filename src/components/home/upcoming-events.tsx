@@ -39,7 +39,7 @@ export function UpcomingEvents({ events }: { events: EventListing[] }) {
                 href={`/services/events/${e.id}`}
                 className="flex-shrink-0 w-72 bg-white rounded-3xl p-2.5 shadow-[0_4px_16px_rgba(139,26,107,0.08)] hover:shadow-[0_6px_20px_rgba(139,26,107,0.14)] transition-shadow"
               >
-                <div className="relative h-40 rounded-[18px] overflow-hidden bg-lime-50 shadow-[0_8px_18px_rgba(0,0,0,0.18)]">
+                <div className="relative h-40 rounded-[18px] overflow-hidden bg-lime-50">
                   {e.photo_urls[0] ? (
                     <Image src={e.photo_urls[0]} alt="" fill sizes="288px" className="object-cover" />
                   ) : (
