@@ -48,3 +48,28 @@ export function sanitizeEventListingBody(body: EventListingBody) {
 export function eventListingModerationText(body: EventListingBody) {
   return [body.title, body.description, body.venue_name, body.categories?.join(", ")].filter(Boolean).join("\n\n");
 }
+
+/** Today's date as YYYY-MM-DD in India time — event_date is a plain date and
+ * the server may run in UTC. Mirrors todayIsoDate in the native app. */
+export function todayIsoDate(): string {
+  return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Kolkata" }).format(new Date());
+}
+
+/** Splits a YYYY-MM-DD event date into calendar-badge parts without timezone drift. */
+export function eventDateParts(isoDate: string): { day: string; month: string; weekday: string } {
+  const [y, m, d] = isoDate.split("-").map(Number);
+  const date = new Date(Date.UTC(y, m - 1, d));
+  return {
+    day: String(d),
+    month: date.toLocaleDateString("en-IN", { month: "short", timeZone: "UTC" }),
+    weekday: date.toLocaleDateString("en-IN", { weekday: "short", timeZone: "UTC" }),
+  };
+}
+
+/** "18:30:00" → "6:30 PM". */
+export function formatEventTime(time: string | null): string | null {
+  if (!time) return null;
+  const [h, m] = time.split(":").map(Number);
+  if (Number.isNaN(h)) return null;
+  return `${((h + 11) % 12) + 1}:${String(m || 0).padStart(2, "0")} ${h < 12 ? "AM" : "PM"}`;
+}

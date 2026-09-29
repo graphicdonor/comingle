@@ -1,5 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
-import type { Profile } from "@/lib/types";
+import type { EventListing, Profile } from "@/lib/types";
+import { todayIsoDate } from "@/lib/event";
+import { UpcomingEvents } from "@/components/home/upcoming-events";
 import { SURVEYS } from "@/lib/surveys";
 import { COMMUNITY_SERVICES } from "@/lib/community-services";
 import Link from "next/link";
@@ -12,6 +14,17 @@ export default async function HomePage() {
 
   let profile: Profile | null = null;
   let submittedSurveyIds: Set<number> = new Set();
+
+  // Events are a public directory, so they show whether or not you're signed in.
+  const { data: eventRows } = await supabase
+    .from("events")
+    .select("*")
+    .eq("moderation_status", "published")
+    .gte("event_date", todayIsoDate())
+    .order("event_date", { ascending: true })
+    .order("start_time", { ascending: true, nullsFirst: true })
+    .limit(10);
+  const upcomingEvents = (eventRows ?? []) as EventListing[];
 
   if (user) {
     const [{ data: p }, { data: surveyResponses }] = await Promise.all([
@@ -41,6 +54,8 @@ export default async function HomePage() {
           ))}
         </div>
       </section>
+
+      <UpcomingEvents events={upcomingEvents} />
 
       {/* Surveys */}
       <section className="mb-6">
