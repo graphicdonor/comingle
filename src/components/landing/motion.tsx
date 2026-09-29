@@ -1,6 +1,6 @@
 "use client";
 import { motion, useReducedMotion } from "framer-motion";
-import { Briefcase, CalendarDays, GraduationCap, Heart, Home, MessageCircle, Store, type LucideIcon } from "lucide-react";
+import { Briefcase, CalendarDays, Heart, Home, MessageCircle, type LucideIcon } from "lucide-react";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -43,12 +43,10 @@ export function HeroBlobs() {
 }
 
 const ORBIT: { icon: LucideIcon; label: string; className: string; tint: string; delay: number }[] = [
-  { icon: Heart, label: "Matrimonial", className: "left-[-6%] top-[12%]", tint: "bg-rose-100 text-rose-500", delay: 0 },
-  { icon: Briefcase, label: "Jobs", className: "right-[-8%] top-[6%]", tint: "bg-sky-100 text-sky-600", delay: 0.6 },
-  { icon: CalendarDays, label: "Events", className: "left-[-10%] top-[46%]", tint: "bg-lime-100 text-lime-700", delay: 1.2 },
-  { icon: Store, label: "Businesses", className: "right-[-10%] top-[40%]", tint: "bg-indigo-100 text-indigo-500", delay: 0.3 },
-  { icon: Home, label: "Housing", className: "left-[-4%] bottom-[10%]", tint: "bg-orange-100 text-orange-500", delay: 0.9 },
-  { icon: GraduationCap, label: "Education", className: "right-[-5%] bottom-[16%]", tint: "bg-amber-100 text-amber-600", delay: 1.5 },
+  { icon: Heart, label: "Matrimonial", className: "left-[-4%] top-[20%]", tint: "bg-rose-100 text-rose-500", delay: 0 },
+  { icon: Briefcase, label: "Jobs", className: "right-[-2%] top-[30%]", tint: "bg-sky-100 text-sky-600", delay: 0.6 },
+  { icon: CalendarDays, label: "Events", className: "left-[-6%] top-[62%]", tint: "bg-lime-100 text-lime-700", delay: 1.2 },
+  { icon: Home, label: "Housing", className: "right-[-4%] top-[72%]", tint: "bg-orange-100 text-orange-500", delay: 0.9 },
 ];
 
 /** The hero phone, floating gently, with community-service chips bobbing
@@ -56,7 +54,7 @@ const ORBIT: { icon: LucideIcon; label: string; className: string; tint: string;
 export function HeroPhone({ children }: { children: React.ReactNode }) {
   const reduce = useReducedMotion();
   return (
-    <div className="relative mx-auto w-full max-w-[340px] py-6">
+    <div className="relative mx-auto w-full max-w-[460px] py-10">
       <motion.div
         initial={reduce ? false : { opacity: 0, y: 40, rotate: -2 }}
         animate={{ opacity: 1, y: 0, rotate: 0 }}
@@ -92,7 +90,7 @@ export function HeroPhone({ children }: { children: React.ReactNode }) {
 
       <motion.div
         aria-hidden
-        className="absolute left-1/2 top-[58%] -translate-x-1/2 flex items-center gap-2 rounded-full bg-[#1E2952] px-3.5 py-2 text-xs font-semibold text-white shadow-xl"
+        className="absolute left-1/2 top-0 -translate-x-1/2 flex items-center gap-2 rounded-full bg-[#1E2952] px-3.5 py-2 text-xs font-semibold text-white shadow-xl"
         initial={reduce ? false : { opacity: 0, y: 16, scale: 0.9 }}
         animate={reduce ? { opacity: 1 } : { opacity: [0, 1, 1, 0], y: [16, 0, 0, -8], scale: [0.9, 1, 1, 0.96] }}
         transition={reduce ? undefined : { duration: 5, times: [0, 0.12, 0.8, 1], repeat: Infinity, repeatDelay: 1.5, delay: 2 }}
