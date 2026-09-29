@@ -23,7 +23,7 @@ export function UpcomingEvents({ events }: { events: EventListing[] }) {
           <CalendarDays className="h-6 w-6 text-[#8B1A6B] flex-shrink-0" />
           <div>
             <p className="text-sm font-bold text-gray-900">No upcoming events yet</p>
-            <p className="text-xs text-gray-500 mt-0.5">Organising a festival, satsang or gathering? Post it for your community.</p>
+            <p className="text-xs text-gray-500 mt-0.5">Organising a festival, prayer meeting or gathering? Post it for your community.</p>
           </div>
         </Link>
       ) : (
