@@ -19,7 +19,7 @@ export function UpcomingEvents({ events }: { events: EventListing[] }) {
       </div>
 
       {events.length === 0 ? (
-        <Link href="/services/events/register" className="flex items-center gap-3 bg-white rounded-2xl p-4 shadow-sm hover:shadow-md transition-shadow">
+        <Link href="/services/events/register" className="flex items-center gap-3 bg-white rounded-2xl p-4">
           <CalendarDays className="h-6 w-6 text-[#8B1A6B] flex-shrink-0" />
           <div>
             <p className="text-sm font-bold text-gray-900">No upcoming events yet</p>
@@ -37,7 +37,7 @@ export function UpcomingEvents({ events }: { events: EventListing[] }) {
               <Link
                 key={e.id}
                 href={`/services/events/${e.id}`}
-                className="flex-shrink-0 w-72 bg-white rounded-3xl overflow-hidden shadow-[0_4px_16px_rgba(139,26,107,0.08)] hover:shadow-[0_6px_20px_rgba(139,26,107,0.14)] transition-shadow"
+                className="flex-shrink-0 w-72 bg-white rounded-3xl overflow-hidden"
               >
                 <div className="relative h-40 bg-lime-50">
                   {e.photo_urls[0] ? (
