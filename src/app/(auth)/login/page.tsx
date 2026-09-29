@@ -95,6 +95,12 @@ export default function LoginPage() {
           <GoogleButton mode="signin" />
         </div>
 
+        <p className="text-center text-[11px] text-gray-400 mt-4 leading-relaxed">
+          By continuing, you agree to our{" "}
+          <Link href="/terms" className="underline hover:text-gray-600">Terms &amp; Conditions</Link> and{" "}
+          <Link href="/privacy" className="underline hover:text-gray-600">Privacy Policy</Link>.
+        </p>
+
         <p className="text-center text-sm text-gray-600 mt-4">
           Don&apos;t have an account?{" "}
           <Link href="/signup" className="text-[#E8355A] font-semibold hover:underline">Sign up</Link>

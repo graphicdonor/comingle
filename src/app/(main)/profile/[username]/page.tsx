@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ProfilePostsGrid } from "@/components/profile/profile-posts-grid";
 import { CommunityCard } from "@/components/community/community-card";
 import { MAX_COMMUNITIES } from "@/lib/community";
+import { ProfileSafetyActions } from "@/components/safety/profile-safety-actions";
 
 const DEV_MODE = process.env.NEXT_PUBLIC_DEV_MODE === "true";
 
@@ -47,7 +48,27 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
   communities = (memberships ?? []).map((m) => m.communities as unknown as Community).filter(Boolean);
   userPosts = (posts ?? []) as Post[];
 
-  return <ProfileView profile={profile} communities={communities} posts={userPosts} isOwn={isOwn} />;
+  let isBlocked = false;
+  if (currentUser && !isOwn) {
+    const { data: block } = await supabase
+      .from("user_blocks")
+      .select("blocked_id")
+      .eq("blocker_id", currentUser.id)
+      .eq("blocked_id", profile.id)
+      .maybeSingle();
+    isBlocked = !!block;
+  }
+
+  return (
+    <ProfileView
+      profile={profile}
+      communities={communities}
+      posts={userPosts}
+      isOwn={isOwn}
+      viewerId={currentUser?.id ?? null}
+      isBlocked={isBlocked}
+    />
+  );
 }
 
 function ProfileView({
@@ -55,11 +76,15 @@ function ProfileView({
   communities,
   posts,
   isOwn,
+  viewerId = null,
+  isBlocked = false,
 }: {
   profile: Profile;
   communities: Community[];
   posts: Post[];
   isOwn: boolean;
+  viewerId?: string | null;
+  isBlocked?: boolean;
 }) {
   const name = p.full_name || p.username;
 
@@ -77,6 +102,11 @@ function ProfileView({
               <Pencil className="w-3 h-3" />
               Edit Profile
             </Link>
+          )}
+          {!isOwn && viewerId && (
+            <div className="absolute top-3 right-3 bg-white/80 backdrop-blur-sm rounded-full p-1 shadow-sm">
+              <ProfileSafetyActions me={viewerId} userId={p.id} name={p.full_name || p.username} initiallyBlocked={isBlocked} />
+            </div>
           )}
         </div>
 

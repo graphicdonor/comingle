@@ -7,6 +7,7 @@ import { Avatar } from "@/components/ui/avatar";
 import { DEV_MODE, getDevProfile, clearDevSession } from "@/lib/dev-auth";
 import { createClient } from "@/lib/supabase/client";
 import { DeleteAccountButton } from "@/components/settings/delete-account-button";
+import { BlockedUsersList } from "@/components/safety/blocked-users-list";
 
 interface SettingsProfile {
   username: string;
@@ -17,6 +18,7 @@ interface SettingsProfile {
 export default function SettingsPage() {
   const router = useRouter();
   const [profile, setProfile] = useState<SettingsProfile | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
     if (DEV_MODE) {
@@ -32,6 +34,7 @@ export default function SettingsPage() {
       const { data: p } = await supabase
         .from("profiles").select("username, full_name, avatar_url").eq("id", data.user.id).single();
       if (!p) { router.push("/signup-details"); return; }
+      setUserId(data.user.id);
       setProfile(p);
     });
   }, []);
@@ -66,6 +69,14 @@ export default function SettingsPage() {
           </Link>
         )}
       </div>
+
+      {/* Blocked users */}
+      {userId && (
+        <div className="bg-white rounded-3xl shadow-sm p-5 mb-4">
+          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Blocked users</p>
+          <BlockedUsersList me={userId} />
+        </div>
+      )}
 
       {/* Help */}
       <div className="bg-white rounded-3xl shadow-sm p-5 mb-4">

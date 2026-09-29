@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AnimatePresence } from "framer-motion";
-import { Flag, Heart, MessageCircle, MoreVertical, Play, Trash2 } from "lucide-react";
+import { Ban, Flag, Heart, MessageCircle, MoreVertical, Play, Trash2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import type { Post } from "@/lib/types";
 import { Avatar } from "@/components/ui/avatar";
@@ -13,6 +13,8 @@ import { ModerationStatusNotice } from "@/components/moderation/moderation-statu
 import { ImagePreviewModal } from "@/components/post/image-preview-modal";
 import { PostComments } from "@/components/post/post-comments";
 import { ReportPostModal } from "@/components/post/report-post-modal";
+import { useDialog } from "@/components/ui/dialog";
+import { blockConfirmMessage, blockUser } from "@/lib/safety";
 
 const KIND_BADGES: Partial<Record<Post["post_type"], { label: string; className: string }>> = {
   matrimonial_profile: { label: "Matrimonial", className: "bg-rose-50 text-rose-600" },
@@ -77,6 +79,7 @@ export function PostCard({ post, currentUserId, liked: initialLiked = false, can
   const titleRef = useRef<HTMLHeadingElement>(null);
   const contentRef = useRef<HTMLParagraphElement>(null);
   const router = useRouter();
+  const dialog = useDialog();
   const supabase = createClient();
   const canDelete = currentUserId === post.author_id || canModerate;
   const canReport = !!currentUserId && currentUserId !== post.author_id;
@@ -319,6 +322,29 @@ export function PostCard({ post, currentUserId, liked: initialLiked = false, can
                           className="w-full flex items-center gap-2 text-left px-4 py-2 text-sm text-gray-600 hover:bg-gray-50"
                         >
                           <Flag className="h-3.5 w-3.5" /> Report Post
+                        </button>
+                      )}
+                      {canReport && currentUserId && (
+                        <button
+                          onClick={() => {
+                            setMenuOpen(false);
+                            const name = post.profiles?.full_name || post.profiles?.username || "this person";
+                            dialog.show({
+                              ...blockConfirmMessage(name),
+                              primary: {
+                                label: "Block",
+                                // RLS hides the blocked author's posts once the block exists — just refresh.
+                                onClick: () =>
+                                  blockUser(createClient(), currentUserId, post.author_id)
+                                    .then(() => router.refresh())
+                                    .catch((e) => dialog.show({ variant: "error", title: "Couldn't block", message: e.message })),
+                              },
+                              secondary: { label: "Cancel" },
+                            });
+                          }}
+                          className="w-full flex items-center gap-2 text-left px-4 py-2 text-sm text-gray-600 hover:bg-gray-50"
+                        >
+                          <Ban className="h-3.5 w-3.5" /> Block {post.profiles?.full_name?.split(" ")[0] || "author"}
                         </button>
                       )}
                       {canDelete && (

@@ -2,6 +2,9 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Send, Trash2, X } from "lucide-react";
+import { useDialog } from "@/components/ui/dialog";
+import { blockConfirmMessage, blockUser } from "@/lib/safety";
+import { ReportUserModal } from "@/components/safety/report-user-modal";
 import { createClient } from "@/lib/supabase/client";
 import { Avatar } from "@/components/ui/avatar";
 import { timeAgo } from "@/lib/utils";
@@ -29,6 +32,8 @@ export function PostComments({ postId, currentUserId, canModerate = false, onCou
   const [error, setError] = useState("");
   const [pendingNotice, setPendingNotice] = useState("");
   const [replyTarget, setReplyTarget] = useState<ReplyTarget | null>(null);
+  const [reportTarget, setReportTarget] = useState<{ commentId: string; authorId: string } | null>(null);
+  const dialog = useDialog();
 
   useEffect(() => {
     const supabase = createClient();
@@ -115,6 +120,35 @@ export function PostComments({ postId, currentUserId, canModerate = false, onCou
                 Reply
               </button>
             )}
+            {currentUserId && currentUserId !== comment.author_id && (
+              <>
+                <button
+                  onClick={() => setReportTarget({ commentId: comment.id, authorId: comment.author_id })}
+                  className="text-[11px] font-semibold text-gray-400 hover:text-gray-600"
+                >
+                  Report
+                </button>
+                <button
+                  onClick={() =>
+                    dialog.show({
+                      ...blockConfirmMessage(author?.full_name || author?.username || "this person"),
+                      primary: {
+                        label: "Block",
+                        // RLS hides the blocked person's comments once the block exists.
+                        onClick: () =>
+                          blockUser(createClient(), currentUserId, comment.author_id)
+                            .then(() => setComments((prev) => (prev ?? []).filter((c) => c.author_id !== comment.author_id)))
+                            .catch((e) => dialog.show({ variant: "error", title: "Couldn't block", message: e.message })),
+                      },
+                      secondary: { label: "Cancel" },
+                    })
+                  }
+                  className="text-[11px] font-semibold text-gray-400 hover:text-gray-600"
+                >
+                  Block
+                </button>
+              </>
+            )}
             {currentUserId === comment.author_id && comment.moderation_status !== "published" && (
               <ModerationStatusNotice status={comment.moderation_status} contentType="comment" contentId={comment.id} />
             )}
@@ -141,6 +175,9 @@ export function PostComments({ postId, currentUserId, canModerate = false, onCou
 
   return (
     <div className="mt-3 pt-3 border-t border-gray-100 space-y-3">
+      {reportTarget && currentUserId && (
+        <ReportUserModal me={currentUserId} reportedUserId={reportTarget.authorId} commentId={reportTarget.commentId} onClose={() => setReportTarget(null)} />
+      )}
       {comments === null ? (
         <p className="text-xs text-gray-400">Loading comments…</p>
       ) : (

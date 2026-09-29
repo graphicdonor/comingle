@@ -15,6 +15,8 @@ const STEPS = ["Personal Info", "Location", "Photo"];
 
 export default function SignupDetailsPage() {
   const [step, setStep] = useState(0); // 0 = personal, 1 = location, 2 = photo
+  // Google Play requires accepting the Terms before a member can post; recorded as profiles.terms_accepted_at.
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [form, setForm] = useState({
     fullName: "",
     username: "",
@@ -84,6 +86,7 @@ export default function SignupDetailsPage() {
 
   const handleSubmit = async () => {
     setError("");
+    if (!agreedToTerms) { setError("Please agree to the Terms & Conditions and Privacy Policy to continue"); return; }
     setLoading(true);
 
     // Dev bypass
@@ -123,6 +126,7 @@ export default function SignupDetailsPage() {
       state: form.state.trim(),
       city: form.city.trim(),
       avatar_url,
+      terms_accepted_at: new Date().toISOString(),
     });
 
     setLoading(false);
@@ -300,6 +304,23 @@ export default function SignupDetailsPage() {
               You can skip this and add a photo later from your profile.
             </p>
           </div>
+        )}
+
+        {step === 2 && (
+          <label className="mt-4 flex items-start gap-2.5 text-xs text-gray-600 leading-relaxed">
+            <input
+              type="checkbox"
+              checked={agreedToTerms}
+              onChange={(e) => setAgreedToTerms(e.target.checked)}
+              className="mt-0.5 h-4 w-4 flex-shrink-0 accent-[#8B1A6B]"
+            />
+            <span>
+              I agree to the{" "}
+              <a href="/terms" target="_blank" className="font-semibold text-[#8B1A6B] underline">Terms &amp; Conditions</a> and{" "}
+              <a href="/privacy" target="_blank" className="font-semibold text-[#8B1A6B] underline">Privacy Policy</a>. If I&apos;m under 18, a
+              parent or guardian has agreed too.
+            </span>
+          </label>
         )}
 
         {/* Error */}
