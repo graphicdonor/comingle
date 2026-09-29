@@ -436,6 +436,15 @@ anonymous user hitting `/` sees the real home feed rendered logged-out.
 
 ### Communities
 
+**Membership limit: 5 communities per member.** Enforced by the
+`trg_community_membership_limit` trigger on `community_members` (advisory
+lock per user, so concurrent joins can't slip past; re-upserting an existing
+membership isn't counted). Every join path hits it — Join buttons, onboarding's
+picker (which also caps selection at 5 in the UI), and community creation,
+which pre-checks the count first so a community is never created without its
+creator. `MAX_COMMUNITIES` / `COMMUNITY_LIMIT_MESSAGE` in `src/lib/community.ts`
+mirror it for the UI (and in the native app's copy).
+
 Anyone can create one (any authenticated user, no approval gate) — the
 creator becomes its sole `admin` via a `community_members` insert with
 `role: "admin"`. Roles: `member` (can post, like, leave), `moderator` (can

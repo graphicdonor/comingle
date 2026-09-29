@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { DEV_MODE } from "@/lib/dev-auth";
 import { DEV_COMMUNITIES } from "@/lib/dev-data";
 import type { Community } from "@/lib/types";
+import { MAX_COMMUNITIES } from "@/lib/community";
 
 export default function SelectCommunitiesPage() {
   const [communities, setCommunities] = useState<Community[]>(DEV_MODE ? DEV_COMMUNITIES : []);
@@ -31,6 +32,11 @@ export default function SelectCommunitiesPage() {
   }, []);
 
   const toggle = (id: string) => {
+    if (!selected.has(id) && selected.size >= MAX_COMMUNITIES) {
+      setError(`You can choose up to ${MAX_COMMUNITIES} communities.`);
+      return;
+    }
+    setError("");
     setSelected((s) => {
       const n = new Set(s);
       if (n.has(id)) n.delete(id); else n.add(id);
@@ -87,7 +93,7 @@ export default function SelectCommunitiesPage() {
         <h2 className="font-semibold text-gray-900 mb-1">
           Please choose any community in which you belongs to
         </h2>
-        <p className="text-xs text-gray-400 mb-5">Select one or more communities</p>
+        <p className="text-xs text-gray-400 mb-5">Select up to {MAX_COMMUNITIES} communities · {selected.size}/{MAX_COMMUNITIES} selected</p>
 
         {fetching ? (
           <div className="grid grid-cols-2 gap-3">

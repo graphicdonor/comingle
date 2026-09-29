@@ -8,6 +8,7 @@ import { Avatar } from "@/components/ui/avatar";
 import { createClient } from "@/lib/supabase/client";
 import { ChevronLeft, Camera } from "lucide-react";
 import { uploadMedia } from "@/lib/media";
+import { COMMUNITY_LIMIT_MESSAGE, MAX_COMMUNITIES } from "@/lib/community";
 
 export default function CreateCommunityPage() {
   const [form, setForm] = useState({ name: "", description: "" });
@@ -42,6 +43,15 @@ export default function CreateCommunityPage() {
 
     const slug = slugify(form.name.trim());
     if (slug.length < 3) { setError("Community name must be at least 3 characters"); return; }
+
+    // Creating a community makes you its admin member, which counts toward
+    // the membership limit — check first so a community is never created
+    // without its creator in it.
+    const { count: joinedCount } = await supabase
+      .from("community_members")
+      .select("community_id", { count: "exact", head: true })
+      .eq("user_id", user.id);
+    if ((joinedCount ?? 0) >= MAX_COMMUNITIES) { setError(COMMUNITY_LIMIT_MESSAGE); return; }
 
     setLoading(true);
 
