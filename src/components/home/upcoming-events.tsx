@@ -37,9 +37,9 @@ export function UpcomingEvents({ events }: { events: EventListing[] }) {
               <Link
                 key={e.id}
                 href={`/services/events/${e.id}`}
-                className="flex-shrink-0 w-72 bg-white rounded-3xl p-2.5 shadow-[0_4px_16px_rgba(139,26,107,0.08)] hover:shadow-[0_6px_20px_rgba(139,26,107,0.14)] transition-shadow"
+                className="flex-shrink-0 w-72 bg-white rounded-3xl overflow-hidden shadow-[0_4px_16px_rgba(139,26,107,0.08)] hover:shadow-[0_6px_20px_rgba(139,26,107,0.14)] transition-shadow"
               >
-                <div className="relative h-40 rounded-[18px] overflow-hidden bg-lime-50">
+                <div className="relative h-40 bg-lime-50">
                   {e.photo_urls[0] ? (
                     <Image src={e.photo_urls[0]} alt="" fill sizes="288px" className="object-cover" />
                   ) : (
@@ -48,7 +48,7 @@ export function UpcomingEvents({ events }: { events: EventListing[] }) {
                     </div>
                   )}
                 </div>
-                <div className="flex pt-3.5 pb-1.5 px-1">
+                <div className="flex pt-3.5 pb-4 px-3.5">
                   <div className="w-14 flex-shrink-0 text-center text-[#8B1A6B]">
                     <p className="text-[15px] font-medium tracking-wider leading-none mt-0.5">{month.toUpperCase()}</p>
                     <p className="text-[32px] font-extrabold leading-9">{day}</p>
