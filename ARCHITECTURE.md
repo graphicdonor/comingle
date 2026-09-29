@@ -697,7 +697,8 @@ pg_net on Supabase lives in the `net` schema, so the call is
 `src/components/layout/bottom-nav.tsx` is a static, flat tab bar (icon +
 label, fixed to the viewport bottom), styled after LinkedIn's mobile nav.
 This is the nav rendered everywhere in the live app today. Tabs: Home,
-Feed, Post, Profile (Communities is in the hamburger drawer) — the post feed lives on its own `/feed`
+Feed, Post (centre), Donate, Profile (Communities is in the hamburger drawer
+and on your profile) — the post feed lives on its own `/feed`
 page, while Home holds the greeting, community services, and surveys.
 
 The original bottom nav, `src/components/floating-nav/`, was a custom

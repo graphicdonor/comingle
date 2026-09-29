@@ -124,8 +124,8 @@ export function Navbar() {
   const bottomNavRoutes = [
     { id: "home", href: "/app", icon: Home, label: "Home" },
     { id: "feed", href: "/feed", icon: Newspaper, label: "Feed" },
-    { id: "donate", href: "/donate", icon: HandHeart, label: "Donate" },
     { id: "create", href: "/posts/create", icon: PlusCircle, label: "Post" },
+    { id: "donate", href: "/donate", icon: HandHeart, label: "Donate" },
     { id: "profile", href: navUser?.username ? `/profile/${navUser.username}` : "/login", icon: User, label: "Profile" },
   ];
   // The drawer also links Communities, which isn't in the bottom bar.
