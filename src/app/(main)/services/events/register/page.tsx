@@ -111,12 +111,15 @@ export default function RegisterEventPage() {
   };
 
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files ?? []);
-    if (files.length === 0) return;
-    const oversized = files.find((f) => f.size > 5 * 1024 * 1024);
-    if (oversized) { setPhotoError("Each photo must be under 5MB"); return; }
+    // Events take a single photo — picking another replaces it.
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) { setPhotoError("Photo must be under 5MB"); return; }
     setPhotoError("");
-    setPhotos((p) => [...p, ...files.map((file) => ({ file, previewUrl: URL.createObjectURL(file) }))]);
+    setPhotos((p) => {
+      p.forEach((old) => URL.revokeObjectURL(old.previewUrl));
+      return [{ file, previewUrl: URL.createObjectURL(file) }];
+    });
     if (fileRef.current) fileRef.current.value = "";
   };
 
@@ -356,15 +359,17 @@ export default function RegisterEventPage() {
               <p className="text-sm text-gray-500">A banner or past-event photos help people recognize it</p>
             </div>
             <div className="grid grid-cols-2 gap-3">
-              <button
-                type="button"
-                onClick={() => fileRef.current?.click()}
-                className="h-32 rounded-xl border-2 border-dashed border-gray-200 flex flex-col items-center justify-center gap-1.5 text-gray-400 hover:border-[#8B1A6B] hover:text-[#8B1A6B] transition-colors"
-              >
-                <ImagePlus className="w-5 h-5" />
-                <span className="text-xs">Upload Photo</span>
-                <span className="text-[10px] text-gray-400 px-3 text-center">Supporting formats: jpg, jpeg, png</span>
-              </button>
+              {photos.length === 0 && (
+                <button
+                  type="button"
+                  onClick={() => fileRef.current?.click()}
+                  className="h-32 rounded-xl border-2 border-dashed border-gray-200 flex flex-col items-center justify-center gap-1.5 text-gray-400 hover:border-[#8B1A6B] hover:text-[#8B1A6B] transition-colors"
+                >
+                  <ImagePlus className="w-5 h-5" />
+                  <span className="text-xs">Upload Photo</span>
+                  <span className="text-[10px] text-gray-400 px-3 text-center">One photo · jpg, jpeg, png</span>
+                </button>
+              )}
               {photos.map((p, i) => (
                 <div key={p.previewUrl} className="relative h-32 rounded-xl overflow-hidden">
                   <img src={p.previewUrl} alt={`Event photo ${i + 1}`} className="w-full h-full object-cover" />
@@ -383,7 +388,6 @@ export default function RegisterEventPage() {
               ref={fileRef}
               type="file"
               accept="image/jpeg,image/jpg,image/png"
-              multiple
               className="hidden"
               onChange={handlePhotoChange}
             />

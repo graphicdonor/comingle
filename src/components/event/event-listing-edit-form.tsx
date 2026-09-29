@@ -55,7 +55,8 @@ function toForm(event: EventListing): FormState {
 
 export function EventListingEditForm({ event }: { event: EventListing }) {
   const [form, setForm] = useState<FormState>(toForm(event));
-  const [existingPhotoUrls, setExistingPhotoUrls] = useState<string[]>(event.photo_urls);
+  // Events take a single photo; older events with several keep just the first once edited.
+  const [existingPhotoUrls, setExistingPhotoUrls] = useState<string[]>(event.photo_urls.slice(0, 1));
   const [newPhotoFiles, setNewPhotoFiles] = useState<File[]>([]);
   const [newPhotoPreviews, setNewPhotoPreviews] = useState<string[]>([]);
   const [photoError, setPhotoError] = useState("");
@@ -75,13 +76,17 @@ export function EventListingEditForm({ event }: { event: EventListing }) {
   };
 
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files ?? []);
-    if (files.length === 0) return;
-    const oversized = files.find((f) => f.size > 5 * 1024 * 1024);
-    if (oversized) { setPhotoError("Each photo must be under 5MB"); return; }
+    // Picking a photo replaces the current one.
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) { setPhotoError("Photo must be under 5MB"); return; }
     setPhotoError("");
-    setNewPhotoFiles((prev) => [...prev, ...files]);
-    setNewPhotoPreviews((prev) => [...prev, ...files.map((f) => URL.createObjectURL(f))]);
+    setExistingPhotoUrls([]);
+    setNewPhotoFiles([file]);
+    setNewPhotoPreviews((prev) => {
+      prev.forEach((u) => URL.revokeObjectURL(u));
+      return [URL.createObjectURL(file)];
+    });
     if (fileRef.current) fileRef.current.value = "";
   };
 
@@ -214,7 +219,7 @@ export function EventListingEditForm({ event }: { event: EventListing }) {
           ))}
         </div>
 
-        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider pt-2">Photos</p>
+        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider pt-2">Photo</p>
         <div className="flex flex-wrap gap-3">
           {existingPhotoUrls.map((url) => (
             <div key={url} className="relative w-20 h-20 rounded-xl overflow-hidden">
@@ -237,12 +242,13 @@ export function EventListingEditForm({ event }: { event: EventListing }) {
           <button
             type="button"
             onClick={() => fileRef.current?.click()}
-            className="w-20 h-20 rounded-xl border-2 border-dashed border-gray-200 flex items-center justify-center text-gray-400 hover:border-[#8B1A6B] hover:text-[#8B1A6B] transition-colors"
+            className="w-20 h-20 rounded-xl border-2 border-dashed border-gray-200 flex flex-col items-center justify-center text-gray-400 hover:border-[#8B1A6B] hover:text-[#8B1A6B] transition-colors"
           >
-            <span className="text-2xl">+</span>
+            <span className="text-2xl leading-none">+</span>
+            {existingPhotoUrls.length + newPhotoPreviews.length > 0 && <span className="text-[10px] mt-0.5">Replace</span>}
           </button>
         </div>
-        <input ref={fileRef} type="file" accept="image/jpeg,image/jpg,image/png" multiple className="hidden" onChange={handlePhotoChange} />
+        <input ref={fileRef} type="file" accept="image/jpeg,image/jpg,image/png" className="hidden" onChange={handlePhotoChange} />
         {photoError && <p className="text-xs text-red-500">{photoError}</p>}
 
         {error && <p className="text-sm text-red-500 bg-red-50 rounded-xl px-4 py-2">{error}</p>}

@@ -19,6 +19,8 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   } catch {
     return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
   }
+  // Events take a single photo — trim before moderation, the DB write and the feed post.
+  body.photo_urls = (body.photo_urls ?? []).slice(0, 1);
 
   if (!body.title?.trim()) {
     return NextResponse.json({ error: "title is required" }, { status: 400 });

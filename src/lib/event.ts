@@ -41,7 +41,8 @@ export function sanitizeEventListingBody(body: EventListingBody) {
     whatsapp_number: body.whatsapp_number?.trim() || null,
     email: body.email?.trim() || null,
     registration_link: body.registration_link?.trim() || null,
-    photo_urls: body.photo_urls ?? [],
+    // Events take a single photo — enforced here for every client.
+    photo_urls: (body.photo_urls ?? []).slice(0, 1),
   };
 }
 
