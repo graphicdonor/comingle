@@ -496,6 +496,7 @@ export default function LandingPage() {
             <Link href="/contact" className="hover:text-[#8B1A6B]">Contact</Link>
             <Link href="/terms" className="hover:text-[#8B1A6B]">Terms</Link>
             <Link href="/privacy" className="hover:text-[#8B1A6B]">Privacy</Link>
+            <Link href="/child-safety" className="hover:text-[#8B1A6B]">Child safety</Link>
           </nav>
           <p>© {new Date().getFullYear()} WePray</p>
         </div>

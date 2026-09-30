@@ -98,6 +98,9 @@ export default function SettingsPage() {
         <Link href="/privacy" className="flex items-center justify-between py-2.5 text-sm text-gray-700 hover:text-gray-900">
           Privacy Policy <ChevronRight className="h-4 w-4 text-gray-300" />
         </Link>
+        <Link href="/child-safety" className="flex items-center justify-between py-2.5 text-sm text-gray-700 hover:text-gray-900">
+          Child safety standards <ChevronRight className="h-4 w-4 text-gray-300" />
+        </Link>
       </div>
 
       {/* Session */}
