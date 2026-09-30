@@ -100,6 +100,7 @@ export default function LandingPage() {
             <a href="#give" className="hover:text-[#8B1A6B]">Donations</a>
             <a href="#safety" className="hover:text-[#8B1A6B]">Safety</a>
             <a href="#how" className="hover:text-[#8B1A6B]">How it works</a>
+            <Link href="/blog" className="hover:text-[#8B1A6B]">Blog</Link>
           </nav>
           <Link
             href="/app"
@@ -502,6 +503,7 @@ export default function LandingPage() {
           <nav className="flex flex-wrap justify-center gap-6">
             <Link href="/app" className="hover:text-[#8B1A6B]">Open the app</Link>
             <Link href="/donate" className="hover:text-[#8B1A6B]">Donate</Link>
+            <Link href="/blog" className="hover:text-[#8B1A6B]">Blog</Link>
             <Link href="/survey" className="hover:text-[#8B1A6B]">Share feedback</Link>
             <Link href="/contact" className="hover:text-[#8B1A6B]">Contact</Link>
             <Link href="/terms" className="hover:text-[#8B1A6B]">Terms</Link>

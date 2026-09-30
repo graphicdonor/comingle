@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/site-url";
+import { BLOG_POSTS } from "@/lib/blog";
 
 // Deliberately static and small: only the genuinely public marketing/entry
 // and directory-browse surfaces. Per-user content (profiles, individual
@@ -17,5 +18,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/services/businesses`, lastModified: now, changeFrequency: "daily", priority: 0.6 },
     { url: `${SITE_URL}/services/jobs`, lastModified: now, changeFrequency: "daily", priority: 0.6 },
     { url: `${SITE_URL}/services/events`, lastModified: now, changeFrequency: "daily", priority: 0.6 },
+    { url: `${SITE_URL}/blog`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
+    ...BLOG_POSTS.map((p) => ({
+      url: `${SITE_URL}/blog/${p.slug}`,
+      lastModified: new Date(`${p.updated ?? p.published}T00:00:00Z`),
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
+    })),
   ];
 }

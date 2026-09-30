@@ -162,6 +162,21 @@ only once the app is live on the Production track, since the listing
 `public/icons/icon-32.png`, `src/app/favicon.ico`) is the round mark; the
 PWA and Apple touch icons still use the older logo.
 
+### Blog (`/blog`)
+
+Posts are plain data in `src/lib/blog.ts` (blocks of paragraphs, headings,
+lists, a quote and a call to action, with `**bold**` and `[text](/path)`
+inline), so the index, article page, generated share image
+(`blog/[slug]/opengraph-image.tsx`), RSS feed (`/blog/rss.xml`) and
+sitemap all read from one list. Adding a post means adding an entry — it's
+statically generated at build (`dynamicParams = false`). Article pages emit
+BlogPosting, BreadcrumbList and (when the post has FAQs) FAQPage JSON-LD,
+and carry share buttons (WhatsApp first). Canonical, OG and sitemap URLs
+come from `SITE_URL` (`src/lib/site-url.ts`), which must be the custom
+domain: the Netlify subdomain also serves the site, and pointing canonicals
+at it would get the duplicate indexed. The splash screen is skipped on
+`/blog` like the other marketing pages.
+
 ### Media storage (Cloudinary)
 
 All images and videos live on Cloudinary, not Supabase Storage. The client

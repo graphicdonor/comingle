@@ -23,11 +23,12 @@ const FADE_MS = 400;
 export function SplashScreen() {
   const [phase, setPhase] = useState<"visible" | "hiding" | "done">("visible");
   const prefersReducedMotion = useReducedMotion();
-  // Not on the public marketing pages ("/" and the "/survey" feedback form) —
+  // Not on the public marketing pages ("/", the "/survey" feedback form and
+  // the "/blog") —
   // the splash is app chrome. The pathname is identical on server and
   // client, so this can't cause the hydration mismatch described below.
   const pathname = usePathname();
-  const isLanding = pathname === "/" || pathname === "/survey";
+  const isLanding = pathname === "/" || pathname === "/survey" || pathname === "/blog" || pathname.startsWith("/blog/");
 
   useEffect(() => {
     // framer-motion's useReducedMotion() reads the media query synchronously
