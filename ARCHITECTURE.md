@@ -149,6 +149,19 @@ manifest's `start_url` is `/app` with `scope` `/`, and the landing page
 redirects standalone-mode visits to `/app` (`StandaloneRedirect`) so
 copies installed before the move, and the TWA wrapper, still open the app.
 
+The page leads on safety: a hero chip ("Every post is checked by AI before
+it's shared") links to `#safety`, where `AiModerationDemo`
+(`src/components/landing/modern.tsx`) animates a sample post through the
+pre-publish checks while it's in view (reduced-motion visitors get the
+finished state). Its copy has to stay true to what the moderation pipeline
+actually does — see MODERATION.md. The Google Play badge in
+`src/components/landing/get-the-app.tsx` renders as a non-clickable "Coming
+soon" while `PLAY_STORE_URL` is `null`; set it to the public listing URL
+only once the app is live on the Production track, since the listing
+404s for non-testers before that. The favicon (`public/favicon.svg`,
+`public/icons/icon-32.png`, `src/app/favicon.ico`) is the round mark; the
+PWA and Apple touch icons still use the older logo.
+
 ### Media storage (Cloudinary)
 
 All images and videos live on Cloudinary, not Supabase Storage. The client
@@ -880,6 +893,28 @@ or a comment** inserts into `user_reports` (post reports keep using
 checkbox, and `TermsGate` (web) / `TermsConsentScreen` (native) asks existing
 members once. `/delete-account` is the public account-deletion page Play
 requires in addition to Settings → Delete Account.
+
+### Google Play policy pages
+
+Public pages whose URLs are entered in Play Console declarations, so their
+paths must not change:
+
+- `/privacy` — the privacy policy URL.
+- `/delete-account` — account deletion. Its `#delete-some-data` section is
+  the partial-deletion link on the Data safety form; it lists only what
+  members can genuinely delete themselves and routes everything else to the
+  Contact form, so keep it in step with the delete actions that exist.
+- `/child-safety` — the published standards against child sexual abuse and
+  exploitation that Play's Child Safety Standards policy requires of social
+  apps. It commits the operators to removing CSAE, disabling the accounts
+  involved and reporting to the authorities (India's National Cybercrime
+  Reporting Portal, and NCMEC where applicable); reports reach them via
+  in-app reporting and the Contact form's `safety` topic. Linked from the
+  landing footer and Settings → Legal.
+- `/contact` — also the feedback URL shown to Play testers.
+
+These are server-rendered and outside `protectedPaths`, so they open without
+signing in, which Play requires.
 ## Known gaps and inconsistencies
 
 Collected here so they're easy to find in one place rather than buried in
@@ -933,6 +968,21 @@ each feature section above:
 - **Push notification text is duplicated in three places** (web
   `notification-row.tsx`, `send-push`, the native app) and kept in sync by
   hand. The push title is also a hardcoded brand string in `send-push`.
+- **Members can't delete everything they create themselves** — posts,
+  comments (web only; the native app has no comment delete), the
+  Matrimonial profile and business/job/event listings can be deleted, but
+  fundraisers and housing, education, health and legal listings can't; the
+  `/delete-account#delete-some-data` page sends those to the Contact form.
+- **Matrimonial chat messages aren't moderated** — posts, comments, media,
+  profiles, listings and fundraisers go through moderation; chat only has
+  block and report. Declared as "no chat moderation" in the Play content
+  rating.
+- **No dedicated child-safety report reason** — `post_reports` and
+  `user_reports` offer spam/harassment/inappropriate/(misinformation or
+  impersonation)/other, so a child-safety concern arrives as one of those
+  and isn't prioritised automatically.
+- **Age and parental consent aren't verified** — the Terms allow 13+ with a
+  guardian's consent, but signup asks for neither.
 - **Stale push tokens are never pruned** — `send-push` ignores Expo's
   response, so a token for an uninstalled app stays in `push_tokens`.
 
@@ -961,6 +1011,16 @@ each feature section above:
   native Android app's signing-key SHA-256 fingerprint. It must be updated
   whenever the signing key is regenerated, or verified links stop opening
   in the app.
+- **Google Play**: the native app ships from its own repository; its
+  `store-listing/PLAY_CONSOLE_CHECKLIST.md` records every Play Console
+  answer. Release signing uses an upload key kept outside both repositories,
+  and Play App Signing holds the final key — so `assetlinks.json` needs the
+  **Play app-signing** SHA-256 (Play Console → App integrity), not only the
+  upload key's. Play reviewers sign in with a dedicated email/password
+  reviewer account (its credentials are kept with the upload key, never in
+  git): don't delete it, change its password or remove it from its
+  communities, or the next review fails. Every release needs a higher
+  `versionCode`.
 - **Deploys**: push to `main` → Netlify builds and deploys automatically.
   Verifying a deploy actually went live: for changes that touch
   client-shipped code, a CSS/JS bundle-hash change is a reasonable signal;

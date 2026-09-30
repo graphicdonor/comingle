@@ -55,6 +55,13 @@ an active moderation team; revisit if that changes.
   synchronous per-message AI check would add real latency to a real-time
   chat. Left unmoderated as a deliberate scope decision.
 
+**Public claims depend on this scope.** The landing page's Safety section
+(including the animated `AiModerationDemo`), the `/child-safety` page and
+the Google Play declarations (content rating: "no chat moderation"; Data
+safety: photos, videos and user content processed for security) all
+describe what is covered above. If the scope changes — for example chat
+becomes moderated, or a content type drops out — update those too.
+
 ## Required setup
 
 **`OPENAI_API_KEY` must be set** for this to actually call OpenAI. Without
