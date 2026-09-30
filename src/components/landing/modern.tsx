@@ -253,3 +253,80 @@ export function PlatformCloud({ names }: { names: string[] }) {
     </div>
   );
 }
+
+const AI_CHECKS = ["Words and tone", "Photos and video", "English, Hindi and Hinglish", "Community guidelines"];
+
+/** Animated walk-through of the pre-publish AI moderation check: a sample
+ * post is scanned, each check ticks off in turn, then it's approved. Loops
+ * while in view; reduced-motion users see the finished state. */
+export function AiModerationDemo() {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { margin: "-80px" });
+  const reduce = useReducedMotion();
+  const [step, setStep] = useState(0); // 0 = scanning, 1..4 = checks done, 5 = approved
+
+  useEffect(() => {
+    if (reduce) { setStep(AI_CHECKS.length + 1); return; }
+    if (!inView) return;
+    const id = setInterval(() => setStep((s) => (s >= AI_CHECKS.length + 3 ? 0 : s + 1)), 700);
+    return () => clearInterval(id);
+  }, [inView, reduce]);
+
+  const shown = Math.min(step, AI_CHECKS.length + 1);
+  const approved = shown > AI_CHECKS.length;
+
+  return (
+    <div ref={ref} className="relative rounded-3xl bg-white shadow-xl shadow-[#8B1A6B]/10 ring-1 ring-[#8B1A6B]/10 p-5 sm:p-6">
+      <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#8B1A6B]">
+        <span className="inline-flex h-6 items-center rounded-full bg-[#8B1A6B]/10 px-2.5">AI safety check</span>
+        <span className="text-gray-400 normal-case tracking-normal font-medium">runs before anyone sees your post</span>
+      </div>
+
+      {/* Sample post being scanned */}
+      <div className="relative mt-4 overflow-hidden rounded-2xl bg-gray-50 p-4">
+        <p className="text-sm font-semibold text-gray-900">Diwali celebration this Sunday 🪔</p>
+        <p className="mt-1 text-sm text-gray-600">Sabhi families welcome hain! Sweets, prayers and a little music at the community hall.</p>
+        <div className="mt-3 h-20 rounded-xl bg-gradient-to-br from-amber-300 via-orange-400 to-rose-400" />
+        {!approved && !reduce && (
+          <motion.div
+            aria-hidden
+            className="absolute inset-x-0 h-10 bg-gradient-to-b from-transparent via-[#8B1A6B]/15 to-transparent"
+            initial={{ top: "-20%" }}
+            animate={{ top: ["-20%", "100%"] }}
+            transition={{ duration: 1.4, repeat: Infinity, ease: "linear" }}
+          />
+        )}
+      </div>
+
+      <ul className="mt-4 space-y-2">
+        {AI_CHECKS.map((label, i) => {
+          const done = shown > i;
+          return (
+            <li key={label} className="flex items-center gap-3 text-sm">
+              <span
+                className={`flex h-5 w-5 items-center justify-center rounded-full text-[11px] font-bold transition-colors duration-300 ${
+                  done ? "bg-emerald-500 text-white" : "bg-gray-100 text-gray-300"
+                }`}
+              >
+                ✓
+              </span>
+              <span className={`transition-colors duration-300 ${done ? "text-gray-900" : "text-gray-400"}`}>{label}</span>
+            </li>
+          );
+        })}
+      </ul>
+
+      <div
+        className={`mt-4 flex items-center gap-2 rounded-2xl px-4 py-3 text-sm font-semibold transition-all duration-500 ${
+          approved ? "bg-emerald-50 text-emerald-700" : "bg-gray-50 text-gray-400"
+        }`}
+        aria-live="polite"
+      >
+        {approved ? "Approved: now visible to your community" : "Checking…"}
+      </div>
+      <p className="mt-3 text-xs text-gray-400">
+        Anything unclear is held for a person to review. Anything harmful is stopped, and you can appeal.
+      </p>
+    </div>
+  );
+}

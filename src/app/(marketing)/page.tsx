@@ -29,7 +29,7 @@ import {
 } from "lucide-react";
 import { StandaloneRedirect } from "@/components/landing/standalone-redirect";
 import { HeroBlobs, HeroPhone, PulseDot, Reveal } from "@/components/landing/motion";
-import { AppMock, CountUp, Marquee, PlatformCloud, ScrollProgress } from "@/components/landing/modern";
+import { AiModerationDemo, AppMock, CountUp, Marquee, PlatformCloud, ScrollProgress } from "@/components/landing/modern";
 import { GooglePlayBadge, InstallWebAppButton } from "@/components/landing/get-the-app";
 import { DONATION_PLATFORMS } from "@/lib/donations";
 
@@ -58,7 +58,7 @@ const MARQUEE_ITEMS = [
   ...SERVICES.map((s) => ({ icon: s.icon, label: s.label })),
   { icon: ClipboardList, label: "Surveys" },
   { icon: Bell, label: "Notifications" },
-  { icon: ShieldCheck, label: "Moderated & safe" },
+  { icon: ShieldCheck, label: "AI-moderated & safe" },
 ];
 
 const SCREENS = [
@@ -147,7 +147,10 @@ export default function LandingPage() {
                 <InstallWebAppButton />
                 <GooglePlayBadge />
               </div>
-              <p className="mt-5 text-sm text-gray-500">Free to join and open to every faith. Sign in with your phone number or Google.</p>
+              <a href="#safety" className="mt-6 inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3.5 py-1.5 text-sm font-semibold text-emerald-700 ring-1 ring-emerald-200 hover:bg-emerald-100 transition-colors">
+                <ShieldCheck className="h-4 w-4" /> Every post is checked by AI before it&apos;s shared
+              </a>
+              <p className="mt-4 text-sm text-gray-500">Free to join and open to every faith. Sign in with your phone number or Google.</p>
             </div>
             <HeroPhone>
               <AppMock />
@@ -373,10 +376,17 @@ export default function LandingPage() {
                 Faith is personal. WePray is built to keep conversations respectful, and safety runs through everything
                 you share.
               </p>
+              <p className="mt-4 text-lg text-gray-600 leading-relaxed">
+                <strong className="text-gray-900">Every post is checked by AI before it goes live.</strong> Words, photos
+                and videos are screened in seconds, so hurtful or unsafe content is stopped before your community ever sees it.
+              </p>
+              <div className="mt-8">
+                <AiModerationDemo />
+              </div>
             </Reveal>
             <ul className="space-y-6">
               {[
-                { icon: ShieldCheck, title: "Checked before it's shared", text: "Posts, comments, photos, profiles, listings and fundraisers are reviewed by automated moderation before other members can see them." },
+                { icon: ShieldCheck, title: "AI-checked before it's shared", text: "Posts, comments, photos, videos, profiles, listings and fundraisers are checked by AI moderation before other members can see them." },
                 { icon: Languages, title: "Understands how we really write", text: "Moderation works across English, Hindi and Hinglish, not just English." },
                 { icon: UserCheck, title: "People make the final call", text: "Anything unclear is held for a human to review, and you can appeal a decision you think was wrong." },
                 { icon: Flag, title: "Report in one tap", text: "See something disrespectful or out of place? Report it and it goes straight to review." },
