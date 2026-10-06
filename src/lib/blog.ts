@@ -35,6 +35,140 @@ export interface BlogPost {
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: "why-humans-cooperate-culture-faith-communities",
+    title: "Why we help one another: what science says about culture, cooperation and community",
+    seoTitle: "Why humans cooperate: culture, faith and community",
+    description:
+      "Humans cooperate with people who aren't family on a scale no other animal does. A well-known paper by evolutionary scientists Robert Boyd and Peter Richerson argues that culture is the reason. Here's what they found, and what it means for faith communities today.",
+    published: "2026-10-06",
+    author: "The WePray team",
+    category: "Research",
+    keywords: [
+      "why humans cooperate",
+      "culture and cooperation",
+      "evolution of human cooperation",
+      "Boyd and Richerson",
+      "cultural group selection",
+      "community and belonging",
+      "faith community",
+      "shared norms and values",
+    ],
+    readingMinutes: 7,
+    body: [
+      {
+        type: "p",
+        text: "Think about the last time your community came together: a festival, a wedding, a family in need, a new arrival who needed a home. Most of the people who helped weren't related to each other. Many barely knew each other. And yet they showed up.",
+      },
+      {
+        type: "p",
+        text: "That's more remarkable than it sounds. Among animals, helping strangers on this scale is rare. So why do humans do it? A widely cited paper by evolutionary scientists **Robert Boyd** (University of California, Los Angeles) and **Peter Richerson** (University of California, Davis), [\"Culture and the evolution of human cooperation\"](https://pmc.ncbi.nlm.nih.gov/articles/PMC2781880/), offers an answer: **culture**.",
+      },
+      { type: "h2", text: "The puzzle: we cooperate with people who aren't family" },
+      {
+        type: "p",
+        text: "Boyd and Richerson start from a puzzle. The evidence suggests our distant ancestors lived in groups much like those of other primates. Yet today, as they put it, \"even in foraging societies people regularly cooperate with many unrelated individuals.\" Something changed human psychology to support \"larger, more cooperative societies.\"",
+      },
+      {
+        type: "p",
+        text: "The usual explanations, such as helping relatives, or helping people who'll help you back, only go so far. The authors point out that reciprocity and reputation can keep almost any behaviour stable once it exists, but they don't explain why large-scale cooperation appeared in the first place.",
+      },
+      { type: "h2", text: "What the paper argues" },
+      {
+        type: "p",
+        text: "The paper is theoretical: it brings together evolutionary models, anthropology and history rather than reporting a new experiment. Its argument has three steps.",
+      },
+      { type: "h3", text: "1. We learn from each other, and that adds up" },
+      {
+        type: "p",
+        text: "Over the last million years or so, humans became unusually good at learning from one another. That made **cumulative culture** possible: knowledge, skills and customs passed on and improved across generations, letting groups adapt to their surroundings far faster than genes alone could. The authors also note that \"people have a strong tendency to imitate the successful.\"",
+      },
+      { type: "h3", text: "2. Groups develop their own norms, and the best ones spread" },
+      {
+        type: "p",
+        text: "Because culture changes quickly, neighbouring groups end up with different ways of living. \"Different human groups have different norms and values,\" the authors write, \"and the cultural transmission of these traits can cause such differences to persist.\" Groups whose norms helped them cooperate tended to do better and to spread, a process the authors call **cultural group selection**. It's slow: their figures from New Guinea suggest it could take 500 to 1,000 years for an innovation to spread from one group to most of its neighbours this way.",
+      },
+      {
+        type: "p",
+        text: "They describe human societies as built on in-groups \"of a few hundred to a few thousand people\" that are \"symbolically marked by language, ritual practices, dress and the like.\" Shared rituals and customs, in other words, help people recognise who belongs and what's expected.",
+      },
+      { type: "h3", text: "3. Living in cooperative groups shaped our hearts" },
+      {
+        type: "p",
+        text: "Finally, in communities held together by shared norms, the people who fitted in well did better. Over a very long time, the authors argue, this favoured \"more pro-social motives\": \"Moral systems enforced by systems of sanctions and rewards increased the reproductive success of individuals who functioned well in such environments, and this in turn led to the evolution of other regarding motives like empathy and social emotions like shame.\"",
+      },
+      {
+        type: "quote",
+        text: "In short: culture made us cooperative, and cooperation made us caring. Empathy and a sense of right and wrong grew in communities that shared norms and looked after one another.",
+      },
+      { type: "h2", text: "What the paper doesn't claim" },
+      {
+        type: "p",
+        text: "It's worth being careful here. This is a theory, and the authors say so: they write that \"there has been little systematic quantitative empirical work\" to measure how important cultural group selection is compared with other forces, and they call for sharper, testable studies. The paper isn't a study of any particular religion, and it doesn't say anything about apps. The reflections below are ours, not the authors'.",
+      },
+      { type: "h2", text: "What this means for faith communities today" },
+      {
+        type: "p",
+        text: "Read with a community in mind, the paper says something many of us already feel: the things a community shares, its rituals, gatherings, values and expectations of one another, aren't extras. They're what makes it possible for people who aren't family to trust each other and help each other. Faith communities are some of the oldest and strongest examples of this.",
+      },
+      {
+        type: "p",
+        text: "But the paper also explains why communities can struggle. Shared norms only work when people can see them, learn them and keep them. Today, community life is scattered across dozens of chat groups, notice boards and phone calls. Announcements get buried, newcomers can't see how things are done, and in open groups there's little to stop spam or disrespect from wearing trust away.",
+      },
+      { type: "h2", text: "How WePray is built around these ideas" },
+      {
+        type: "p",
+        text: "We built WePray to give every faith community a place where the things that hold it together are easy to see and easy to keep:",
+      },
+      {
+        type: "ul",
+        items: [
+          "**A space of its own.** Each community has its own feed, members and admins, so people know who they're with and what's expected. You join up to five communities of your faith, not a feed of strangers.",
+          "**Shared moments, front and centre.** Festivals, prayer meetings and celebrations appear as [upcoming events](/services/events) on your home screen, the modern equivalent of the shared rituals the paper describes.",
+          "**Norms that protect trust.** Every post, comment, photo and listing is checked by AI before anyone sees it, members can report or block in one tap, and each community's admins set its rules. Respect is the default, not something that has to be fought for.",
+          "**Learning from one another.** The feed lets members see how others in their community celebrate, help and give, which is how good practices spread.",
+          "**Helping people who aren't family.** Matrimonial, jobs, housing, education, health care and legal aid listings let members help one another, and the [Donate](/donate) tab lets them give to causes their community shares, through trusted platforms.",
+        ],
+      },
+      {
+        type: "p",
+        text: "If Boyd and Richerson are right, cooperation is one of the oldest things humans do together, and community is where it happens. Our job is simply to give that community a good home.",
+      },
+      {
+        type: "h2",
+        text: "Source",
+      },
+      {
+        type: "p",
+        text: "Boyd R, Richerson PJ. Culture and the evolution of human cooperation. Philosophical Transactions of the Royal Society B: Biological Sciences. 2009;364(1533):3281–3288. [Read the full paper (open access)](https://pmc.ncbi.nlm.nih.gov/articles/PMC2781880/). Quotations are from the paper; the interpretation for faith communities is ours.",
+      },
+      {
+        type: "cta",
+        title: "Give your community a home of its own",
+        text: "WePray is free and open to every faith. Bring your community together in one safe, respectful place.",
+        href: "/app",
+        label: "Open WePray",
+      },
+    ],
+    faqs: [
+      {
+        q: "Why do humans cooperate with people who aren't family?",
+        a: "Boyd and Richerson argue that culture is the key. Because humans learn from one another, groups develop shared norms; groups whose norms support cooperation tend to do better and spread, and over a long time this favoured pro-social feelings like empathy and shame.",
+      },
+      {
+        q: "What is cultural group selection?",
+        a: "It's the idea that groups with different cultural norms compete, and norms that help a group cooperate and thrive spread, by the group growing, being imitated or absorbing others. The authors describe it as a slow process, taking centuries.",
+      },
+      {
+        q: "Is this paper about religion?",
+        a: "No. It's a general theory of human cooperation. It mentions ritual practices and beliefs as examples of what marks and guides groups, but it isn't a study of any religion. The link to faith communities in this article is our interpretation.",
+      },
+      {
+        q: "Is the theory proven?",
+        a: "Not fully. The authors say the theory is well worked out with convincing examples, but that more systematic, quantitative evidence is needed to measure how important it is compared with other explanations.",
+      },
+    ],
+  },
+  {
     slug: "wepray-mission-goals-how-it-works",
     title: "Why we built WePray: our mission, our goals and how it works",
     seoTitle: "WePray: a safe app for faith communities",
