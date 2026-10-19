@@ -175,6 +175,7 @@ export const BLOG_POSTS: BlogPost[] = [
     description:
       "WePray is a free, safe app that brings people of the same faith together: a community feed, upcoming events, matrimonial, jobs, housing, health care, legal aid and trusted giving, with AI moderation on every post.",
     published: "2026-10-01",
+    updated: "2026-10-19",
     author: "The WePray team",
     category: "About WePray",
     keywords: [
@@ -286,12 +287,12 @@ export const BLOG_POSTS: BlogPost[] = [
       { type: "h2", text: "What's next" },
       {
         type: "p",
-        text: "WePray is still early, and the communities using it help decide where it goes next. The Android app is coming to Google Play, and more community services and more ways to give and connect are on the way. If there's something your community needs, [tell us in our short survey](/survey).",
+        text: "WePray is still early, and the communities using it help decide where it goes next. The Android app is now [on Google Play](https://play.google.com/store/apps/details?id=in.wepray.app), and more community services and more ways to give and connect are on the way. If there's something your community needs, [tell us in our short survey](/survey).",
       },
       {
         type: "cta",
         title: "Bring your community to WePray",
-        text: "It's free to join and open to every faith. Open WePray in your browser and install it like an app on any phone.",
+        text: "It's free to join and open to every faith. Get the Android app on Google Play, or open WePray in your browser and install it like an app on any phone.",
         href: "/app",
         label: "Open WePray",
       },
@@ -319,7 +320,7 @@ export const BLOG_POSTS: BlogPost[] = [
       },
       {
         q: "How do I get the app?",
-        a: "Open www.wepray.in on any phone and install it as a web app. The Android app is coming to Google Play.",
+        a: "Download WePray from Google Play on Android, or open www.wepray.in on any phone and install it as a web app.",
       },
     ],
   },

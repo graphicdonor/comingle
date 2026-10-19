@@ -5,7 +5,7 @@ import { Download, Plus, Share } from "lucide-react";
 
 /** Set to the Play Store listing URL once the Android app is published —
  * until then the badge renders as a non-clickable "Coming soon". */
-const PLAY_STORE_URL: string | null = null;
+const PLAY_STORE_URL: string | null = "https://play.google.com/store/apps/details?id=in.wepray.app";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt(): Promise<void>;

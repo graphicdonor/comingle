@@ -155,10 +155,10 @@ it's shared") links to `#safety`, where `AiModerationDemo`
 pre-publish checks while it's in view (reduced-motion visitors get the
 finished state). Its copy has to stay true to what the moderation pipeline
 actually does — see MODERATION.md. The Google Play badge in
-`src/components/landing/get-the-app.tsx` renders as a non-clickable "Coming
-soon" while `PLAY_STORE_URL` is `null`; set it to the public listing URL
-only once the app is live on the Production track, since the listing
-404s for non-testers before that. The favicon (`public/favicon.svg`,
+`src/components/landing/get-the-app.tsx` links to the public listing via
+`PLAY_STORE_URL`; setting it to `null` turns the badge back into a
+non-clickable "Coming soon" (the listing 404s for non-testers until the app
+is live on Production). The favicon (`public/favicon.svg`,
 `public/icons/icon-32.png`, `src/app/favicon.ico`) is the round mark; the
 PWA and Apple touch icons still use the older logo.
 

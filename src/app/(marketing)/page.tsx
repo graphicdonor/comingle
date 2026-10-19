@@ -454,7 +454,7 @@ export default function LandingPage() {
               </Link>
               <br />
               <ul className="mt-8 inline-flex flex-col sm:flex-row gap-3 sm:gap-6 text-left text-gray-700">
-                {["The Android app on Google Play", "More community services", "More ways to give and connect"].map((item) => (
+                {["More community services", "More ways to give and connect"].map((item) => (
                   <li key={item} className="flex items-center gap-2">
                     <Clock className="h-5 w-5 text-[#8B1A6B]" /> {item}
                   </li>
