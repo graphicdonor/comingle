@@ -50,7 +50,7 @@ export function PrayerList({ prayers }: { prayers: Prayer[] }) {
       </div>
 
       {shown.length === 0 ? (
-        <p className="text-sm text-[#7A706B] rounded-2xl bg-white border border-[#E7DCC8] px-4 py-6 text-center">
+        <p className="text-sm text-[#6E6560] rounded-2xl bg-white border border-[#E7DCC8] px-4 py-6 text-center">
           {t("prayers.emptySaved")}
         </p>
       ) : (

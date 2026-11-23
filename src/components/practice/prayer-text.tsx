@@ -65,7 +65,7 @@ export function PrayerText({
           {(section.heading || section.repeat) && (
             <div className="flex items-center gap-2 mb-3">
               {section.heading && (
-                <h2 lang={ui} className="text-xs font-semibold uppercase tracking-wider text-[#A0701E]">
+                <h2 lang={ui} className="text-xs font-semibold uppercase tracking-wider text-[#885F19]">
                   {section.heading[ui]}
                 </h2>
               )}

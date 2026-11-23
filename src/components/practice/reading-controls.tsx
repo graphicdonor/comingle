@@ -85,7 +85,7 @@ export function ReadingControls({ prefs, className }: { prefs: ReadingPrefs; cla
         />
       </div>
       <div className="flex items-center justify-between pt-0.5">
-        <span className="text-xs font-medium text-[#7A706B]">{t("reading.size")}</span>
+        <span className="text-xs font-medium text-[#6E6560]">{t("reading.size")}</span>
         <div className="flex items-center gap-1">
           <button
             type="button"

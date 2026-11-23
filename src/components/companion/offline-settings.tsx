@@ -56,7 +56,7 @@ export function OfflineSettings() {
           <p className="text-sm text-[#5B5350] leading-relaxed">
             {pack ? t("offline.ready", { size: formatBytes(pack.bytes) }) : t("offline.desc")}
           </p>
-          {pack && savedDate && <p className="text-xs text-[#8A7F76] mt-0.5">{t("offline.savedOn", { date: savedDate })}</p>}
+          {pack && savedDate && <p className="text-xs text-[#6D645D] mt-0.5">{t("offline.savedOn", { date: savedDate })}</p>}
         </div>
       </div>
 
@@ -70,7 +70,7 @@ export function OfflineSettings() {
               style={{ width: `${Math.round((status.done / Math.max(1, status.total)) * 100)}%` }}
             />
           </div>
-          <p className="mt-2 text-xs text-[#7A706B]">{t("offline.downloading", { done: status.done, total: status.total })}</p>
+          <p className="mt-2 text-xs text-[#6E6560]">{t("offline.downloading", { done: status.done, total: status.total })}</p>
         </div>
       ) : (
         <>
@@ -106,7 +106,7 @@ export function OfflineSettings() {
         </>
       )}
 
-      {usage !== null && usage > 0 && <p className="mt-4 text-xs text-[#8A7F76]">{t("offline.storage", { size: formatBytes(usage) })}</p>}
+      {usage !== null && usage > 0 && <p className="mt-4 text-xs text-[#6D645D]">{t("offline.storage", { size: formatBytes(usage) })}</p>}
     </div>
   );
 }

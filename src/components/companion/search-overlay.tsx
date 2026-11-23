@@ -100,7 +100,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
       <div className="flex-shrink-0 pt-[env(safe-area-inset-top)] border-b border-[#E7DCC8] bg-[#F7F2E8]">
         <div className="max-w-xl mx-auto h-16 px-4 flex items-center gap-2">
           <div className="flex-1 flex items-center gap-2 rounded-full bg-white border border-[#E7DCC8] px-4 h-11 focus-within:border-[#6D252C]">
-            <Search className="h-4 w-4 text-[#8A7F76] flex-shrink-0" aria-hidden />
+            <Search className="h-4 w-4 text-[#6D645D] flex-shrink-0" aria-hidden />
             <input
               ref={input}
               type="search"
@@ -109,10 +109,10 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
               placeholder={t("search.placeholder")}
               aria-label={t("search.placeholder")}
               enterKeyHint="search"
-              className="flex-1 min-w-0 bg-transparent text-[15px] text-[#2A1A1C] placeholder:text-[#A39A92] outline-none [&::-webkit-search-cancel-button]:hidden"
+              className="flex-1 min-w-0 bg-transparent text-[15px] text-[#2A1A1C] placeholder:text-[#6E6560] outline-none [&::-webkit-search-cancel-button]:hidden"
             />
             {query && (
-              <button type="button" onClick={() => setQuery("")} aria-label={t("search.clear")} className="text-[#8A7F76]">
+              <button type="button" onClick={() => setQuery("")} aria-label={t("search.clear")} className="text-[#6D645D]">
                 <X className="h-4 w-4" />
               </button>
             )}
@@ -127,7 +127,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
         <div className="max-w-xl mx-auto px-4 py-5">
           {!query.trim() ? (
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#A0701E] mb-3">{t("search.try")}</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#885F19] mb-3">{t("search.try")}</p>
               <div className="flex flex-wrap gap-2">
                 {SUGGESTIONS[lang].map((s) => (
                   <button
@@ -140,19 +140,19 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
                   </button>
                 ))}
               </div>
-              <p className="mt-6 text-xs text-[#8A7F76] leading-relaxed">{t("search.hint")}</p>
+              <p className="mt-6 text-xs text-[#6D645D] leading-relaxed">{t("search.hint")}</p>
             </div>
           ) : results.length === 0 ? (
             <p className="mt-8 text-center text-[15px] text-[#5B5350] leading-relaxed">{t("search.none", { q: query.trim() })}</p>
           ) : (
             <div className="space-y-6">
-              <p className="text-xs text-[#8A7F76]" aria-live="polite">{t("search.count", { n: results.length })}</p>
+              <p className="text-xs text-[#6D645D]" aria-live="polite">{t("search.count", { n: results.length })}</p>
               {GROUPS.map(({ kind, label, icon: Icon }) => {
                 const group = results.filter((r) => r.kind === kind);
                 if (group.length === 0) return null;
                 return (
                   <section key={kind}>
-                    <h2 className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-[#A0701E] mb-2">
+                    <h2 className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-[#885F19] mb-2">
                       <Icon className="h-3.5 w-3.5" aria-hidden /> {t(label)}
                     </h2>
                     <ul className="space-y-2">
@@ -186,7 +186,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
                               )}
                             </p>
                             {r.snippet && (
-                              <p className="mt-1.5 text-sm text-[#7A706B] leading-relaxed">
+                              <p className="mt-1.5 text-sm text-[#6E6560] leading-relaxed">
                                 <Highlighted text={r.snippet} terms={terms} />
                               </p>
                             )}

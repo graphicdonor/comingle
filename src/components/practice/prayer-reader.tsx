@@ -41,7 +41,7 @@ export function PrayerReader({ prayer }: { prayer: Prayer }) {
   return (
     <article className="pb-6">
       <header className="mb-5">
-        <p className="text-xs font-semibold uppercase tracking-wider text-[#A0701E] mb-1">
+        <p className="text-xs font-semibold uppercase tracking-wider text-[#885F19] mb-1">
           {prayer.category[ui]} · {t("common.min", { n: prayer.durationMinutes })}
         </p>
         <h1 className="font-pali text-3xl font-semibold text-[#3A1418] leading-tight">{prayer.title.pi}</h1>
@@ -83,7 +83,7 @@ export function PrayerReader({ prayer }: { prayer: Prayer }) {
 
       <div className="flex items-center gap-3 rounded-2xl bg-white border border-[#E7DCC8] px-4 py-3 mb-4">
         <div className="w-9 h-9 rounded-full bg-[#F7F2E8] flex items-center justify-center flex-shrink-0">
-          <Volume2 className="h-4 w-4 text-[#A0701E]" />
+          <Volume2 className="h-4 w-4 text-[#885F19]" />
         </div>
         <p className="text-sm text-[#5B5350]">
           {prayer.audio ? prayer.audio.credit : t("prayers.noAudio")}
@@ -103,13 +103,13 @@ export function PrayerReader({ prayer }: { prayer: Prayer }) {
           </p>
         )}
         <dl className="rounded-2xl bg-white border border-[#E7DCC8] px-4 py-3 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-xs">
-          <dt className="text-[#7A706B]">{t("prayers.source")}</dt>
+          <dt className="text-[#6E6560]">{t("prayers.source")}</dt>
           <dd className="font-pali text-[#2A1A1C]">
             {prayer.source.title} — {prayer.source.reference}
           </dd>
-          <dt className="text-[#7A706B]">{t("prayers.tradition")}</dt>
+          <dt className="text-[#6E6560]">{t("prayers.tradition")}</dt>
           <dd className="text-[#2A1A1C]">{prayer.tradition}</dd>
-          <dt className="text-[#7A706B]">{t("prayers.review")}</dt>
+          <dt className="text-[#6E6560]">{t("prayers.review")}</dt>
           <dd className="text-[#2A1A1C]">
             {(["pali", "hi", "en"] as const)
               .map((k) => `${t(k === "pali" ? "common.lang.pi" : k === "hi" ? "common.lang.hi" : "common.lang.en")}: ${t(`common.status.${prayer.review[k].status}`)}`)

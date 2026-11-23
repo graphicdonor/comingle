@@ -92,7 +92,7 @@ export function MeditationTimer({ initialPractice, initialMinutes }: { initialPr
               >
                 <div className="flex items-baseline justify-between gap-3">
                   <span className="font-bold text-[#2A1A1C]">{m.title[ui]}</span>
-                  <span className="font-pali text-sm text-[#A0701E]">{m.pali}</span>
+                  <span className="font-pali text-sm text-[#885F19]">{m.pali}</span>
                 </div>
                 <p className="text-sm text-[#5B5350] mt-0.5">{m.summary[ui]}</p>
               </button>
@@ -101,7 +101,7 @@ export function MeditationTimer({ initialPractice, initialMinutes }: { initialPr
         </div>
 
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#A0701E] mb-3">{t("meditate.duration")}</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#885F19] mb-3">{t("meditate.duration")}</p>
           <div role="radiogroup" aria-label={t("meditate.durationLabel")} className="grid grid-cols-5 gap-2">
             {MEDITATION_DURATIONS.map((d) => (
               <button
@@ -123,16 +123,16 @@ export function MeditationTimer({ initialPractice, initialMinutes }: { initialPr
         </div>
 
         <div className="rounded-3xl bg-[#FFFCF6] border border-[#E7DCC8] px-5 py-5">
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#A0701E] mb-3">{t("meditate.howTo")}</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#885F19] mb-3">{t("meditate.howTo")}</p>
           <ol className="space-y-2.5">
             {practice.steps.map((s, i) => (
               <li key={i} className="flex gap-3 text-sm text-[#4A4340] leading-relaxed">
-                <span className="text-[#A0701E] font-semibold">{i + 1}.</span>
+                <span className="text-[#885F19] font-semibold">{i + 1}.</span>
                 <span>{s[ui]}</span>
               </li>
             ))}
           </ol>
-          <p className="mt-4 text-xs text-[#7A706B] leading-relaxed">{practice.context[ui]}</p>
+          <p className="mt-4 text-xs text-[#6E6560] leading-relaxed">{practice.context[ui]}</p>
         </div>
 
         <label className="flex items-center justify-between gap-4 rounded-3xl bg-white border border-[#E7DCC8] px-5 py-4 cursor-pointer">
@@ -145,7 +145,7 @@ export function MeditationTimer({ initialPractice, initialMinutes }: { initialPr
             aria-hidden
             className={cn(
               "relative h-7 w-12 rounded-full transition-colors flex-shrink-0 peer-focus-visible:ring-2 peer-focus-visible:ring-[#6D252C]/40",
-              breathGuide ? "bg-[#6D252C]" : "bg-[#D8CFC1]",
+              breathGuide ? "bg-[#6D252C]" : "bg-[#8E847C]",
             )}
           >
             <span className={cn("absolute top-1 h-5 w-5 rounded-full bg-white shadow transition-all", breathGuide ? "left-6" : "left-1")} />
@@ -155,7 +155,7 @@ export function MeditationTimer({ initialPractice, initialMinutes }: { initialPr
         <button type="button" onClick={start} className="w-full flex items-center justify-center gap-2 rounded-full bg-[#6D252C] text-[#F7F2E8] py-4 text-[15px] font-bold">
           <Play className="h-4 w-4 fill-current" /> {t("common.begin", { n: minutes })}
         </button>
-        <p className="text-center text-xs text-[#8A7F76]">
+        <p className="text-center text-xs text-[#6D645D]">
           {t("meditate.disclaimer")}
         </p>
       </div>

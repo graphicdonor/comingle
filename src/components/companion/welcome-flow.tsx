@@ -47,10 +47,10 @@ export function WelcomeFlow() {
         <div className="max-w-md mx-auto h-14 px-5 flex items-center justify-between">
           <div className="flex gap-1.5" aria-hidden>
             {[0, 1, 2].map((i) => (
-              <span key={i} className={cn("h-1.5 rounded-full transition-all duration-500", i === step ? "w-6 bg-[#6D252C]" : "w-1.5 bg-[#D8CFC1]")} />
+              <span key={i} className={cn("h-1.5 rounded-full transition-all duration-500", i === step ? "w-6 bg-[#6D252C]" : "w-1.5 bg-[#8E847C]")} />
             ))}
           </div>
-          <button type="button" onClick={finish} className="text-sm font-semibold text-[#7A706B] px-2 py-1">
+          <button type="button" onClick={finish} className="text-sm font-semibold text-[#6E6560] px-2 py-1">
             {t("welcome.skip")}
           </button>
         </div>
@@ -71,7 +71,7 @@ export function WelcomeFlow() {
                   <p className="text-3xl font-bold tracking-tight text-[#6D252C]">WePray</p>
                   <h1 className="mt-6 text-2xl font-bold text-[#2A1A1C] leading-snug">
                     <span lang="hi" className="block">अपनी भाषा चुनें</span>
-                    <span lang="en" className="block text-lg font-semibold text-[#7A706B] mt-1">Choose your language</span>
+                    <span lang="en" className="block text-lg font-semibold text-[#6E6560] mt-1">Choose your language</span>
                   </h1>
                   <div className="mt-8 space-y-3">
                     {(browserHindi ? (["hi", "en"] as const) : (["en", "hi"] as const)).map((l) => (
@@ -86,7 +86,7 @@ export function WelcomeFlow() {
                         className="w-full rounded-3xl border px-6 py-5 text-left transition-colors bg-white border-[#E7DCC8] text-[#2A1A1C] hover:border-[#6D252C] active:bg-[#6D252C] active:text-[#F7F2E8]"
                       >
                         <span className="block text-xl font-bold">{l === "hi" ? "हिन्दी" : "English"}</span>
-                        <span className="block text-sm mt-0.5 text-[#7A706B]">
+                        <span className="block text-sm mt-0.5 text-[#6E6560]">
                           {l === "hi" ? "Hindi" : "अंग्रेज़ी"}
                         </span>
                       </button>

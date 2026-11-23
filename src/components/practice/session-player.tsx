@@ -48,7 +48,7 @@ export function SessionPlayer({ session, prayers }: { session: PracticeSession; 
             <div className="flex-1 min-w-0">
               <p className="text-sm font-semibold text-[#2A1A1C] truncate">{session.title[ui]}</p>
               {!done && (
-                <p className="text-xs text-[#7A706B]">
+                <p className="text-xs text-[#6E6560]">
                   {t("session.progress", { i: step + 1, n: prayers.length })}
                 </p>
               )}
@@ -117,10 +117,10 @@ export function SessionPlayer({ session, prayers }: { session: PracticeSession; 
                   transition={{ duration: 0.35, ease: EASE }}
                 >
                   {showControls && <ReadingControls prefs={prefs} className="rounded-2xl bg-white border border-[#E7DCC8] p-3 mb-5" />}
-                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#A0701E]">{prayer.category[ui]}</p>
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#885F19]">{prayer.category[ui]}</p>
                   <h1 className="font-pali text-[28px] font-semibold text-[#3A1418] leading-tight mt-1">{prayer.title.pi}</h1>
                   <p lang={prefs.translation} className="text-sm text-[#5B5350]">{prayer.title[prefs.translation]}</p>
-                  <p className="mt-4 text-xs text-[#8A7F76]">{t("session.tapLine")}</p>
+                  <p className="mt-4 text-xs text-[#6D645D]">{t("session.tapLine")}</p>
                   <PrayerText
                     prayer={prayer}
                     prefs={prefs}

@@ -28,7 +28,7 @@ export default function PracticePage() {
       </header>
 
       <section aria-labelledby="sessions-heading">
-        <h2 id="sessions-heading" className="text-xs font-semibold uppercase tracking-[0.14em] text-[#A0701E] mb-3">
+        <h2 id="sessions-heading" className="text-xs font-semibold uppercase tracking-[0.14em] text-[#885F19] mb-3">
           <T k="prayers.sessions" />
         </h2>
         <div className="grid grid-cols-2 gap-3">
@@ -52,7 +52,7 @@ export default function PracticePage() {
       </section>
 
       <section aria-labelledby="all-heading">
-        <h2 id="all-heading" className="text-xs font-semibold uppercase tracking-[0.14em] text-[#A0701E] mb-3">
+        <h2 id="all-heading" className="text-xs font-semibold uppercase tracking-[0.14em] text-[#885F19] mb-3">
           <T k="prayers.all" />
         </h2>
         <PrayerList prayers={PRAYERS} />

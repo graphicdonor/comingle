@@ -33,7 +33,7 @@ function CaptionedAnimation({ id }: { id: AnimationId }) {
       <div className="mt-2 flex items-center justify-center gap-3 pb-1">
         <div className="flex gap-1.5" aria-hidden>
           {anim.frames.map((f, i) => (
-            <span key={i} className={cn("h-1.5 rounded-full transition-all duration-500", i === frame ? "w-5 bg-[#6D252C]" : "w-1.5 bg-[#D8CFC1]")} />
+            <span key={i} className={cn("h-1.5 rounded-full transition-all duration-500", i === frame ? "w-5 bg-[#6D252C]" : "w-1.5 bg-[#8E847C]")} />
           ))}
         </div>
         <p aria-live="polite" className="text-xs font-semibold text-[#6D252C] min-w-[11rem]">
@@ -174,7 +174,7 @@ function StepCard({ step, index }: { step: GuideStep; index: number }) {
             })}
           </ul>
         )}
-        {hasPoints && <p className="mt-2 text-[11px] text-[#8A7F76]">{t("learn.tapPoint")}</p>}
+        {hasPoints && <p className="mt-2 text-[11px] text-[#6D645D]">{t("learn.tapPoint")}</p>}
 
         {step.caution && (
           <p className="mt-4 flex gap-2.5 rounded-2xl bg-[#FBEDEA] border border-[#EDC9C2] px-4 py-3 text-sm text-[#7A2A24] leading-relaxed">

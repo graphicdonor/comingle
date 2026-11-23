@@ -11,7 +11,7 @@ export interface LegalSection {
   body: string;
 }
 
-export const LEGAL_LAST_UPDATED = "29 September 2026";
+export const LEGAL_LAST_UPDATED = "23 November 2026";
 
 export const TERMS_SECTIONS: LegalSection[] = [
   {
@@ -90,43 +90,47 @@ export const PRIVACY_SECTIONS: LegalSection[] = [
     body: "• Technical data needed to run WePray, such as your device and browser type, and your IP address. For the feedback form, we store only a scrambled (hashed) form of your IP address, to prevent spam.\n• A notification token, if you allow push notifications in the Android app.\n• Cookies: we use essential cookies to keep you signed in. Our public pages (the home page and feedback survey) also use Google Analytics, which sets cookies and collects information such as the pages you visit, your device and your approximate location, to help us understand how people find WePray. The app itself, including everything you do after signing in, is not tracked by Google Analytics.",
   },
   {
-    title: "4. How we use your information",
+    title: "4. Prayer, meditation and learning features",
+    body: "You don't need an account to use WePray's prayers, guided practice, meditation timer, guides or search.\n\nYour language and reading preferences, saved prayers, recently opened prayers and anything you download for offline use are stored only on your device. We never receive them, so we cannot see, share or analyse them. Searches in the app also run on your device and are not sent to us.\n\nBecause your prayer and meditation practice is personal and can reveal your religious beliefs, these features are designed so that this information stays with you. You can clear it at any time from Settings in the app, or by clearing the app's or browser's stored data.",
+  },
+  {
+    title: "5. How we use your information",
     body: "We use your information to run WePray: to sign you in, show your profile and content to the people you share it with, connect you with your communities, send notifications, and keep WePray safe through moderation and by preventing spam, fraud and abuse. We also use survey answers, feedback and analytics to improve WePray, and we use data where the law requires us to.",
   },
   {
-    title: "5. Content moderation",
+    title: "6. Content moderation",
     body: "Before your posts, comments, photos, profiles, listings and fundraisers are shown to others, their text and images are checked by an automated moderation service (currently provided by OpenAI). Text may first be translated into English for this check. We keep a record of each moderation decision, and our team may review content that is held or reported.",
   },
   {
-    title: "6. What other members can see",
+    title: "7. What other members can see",
     body: "WePray is a community platform, so other members can see your profile, your posts and comments, the communities you belong to, and any listings or fundraisers you share, including contact details you choose to add. Your Matrimonial profile is visible to other members using the Matrimonial service. Please don't share anything you don't want others to see.",
   },
   {
-    title: "7. Who we share information with",
+    title: "8. Who we share information with",
     body: "We do not sell your personal data. We share it only with service providers who help us run WePray, and only as needed for that purpose:\n\n• Supabase, for our database, sign-in and one-time login codes (sent by SMS through its SMS provider);\n• Cloudinary, to store and deliver photos and videos;\n• Netlify, to host our website;\n• OpenAI, to moderate content;\n• Google, for Google sign-in and, on public pages, Google Analytics;\n• Expo, to deliver push notifications to the Android app.\n\nSome of these providers may process data outside India. We may also share information if the law requires it, or to protect the safety of our members.\n\nWhen you open a fundraiser or donation platform, you leave WePray, and that platform's own privacy policy applies.",
   },
   {
-    title: "8. Children",
+    title: "9. Children",
     body: "WePray is for people aged 13 and over. If you are under 18, you may use WePray only with the consent of a parent or legal guardian. We do not knowingly collect data from children under 13; if we learn that we have, we will delete it. The Matrimonial service is for adults aged 18 and over only.\n\nA parent or guardian who has questions about a child's account, or wants it deleted, can use our Contact us form and choose \"Parent or guardian request\".",
   },
   {
-    title: "9. How long we keep your information",
+    title: "10. How long we keep your information",
     body: "We keep your information while your account is active. When you delete your account from Settings, we delete your profile and the content you created, including posts, comments, likes, listings, fundraisers, your Matrimonial profile and messages, notifications and moderation records.\n\nCommunities you created stay on WePray without you listed as the creator, and feedback survey answers are kept without being linked to you. Uploaded photo and video files, and backups, may take longer to be removed from our storage. We may keep limited information where the law requires it.",
   },
   {
-    title: "10. Security",
+    title: "11. Security",
     body: "We use reasonable safeguards to protect your data, including encrypted connections and access controls that limit who can see what. No system is completely secure, so please keep your login details private and let us know if you notice anything suspicious.",
   },
   {
-    title: "11. Your rights",
+    title: "12. Your rights",
     body: "Under India's Digital Personal Data Protection Act, 2023, and other applicable laws, you can ask to access, correct or delete your personal data, withdraw your consent, and nominate someone to exercise your rights if you are unable to. You can edit your profile at any time and delete your account from Settings.\n\nTo make a request, or if you have a concern, use our Contact us form and choose \"Privacy or data request\". If we cannot resolve your concern, you may complain to the Data Protection Board of India.",
   },
   {
-    title: "12. Changes to this policy",
+    title: "13. Changes to this policy",
     body: "We may update this policy as WePray changes. We will show the new date at the top of this page and let you know about significant changes.",
   },
   {
-    title: "13. Contact",
+    title: "14. Contact",
     body: "If you have questions about this policy or your personal data, please use our Contact us form: open Settings and choose Contact us (or Privacy or data request), or go to www.wepray.in/contact. We use the details you give there only to reply to you.",
   },
 ];

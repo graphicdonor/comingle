@@ -16,7 +16,7 @@ const PREVIEW = getPrayer("buddha-vandana");
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section>
-      <h2 className="text-xs font-semibold uppercase tracking-[0.14em] text-[#A0701E] mb-3">{title}</h2>
+      <h2 className="text-xs font-semibold uppercase tracking-[0.14em] text-[#885F19] mb-3">{title}</h2>
       {children}
     </section>
   );
@@ -45,7 +45,7 @@ export function PreferencesView() {
 
       <Section title={t("settings.language")}>
         <div className="rounded-3xl bg-white border border-[#E7DCC8] p-4">
-          <p className="text-xs font-medium text-[#7A706B] mb-2">{t("settings.appLanguage")}</p>
+          <p className="text-xs font-medium text-[#6E6560] mb-2">{t("settings.appLanguage")}</p>
           <Segmented<UiLang>
             label={t("settings.appLanguage")}
             value={lang}
@@ -63,7 +63,7 @@ export function PreferencesView() {
           <ReadingControls prefs={prefs} />
           {PREVIEW && (
             <div className="mt-4 rounded-2xl bg-[#FFFCF6] border border-[#EFE5D3] px-4 py-4">
-              <p className="text-[11px] font-semibold uppercase tracking-wider text-[#8A7F76] mb-2">{t("settings.preview")}</p>
+              <p className="text-[11px] font-semibold uppercase tracking-wider text-[#6D645D] mb-2">{t("settings.preview")}</p>
               <PrayerText prayer={PREVIEW} prefs={prefs} />
             </div>
           )}
@@ -87,7 +87,7 @@ export function PreferencesView() {
             aria-hidden
             className={cn(
               "relative h-7 w-12 rounded-full transition-colors flex-shrink-0 peer-focus-visible:ring-2 peer-focus-visible:ring-[#6D252C]/40",
-              prefs.keepAwake ? "bg-[#6D252C]" : "bg-[#D8CFC1]",
+              prefs.keepAwake ? "bg-[#6D252C]" : "bg-[#8E847C]",
             )}
           >
             <span className={cn("absolute top-1 h-5 w-5 rounded-full bg-white shadow transition-all", prefs.keepAwake ? "left-6" : "left-1")} />
@@ -130,7 +130,7 @@ export function PreferencesView() {
             </button>
           </div>
         </div>
-        <p className="mt-3 flex gap-2 text-xs text-[#7A706B] leading-relaxed">
+        <p className="mt-3 flex gap-2 text-xs text-[#6E6560] leading-relaxed">
           <ShieldCheck className="h-4 w-4 flex-shrink-0 text-[#87977A]" />
           {t("settings.privacyNote")}
         </p>

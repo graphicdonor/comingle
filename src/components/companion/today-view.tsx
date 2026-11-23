@@ -50,7 +50,7 @@ export function TodayView() {
       <motion.section {...fadeUp(0)} aria-label={t("today.aria.greeting")} className="pt-1">
         {now ? (
           <>
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#A0701E]">
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#885F19]">
               {now.toLocaleDateString(ui === "hi" ? "hi-IN" : "en-IN", { weekday: "long", day: "numeric", month: "long" })}
             </p>
             <h1 className="mt-1.5 text-[32px] leading-[1.1] font-bold tracking-tight text-[#2A1A1C]">{t(greetingKey(now.getHours()))}</h1>
@@ -108,7 +108,7 @@ export function TodayView() {
                     {i + 1}
                   </span>
                   <span className="font-pali text-[17px]">{p.title.pi}</span>
-                  <span className="ml-auto text-xs text-[#F7F2E8]/60">{t("common.min", { n: p.durationMinutes })}</span>
+                  <span className="ml-auto text-xs text-[#F7F2E8]/75">{t("common.min", { n: p.durationMinutes })}</span>
                 </motion.li>
               ))}
             </ol>
@@ -130,7 +130,7 @@ export function TodayView() {
 
       {/* Today's verse */}
       <motion.section {...fadeUp(2)} aria-labelledby="verse-heading">
-        <h2 id="verse-heading" className="text-xs font-semibold uppercase tracking-[0.14em] text-[#A0701E] mb-3">
+        <h2 id="verse-heading" className="text-xs font-semibold uppercase tracking-[0.14em] text-[#885F19] mb-3">
           {t("today.verse")}
         </h2>
         {verse ? (
@@ -145,7 +145,7 @@ export function TodayView() {
             </blockquote>
             <figcaption className="mt-4 flex items-center justify-between gap-3 text-xs">
               <span className="font-semibold text-[#6D252C]">{verse.reference}</span>
-              {verse.review !== "reviewed" && <span className="text-[#8A7F76]">{t("today.draftTranslation")}</span>}
+              {verse.review !== "reviewed" && <span className="text-[#6D645D]">{t("today.draftTranslation")}</span>}
             </figcaption>
           </figure>
         ) : (
@@ -156,7 +156,7 @@ export function TodayView() {
       {/* Meditate */}
       <motion.section {...fadeUp(3)} aria-labelledby="sit-heading">
         <div className="flex items-baseline justify-between mb-3">
-          <h2 id="sit-heading" className="text-xs font-semibold uppercase tracking-[0.14em] text-[#A0701E]">
+          <h2 id="sit-heading" className="text-xs font-semibold uppercase tracking-[0.14em] text-[#885F19]">
             {t("today.sit")}
           </h2>
           <Link href="/meditate" className="text-xs font-semibold text-[#6D252C]">{t("today.allPractices")}</Link>
@@ -171,7 +171,7 @@ export function TodayView() {
             >
               <Flower2 className="mx-auto h-5 w-5 text-[#87977A]" strokeWidth={1.8} />
               <span className="mt-2 block text-2xl font-bold text-[#2A1A1C] leading-none">{m}</span>
-              <span className="mt-1 block text-[11px] font-medium text-[#7A706B]">{t("today.minBreathing")}</span>
+              <span className="mt-1 block text-[11px] font-medium text-[#6E6560]">{t("today.minBreathing")}</span>
             </MotionLink>
           ))}
         </div>
@@ -180,7 +180,7 @@ export function TodayView() {
       {/* Continue */}
       {lastPrayer && (
         <motion.section {...fadeUp(4)} aria-labelledby="continue-heading">
-          <h2 id="continue-heading" className="text-xs font-semibold uppercase tracking-[0.14em] text-[#A0701E] mb-3">
+          <h2 id="continue-heading" className="text-xs font-semibold uppercase tracking-[0.14em] text-[#885F19] mb-3">
             {t("today.continue")}
           </h2>
           <Link
@@ -199,7 +199,7 @@ export function TodayView() {
 
       {/* New to practice */}
       <motion.section {...fadeUp(5)} aria-labelledby="learn-heading">
-        <h2 id="learn-heading" className="text-xs font-semibold uppercase tracking-[0.14em] text-[#A0701E] mb-3">
+        <h2 id="learn-heading" className="text-xs font-semibold uppercase tracking-[0.14em] text-[#885F19] mb-3">
           {t("today.newToPractice")}
         </h2>
         <div className="-mx-4 px-4 flex gap-3 overflow-x-auto pb-1 snap-x scroll-px-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
@@ -221,7 +221,7 @@ export function TodayView() {
         </div>
       </motion.section>
 
-      <p className="flex items-center justify-center gap-1.5 text-xs text-[#8A7F76] pb-2">
+      <p className="flex items-center justify-center gap-1.5 text-xs text-[#6D645D] pb-2">
         <Lock className="h-3.5 w-3.5" />
         {t("today.private")}
       </p>

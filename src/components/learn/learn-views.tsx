@@ -27,7 +27,7 @@ export function LearnIndex() {
               </span>
               <div className="min-w-0 flex-1">
                 <p lang={lang} className="text-lg font-bold text-[#2A1A1C]">{g.title[lang]}</p>
-                <p lang={other} className="text-sm text-[#7A706B]">{g.title[other]}</p>
+                <p lang={other} className="text-sm text-[#6E6560]">{g.title[other]}</p>
                 <p lang={lang} className="mt-2 text-sm text-[#5B5350] leading-relaxed">{g.summary[lang]}</p>
                 <p className="mt-2 text-xs font-medium text-[#56634A]">{t("common.minRead", { n: g.minutes })}</p>
               </div>
@@ -36,7 +36,7 @@ export function LearnIndex() {
           </li>
         ))}
       </ul>
-      <p className="text-xs text-[#8A7F76] leading-relaxed">{t("learn.more")}</p>
+      <p className="text-xs text-[#6D645D] leading-relaxed">{t("learn.more")}</p>
     </div>
   );
 }
@@ -55,9 +55,9 @@ export function GuideView({ slug }: { slug: string }) {
       <header>
         <div className="flex items-end gap-4">
           <div className="flex-1 min-w-0">
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#A0701E]">{t("learn.guideMeta", { n: guide.minutes })}</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#885F19]">{t("learn.guideMeta", { n: guide.minutes })}</p>
             <h1 lang={lang} className="mt-1 text-[30px] font-bold tracking-tight text-[#2A1A1C] leading-tight">{guide.title[lang]}</h1>
-            <p lang={other} className="text-base text-[#7A706B]">{guide.title[other]}</p>
+            <p lang={other} className="text-base text-[#6E6560]">{guide.title[other]}</p>
           </div>
           <PostureAnimation id={guide.coverAnimation} decorative className="h-40 w-28 flex-shrink-0" />
         </div>

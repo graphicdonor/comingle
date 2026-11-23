@@ -88,7 +88,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   )}
                   <Icon className={cn("relative h-[22px] w-[22px]", active ? "text-[#6D252C]" : "text-[#9A8F86]")} strokeWidth={active ? 2.2 : 1.8} />
                 </span>
-                <span className={cn("text-[11px] leading-none", active ? "font-semibold text-[#6D252C]" : "font-medium text-[#8A7F76]")}>
+                <span className={cn("text-[11px] leading-none", active ? "font-semibold text-[#6D252C]" : "font-medium text-[#6D645D]")}>
                   {t(item.label)}
                 </span>
               </Link>
