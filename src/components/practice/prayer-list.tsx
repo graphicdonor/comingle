@@ -6,11 +6,13 @@ import { Heart, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Prayer } from "@/lib/practice/prayers";
 import { favourites, readingPrefs } from "@/lib/practice/preferences";
+import { useT } from "@/lib/i18n/use-t";
 
 export function PrayerList({ prayers }: { prayers: Prayer[] }) {
   const favs = favourites.use();
   const { translation } = readingPrefs.use();
   const [filter, setFilter] = useState<"all" | "saved">("all");
+  const { t, lang: ui } = useT();
 
   const shown = filter === "saved" ? prayers.filter((p) => favs.includes(p.slug)) : prayers;
 
@@ -28,14 +30,14 @@ export function PrayerList({ prayers }: { prayers: Prayer[] }) {
               filter === f ? "bg-[#6D252C] text-white border-[#6D252C]" : "bg-white text-[#6D252C] border-[#6D252C]/25",
             )}
           >
-            {f === "all" ? `All prayers (${prayers.length})` : `Saved (${favs.length})`}
+            {f === "all" ? t("prayers.filterAll", { n: prayers.length }) : t("prayers.filterSaved", { n: favs.length })}
           </button>
         ))}
       </div>
 
       {shown.length === 0 ? (
         <p className="text-sm text-gray-500 rounded-2xl bg-white border border-[#E7DCC8] px-4 py-6 text-center">
-          Prayers you save appear here. They are stored on this device only.
+          {t("prayers.emptySaved")}
         </p>
       ) : (
         <ul className="space-y-3">
@@ -55,13 +57,13 @@ export function PrayerList({ prayers }: { prayers: Prayer[] }) {
                     <h3 className="font-pali text-lg font-semibold text-[#3A1418] truncate">
                       {p.title.pi}
                     </h3>
-                    {favs.includes(p.slug) && <Heart aria-label="Saved" className="h-3.5 w-3.5 text-[#6D252C] fill-current flex-shrink-0" />}
+                    {favs.includes(p.slug) && <Heart aria-label={t("prayers.saved")} className="h-3.5 w-3.5 text-[#6D252C] fill-current flex-shrink-0" />}
                   </div>
                   <p lang={translation} className="text-sm text-[#4A4340]">
                     {p.title[translation]}
                   </p>
                   <p className="text-xs text-gray-500 mt-1">
-                    {p.category.en} · {p.durationMinutes} min · {p.audio ? "Audio" : "Text"}
+                    {p.category[ui]} · {t("common.min", { n: p.durationMinutes })} · {p.audio ? t("prayers.audio") : t("prayers.text")}
                   </p>
                 </div>
                 <ChevronRight className="h-5 w-5 text-gray-300 flex-shrink-0" />

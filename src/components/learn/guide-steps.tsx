@@ -15,18 +15,21 @@ import {
   type FigureId,
   type FigurePoint,
 } from "@/components/visuals/posture-figure";
+import { useT } from "@/lib/i18n/use-t";
+import type { MessageKey } from "@/lib/i18n/dictionary";
 
-const FIGURE_NAMES: Partial<Record<FigureId, string>> = { "lap-hands": "In the lap", anjali: "Añjali" };
+const FIGURE_NAMES: Partial<Record<FigureId, MessageKey>> = { "lap-hands": "learn.inLap", anjali: "learn.anjali" };
 
 /** An animation with step captions, progress dots and a pause button. */
 function CaptionedAnimation({ id }: { id: AnimationId }) {
   const anim = ANIMATIONS[id];
   const [frame, setFrame] = useState(0);
   const [playing, setPlaying] = useState(true);
+  const { t, lang } = useT();
 
   return (
     <div className="relative">
-      <FrameSequence frames={anim.frames} fade={anim.fade} label={anim.label} playing={playing} onFrameChange={setFrame} className="mx-auto w-full max-w-[220px]" />
+      <FrameSequence frames={anim.frames} fade={anim.fade} label={anim.label[lang]} playing={playing} onFrameChange={setFrame} className="mx-auto w-full max-w-[220px]" />
       <div className="mt-2 flex items-center justify-center gap-3 pb-1">
         <div className="flex gap-1.5" aria-hidden>
           {anim.frames.map((f, i) => (
@@ -34,12 +37,12 @@ function CaptionedAnimation({ id }: { id: AnimationId }) {
           ))}
         </div>
         <p aria-live="polite" className="text-xs font-semibold text-[#6D252C] min-w-[11rem]">
-          {anim.frames[frame].caption}
+          {anim.frames[frame].caption?.[lang]}
         </p>
         <button
           type="button"
           onClick={() => setPlaying((p) => !p)}
-          aria-label={playing ? "Pause animation" : "Play animation"}
+          aria-label={playing ? t("learn.pause") : t("learn.play")}
           className="h-8 w-8 rounded-full bg-white border border-[#E7DCC8] flex items-center justify-center text-[#6D252C]"
         >
           {playing ? <Pause className="h-3.5 w-3.5 fill-current" /> : <Play className="h-3.5 w-3.5 fill-current ml-0.5" />}
@@ -83,6 +86,7 @@ function StepCard({ step, index }: { step: GuideStep; index: number }) {
   const figure = step.figures?.[figureIndex];
   const hasVisual = Boolean(step.figures || step.scene || step.animation);
   const hasPoints = step.cues?.some((c) => c.point && figure && figureHasPoint(figure, c.point));
+  const { t, lang } = useT();
 
   return (
     <motion.li
@@ -96,7 +100,7 @@ function StepCard({ step, index }: { step: GuideStep; index: number }) {
         <div className="relative bg-gradient-to-b from-[#F3ECDF] to-[#FFFCF6] px-4 pt-5 pb-2">
           <StepVisual step={step} figureIndex={figureIndex} point={point} />
           {step.figures && step.figures.length > 1 && (
-            <div role="tablist" aria-label="Hand position" className="absolute top-3 right-3 flex rounded-full bg-white/90 p-0.5 border border-[#E7DCC8]">
+            <div role="tablist" aria-label={t("learn.handPosition")} className="absolute top-3 right-3 flex rounded-full bg-white/90 p-0.5 border border-[#E7DCC8]">
               {step.figures.map((f, i) => (
                 <button
                   key={f}
@@ -112,7 +116,7 @@ function StepCard({ step, index }: { step: GuideStep; index: number }) {
                     i === figureIndex ? "bg-[#6D252C] text-white" : "text-[#6D252C]",
                   )}
                 >
-                  {FIGURE_NAMES[f] ?? f}
+                  {FIGURE_NAMES[f] ? t(FIGURE_NAMES[f]) : f}
                 </button>
               ))}
             </div>
@@ -125,11 +129,11 @@ function StepCard({ step, index }: { step: GuideStep; index: number }) {
           <span className="h-7 w-7 rounded-full bg-[#6D252C] text-[#F7F2E8] text-sm font-bold flex items-center justify-center flex-shrink-0">
             {index + 1}
           </span>
-          <h2 className="text-[17px] font-bold text-[#2A1A1C] leading-snug">{step.title}</h2>
+          <h2 lang={lang} className="text-[17px] font-bold text-[#2A1A1C] leading-snug">{step.title[lang]}</h2>
         </div>
         <div className="mt-3 space-y-2.5">
           {step.body.map((p) => (
-            <p key={p} className="text-[15px] text-[#4A4340] leading-relaxed">{p}</p>
+            <p key={p.en} lang={lang} className="text-[15px] text-[#4A4340] leading-relaxed">{p[lang]}</p>
           ))}
         </div>
 
@@ -144,12 +148,12 @@ function StepCard({ step, index }: { step: GuideStep; index: number }) {
                     aria-hidden
                     className={cn("mt-2 h-1.5 w-1.5 rounded-full flex-shrink-0 transition-colors", active ? "bg-[#D99A38]" : "bg-[#87977A]")}
                   />
-                  <span className="flex-1">{c.text}</span>
+                  <span lang={lang} className="flex-1">{c.text[lang]}</span>
                   {linked && <Crosshair aria-hidden className={cn("mt-1 h-4 w-4 flex-shrink-0", active ? "text-[#D99A38]" : "text-[#C9BCA8]")} />}
                 </>
               );
               return (
-                <li key={c.text}>
+                <li key={c.text.en}>
                   {linked ? (
                     <button
                       type="button"
@@ -170,12 +174,12 @@ function StepCard({ step, index }: { step: GuideStep; index: number }) {
             })}
           </ul>
         )}
-        {hasPoints && <p className="mt-2 text-[11px] text-[#8A7F76]">Tap a point to see it on the figure.</p>}
+        {hasPoints && <p className="mt-2 text-[11px] text-[#8A7F76]">{t("learn.tapPoint")}</p>}
 
         {step.caution && (
           <p className="mt-4 flex gap-2.5 rounded-2xl bg-[#FBEDEA] border border-[#EDC9C2] px-4 py-3 text-sm text-[#7A2A24] leading-relaxed">
             <AlertTriangle className="h-4 w-4 flex-shrink-0 mt-0.5" />
-            {step.caution}
+            <span lang={lang}>{step.caution[lang]}</span>
           </p>
         )}
       </div>
@@ -187,7 +191,7 @@ export function GuideSteps({ guide }: { guide: Guide }) {
   return (
     <ol className="mt-8 space-y-4">
       {guide.steps.map((step, i) => (
-        <StepCard key={step.title} step={step} index={i} />
+        <StepCard key={step.title.en} step={step} index={i} />
       ))}
     </ol>
   );

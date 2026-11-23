@@ -9,6 +9,7 @@ import {
   type DisplayMode,
   type ReadingPrefs,
 } from "@/lib/practice/preferences";
+import { useT } from "@/lib/i18n/use-t";
 
 export function Segmented<T extends string>({
   label,
@@ -49,22 +50,23 @@ export function Segmented<T extends string>({
 /** Display mode, translation language, Pali script and text size. */
 export function ReadingControls({ prefs, className }: { prefs: ReadingPrefs; className?: string }) {
   const update = (patch: Partial<ReadingPrefs>) => readingPrefs.set({ ...prefs, ...patch });
+  const { t } = useT();
 
   return (
     <div className={cn("space-y-2.5", className)}>
       <Segmented<DisplayMode>
-        label="Show"
+        label={t("reading.show")}
         value={prefs.mode}
         onChange={(mode) => update({ mode })}
         options={[
-          { value: "pali", label: "Pali" },
-          { value: "both", label: "Pali + translation" },
-          { value: "translation", label: "Translation" },
+          { value: "pali", label: t("reading.pali") },
+          { value: "both", label: t("reading.both") },
+          { value: "translation", label: t("reading.translation") },
         ]}
       />
       <div className="grid grid-cols-2 gap-2.5">
         <Segmented<TranslationLang>
-          label="Translation language"
+          label={t("reading.translationLang")}
           value={prefs.translation}
           onChange={(translation) => update({ translation })}
           options={[
@@ -73,21 +75,21 @@ export function ReadingControls({ prefs, className }: { prefs: ReadingPrefs; cla
           ]}
         />
         <Segmented<ReadingPrefs["script"]>
-          label="Pali script"
+          label={t("reading.script")}
           value={prefs.script}
           onChange={(script) => update({ script })}
           options={[
-            { value: "roman", label: "Roman" },
+            { value: "roman", label: t("reading.roman") },
             { value: "devanagari", label: "देवनागरी" },
           ]}
         />
       </div>
       <div className="flex items-center justify-between pt-0.5">
-        <span className="text-xs font-medium text-[#7A706B]">Text size</span>
+        <span className="text-xs font-medium text-[#7A706B]">{t("reading.size")}</span>
         <div className="flex items-center gap-1">
           <button
             type="button"
-            aria-label="Smaller text"
+            aria-label={t("reading.smaller")}
             disabled={prefs.size <= TEXT_SIZE_MIN}
             onClick={() => update({ size: prefs.size - 1 })}
             className="w-10 h-10 rounded-full flex items-center justify-center text-[#6D252C] hover:bg-[#F7F2E8] disabled:opacity-30"
@@ -96,7 +98,7 @@ export function ReadingControls({ prefs, className }: { prefs: ReadingPrefs; cla
           </button>
           <button
             type="button"
-            aria-label="Larger text"
+            aria-label={t("reading.larger")}
             disabled={prefs.size >= TEXT_SIZE_MAX}
             onClick={() => update({ size: prefs.size + 1 })}
             className="w-10 h-10 rounded-full flex items-center justify-center text-[#6D252C] hover:bg-[#F7F2E8] disabled:opacity-30"

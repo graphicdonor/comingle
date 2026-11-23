@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import type { Prayer } from "@/lib/practice/prayers";
 import { paliToDevanagari } from "@/lib/practice/pali-devanagari";
 import { TEXT_SIZE_MIN, type ReadingPrefs } from "@/lib/practice/preferences";
+import { useT } from "@/lib/i18n/use-t";
 
 const PALI_SIZES = [16, 19, 22, 26, 30];
 const TRANSLATION_SIZES = [14, 16, 18, 21, 24];
@@ -13,11 +14,12 @@ export function ReviewNotice({ prayer, prefs }: { prayer: Prayer; prefs: Reading
   const showPali = prefs.mode !== "translation";
   const showTranslation = prefs.mode !== "pali";
   const lang = prefs.translation;
+  const { t } = useT();
   const notes: string[] = [];
-  if (showPali && prayer.review.pali.status !== "reviewed") notes.push("The Pali text is awaiting review against an approved edition.");
-  if (showPali && prefs.script === "devanagari") notes.push("Devanagari is generated automatically from the Roman text and has not been reviewed.");
+  if (showPali && prayer.review.pali.status !== "reviewed") notes.push(t("prayers.notice.pali"));
+  if (showPali && prefs.script === "devanagari") notes.push(t("prayers.notice.devanagari"));
   if (showTranslation && prayer.review[lang].status !== "reviewed") {
-    notes.push(`This ${lang === "hi" ? "Hindi" : "English"} translation is a draft and has not yet been reviewed.`);
+    notes.push(t("prayers.notice.translation", { lang: t(lang === "hi" ? "common.lang.hi" : "common.lang.en") }));
   }
   if (notes.length === 0) return null;
 
@@ -54,6 +56,7 @@ export function PrayerText({
   const showTranslation = prefs.mode !== "pali";
   const devanagari = prefs.script === "devanagari";
   const sizeIndex = prefs.size - TEXT_SIZE_MIN;
+  const { t, lang: ui } = useT();
 
   return (
     <div className={cn("space-y-7", className)}>
@@ -62,13 +65,13 @@ export function PrayerText({
           {(section.heading || section.repeat) && (
             <div className="flex items-center gap-2 mb-3">
               {section.heading && (
-                <h2 lang={lang} className="text-xs font-semibold uppercase tracking-wider text-[#A0701E]">
-                  {section.heading[lang]}
+                <h2 lang={ui} className="text-xs font-semibold uppercase tracking-wider text-[#A0701E]">
+                  {section.heading[ui]}
                 </h2>
               )}
               {section.repeat && (
                 <span className="text-[11px] font-semibold rounded-full bg-[#EFE7D8] text-[#6D252C] px-2.5 py-0.5">
-                  Recite {section.repeat}×
+                  {t("prayers.recite", { n: section.repeat })}
                 </span>
               )}
             </div>

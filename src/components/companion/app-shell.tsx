@@ -1,28 +1,39 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 import { MotionConfig, motion } from "framer-motion";
 import { Home, BookOpen, Flower2, GraduationCap, SlidersHorizontal, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useT } from "@/lib/i18n/use-t";
+import type { MessageKey } from "@/lib/i18n/dictionary";
+import { WelcomeFlow } from "./welcome-flow";
 
 interface NavItem {
   href: string;
-  label: string;
+  label: MessageKey;
   icon: LucideIcon;
   match: (path: string) => boolean;
 }
 
 const NAV: NavItem[] = [
-  { href: "/app", label: "Today", icon: Home, match: (p) => p === "/app" },
-  { href: "/practice", label: "Prayers", icon: BookOpen, match: (p) => p.startsWith("/practice") },
-  { href: "/meditate", label: "Meditate", icon: Flower2, match: (p) => p.startsWith("/meditate") },
-  { href: "/learn", label: "Learn", icon: GraduationCap, match: (p) => p.startsWith("/learn") },
-  { href: "/preferences", label: "Settings", icon: SlidersHorizontal, match: (p) => p.startsWith("/preferences") },
+  { href: "/app", label: "nav.today", icon: Home, match: (p) => p === "/app" },
+  { href: "/practice", label: "nav.prayers", icon: BookOpen, match: (p) => p.startsWith("/practice") },
+  { href: "/meditate", label: "nav.meditate", icon: Flower2, match: (p) => p.startsWith("/meditate") },
+  { href: "/learn", label: "nav.learn", icon: GraduationCap, match: (p) => p.startsWith("/learn") },
+  { href: "/preferences", label: "nav.settings", icon: SlidersHorizontal, match: (p) => p.startsWith("/preferences") },
 ];
 
 /** App chrome for the practice companion: quiet header, five-tab bottom bar. */
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const { t, lang } = useT();
+
+  // Keep the document language in step with the interface language, so
+  // screen readers and hyphenation use the right rules.
+  useEffect(() => {
+    document.documentElement.lang = lang;
+  }, [lang]);
 
   // reducedMotion="user": every framer-motion animation in the app respects
   // the device's reduce-motion setting.
@@ -40,7 +51,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <div className="max-w-xl mx-auto px-4 py-5">{children}</div>
       </main>
 
-      <nav aria-label="Main navigation" className="fixed bottom-0 inset-x-0 z-40 bg-[#FFFCF6] border-t border-[#E7DCC8] pb-[env(safe-area-inset-bottom)]">
+      <nav aria-label={t("aria.mainNav")} className="fixed bottom-0 inset-x-0 z-40 bg-[#FFFCF6] border-t border-[#E7DCC8] pb-[env(safe-area-inset-bottom)]">
         <div className="max-w-xl mx-auto flex">
           {NAV.map((item) => {
             const active = item.match(pathname);
@@ -63,13 +74,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   <Icon className={cn("relative h-[22px] w-[22px]", active ? "text-[#6D252C]" : "text-[#9A8F86]")} strokeWidth={active ? 2.2 : 1.8} />
                 </span>
                 <span className={cn("text-[11px] leading-none", active ? "font-semibold text-[#6D252C]" : "font-medium text-[#8A7F76]")}>
-                  {item.label}
+                  {t(item.label)}
                 </span>
               </Link>
             );
           })}
         </div>
       </nav>
+
+      <WelcomeFlow />
     </MotionConfig>
   );
 }

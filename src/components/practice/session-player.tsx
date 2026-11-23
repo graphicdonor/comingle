@@ -11,12 +11,14 @@ import { useWakeLock } from "@/lib/practice/client-hooks";
 import { PostureAnimation } from "@/components/visuals/posture-figure";
 import { PrayerText, ReviewNotice } from "./prayer-text";
 import { ReadingControls } from "./reading-controls";
+import { useT } from "@/lib/i18n/use-t";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
 /** Distraction-free, one-prayer-at-a-time guided session (PRD §7.6). */
 export function SessionPlayer({ session, prayers }: { session: PracticeSession; prayers: Prayer[] }) {
   const prefs = readingPrefs.use();
+  const { t, lang: ui } = useT();
   const [step, setStep] = useState(0);
   const [direction, setDirection] = useState(1);
   const [activeLine, setActiveLine] = useState<string | null>(null);
@@ -40,21 +42,21 @@ export function SessionPlayer({ session, prayers }: { session: PracticeSession; 
         {/* Top bar */}
         <div className="flex-shrink-0 pt-[env(safe-area-inset-top)]">
           <div className="max-w-xl mx-auto px-4 h-14 flex items-center gap-3">
-            <Link href="/app" aria-label="End session" className="w-10 h-10 -ml-2 rounded-full flex items-center justify-center text-[#6D252C] hover:bg-[#EFE7D8]">
+            <Link href="/app" aria-label={t("common.endSession")} className="w-10 h-10 -ml-2 rounded-full flex items-center justify-center text-[#6D252C] hover:bg-[#EFE7D8]">
               <X className="h-5 w-5" />
             </Link>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-[#2A1A1C] truncate">{session.title.en}</p>
+              <p className="text-sm font-semibold text-[#2A1A1C] truncate">{session.title[ui]}</p>
               {!done && (
                 <p className="text-xs text-[#7A706B]">
-                  {step + 1} of {prayers.length}
+                  {t("session.progress", { i: step + 1, n: prayers.length })}
                 </p>
               )}
             </div>
             {!done && (
               <button
                 type="button"
-                aria-label="Reading options"
+                aria-label={t("session.options")}
                 aria-expanded={showControls}
                 onClick={() => setShowControls((v) => !v)}
                 className={cn("w-10 h-10 rounded-full flex items-center justify-center text-[#6D252C]", showControls ? "bg-[#EFE7D8]" : "hover:bg-[#EFE7D8]")}
@@ -94,11 +96,10 @@ export function SessionPlayer({ session, prayers }: { session: PracticeSession; 
                   <PostureAnimation id="bow" decorative className="h-56 w-40" />
                   <p className="mt-6 font-pali text-3xl text-[#6D252C]">Sādhu · sādhu · sādhu</p>
                   <p className="mt-4 text-[15px] text-[#5B5350] max-w-xs leading-relaxed">
-                    Your practice is complete. May all beings be happy.
+                    {t("session.complete")}
                   </p>
-                  <p lang="hi" className="mt-1 text-sm text-[#7A706B]">सभी प्राणी सुखी हों।</p>
                   <Link href="/app" className="mt-8 rounded-full bg-[#6D252C] text-[#F7F2E8] px-8 py-3 text-sm font-bold">
-                    Back to today
+                    {t("common.backToToday")}
                   </Link>
                 </motion.div>
               ) : (
@@ -116,10 +117,10 @@ export function SessionPlayer({ session, prayers }: { session: PracticeSession; 
                   transition={{ duration: 0.35, ease: EASE }}
                 >
                   {showControls && <ReadingControls prefs={prefs} className="rounded-2xl bg-white border border-[#E7DCC8] p-3 mb-5" />}
-                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#A0701E]">{prayer.category.en}</p>
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#A0701E]">{prayer.category[ui]}</p>
                   <h1 className="font-pali text-[28px] font-semibold text-[#3A1418] leading-tight mt-1">{prayer.title.pi}</h1>
                   <p lang={prefs.translation} className="text-sm text-[#5B5350]">{prayer.title[prefs.translation]}</p>
-                  <p className="mt-4 text-xs text-[#8A7F76]">Tap a line to keep your place.</p>
+                  <p className="mt-4 text-xs text-[#8A7F76]">{t("session.tapLine")}</p>
                   <PrayerText
                     prayer={prayer}
                     prefs={prefs}
@@ -147,7 +148,7 @@ export function SessionPlayer({ session, prayers }: { session: PracticeSession; 
                 disabled={step === 0}
                 className="flex items-center justify-center gap-1 rounded-full border border-[#6D252C]/25 text-[#6D252C] px-5 py-3 text-sm font-semibold disabled:opacity-30"
               >
-                <ChevronLeft className="h-4 w-4" /> Back
+                <ChevronLeft className="h-4 w-4" /> {t("session.back")}
               </motion.button>
               <motion.button
                 whileTap={{ scale: 0.97 }}
@@ -155,9 +156,9 @@ export function SessionPlayer({ session, prayers }: { session: PracticeSession; 
                 onClick={() => go(step + 1)}
                 className="flex-1 flex items-center justify-center gap-1 rounded-full bg-[#6D252C] text-[#F7F2E8] py-3 text-sm font-bold"
               >
-                {step === prayers.length - 1 ? "Finish" : (
+                {step === prayers.length - 1 ? t("session.finish") : (
                   <>
-                    Next: <span className="font-pali font-semibold">{prayers[step + 1].title.pi}</span> <ChevronRight className="h-4 w-4" />
+                    {t("session.next")} <span className="font-pali font-semibold">{prayers[step + 1].title.pi}</span> <ChevronRight className="h-4 w-4" />
                   </>
                 )}
               </motion.button>

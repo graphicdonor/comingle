@@ -3,9 +3,11 @@ import Link from "next/link";
 import { useState } from "react";
 import { ChevronRight, ShieldCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { readingPrefs, favourites, recentPrayers } from "@/lib/practice/preferences";
+import { readingPrefs, favourites, recentPrayers, welcomeDone } from "@/lib/practice/preferences";
+import { uiLang, useT } from "@/lib/i18n/use-t";
+import type { UiLang } from "@/lib/i18n/dictionary";
 import { getPrayer } from "@/lib/practice/prayers";
-import { ReadingControls } from "@/components/practice/reading-controls";
+import { ReadingControls, Segmented } from "@/components/practice/reading-controls";
 import { PrayerText } from "@/components/practice/prayer-text";
 
 const PREVIEW = getPrayer("buddha-vandana");
@@ -24,6 +26,7 @@ export function PreferencesView() {
   const favs = favourites.use();
   const recent = recentPrayers.use();
   const [cleared, setCleared] = useState<string | null>(null);
+  const { t, lang } = useT();
 
   function clear(what: "history" | "saved") {
     if (what === "history") recentPrayers.set([]);
@@ -35,27 +38,42 @@ export function PreferencesView() {
   return (
     <div className="space-y-8">
       <header>
-        <h1 className="text-[28px] font-bold tracking-tight text-[#2A1A1C]">Settings</h1>
-        <p className="mt-1 text-[15px] text-[#5B5350]">Saved on this device. No account needed.</p>
+        <h1 className="text-[28px] font-bold tracking-tight text-[#2A1A1C]">{t("settings.title")}</h1>
+        <p className="mt-1 text-[15px] text-[#5B5350]">{t("settings.intro")}</p>
       </header>
 
-      <Section title="Reading">
+      <Section title={t("settings.language")}>
+        <div className="rounded-3xl bg-white border border-[#E7DCC8] p-4">
+          <p className="text-xs font-medium text-[#7A706B] mb-2">{t("settings.appLanguage")}</p>
+          <Segmented<UiLang>
+            label={t("settings.appLanguage")}
+            value={lang}
+            onChange={(l) => uiLang.set(l)}
+            options={[
+              { value: "hi", label: "हिन्दी" },
+              { value: "en", label: "English" },
+            ]}
+          />
+        </div>
+      </Section>
+
+      <Section title={t("settings.reading")}>
         <div className="rounded-3xl bg-white border border-[#E7DCC8] p-4">
           <ReadingControls prefs={prefs} />
           {PREVIEW && (
             <div className="mt-4 rounded-2xl bg-[#FFFCF6] border border-[#EFE5D3] px-4 py-4">
-              <p className="text-[11px] font-semibold uppercase tracking-wider text-[#8A7F76] mb-2">Preview</p>
+              <p className="text-[11px] font-semibold uppercase tracking-wider text-[#8A7F76] mb-2">{t("settings.preview")}</p>
               <PrayerText prayer={PREVIEW} prefs={prefs} />
             </div>
           )}
         </div>
       </Section>
 
-      <Section title="Practice">
+      <Section title={t("settings.practice")}>
         <label className="flex items-center justify-between gap-4 rounded-3xl bg-white border border-[#E7DCC8] px-5 py-4 cursor-pointer">
           <span>
-            <span className="block font-semibold text-[#2A1A1C]">Keep screen on</span>
-            <span className="block text-sm text-[#5B5350]">During guided sessions and meditation</span>
+            <span className="block font-semibold text-[#2A1A1C]">{t("settings.keepAwake")}</span>
+            <span className="block text-sm text-[#5B5350]">{t("settings.keepAwakeHint")}</span>
           </span>
           <input
             type="checkbox"
@@ -76,12 +94,12 @@ export function PreferencesView() {
         </label>
       </Section>
 
-      <Section title="Your data">
+      <Section title={t("settings.data")}>
         <div className="rounded-3xl bg-white border border-[#E7DCC8] divide-y divide-[#EFE5D3]">
           <div className="flex items-center justify-between gap-4 px-5 py-4">
             <span>
-              <span className="block font-semibold text-[#2A1A1C]">Recently opened</span>
-              <span className="block text-sm text-[#5B5350]">{recent.length} {recent.length === 1 ? "prayer" : "prayers"}</span>
+              <span className="block font-semibold text-[#2A1A1C]">{t("settings.recent")}</span>
+              <span className="block text-sm text-[#5B5350]">{t("settings.recentCount", { n: recent.length })}</span>
             </span>
             <button
               type="button"
@@ -89,13 +107,13 @@ export function PreferencesView() {
               onClick={() => clear("history")}
               className="rounded-full border border-[#6D252C]/25 px-4 py-2 text-sm font-semibold text-[#6D252C] disabled:opacity-40"
             >
-              {cleared === "history" ? "Cleared" : "Clear"}
+              {cleared === "history" ? t("settings.cleared") : t("settings.clear")}
             </button>
           </div>
           <div className="flex items-center justify-between gap-4 px-5 py-4">
             <span>
-              <span className="block font-semibold text-[#2A1A1C]">Saved prayers</span>
-              <span className="block text-sm text-[#5B5350]">{favs.length} saved</span>
+              <span className="block font-semibold text-[#2A1A1C]">{t("settings.savedPrayers")}</span>
+              <span className="block text-sm text-[#5B5350]">{t("settings.savedCount", { n: favs.length })}</span>
             </span>
             <button
               type="button"
@@ -103,28 +121,36 @@ export function PreferencesView() {
               onClick={() => clear("saved")}
               className="rounded-full border border-[#6D252C]/25 px-4 py-2 text-sm font-semibold text-[#6D252C] disabled:opacity-40"
             >
-              {cleared === "saved" ? "Removed" : "Remove all"}
+              {cleared === "saved" ? t("settings.removed") : t("settings.removeAll")}
             </button>
           </div>
         </div>
         <p className="mt-3 flex gap-2 text-xs text-[#7A706B] leading-relaxed">
           <ShieldCheck className="h-4 w-4 flex-shrink-0 text-[#87977A]" />
-          Your prayer history, saved prayers and settings are stored only on this device. They are never sent to us or shared.
+          {t("settings.privacyNote")}
         </p>
       </Section>
 
-      <Section title="About">
+      <Section title={t("settings.about")}>
         <div className="rounded-3xl bg-white border border-[#E7DCC8] divide-y divide-[#EFE5D3]">
           {[
-            { href: "/privacy", label: "Privacy policy" },
-            { href: "/terms", label: "Terms of use" },
-            { href: "/contact", label: "Contact us" },
+            { href: "/privacy", label: t("settings.privacy") },
+            { href: "/terms", label: t("settings.terms") },
+            { href: "/contact", label: t("settings.contact") },
           ].map((l) => (
             <Link key={l.href} href={l.href} className="flex items-center justify-between px-5 py-4 text-[15px] font-medium text-[#2A1A1C]">
               {l.label}
               <ChevronRight className="h-4 w-4 text-[#B5AA9F]" />
             </Link>
           ))}
+          <button
+            type="button"
+            onClick={() => welcomeDone.set(false)}
+            className="w-full flex items-center justify-between px-5 py-4 text-[15px] font-medium text-[#2A1A1C] text-left"
+          >
+            {t("settings.showWelcome")}
+            <ChevronRight className="h-4 w-4 text-[#B5AA9F]" />
+          </button>
         </div>
       </Section>
     </div>

@@ -7,6 +7,7 @@ import type { Prayer } from "@/lib/practice/prayers";
 import { readingPrefs, favourites, toggleFavourite, markPrayerOpened } from "@/lib/practice/preferences";
 import { PrayerText, ReviewNotice } from "./prayer-text";
 import { ReadingControls } from "./reading-controls";
+import { useT } from "@/lib/i18n/use-t";
 
 export function PrayerReader({ prayer }: { prayer: Prayer }) {
   const prefs = readingPrefs.use();
@@ -14,6 +15,8 @@ export function PrayerReader({ prayer }: { prayer: Prayer }) {
   const [shared, setShared] = useState(false);
   const isFav = favs.includes(prayer.slug);
   const lang = prefs.translation;
+  const { t, lang: ui } = useT();
+  const other = ui === "hi" ? "en" : "hi";
 
   useEffect(() => {
     markPrayerOpened(prayer.slug);
@@ -39,13 +42,13 @@ export function PrayerReader({ prayer }: { prayer: Prayer }) {
     <article className="pb-6">
       <header className="mb-5">
         <p className="text-xs font-semibold uppercase tracking-wider text-[#A0701E] mb-1">
-          {prayer.category.en} · {prayer.durationMinutes} min
+          {prayer.category[ui]} · {t("common.min", { n: prayer.durationMinutes })}
         </p>
         <h1 className="font-pali text-3xl font-semibold text-[#3A1418] leading-tight">{prayer.title.pi}</h1>
         <p className="text-base text-[#4A4340] mt-1">
-          {prayer.title.en} · <span lang="hi">{prayer.title.hi}</span>
+          <span lang={ui}>{prayer.title[ui]}</span> · <span lang={other}>{prayer.title[other]}</span>
         </p>
-        <p className="text-sm text-[#5B5350] mt-3 leading-relaxed">{prayer.summary.en}</p>
+        <p lang={ui} className="text-sm text-[#5B5350] mt-3 leading-relaxed">{prayer.summary[ui]}</p>
 
         <div className="flex items-center gap-2 mt-4">
           <button
@@ -65,7 +68,7 @@ export function PrayerReader({ prayer }: { prayer: Prayer }) {
             >
               <Heart className={cn("h-4 w-4", isFav && "fill-current")} />
             </motion.span>
-            {isFav ? "Saved" : "Save"}
+            {isFav ? t("prayers.saved") : t("prayers.save")}
           </button>
           <button
             type="button"
@@ -73,7 +76,7 @@ export function PrayerReader({ prayer }: { prayer: Prayer }) {
             className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold border bg-white text-[#6D252C] border-[#6D252C]/30 hover:border-[#6D252C] transition-colors"
           >
             {shared ? <Check className="h-4 w-4" /> : <Share2 className="h-4 w-4" />}
-            {shared ? "Link copied" : "Share"}
+            {shared ? t("prayers.linkCopied") : t("prayers.share")}
           </button>
         </div>
       </header>
@@ -83,7 +86,7 @@ export function PrayerReader({ prayer }: { prayer: Prayer }) {
           <Volume2 className="h-4 w-4 text-[#A0701E]" />
         </div>
         <p className="text-sm text-[#5B5350]">
-          {prayer.audio ? prayer.audio.credit : "Chanting audio for this prayer isn't available yet."}
+          {prayer.audio ? prayer.audio.credit : t("prayers.noAudio")}
         </p>
       </div>
 
@@ -95,20 +98,22 @@ export function PrayerReader({ prayer }: { prayer: Prayer }) {
 
       <footer className="mt-6 space-y-3 text-sm">
         {prayer.notes && (
-          <p lang={lang} className="text-[#5B5350] leading-relaxed">
-            {prayer.notes[lang]}
+          <p lang={ui} className="text-[#5B5350] leading-relaxed">
+            {prayer.notes[ui]}
           </p>
         )}
         <dl className="rounded-2xl bg-white border border-[#E7DCC8] px-4 py-3 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-xs">
-          <dt className="text-[#7A706B]">Source</dt>
+          <dt className="text-[#7A706B]">{t("prayers.source")}</dt>
           <dd className="font-pali text-[#2A1A1C]">
             {prayer.source.title} — {prayer.source.reference}
           </dd>
-          <dt className="text-[#7A706B]">Tradition</dt>
+          <dt className="text-[#7A706B]">{t("prayers.tradition")}</dt>
           <dd className="text-[#2A1A1C]">{prayer.tradition}</dd>
-          <dt className="text-[#7A706B]">Review</dt>
+          <dt className="text-[#7A706B]">{t("prayers.review")}</dt>
           <dd className="text-[#2A1A1C]">
-            Pali: {prayer.review.pali.status} · Hindi: {prayer.review.hi.status} · English: {prayer.review.en.status}
+            {(["pali", "hi", "en"] as const)
+              .map((k) => `${t(k === "pali" ? "common.lang.pi" : k === "hi" ? "common.lang.hi" : "common.lang.en")}: ${t(`common.status.${prayer.review[k].status}`)}`)
+              .join(" · ")}
           </dd>
         </dl>
       </footer>

@@ -55,3 +55,6 @@ export function toggleFavourite(slug: string) {
   const current = favourites.get();
   favourites.set(current.includes(slug) ? current.filter((s) => s !== slug) : [...current, slug]);
 }
+
+/** Whether the first-launch welcome screens have been completed or skipped. */
+export const welcomeDone = createLocalStore<boolean>("practice:welcomed", false, (raw) => raw === true, true);

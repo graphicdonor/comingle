@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useInView, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { useT } from "@/lib/i18n/use-t";
 import manifest from "./illustrations.json";
 
 // Illustrations of postures, hand positions and prayer scenes, generated as
@@ -18,8 +19,10 @@ export type FigurePoint = "spine" | "seat" | "feet" | "foot" | "hands" | "knees"
 /** Position on the image, in percent of its width and height. */
 type Pt = { x: number; y: number };
 
+type L = { en: string; hi: string };
+
 interface FigureDef {
-  label: string;
+  label: L;
   image: ImageId;
   /** Slow breathing loop shown when motion is allowed. */
   breathe?: boolean;
@@ -29,73 +32,73 @@ interface FigureDef {
 
 const FIGURES: Record<FigureId, FigureDef> = {
   chair: {
-    label: "Sitting upright on a chair, feet flat on the floor, hands resting on the thighs",
+    label: { en: "Sitting upright on a chair, feet flat on the floor, hands resting on the thighs", hi: "कुर्सी पर सीधे बैठे हुए, पैर ज़मीन पर सपाट, हाथ जाँघों पर" },
     image: "chair",
     spine: [{ x: 41, y: 4 }, { x: 36, y: 64 }],
     points: { seat: [{ x: 40, y: 67 }], feet: [{ x: 72, y: 93 }], hands: [{ x: 66, y: 53 }] },
   },
   bench: {
-    label: "Kneeling with a low bench under the sitting bones, shins and tops of the feet on the floor",
+    label: { en: "Kneeling with a low bench under the sitting bones, shins and tops of the feet on the floor", hi: "बैठने की हड्डियों के नीचे छोटी बेंच रखकर घुटनों के बल, पिंडलियाँ और पैरों का ऊपरी भाग ज़मीन पर" },
     image: "bench",
     spine: [{ x: 45, y: 5 }, { x: 41, y: 76 }],
     points: { seat: [{ x: 43, y: 81 }], knees: [{ x: 83, y: 85 }], feet: [{ x: 22, y: 90 }] },
   },
   burmese: {
-    label: "Cross-legged on a cushion with both shins resting on the floor, one in front of the other",
+    label: { en: "Cross-legged on a cushion with both shins resting on the floor, one in front of the other", hi: "गद्दी पर पालथी मारकर, दोनों पिंडलियाँ ज़मीन पर, एक के आगे दूसरी" },
     image: "burmese",
     breathe: true,
     spine: [{ x: 50, y: 3 }, { x: 50, y: 82 }],
     points: { cushion: [{ x: 50, y: 94 }], knees: [{ x: 15, y: 85 }, { x: 85, y: 85 }] },
   },
   "half-lotus": {
-    label: "Half-lotus: one foot resting on the opposite thigh, the other foot on the floor",
+    label: { en: "Half-lotus: one foot resting on the opposite thigh, the other foot on the floor", hi: "अर्ध-पद्मासन: एक पैर विपरीत जाँघ पर, दूसरा पैर ज़मीन पर" },
     image: "half-lotus",
     spine: [{ x: 50, y: 3 }, { x: 50, y: 82 }],
     points: { cushion: [{ x: 50, y: 94 }], foot: [{ x: 63, y: 81 }], knees: [{ x: 11, y: 85 }, { x: 89, y: 85 }] },
   },
   "full-lotus": {
-    label: "Full-lotus: each foot resting on the opposite thigh",
+    label: { en: "Full-lotus: each foot resting on the opposite thigh", hi: "पद्मासन: दोनों पैर विपरीत जाँघों पर" },
     image: "full-lotus",
     spine: [{ x: 50, y: 3 }, { x: 50, y: 82 }],
     points: { feet: [{ x: 27, y: 79 }, { x: 73, y: 79 }], knees: [{ x: 9, y: 85 }, { x: 91, y: 85 }] },
   },
   "lap-hands": {
-    label: "Hands resting in the lap, one on the other, thumbs lightly touching",
+    label: { en: "Hands resting in the lap, one on the other, thumbs lightly touching", hi: "हाथ गोद में, एक पर दूसरा, अंगूठे हल्के से मिले हुए" },
     image: "lap-hands",
     spine: [{ x: 50, y: 3 }, { x: 50, y: 82 }],
     points: { hands: [{ x: 50, y: 74 }] },
   },
   anjali: {
-    label: "Palms joined together at the chest (añjali)",
+    label: { en: "Palms joined together at the chest (añjali)", hi: "छाती के सामने जुड़ी हुई हथेलियाँ (अंजलि)" },
     image: "anjali",
     spine: [{ x: 50, y: 3 }, { x: 50, y: 82 }],
     points: { hands: [{ x: 50, y: 44 }] },
   },
   "standing-anjali": {
-    label: "Standing with palms joined at the chest (añjali)",
+    label: { en: "Standing with palms joined at the chest (añjali)", hi: "खड़े होकर छाती के सामने हथेलियाँ जोड़े हुए (अंजलि)" },
     image: "standing-anjali",
     spine: [{ x: 42, y: 4 }, { x: 40, y: 58 }],
     points: { hands: [{ x: 60, y: 24 }], feet: [{ x: 52, y: 95 }] },
   },
 };
 
-const SCENE_LABELS: Record<SceneId, string> = {
-  "scene-place": "Carrying a cushion to a quiet corner of a room by a window",
-  "scene-prepare": "Kneeling to light a candle on a low table beside a vase of flowers",
-  "scene-reflect": "Sitting quietly, eyes closed, in reflection",
-  "scene-dedicate": "Sitting with palms joined, wishing well to all beings",
+const SCENE_LABELS: Record<SceneId, L> = {
+  "scene-place": { en: "Carrying a cushion to a quiet corner of a room by a window", hi: "खिड़की के पास कमरे के शांत कोने में गद्दी ले जाते हुए" },
+  "scene-prepare": { en: "Kneeling to light a candle on a low table beside a vase of flowers", hi: "फूलदान के पास छोटी मेज़ पर घुटनों के बल बैठकर मोमबत्ती जलाते हुए" },
+  "scene-reflect": { en: "Sitting quietly, eyes closed, in reflection", hi: "आँखें बंद किए शांत भाव से चिंतन में बैठे हुए" },
+  "scene-dedicate": { en: "Sitting with palms joined, wishing well to all beings", hi: "हथेलियाँ जोड़कर सभी प्राणियों के कल्याण की कामना करते हुए" },
 };
 
 interface Frame {
   image: ImageId;
   /** How long the frame is held before fading to the next, in ms. */
   hold: number;
-  caption?: string;
+  caption?: { en: string; hi: string };
 }
 
-export const ANIMATIONS: Record<AnimationId, { label: string; fade: number; frames: Frame[] }> = {
+export const ANIMATIONS: Record<AnimationId, { label: L; fade: number; frames: Frame[] }> = {
   breathe: {
-    label: "Seated cross-legged, breathing slowly",
+    label: { en: "Seated cross-legged, breathing slowly", hi: "पालथी मारकर बैठे हुए, धीरे-धीरे श्वास लेते हुए" },
     fade: 2200,
     frames: [
       { image: "burmese", hold: 3800 },
@@ -103,7 +106,7 @@ export const ANIMATIONS: Record<AnimationId, { label: string; fade: number; fram
     ],
   },
   bow: {
-    label: "Bowing with palms joined, then rising",
+    label: { en: "Bowing with palms joined, then rising", hi: "हथेलियाँ जोड़कर प्रणाम करते हुए, फिर सीधे होते हुए" },
     fade: 650,
     frames: [
       { image: "standing-anjali", hold: 2400 },
@@ -113,12 +116,12 @@ export const ANIMATIONS: Record<AnimationId, { label: string; fade: number; fram
     ],
   },
   "sit-down": {
-    label: "Sitting down onto a meditation cushion",
+    label: { en: "Sitting down onto a meditation cushion", hi: "ध्यान की गद्दी पर बैठते हुए" },
     fade: 700,
     frames: [
-      { image: "sit-1", hold: 2200, caption: "Stand behind the cushion" },
-      { image: "sit-2", hold: 2200, caption: "Lower down onto one knee" },
-      { image: "sit-3", hold: 2800, caption: "Sit, then draw in the legs" },
+      { image: "sit-1", hold: 2200, caption: { en: "Stand behind the cushion", hi: "गद्दी के पीछे खड़े हों" } },
+      { image: "sit-2", hold: 2200, caption: { en: "Lower down onto one knee", hi: "एक घुटने पर नीचे आएँ" } },
+      { image: "sit-3", hold: 2800, caption: { en: "Sit, then draw in the legs", hi: "बैठें, फिर पैरों को अंदर लाएँ" } },
     ],
   },
 };
@@ -252,21 +255,24 @@ export function PostureFigure({
   still?: boolean;
 }) {
   const fig = FIGURES[id];
+  const { lang } = useT();
   const frames: Frame[] = fig.breathe && !still ? ANIMATIONS.breathe.frames : [{ image: fig.image, hold: 0 }];
   return (
-    <FrameSequence frames={frames} fade={ANIMATIONS.breathe.fade} label={decorative ? undefined : fig.label} className={className}>
+    <FrameSequence frames={frames} fade={ANIMATIONS.breathe.fade} label={decorative ? undefined : fig.label[lang]} className={className}>
       <Markers fig={fig} highlight={highlight} />
     </FrameSequence>
   );
 }
 
 export function SceneIllustration({ id, className }: { id: SceneId; className?: string }) {
-  return <FrameSequence frames={[{ image: id, hold: 0 }]} fade={0} label={SCENE_LABELS[id]} className={className} />;
+  const { lang } = useT();
+  return <FrameSequence frames={[{ image: id, hold: 0 }]} fade={0} label={SCENE_LABELS[id][lang]} className={className} />;
 }
 
 export function PostureAnimation({ id, className, decorative = false }: { id: AnimationId; className?: string; decorative?: boolean }) {
   const anim = ANIMATIONS[id];
-  return <FrameSequence frames={anim.frames} fade={anim.fade} label={decorative ? undefined : anim.label} className={className} />;
+  const { lang } = useT();
+  return <FrameSequence frames={anim.frames} fade={anim.fade} label={decorative ? undefined : anim.label[lang]} className={className} />;
 }
 
 /** Which highlightable points a figure supports (for the guide's cue buttons). */

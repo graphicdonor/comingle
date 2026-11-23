@@ -12,7 +12,13 @@ export interface LocalStore<T> {
   get(): T;
 }
 
-export function createLocalStore<T>(key: string, fallback: T, parse: (raw: unknown) => T): LocalStore<T> {
+/**
+ * @param fallback value when nothing is stored yet
+ * @param serverValue value rendered on the server and during hydration
+ *   (defaults to `fallback`); differs for things like "has seen the welcome
+ *   screens", which must not flash on the server but should show on a new device
+ */
+export function createLocalStore<T>(key: string, fallback: T, parse: (raw: unknown) => T, serverValue: T = fallback): LocalStore<T> {
   const listeners = new Set<() => void>();
   let cachedRaw: string | null | undefined;
   let cachedValue: T = fallback;
@@ -61,6 +67,6 @@ export function createLocalStore<T>(key: string, fallback: T, parse: (raw: unkno
   return {
     get,
     set,
-    use: () => useSyncExternalStore(subscribe, get, () => fallback),
+    use: () => useSyncExternalStore(subscribe, get, () => serverValue),
   };
 }

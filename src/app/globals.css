@@ -121,3 +121,7 @@ body {
 @keyframes spin { to { transform: rotate(360deg); } }
 @keyframes marker { 0% { transform: scale(0.5); opacity: 0.9; } 100% { transform: scale(1.5); opacity: 0; } }
 @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+
+/* Devanagari letters join into conjuncts, so the wide letter-spacing used
+   for small Latin labels breaks Hindi words apart. Reset it for Hindi. */
+:lang(hi)[class*="tracking-"] { letter-spacing: normal; }

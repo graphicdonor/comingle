@@ -12,12 +12,14 @@ import { verseForDate } from "@/lib/practice/verses";
 import { getPrayer } from "@/lib/practice/prayers";
 import { readingPrefs, recentPrayers } from "@/lib/practice/preferences";
 import { GUIDES } from "@/lib/learn/guides";
+import { useT } from "@/lib/i18n/use-t";
+import type { MessageKey } from "@/lib/i18n/dictionary";
 
-function greeting(hour: number) {
-  if (hour >= 3 && hour < 12) return "Good morning";
-  if (hour >= 12 && hour < 17) return "Good afternoon";
-  if (hour >= 17 && hour < 22) return "Good evening";
-  return "A quiet night";
+function greetingKey(hour: number): MessageKey {
+  if (hour >= 3 && hour < 12) return "today.greeting.morning";
+  if (hour >= 12 && hour < 17) return "today.greeting.afternoon";
+  if (hour >= 17 && hour < 22) return "today.greeting.evening";
+  return "today.greeting.night";
 }
 
 const EASE = [0.16, 1, 0.3, 1] as const;
@@ -35,6 +37,8 @@ export function TodayView() {
   const [chosen, setChosen] = useState<PracticeSession["id"] | null>(null);
 
   const lang = prefs.translation;
+  const { t, lang: ui } = useT();
+  const other = ui === "hi" ? "en" : "hi";
   const sessionId = chosen ?? (now ? sessionForHour(now.getHours()) : null);
   const session = SESSIONS.find((s) => s.id === sessionId);
   const verse = now ? verseForDate(now) : null;
@@ -43,13 +47,13 @@ export function TodayView() {
   return (
     <div className="space-y-8">
       {/* Greeting */}
-      <motion.section {...fadeUp(0)} aria-label="Greeting" className="pt-1">
+      <motion.section {...fadeUp(0)} aria-label={t("today.aria.greeting")} className="pt-1">
         {now ? (
           <>
             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#A0701E]">
-              {now.toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "long" })}
+              {now.toLocaleDateString(ui === "hi" ? "hi-IN" : "en-IN", { weekday: "long", day: "numeric", month: "long" })}
             </p>
-            <h1 className="mt-1.5 text-[32px] leading-[1.1] font-bold tracking-tight text-[#2A1A1C]">{greeting(now.getHours())}</h1>
+            <h1 className="mt-1.5 text-[32px] leading-[1.1] font-bold tracking-tight text-[#2A1A1C]">{t(greetingKey(now.getHours()))}</h1>
           </>
         ) : (
           <div className="space-y-2.5" aria-hidden>
@@ -58,17 +62,17 @@ export function TodayView() {
           </div>
         )}
         <p className="mt-2 text-[15px] text-[#5B5350] leading-relaxed">
-          Learn the Dhamma. Practise with mindfulness. Live with compassion.
+          {t("today.tagline")}
         </p>
       </motion.section>
 
       {/* Today's practice */}
-      <motion.section {...fadeUp(1)} aria-label="Today's practice">
+      <motion.section {...fadeUp(1)} aria-label={t("today.aria.practice")}>
         {session ? (
           <div className="relative overflow-hidden rounded-[28px] bg-[#6D252C] text-[#F7F2E8] px-6 pt-5 pb-6 shadow-[0_18px_40px_-20px_rgba(109,37,44,0.7)]">
             <SkyScene key={session.id} variant={session.id} className="pointer-events-none absolute -right-6 -top-2 w-60" />
 
-            <div role="tablist" aria-label="Practice time" className="relative inline-flex rounded-full bg-white/10 p-0.5 mb-5">
+            <div role="tablist" aria-label={t("today.practiceTime")} className="relative inline-flex rounded-full bg-white/10 p-0.5 mb-5">
               {SESSIONS.map((s) => (
                 <button
                   key={s.id}
@@ -81,15 +85,15 @@ export function TodayView() {
                     s.id === session.id ? "bg-[#F7F2E8] text-[#6D252C]" : "text-[#F7F2E8]/75 hover:text-[#F7F2E8]",
                   )}
                 >
-                  {s.id === "morning" ? "Morning" : "Evening"}
+                  {s.id === "morning" ? t("today.morning") : t("today.evening")}
                 </button>
               ))}
             </div>
 
             <motion.div key={`${session.id}-text`} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, ease: EASE }}>
-            <h2 className="relative text-2xl font-bold leading-tight">{session.title.en}</h2>
-            <p lang="hi" className="relative text-sm text-[#F7F2E8]/75">{session.title.hi}</p>
-            <p lang={lang} className="relative mt-3 text-sm text-[#F7F2E8]/85 leading-relaxed">{session.description[lang]}</p>
+            <h2 lang={ui} className="relative text-2xl font-bold leading-tight">{session.title[ui]}</h2>
+            <p lang={other} className="relative text-sm text-[#F7F2E8]/75">{session.title[other]}</p>
+            <p lang={ui} className="relative mt-3 text-sm text-[#F7F2E8]/85 leading-relaxed">{session.description[ui]}</p>
 
             <ol className="relative mt-5 space-y-2.5">
               {sessionPrayers(session).map((p, i) => (
@@ -104,7 +108,7 @@ export function TodayView() {
                     {i + 1}
                   </span>
                   <span className="font-pali text-[17px]">{p.title.pi}</span>
-                  <span className="ml-auto text-xs text-[#F7F2E8]/60">{p.durationMinutes} min</span>
+                  <span className="ml-auto text-xs text-[#F7F2E8]/60">{t("common.min", { n: p.durationMinutes })}</span>
                 </motion.li>
               ))}
             </ol>
@@ -116,7 +120,7 @@ export function TodayView() {
               className="relative mt-6 flex items-center justify-center gap-2 rounded-full bg-[#F7F2E8] text-[#6D252C] py-3.5 text-[15px] font-bold hover:bg-white transition-colors"
             >
               <Play className="h-4 w-4 fill-current" />
-              Begin · {sessionMinutes(session)} min
+              {t("common.begin", { n: sessionMinutes(session) })}
             </MotionLink>
           </div>
         ) : (
@@ -127,7 +131,7 @@ export function TodayView() {
       {/* Today's verse */}
       <motion.section {...fadeUp(2)} aria-labelledby="verse-heading">
         <h2 id="verse-heading" className="text-xs font-semibold uppercase tracking-[0.14em] text-[#A0701E] mb-3">
-          Today&apos;s verse
+          {t("today.verse")}
         </h2>
         {verse ? (
           <figure className="rounded-[28px] bg-[#FFFCF6] border border-[#E7DCC8] px-6 py-6">
@@ -141,7 +145,7 @@ export function TodayView() {
             </blockquote>
             <figcaption className="mt-4 flex items-center justify-between gap-3 text-xs">
               <span className="font-semibold text-[#6D252C]">{verse.reference}</span>
-              {verse.review !== "reviewed" && <span className="text-[#8A7F76]">Draft translation</span>}
+              {verse.review !== "reviewed" && <span className="text-[#8A7F76]">{t("today.draftTranslation")}</span>}
             </figcaption>
           </figure>
         ) : (
@@ -153,9 +157,9 @@ export function TodayView() {
       <motion.section {...fadeUp(3)} aria-labelledby="sit-heading">
         <div className="flex items-baseline justify-between mb-3">
           <h2 id="sit-heading" className="text-xs font-semibold uppercase tracking-[0.14em] text-[#A0701E]">
-            Sit for a while
+            {t("today.sit")}
           </h2>
-          <Link href="/meditate" className="text-xs font-semibold text-[#6D252C]">All practices</Link>
+          <Link href="/meditate" className="text-xs font-semibold text-[#6D252C]">{t("today.allPractices")}</Link>
         </div>
         <div className="grid grid-cols-3 gap-3">
           {[3, 5, 10].map((m) => (
@@ -167,7 +171,7 @@ export function TodayView() {
             >
               <Flower2 className="mx-auto h-5 w-5 text-[#87977A]" strokeWidth={1.8} />
               <span className="mt-2 block text-2xl font-bold text-[#2A1A1C] leading-none">{m}</span>
-              <span className="mt-1 block text-[11px] font-medium text-[#7A706B]">min · breathing</span>
+              <span className="mt-1 block text-[11px] font-medium text-[#7A706B]">{t("today.minBreathing")}</span>
             </MotionLink>
           ))}
         </div>
@@ -177,7 +181,7 @@ export function TodayView() {
       {lastPrayer && (
         <motion.section {...fadeUp(4)} aria-labelledby="continue-heading">
           <h2 id="continue-heading" className="text-xs font-semibold uppercase tracking-[0.14em] text-[#A0701E] mb-3">
-            Continue
+            {t("today.continue")}
           </h2>
           <Link
             href={`/practice/${lastPrayer.slug}`}
@@ -196,7 +200,7 @@ export function TodayView() {
       {/* New to practice */}
       <motion.section {...fadeUp(5)} aria-labelledby="learn-heading">
         <h2 id="learn-heading" className="text-xs font-semibold uppercase tracking-[0.14em] text-[#A0701E] mb-3">
-          New to practice?
+          {t("today.newToPractice")}
         </h2>
         <div className="grid grid-cols-2 gap-3">
           {GUIDES.map((g) => {
@@ -208,9 +212,9 @@ export function TodayView() {
                 className="rounded-3xl bg-[#EEF0E8] border border-[#D9DECF] px-4 pt-2 pb-4 hover:border-[#87977A] transition-colors"
               >
                 <PostureFigure id={g.cover} decorative still className="h-28 mx-auto" />
-                <p className="mt-1 font-bold text-[#2A1A1C] leading-tight">{g.title}</p>
-                <p lang="hi" className="text-xs text-[#5B5350]">{g.titleHi}</p>
-                <p className="mt-2 text-[11px] font-medium text-[#56634A]">{g.minutes} min read</p>
+                <p lang={ui} className="mt-1 font-bold text-[#2A1A1C] leading-tight">{g.title[ui]}</p>
+                <p lang={other} className="text-xs text-[#5B5350]">{g.title[other]}</p>
+                <p className="mt-2 text-[11px] font-medium text-[#56634A]">{t("common.minRead", { n: g.minutes })}</p>
               </MotionLink>
             );
           })}
@@ -219,7 +223,7 @@ export function TodayView() {
 
       <p className="flex items-center justify-center gap-1.5 text-xs text-[#8A7F76] pb-2">
         <Lock className="h-3.5 w-3.5" />
-        Your practice stays private, on this device.
+        {t("today.private")}
       </p>
     </div>
   );
