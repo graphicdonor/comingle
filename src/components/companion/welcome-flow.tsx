@@ -39,7 +39,7 @@ export function WelcomeFlow() {
   if (done || !onAppRoute) return null;
 
   const finish = () => welcomeDone.set(true);
-  const browserHindi = typeof navigator !== "undefined" && navigator.language.toLowerCase().startsWith("hi");
+  const browserHindi = typeof window !== "undefined" && navigator.language.toLowerCase().startsWith("hi");
 
   return (
     <div role="dialog" aria-modal="true" aria-label={t("aria.welcome")} className="fixed inset-0 z-[60] flex flex-col bg-[#F7F2E8]">

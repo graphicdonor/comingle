@@ -5,6 +5,7 @@ import { PRAYERS } from "./prayers";
 import { SESSIONS } from "./sessions";
 import { GUIDES } from "@/lib/learn/guides";
 import manifest from "@/components/visuals/illustrations.json";
+import { SPLASH_LAYERS } from "@/lib/splash";
 
 // "Use without internet" (PRD §7.13). The service worker (public/sw.js)
 // saves every practice page, the build assets they load, and the
@@ -35,6 +36,7 @@ export function offlineUrls(): string[] {
     "/preferences",
     "/offline",
     ...Object.values(manifest).map((m) => m.src),
+    ...SPLASH_LAYERS.map((l) => l.src),
     "/icons/icon-192.png",
     "/favicon.svg",
   ];

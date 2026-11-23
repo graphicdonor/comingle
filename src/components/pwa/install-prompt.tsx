@@ -1,145 +1,128 @@
 "use client";
 import { useEffect, useState } from "react";
-import { X, Download, Share, Plus, Check } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { Check, Download, Plus, Share, X } from "lucide-react";
+import { useT } from "@/lib/i18n/use-t";
+import { createLocalStore } from "@/lib/practice/local-store";
+import { welcomeDone } from "@/lib/practice/preferences";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt(): Promise<void>;
   readonly userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
 }
 
+/** Dismissal is remembered on the device, so the suggestion appears at most until it's declined. */
+const installDismissed = createLocalStore<boolean>("practice:install-dismissed", false, (raw) => raw === true, true);
+
+/**
+ * A gentle "install to home screen" suggestion for phone browsers. Calm by
+ * design (PRD §2.2): only on the Today screen — never over a prayer, session
+ * or meditation — not during the welcome screens, and gone for good once
+ * dismissed. Desktop stays a plain website.
+ */
 export function InstallPrompt() {
+  const pathname = usePathname();
+  const { t } = useT();
+  const dismissed = installDismissed.use();
+  const welcomed = welcomeDone.use();
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-  // All of these read a synchronous external condition that's already known
-  // at mount (UA, display-mode, sessionStorage) — computed as lazy
-  // initializers rather than set from inside an effect, so mounting this
-  // component never triggers an extra cascading render.
-  const [isIOS] = useState(
-    () =>
-      typeof navigator !== "undefined" &&
-      /iPad|iPhone|iPod/.test(navigator.userAgent) &&
-      !(window as unknown as { MSStream?: unknown }).MSStream
-  );
-  const [isAndroid] = useState(() => typeof navigator !== "undefined" && /Android/.test(navigator.userAgent));
-  const [isStandalone] = useState(
-    () => typeof window !== "undefined" && window.matchMedia("(display-mode: standalone)").matches
-  );
-  const [dismissed, setDismissed] = useState(
-    () => typeof window !== "undefined" && !!sessionStorage.getItem("pwa-dismissed")
-  );
   const [showIOSGuide, setShowIOSGuide] = useState(false);
+  const [device] = useState(() => {
+    // Check for window, not navigator: Node.js also defines navigator during server rendering.
+    if (typeof window === "undefined") return { ios: false, android: false, standalone: false };
+    return {
+      ios: /iPad|iPhone|iPod/.test(navigator.userAgent),
+      android: /Android/.test(navigator.userAgent),
+      standalone: window.matchMedia("(display-mode: standalone)").matches,
+    };
+  });
 
   useEffect(() => {
-    // Desktop stays a plain website — no install nudging there. Chrome/Edge
-    // on desktop can also fire `beforeinstallprompt`, so this has to be an
-    // explicit device check, not just "did the browser offer it."
-    if (isStandalone || dismissed || (!isIOS && !isAndroid)) return;
-
-    // Android / Chrome — capture beforeinstallprompt
+    // Chrome/Edge on desktop can also fire beforeinstallprompt, hence the explicit device check.
+    if (device.standalone || !device.android) return;
     const handler = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
     };
     window.addEventListener("beforeinstallprompt", handler);
     return () => window.removeEventListener("beforeinstallprompt", handler);
-  }, [isStandalone, dismissed, isIOS, isAndroid]);
+  }, [device]);
 
-  const handleInstall = async () => {
+  if (device.standalone || dismissed || !welcomed || pathname !== "/app") return null;
+  if (!deferredPrompt && !device.ios) return null; // Not installable here
+
+  const dismiss = () => installDismissed.set(true);
+  const install = async () => {
     if (!deferredPrompt) return;
     await deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
-    if (outcome === "accepted") setDeferredPrompt(null);
+    if (outcome === "accepted") installDismissed.set(true);
+    setDeferredPrompt(null);
   };
-
-  const handleDismiss = () => {
-    setDismissed(true);
-    sessionStorage.setItem("pwa-dismissed", "1");
-  };
-
-  if (isStandalone || dismissed) return null;
-  if (!deferredPrompt && !isIOS) return null; // Not installable
 
   return (
     <>
-      {/* Android / Chrome install banner */}
-      {deferredPrompt && (
-        <div className="fixed bottom-20 left-3 right-3 z-50 animate-in slide-in-from-bottom-4">
-          <div className="bg-[#1E2952] rounded-2xl shadow-xl px-4 py-3 flex items-center gap-3">
-            <img src="/icons/icon-72.png" alt="WePray" className="w-10 h-10 rounded-xl flex-shrink-0" />
-            <div className="flex-1 min-w-0">
-              <p className="text-white font-semibold text-sm">Install WePray</p>
-              <p className="text-blue-200 text-xs">Add to home screen for offline access</p>
-            </div>
+      <div className="fixed bottom-[calc(76px+env(safe-area-inset-bottom))] inset-x-0 z-30 px-4 pointer-events-none">
+        <div className="pointer-events-auto max-w-xl mx-auto flex items-center gap-3 rounded-2xl bg-[#FFFCF6] border border-[#E7DCC8] shadow-[0_8px_30px_-12px_rgba(42,26,28,0.35)] px-4 py-3">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/icons/icon-72.png" alt="" className="w-10 h-10 rounded-xl flex-shrink-0" />
+          <div className="flex-1 min-w-0">
+            <p className="font-semibold text-sm text-[#2A1A1C]">{t("install.title")}</p>
+            <p className="text-xs text-[#5B5350]">{device.ios ? t("install.ios") : t("install.android")}</p>
+          </div>
+          <button
+            type="button"
+            onClick={device.ios ? () => setShowIOSGuide(true) : install}
+            className="flex items-center gap-1 rounded-full bg-[#6D252C] px-3.5 py-2 text-xs font-bold text-[#F7F2E8] flex-shrink-0"
+          >
+            {device.ios ? <Share className="w-3.5 h-3.5" /> : <Download className="w-3.5 h-3.5" />}
+            {device.ios ? t("install.how") : t("install.button")}
+          </button>
+          <button type="button" onClick={dismiss} aria-label={t("install.dismiss")} className="h-9 w-9 -mr-2 flex items-center justify-center rounded-full text-[#6D645D] flex-shrink-0">
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+
+      {showIOSGuide && (
+        <div className="fixed inset-0 z-[60] flex items-end" onClick={() => setShowIOSGuide(false)}>
+          <div className="absolute inset-0 bg-black/40" />
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label={t("install.iosTitle")}
+            className="relative w-full rounded-t-3xl bg-[#FFFCF6] p-6 pb-[calc(2.5rem+env(safe-area-inset-bottom))]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="mx-auto mb-5 h-1 w-10 rounded-full bg-[#E2D7C3]" />
+            <h3 className="mb-4 text-lg font-bold text-[#2A1A1C]">{t("install.iosTitle")}</h3>
+            <ol className="space-y-4">
+              {(
+                [
+                  [Share, "install.ios1"],
+                  [Plus, "install.ios2"],
+                  [Check, "install.ios3"],
+                ] as const
+              ).map(([Icon, key], i) => (
+                <li key={key} className="flex items-center gap-3">
+                  <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-[#6D252C] text-xs font-bold text-white">{i + 1}</span>
+                  <Icon className="h-5 w-5 flex-shrink-0 text-[#6D645D]" strokeWidth={1.75} />
+                  <span className="text-sm text-[#2A1A1C]">{t(key)}</span>
+                </li>
+              ))}
+            </ol>
             <button
-              onClick={handleInstall}
-              className="flex items-center gap-1 bg-white text-[#1E2952] px-3 py-1.5 rounded-full text-xs font-bold hover:bg-gray-100 transition-colors flex-shrink-0"
+              type="button"
+              onClick={() => {
+                setShowIOSGuide(false);
+                dismiss();
+              }}
+              className="mt-6 w-full rounded-full bg-[#6D252C] py-3 text-sm font-semibold text-[#F7F2E8]"
             >
-              <Download className="w-3 h-3" />
-              Install
-            </button>
-            <button onClick={handleDismiss} className="text-blue-200 hover:text-white flex-shrink-0">
-              <X className="w-4 h-4" />
+              {t("install.gotIt")}
             </button>
           </div>
         </div>
-      )}
-
-      {/* iOS guide — tap to open */}
-      {isIOS && !deferredPrompt && (
-        <>
-          <div className="fixed bottom-20 left-3 right-3 z-50 animate-in slide-in-from-bottom-4">
-            <div className="bg-[#1E2952] rounded-2xl shadow-xl px-4 py-3 flex items-center gap-3">
-              <img src="/icons/icon-72.png" alt="WePray" className="w-10 h-10 rounded-xl flex-shrink-0" />
-              <div className="flex-1 min-w-0">
-                <p className="text-white font-semibold text-sm">Install WePray</p>
-                <p className="text-blue-200 text-xs">Add to your home screen</p>
-              </div>
-              <button
-                onClick={() => setShowIOSGuide(true)}
-                className="flex items-center gap-1 bg-white text-[#1E2952] px-3 py-1.5 rounded-full text-xs font-bold hover:bg-gray-100 transition-colors flex-shrink-0"
-              >
-                <Share className="w-3 h-3" />
-                How?
-              </button>
-              <button onClick={handleDismiss} className="text-blue-200 hover:text-white flex-shrink-0">
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-
-          {/* iOS step-by-step modal */}
-          {showIOSGuide && (
-            <div className="fixed inset-0 z-[60] flex items-end" onClick={() => setShowIOSGuide(false)}>
-              <div className="absolute inset-0 bg-black/50" />
-              <div className="relative w-full bg-white rounded-t-3xl p-6 pb-10" onClick={(e) => e.stopPropagation()}>
-                <div className="w-10 h-1 rounded-full bg-gray-200 mx-auto mb-5" />
-                <h3 className="font-bold text-gray-900 text-lg mb-4">Add WePray to Home Screen</h3>
-                <div className="space-y-4">
-                  {[
-                    { step: "1", icon: Share, text: 'Tap the Share button at the bottom of Safari' },
-                    { step: "2", icon: Plus, text: 'Scroll down and tap "Add to Home Screen"' },
-                    { step: "3", icon: Check, text: 'Tap "Add" in the top-right corner' },
-                  ].map(({ step, icon: StepIcon, text }) => (
-                    <div key={step} className="flex items-start gap-3">
-                      <div className="w-7 h-7 rounded-full bg-[#8B1A6B] text-white text-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5">
-                        {step}
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <StepIcon className="h-5 w-5 text-gray-500 flex-shrink-0" strokeWidth={1.75} />
-                        <span className="text-sm text-gray-700">{text}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <button
-                  onClick={() => { setShowIOSGuide(false); handleDismiss(); }}
-                  className="mt-6 w-full py-3 bg-[#1E2952] text-white rounded-full font-semibold text-sm"
-                >
-                  Got it
-                </button>
-              </div>
-            </div>
-          )}
-        </>
       )}
     </>
   );

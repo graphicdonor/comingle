@@ -159,6 +159,19 @@ const en = {
   "offline.badge": "Available offline",
   "offline.storage": "Storage used by this app: {size}",
 
+  // Install suggestion
+  "install.title": "Install WePray",
+  "install.android": "Open it from your home screen, like an app.",
+  "install.ios": "Add it to your home screen, like an app.",
+  "install.button": "Install",
+  "install.how": "How?",
+  "install.dismiss": "Not now",
+  "install.iosTitle": "Add WePray to your home screen",
+  "install.ios1": "Tap the Share button in Safari",
+  "install.ios2": "Choose “Add to Home Screen”",
+  "install.ios3": "Tap “Add”",
+  "install.gotIt": "Got it",
+
   // Settings
   "settings.title": "Settings",
   "settings.intro": "Saved on this device. No account needed.",
@@ -343,6 +356,18 @@ const hi: Record<MessageKey, string> = {
   "offline.bannerNoPack": "आप ऑफ़लाइन हैं। केवल पहले खोले गए पेज उपलब्ध हैं।",
   "offline.badge": "ऑफ़लाइन उपलब्ध",
   "offline.storage": "इस ऐप द्वारा उपयोग किया गया स्थान: {size}",
+
+  "install.title": "WePray इंस्टॉल करें",
+  "install.android": "इसे ऐप की तरह होम स्क्रीन से खोलें।",
+  "install.ios": "इसे ऐप की तरह होम स्क्रीन पर जोड़ें।",
+  "install.button": "इंस्टॉल करें",
+  "install.how": "कैसे?",
+  "install.dismiss": "अभी नहीं",
+  "install.iosTitle": "WePray को होम स्क्रीन पर जोड़ें",
+  "install.ios1": "Safari में शेयर बटन पर टैप करें",
+  "install.ios2": "“होम स्क्रीन पर जोड़ें” चुनें",
+  "install.ios3": "“जोड़ें” पर टैप करें",
+  "install.gotIt": "ठीक है",
 
   "settings.title": "सेटिंग्स",
   "settings.intro": "इसी डिवाइस पर सहेजा जाता है। खाते की आवश्यकता नहीं।",

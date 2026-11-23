@@ -125,3 +125,48 @@ body {
 /* Devanagari letters join into conjuncts, so the wide letter-spacing used
    for small Latin labels breaks Hindi words apart. Reset it for Hindi. */
 :lang(hi)[class*="tracking-"] { letter-spacing: normal; }
+
+/* ── Splash: dawn over the hills ──────────────────────────────────────
+   Layered artwork (public/splash) animated in pure CSS, so it starts as
+   soon as the stylesheet arrives, before JavaScript. Resting styles are the
+   final frame; each animation starts from its first keyframe (fill-mode:
+   both). Percent translations are relative to the layer, i.e. the artwork. */
+.sp-dawn { animation: sp-fade 2.2s ease-in-out 0.1s both; }
+.sp-rays { transform-origin: 48.6% 56.8%; animation: sp-rays-in 1.6s ease-out 0.7s both, sp-spin 90s linear infinite; }
+.sp-sun { animation: sp-rise 1.9s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both; }
+.sp-far { animation: sp-far 1.7s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.sp-mist { animation: sp-fade 1.4s ease-out 0.5s both, sp-drift 7s ease-in-out 0.5s infinite alternate; }
+.sp-near { animation: sp-near 1.5s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.splash-letter { display: inline-block; animation: splash-letter 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.splash-phrase { animation: splash-phrase 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.splash-progress { transform-origin: left; animation: splash-progress 2.1s ease-in-out 0.3s both; }
+
+@keyframes sp-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes sp-rays-in { from { opacity: 0; } to { opacity: 0.9; } }
+@keyframes sp-spin { from { rotate: 0deg; } to { rotate: 360deg; } }
+@keyframes sp-rise { from { transform: translateY(16%); } to { transform: translateY(0); } }
+@keyframes sp-far { from { transform: translateY(3%); } to { transform: translateY(0); } }
+@keyframes sp-drift { from { translate: -3% 0; } to { translate: 3% 0; } }
+@keyframes sp-near { from { transform: translateY(8%); } to { transform: translateY(0); } }
+@keyframes splash-letter { from { opacity: 0; transform: translateY(14px); filter: blur(6px); } to { opacity: 1; transform: none; filter: none; } }
+@keyframes splash-phrase { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes splash-progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .sp-dawn, .sp-rays, .sp-sun, .sp-far, .sp-mist, .sp-near,
+  .splash-letter, .splash-phrase, .splash-progress { animation: none; }
+  .sp-rays { opacity: 0.9; }
+}
+
+/* The artwork starts hidden and paused; the inline script in splash-screen.tsx
+   marks it ready only once every layer has fully downloaded (immediately when
+   cached). So however slowly the page arrives, a half-loaded image is never
+   painted: the scene fades in whole and plays from the start. */
+.sp-layer { opacity: 0; animation-play-state: paused; transition: opacity 0.4s ease; }
+html[data-splash="ready"] .sp-layer { opacity: 1; animation-play-state: running; }
+
+/* Safety net that needs no JavaScript: if the app's code hasn't arrived to
+   dismiss the splash within 6 seconds (very slow connections), it fades
+   itself out to reveal the already-rendered page underneath. */
+.splash-root { animation: splash-autohide 0.6s ease 6s forwards; }
+@keyframes splash-autohide { to { opacity: 0; visibility: hidden; } }
