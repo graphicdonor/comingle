@@ -27,7 +27,8 @@ function Hills() {
 }
 
 export function SkyScene({ variant, className }: { variant: "morning" | "evening"; className?: string }) {
-  const maskId = useId();
+  // Keep the generated id to characters that are always safe in url(#…).
+  const maskId = `moon-${useId().replace(/[^a-zA-Z0-9_-]/g, "")}`;
 
   return (
     <svg viewBox="0 0 220 150" className={className} aria-hidden>
@@ -49,7 +50,10 @@ export function SkyScene({ variant, className }: { variant: "morning" | "evening
               />
             ))}
           </g>
-          <circle cx={150} cy={78} r={26} fill={SAFFRON} opacity={0.18} className="anim-glow" />
+          {/* The glow animation sets opacity itself, so the faintness lives on a wrapper. */}
+          <g opacity={0.18}>
+            <circle cx={150} cy={78} r={26} fill={SAFFRON} className="anim-glow" />
+          </g>
           <circle cx={150} cy={78} r={20} fill={SAFFRON} opacity={0.85} />
         </g>
       ) : (
@@ -60,7 +64,9 @@ export function SkyScene({ variant, className }: { variant: "morning" | "evening
               <circle cx={162} cy={42} r={19} fill="black" />
             </mask>
           </defs>
-          <circle cx={150} cy={50} r={22} fill={CREAM} opacity={0.12} className="anim-glow" />
+          <g opacity={0.12}>
+            <circle cx={150} cy={50} r={22} fill={CREAM} className="anim-glow" />
+          </g>
           <circle cx={150} cy={50} r={19} fill={CREAM} opacity={0.9} mask={`url(#${maskId})`} />
           {STARS.map((s) => (
             <circle key={`${s.x}-${s.y}`} cx={s.x} cy={s.y} r={s.r} fill={CREAM} className="anim-twinkle" style={{ animationDelay: `${s.d}s` }} />

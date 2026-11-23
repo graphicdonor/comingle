@@ -6,6 +6,7 @@ import { SESSIONS, sessionMinutes } from "@/lib/practice/sessions";
 import { PrayerList } from "@/components/practice/prayer-list";
 import { SessionCardTitle } from "@/components/practice/session-card-title";
 import { T } from "@/lib/i18n/use-t";
+import { OfflineBadge } from "@/components/companion/offline-settings";
 
 export const metadata: Metadata = {
   title: "Prayers — Buddhist prayers in Pali, Hindi and English | WePray",
@@ -21,6 +22,9 @@ export default function PracticePage() {
         <p className="mt-1 text-[15px] text-[#5B5350] leading-relaxed">
           <T k="prayers.intro" />
         </p>
+        <div className="mt-2">
+          <OfflineBadge />
+        </div>
       </header>
 
       <section aria-labelledby="sessions-heading">

@@ -9,6 +9,8 @@ import { useT } from "@/lib/i18n/use-t";
 import type { MessageKey } from "@/lib/i18n/dictionary";
 import { WelcomeFlow } from "./welcome-flow";
 import { SearchButton } from "./search-overlay";
+import { offlinePack, useOnline } from "@/lib/practice/offline";
+import { WifiOff } from "lucide-react";
 
 interface NavItem {
   href: string;
@@ -29,6 +31,8 @@ const NAV: NavItem[] = [
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { t, lang } = useT();
+  const online = useOnline();
+  const pack = offlinePack.use();
 
   // Keep the document language in step with the interface language, so
   // screen readers and hyphenation use the right rules.
@@ -48,6 +52,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <SearchButton />
         </div>
       </header>
+
+      {!online && (
+        <div role="status" className="fixed top-14 inset-x-0 z-30 flex justify-center px-4 pointer-events-none">
+          <p className="mt-2 inline-flex items-center gap-2 rounded-full bg-[#2A1A1C] px-4 py-2 text-xs font-medium text-[#F7F2E8] shadow-lg">
+            <WifiOff className="h-3.5 w-3.5 flex-shrink-0" />
+            {pack ? t("offline.banner") : t("offline.bannerNoPack")}
+          </p>
+        </div>
+      )}
 
       <main className="pt-14 pb-28 min-h-screen">
         <div className="max-w-xl mx-auto px-4 py-5">{children}</div>

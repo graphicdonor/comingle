@@ -9,6 +9,7 @@ import type { UiLang } from "@/lib/i18n/dictionary";
 import { getPrayer } from "@/lib/practice/prayers";
 import { ReadingControls, Segmented } from "@/components/practice/reading-controls";
 import { PrayerText } from "@/components/practice/prayer-text";
+import { OfflineSettings } from "./offline-settings";
 
 const PREVIEW = getPrayer("buddha-vandana");
 
@@ -92,6 +93,10 @@ export function PreferencesView() {
             <span className={cn("absolute top-1 h-5 w-5 rounded-full bg-white shadow transition-all", prefs.keepAwake ? "left-6" : "left-1")} />
           </span>
         </label>
+      </Section>
+
+      <Section title={t("offline.section")}>
+        <OfflineSettings />
       </Section>
 
       <Section title={t("settings.data")}>

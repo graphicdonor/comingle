@@ -1,11 +1,12 @@
-// Introductory meditation practices (PRD §7.10), in English and Hindi.
+// Introductory meditation practices (PRD §7.10: breathing, loving-kindness,
+// walking, plus a silent timer), in English and Hindi.
 // Silent timer with written guidance for now; guided voice recordings come
 // later with rights-cleared audio. No therapeutic claims.
 
 import type { Localised } from "./prayers";
 
 export interface MeditationPractice {
-  id: "breathing" | "metta" | "open";
+  id: "breathing" | "metta" | "walking" | "open";
   title: Localised;
   pali: string;
   summary: Localised;
@@ -70,6 +71,34 @@ export const MEDITATIONS: MeditationPractice[] = [
     context: {
       en: "Mettā is one of the four 'divine abodes' (brahmavihāra). Phrases differ between teachers; use words that feel natural to you.",
       hi: "मैत्री चार 'ब्रह्मविहारों' में से एक है। अलग-अलग शिक्षक अलग शब्द उपयोग करते हैं; वे शब्द चुनें जो आपको सहज लगें।",
+    },
+  },
+  {
+    id: "walking",
+    title: { en: "Walking meditation", hi: "चंक्रमण (चलते हुए ध्यान)" },
+    pali: "Caṅkamana",
+    summary: { en: "Slow, mindful walking back and forth.", hi: "धीरे-धीरे, सजगता से आगे-पीछे चलना।" },
+    steps: [
+      {
+        en: "Choose a short, quiet path of 10 to 20 steps, indoors or outside.",
+        hi: "घर के अंदर या बाहर, 10 से 20 कदम का एक छोटा, शांत रास्ता चुनें।",
+      },
+      {
+        en: "Walk slowly, noticing each step: lifting, moving, placing the foot.",
+        hi: "धीरे-धीरे चलें और हर कदम पर ध्यान दें: पैर उठाना, आगे बढ़ाना, रखना।",
+      },
+      {
+        en: "At the end of the path, pause, turn mindfully and walk back.",
+        hi: "रास्ते के अंत में रुकें, सजगता से मुड़ें और वापस चलें।",
+      },
+      {
+        en: "When the mind wanders, stand still for a moment and return to the feeling of your feet.",
+        hi: "जब मन भटके, तो एक क्षण स्थिर खड़े रहें और पैरों की अनुभूति पर लौट आएँ।",
+      },
+    ],
+    context: {
+      en: "Walking meditation is practised in many traditions, often between periods of sitting. Keep your eyes open and walk where it is safe.",
+      hi: "चलते हुए ध्यान का अभ्यास अनेक परंपराओं में होता है, प्रायः बैठकर किए गए ध्यान के बीच में। आँखें खुली रखें और सुरक्षित स्थान पर ही चलें।",
     },
   },
   {

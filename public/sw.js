@@ -1,10 +1,15 @@
-const CACHE_VERSION = "v3";
+const CACHE_VERSION = "v4";
 const STATIC_CACHE  = `wepray-static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `wepray-dynamic-${CACHE_VERSION}`;
+// The reader's "use without internet" download. Not versioned: it holds a
+// complete, self-consistent snapshot (pages plus the exact JS/CSS/fonts they
+// reference) and is only replaced when the reader updates or removes it.
+const OFFLINE_CACHE = "wepray-offline-pack";
 
-// Assets to pre-cache on install
+// Assets to pre-cache on install. ("/" redirects to /app, and a redirected
+// response can't be served for navigations, so it isn't pre-cached.)
 const PRECACHE_ASSETS = [
-  "/",
+  "/app",
   "/offline",
   "/icons/icon-192.png",
   "/icons/icon-512.png",
@@ -29,7 +34,7 @@ self.addEventListener("activate", (event) => {
       .then((keys) =>
         Promise.all(
           keys
-            .filter((k) => k !== STATIC_CACHE && k !== DYNAMIC_CACHE)
+            .filter((k) => k !== STATIC_CACHE && k !== DYNAMIC_CACHE && k !== OFFLINE_CACHE)
             .map((k) => caches.delete(k))
         )
       )
@@ -49,6 +54,14 @@ self.addEventListener("fetch", (event) => {
   // Cloudinary is its own CDN, and routing video through respondWith breaks
   // the range requests playback relies on.
   if (url.hostname.includes("supabase.co") || url.hostname.endsWith("cloudinary.com") || url.pathname.startsWith("/api/")) {
+    return;
+  }
+
+  // Client-side navigation payloads (RSC). Never serve these from a cache or
+  // fall back to HTML: when offline, failing the request makes Next.js fall
+  // back to a full page load, which the cached HTML below can then serve.
+  if (request.headers.get("RSC") === "1") {
+    event.respondWith(fetch(request).catch(() => Response.error()));
     return;
   }
 
@@ -134,8 +147,82 @@ async function networkFirstWithOfflineFallback(request) {
     }
     return response;
   } catch {
-    const cached = await caches.match(request);
+    const cached =
+      (await caches.match(request, { ignoreVary: true })) ||
+      // e.g. /meditate?practice=metta when only /meditate was saved
+      (request.mode === "navigate" ? await caches.match(request, { ignoreVary: true, ignoreSearch: true }) : undefined);
     if (cached) return cached;
     return caches.match("/offline");
   }
+}
+
+// ── Offline pack ("Use without internet" in Settings) ────────────────────────
+// The page sends the list of URLs to save over a MessageChannel; progress and
+// the result are reported back on the same port.
+self.addEventListener("message", (event) => {
+  const port = event.ports && event.ports[0];
+  if (!port || !event.data) return;
+  if (event.data.type === "OFFLINE_DOWNLOAD") {
+    event.waitUntil(downloadOfflinePack(event.data.urls || [], port));
+  } else if (event.data.type === "OFFLINE_REMOVE") {
+    event.waitUntil(caches.delete(OFFLINE_CACHE).then(() => port.postMessage({ type: "removed" })));
+  }
+});
+
+// Build-asset references in HTML, the RSC payload inlined in it, and CSS.
+const ASSET_PATTERN = /(?:\/_next\/)?static\/(?:chunks|css|media)\/[^"'\s)\\]+/g;
+
+function assetUrls(text) {
+  const found = new Set();
+  for (const match of text.matchAll(ASSET_PATTERN)) {
+    const path = match[0].startsWith("/_next/") ? match[0] : `/_next/${match[0]}`;
+    found.add(path);
+  }
+  return found;
+}
+
+async function downloadOfflinePack(urls, port) {
+  // Build into a fresh cache and swap it in only when complete, so a failed
+  // or interrupted update never leaves a half-saved pack behind.
+  const temp = `${OFFLINE_CACHE}-next`;
+  await caches.delete(temp);
+  const cache = await caches.open(temp);
+  const queue = [...urls];
+  const seen = new Set(queue);
+  const failed = [];
+  let done = 0;
+  let bytes = 0;
+
+  while (queue.length > 0) {
+    const url = queue.shift();
+    try {
+      const response = await fetch(url, { cache: "no-store", credentials: "same-origin" });
+      if (!response.ok || response.redirected) throw new Error(String(response.status));
+      const body = await response.clone().arrayBuffer();
+      bytes += body.byteLength;
+      await cache.put(url, response);
+      const type = response.headers.get("content-type") || "";
+      if (type.includes("text/html") || type.includes("text/css")) {
+        for (const asset of assetUrls(new TextDecoder().decode(body))) {
+          if (!seen.has(asset)) {
+            seen.add(asset);
+            queue.push(asset);
+          }
+        }
+      }
+    } catch {
+      failed.push(url);
+    }
+    done += 1;
+    port.postMessage({ type: "progress", done, total: seen.size });
+  }
+
+  if (failed.length === 0) {
+    await caches.delete(OFFLINE_CACHE);
+    const final = await caches.open(OFFLINE_CACHE);
+    const requests = await cache.keys();
+    await Promise.all(requests.map(async (req) => final.put(req, await cache.match(req))));
+  }
+  await caches.delete(temp);
+  port.postMessage({ type: "done", bytes, files: seen.size, failed });
 }
