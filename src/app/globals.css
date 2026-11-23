@@ -8,14 +8,23 @@
   --accent-red: #E8355A;
   --bg-base: #F7F7F9;
   --bg-card: #FFFFFF;
+
+  /* Practice companion palette (PRD §11.2) */
+  --wp-burgundy: #6D252C;
+  --wp-saffron: #D99A38;
+  --wp-cream: #F7F2E8;
+  --wp-charcoal: #292929;
+  --wp-gold: #C6A15B;
+  --wp-green: #87977A;
 }
 
 * { box-sizing: border-box; }
 
 body {
-  background: var(--bg-base);
-  color: #111827;
-  font-family: 'Inter', sans-serif;
+  background: var(--wp-cream);
+  color: var(--wp-charcoal);
+  /* Figtree for English; Hindi falls through to Noto Sans Devanagari. */
+  font-family: var(--font-figtree), var(--font-devanagari), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -84,3 +93,31 @@ body {
 .input-field::placeholder {
   color: #9CA3AF;
 }
+
+/* Pali in Roman script: serif with full diacritic coverage. */
+.font-pali { font-family: var(--font-pali), var(--font-devanagari), Georgia, serif; }
+
+/* Slow breathing pulse for the meditation timer (only with motion allowed). */
+@keyframes breathe {
+  0%, 100% { transform: scale(0.88); opacity: 0.7; }
+  50% { transform: scale(1); opacity: 1; }
+}
+
+/* ── Illustration motion ───────────────────────────────────────────────
+   Only for readers who haven't asked for reduced motion. Applied to SVG
+   parts, so transforms use each element's own box as the origin. */
+@media (prefers-reduced-motion: no-preference) {
+  .anim-glow { transform-box: fill-box; transform-origin: center; animation: glow 3.6s ease-in-out infinite; }
+  .anim-twinkle { animation: twinkle 3.2s ease-in-out infinite; }
+  .anim-rise { animation: rise 1.8s cubic-bezier(0.16, 1, 0.3, 1) both; }
+  .anim-spin-slow { animation: spin 60s linear infinite; }
+  .anim-marker { transform-box: fill-box; transform-origin: center; animation: marker 1.6s ease-out infinite; }
+  .anim-fade-in { animation: fade-in 0.6s ease both; }
+}
+
+@keyframes glow { 0%, 100% { transform: scale(0.9); opacity: 0.6; } 50% { transform: scale(1.08); opacity: 1; } }
+@keyframes twinkle { 0%, 100% { opacity: 0.25; } 50% { opacity: 1; } }
+@keyframes rise { from { transform: translateY(26px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes marker { 0% { transform: scale(0.5); opacity: 0.9; } 100% { transform: scale(1.5); opacity: 0; } }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }

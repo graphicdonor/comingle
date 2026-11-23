@@ -1,0 +1,110 @@
+{
+  "burmese": {
+    "src": "/illustrations/burmese.webp",
+    "width": 656,
+    "height": 760,
+    "group": "seated"
+  },
+  "burmese-inhale": {
+    "src": "/illustrations/burmese-inhale.webp",
+    "width": 656,
+    "height": 760,
+    "group": "seated"
+  },
+  "lap-hands": {
+    "src": "/illustrations/lap-hands.webp",
+    "width": 656,
+    "height": 760,
+    "group": "seated"
+  },
+  "anjali": {
+    "src": "/illustrations/anjali.webp",
+    "width": 656,
+    "height": 760,
+    "group": "seated"
+  },
+  "half-lotus": {
+    "src": "/illustrations/half-lotus.webp",
+    "width": 656,
+    "height": 760,
+    "group": "seated"
+  },
+  "full-lotus": {
+    "src": "/illustrations/full-lotus.webp",
+    "width": 656,
+    "height": 760,
+    "group": "seated"
+  },
+  "standing-anjali": {
+    "src": "/illustrations/standing-anjali.webp",
+    "width": 370,
+    "height": 760,
+    "group": "bow"
+  },
+  "bow-1": {
+    "src": "/illustrations/bow-1.webp",
+    "width": 370,
+    "height": 760,
+    "group": "bow"
+  },
+  "bow-2": {
+    "src": "/illustrations/bow-2.webp",
+    "width": 370,
+    "height": 760,
+    "group": "bow"
+  },
+  "sit-1": {
+    "src": "/illustrations/sit-1.webp",
+    "width": 445,
+    "height": 760,
+    "group": "sit"
+  },
+  "sit-2": {
+    "src": "/illustrations/sit-2.webp",
+    "width": 445,
+    "height": 760,
+    "group": "sit"
+  },
+  "sit-3": {
+    "src": "/illustrations/sit-3.webp",
+    "width": 445,
+    "height": 760,
+    "group": "sit"
+  },
+  "chair": {
+    "src": "/illustrations/chair.webp",
+    "width": 613,
+    "height": 760,
+    "group": "chair"
+  },
+  "bench": {
+    "src": "/illustrations/bench.webp",
+    "width": 652,
+    "height": 760,
+    "group": "bench"
+  },
+  "scene-place": {
+    "src": "/illustrations/scene-place.webp",
+    "width": 760,
+    "height": 722,
+    "group": "scene-place"
+  },
+  "scene-prepare": {
+    "src": "/illustrations/scene-prepare.webp",
+    "width": 760,
+    "height": 703,
+    "group": "scene-prepare"
+  },
+  "scene-reflect": {
+    "src": "/illustrations/scene-reflect.webp",
+    "width": 498,
+    "height": 760,
+    "group": "scene-reflect"
+  },
+  "scene-dedicate": {
+    "src": "/illustrations/scene-dedicate.webp",
+    "width": 461,
+    "height": 760,
+    "group": "scene-dedicate"
+  }
+}

@@ -2,18 +2,18 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "WePray — Uniting Communities",
+    name: "WePray — Buddhist Spiritual Companion",
     short_name: "WePray",
-    description: "Connect with your community — matrimonial, health, education, housing and more.",
+    description: "Buddhist prayers in Pali, Hindi and English, guided practice and meditation.",
     // The app lives at /app; "/" is the public landing page. Scope stays
     // "/" because the app's other pages (/feed, /communities, …) sit at the root.
     start_url: "/app",
     scope: "/",
     display: "standalone",
     orientation: "portrait",
-    background_color: "#ffffff",
-    theme_color: "#8B1A6B",
-    categories: ["social", "lifestyle", "community"],
+    background_color: "#F7F2E8",
+    theme_color: "#F7F2E8",
+    categories: ["lifestyle", "education"],
     icons: [
       { src: "/icons/icon-72.png",   sizes: "72x72",   type: "image/png" },
       { src: "/icons/icon-96.png",   sizes: "96x96",   type: "image/png" },
@@ -28,17 +28,17 @@ export default function manifest(): MetadataRoute.Manifest {
     ],
     shortcuts: [
       {
-        name: "Communities",
-        short_name: "Communities",
-        description: "Browse and join communities",
-        url: "/communities",
+        name: "Morning practice",
+        short_name: "Morning",
+        description: "Homage, the Three Refuges and the Five Precepts",
+        url: "/practice/session/morning",
         icons: [{ src: "/icons/icon-96.png", sizes: "96x96" }],
       },
       {
-        name: "My Profile",
-        short_name: "Profile",
-        description: "View your profile",
-        url: "/app",
+        name: "Meditate",
+        short_name: "Meditate",
+        description: "A calm meditation timer",
+        url: "/meditate",
         icons: [{ src: "/icons/icon-96.png", sizes: "96x96" }],
       },
     ],

@@ -16,7 +16,7 @@ const FADE_MS = 400;
  * hydrates; a mount-time effect then times its own dismissal.
  *
  * The background color intentionally matches manifest.ts's
- * background_color (white) exactly — that's the color Android paints for
+ * background_color (warm cream) exactly — that's the color Android paints for
  * the native OS-level splash before any JS runs, so this overlay continues
  * it seamlessly instead of flashing a different shade underneath.
  */
@@ -58,7 +58,7 @@ export function SplashScreen() {
     <AnimatePresence>
       {phase !== "done" && !isLanding && (
         <motion.div
-          className="fixed inset-0 z-[999] flex flex-col items-center justify-center bg-white"
+          className="fixed inset-0 z-[999] flex flex-col items-center justify-center bg-[#F7F2E8]"
           initial={{ opacity: 1 }}
           animate={{ opacity: phase === "hiding" ? 0 : 1 }}
           exit={{ opacity: 0 }}
@@ -74,7 +74,7 @@ export function SplashScreen() {
           </motion.div>
 
           <motion.h1
-            className="mt-5 text-2xl font-bold tracking-tight text-[#201D1E]"
+            className="mt-5 text-2xl font-bold tracking-tight text-[#6D252C]"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: EASE, delay: 0.25 }}
@@ -88,7 +88,7 @@ export function SplashScreen() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, ease: EASE, delay: 0.45 }}
           >
-            Uniting Communities
+            Buddhist Spiritual Companion
           </motion.p>
 
           <motion.div

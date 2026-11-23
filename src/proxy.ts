@@ -1,6 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { isAdminTokenValid } from "@/lib/admin-auth";
+import { isSuppressedPath } from "@/lib/features";
 
 function isAdminAuthed(request: NextRequest): boolean {
   const secret = process.env.ADMIN_SECRET;
@@ -20,6 +21,16 @@ export async function proxy(request: NextRequest) {
       return NextResponse.redirect(url);
     }
     return NextResponse.next({ request });
+  }
+
+  // ── Suppressed features ────────────────────────────────────────
+  // Pages of features not part of the practice companion go to the home
+  // screen. API routes are never matched here (see src/lib/features.ts).
+  if (isSuppressedPath(pathname)) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/app";
+    url.search = "";
+    return NextResponse.redirect(url);
   }
 
   let supabaseResponse = NextResponse.next({ request });

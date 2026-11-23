@@ -1,29 +1,28 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/site-url";
-import { BLOG_POSTS } from "@/lib/blog";
+import { GUIDES } from "@/lib/learn/guides";
+import { PRAYERS } from "@/lib/practice/prayers";
 
-// Deliberately static and small: only the genuinely public marketing/entry
-// and directory-browse surfaces. Per-user content (profiles, individual
-// posts, matrimonial) is excluded here the same way it's excluded from
-// robots.txt — see that file for why.
+// Only the practice companion's public pages; suppressed features
+// (src/lib/features.ts) redirect and are left out.
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
   return [
-    { url: `${SITE_URL}/`, lastModified: now, changeFrequency: "daily", priority: 1 },
-    { url: `${SITE_URL}/app`, lastModified: now, changeFrequency: "daily", priority: 0.9 },
-    { url: `${SITE_URL}/donate`, lastModified: now, changeFrequency: "daily", priority: 0.7 },
-    { url: `${SITE_URL}/login`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
-    { url: `${SITE_URL}/signup`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
-    { url: `${SITE_URL}/communities`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
-    { url: `${SITE_URL}/services/businesses`, lastModified: now, changeFrequency: "daily", priority: 0.6 },
-    { url: `${SITE_URL}/services/jobs`, lastModified: now, changeFrequency: "daily", priority: 0.6 },
-    { url: `${SITE_URL}/services/events`, lastModified: now, changeFrequency: "daily", priority: 0.6 },
-    { url: `${SITE_URL}/blog`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
-    ...BLOG_POSTS.map((p) => ({
-      url: `${SITE_URL}/blog/${p.slug}`,
-      lastModified: new Date(`${p.updated ?? p.published}T00:00:00Z`),
+    { url: `${SITE_URL}/app`, lastModified: now, changeFrequency: "daily", priority: 1 },
+    { url: `${SITE_URL}/practice`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
+    ...PRAYERS.map((p) => ({
+      url: `${SITE_URL}/practice/${p.slug}`,
+      lastModified: now,
       changeFrequency: "monthly" as const,
       priority: 0.8,
+    })),
+    { url: `${SITE_URL}/meditate`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${SITE_URL}/learn`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+    ...GUIDES.map((g) => ({
+      url: `${SITE_URL}/learn/${g.slug}`,
+      lastModified: now,
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
     })),
   ];
 }

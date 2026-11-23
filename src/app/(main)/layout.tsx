@@ -1,14 +1,7 @@
-import { Navbar } from "@/components/layout/navbar";
-import { TermsGate } from "@/components/legal-gate/terms-gate";
+import { AppShell } from "@/components/companion/app-shell";
 
+// The community navbar (src/components/layout/navbar.tsx) and Terms gate are
+// not used while the app ships as a practice companion; see src/lib/features.ts.
 export default function MainLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <>
-      <Navbar />
-      <TermsGate />
-      <main className="pt-16 pb-24 min-h-screen bg-gray-50">
-        <div className="max-w-xl mx-auto px-4 py-6">{children}</div>
-      </main>
-    </>
-  );
+  return <AppShell>{children}</AppShell>;
 }

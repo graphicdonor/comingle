@@ -3,16 +3,13 @@ import { WifiOff } from "lucide-react";
 
 export default function OfflinePage() {
   return (
-    <div className="min-h-screen bg-[#F7F7F9] flex flex-col items-center justify-center px-6 text-center">
+    <div className="min-h-screen bg-[#F7F2E8] flex flex-col items-center justify-center px-6 text-center">
       <div className="mb-6 flex items-center justify-center">
         <WifiOff className="h-16 w-16 text-gray-400" strokeWidth={1.5} />
       </div>
 
-      <div className="mb-2 font-black text-3xl tracking-tight">
-        <span style={{ color: "#8B1A6B" }}>We</span>
-        <span style={{ color: "#2A5C27", fontStyle: "italic", fontFamily: "Georgia, serif" }}>Pray</span>
-      </div>
-      <p className="text-sm text-[#2A5C27] font-medium mb-8">Uniting Communities</p>
+      <div className="mb-2 font-bold text-3xl tracking-tight text-[#6D252C]">WePray</div>
+      <p className="text-sm text-[#7A706B] font-medium mb-8">Buddhist Spiritual Companion</p>
 
       <div className="bg-white rounded-3xl shadow-sm p-8 max-w-sm w-full">
         <h1 className="text-xl font-bold text-gray-900 mb-2">You&apos;re offline</h1>
@@ -21,7 +18,7 @@ export default function OfflinePage() {
         </p>
         <button
           onClick={() => window.location.reload()}
-          className="w-full py-3 bg-[#1E2952] text-white rounded-full font-semibold text-sm hover:bg-[#16203D] transition-colors"
+          className="w-full py-3 bg-[#6D252C] text-[#F7F2E8] rounded-full font-semibold text-sm hover:bg-[#5E1F25] transition-colors"
         >
           Try Again
         </button>

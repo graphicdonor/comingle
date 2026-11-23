@@ -1,20 +1,19 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import { ServiceWorkerRegister } from "@/components/pwa/sw-register";
 import { InstallPrompt } from "@/components/pwa/install-prompt";
 import { SplashScreen } from "@/components/splash/splash-screen";
 import { SITE_URL } from "@/lib/site-url";
 import { DialogProvider } from "@/components/ui/dialog";
+import { figtreeFont, devanagariFont, paliRomanFont } from "@/lib/fonts";
 
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "WePray — Uniting Communities",
-  description: "Connect with your community — matrimonial, health, education, housing and more.",
+  title: "WePray — Buddhist Spiritual Companion",
+  description: "Learn the Dhamma, practise with mindfulness, live with compassion. Buddhist prayers in Pali, Hindi and English, guided practice and meditation.",
   applicationName: "WePray",
-  keywords: ["community", "social", "matrimonial", "health", "education", "housing"],
+  keywords: ["Buddhist prayers", "Pali", "Buddha Vandana", "Tisarana", "Pancasila", "meditation", "Dhamma", "बुद्ध वंदना"],
   authors: [{ name: "WePray" }],
   appleWebApp: {
     capable: true,
@@ -25,14 +24,14 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: "/",
-    title: "WePray — Uniting Communities",
-    description: "Connect with your community.",
+    title: "WePray — Buddhist Spiritual Companion",
+    description: "Learn the Dhamma. Practise with mindfulness. Live with compassion.",
     siteName: "WePray",
   },
   twitter: {
     card: "summary_large_image",
-    title: "WePray — Uniting Communities",
-    description: "Connect with your community.",
+    title: "WePray — Buddhist Spiritual Companion",
+    description: "Learn the Dhamma. Practise with mindfulness. Live with compassion.",
   },
   icons: {
     icon: [
@@ -46,7 +45,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#8B1A6B",
+  themeColor: "#F7F2E8",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
@@ -56,8 +55,8 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html lang="en" className={`${figtreeFont.variable} ${devanagariFont.variable} ${paliRomanFont.variable}`}>
+      <body>
         <DialogProvider>{children}</DialogProvider>
         <SplashScreen />
         <ServiceWorkerRegister />
