@@ -202,14 +202,14 @@ export function TodayView() {
         <h2 id="learn-heading" className="text-xs font-semibold uppercase tracking-[0.14em] text-[#A0701E] mb-3">
           {t("today.newToPractice")}
         </h2>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="-mx-4 px-4 flex gap-3 overflow-x-auto pb-1 snap-x scroll-px-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {GUIDES.map((g) => {
             return (
               <MotionLink
                 whileTap={{ scale: 0.97 }}
                 key={g.slug}
                 href={`/learn/${g.slug}`}
-                className="rounded-3xl bg-[#EEF0E8] border border-[#D9DECF] px-4 pt-2 pb-4 hover:border-[#87977A] transition-colors"
+                className="snap-start flex-shrink-0 w-[44%] rounded-3xl bg-[#EEF0E8] border border-[#D9DECF] px-4 pt-2 pb-4 hover:border-[#87977A] transition-colors"
               >
                 <PostureFigure id={g.cover} decorative still className="h-28 mx-auto" />
                 <p lang={ui} className="mt-1 font-bold text-[#2A1A1C] leading-tight">{g.title[ui]}</p>

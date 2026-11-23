@@ -1,4 +1,4 @@
-// Beginner guides (PRD §7.7, §7.8) in English and Hindi. Drafts until an
+// Beginner guides (PRD §7.7, §7.8, §7.9) in English and Hindi. Drafts until an
 // editorial and language reviewer signs them off, and labelled as such on
 // screen. No posture is presented as mandatory, and practice differs between
 // traditions — the guides say both.
@@ -327,6 +327,140 @@ export const GUIDES: Guide[] = [
     closing: {
       en: "Don't stay in a position that hurts. Moving mindfully to ease discomfort is part of practice, not a failure of it. This guide is general information, not medical advice.",
       hi: "जिस आसन में दर्द हो, उसमें न रहें। असुविधा कम करने के लिए सजगता से हिलना अभ्यास का हिस्सा है, उसकी विफलता नहीं। यह मार्गदर्शिका सामान्य जानकारी है, चिकित्सा सलाह नहीं।",
+    },
+    review: "draft",
+  },
+  {
+    slug: "temple-etiquette",
+    title: { en: "Visiting a temple", hi: "विहार में शिष्टाचार" },
+    summary: {
+      en: "How to visit a temple or monastery respectfully: footwear, greeting monastics, offerings and more.",
+      hi: "विहार या मठ में सम्मान के साथ कैसे जाएँ: जूते-चप्पल, भिक्षुओं का अभिवादन, दान और बहुत कुछ।",
+    },
+    minutes: 4,
+    cover: "anjali",
+    coverAnimation: "bow",
+    intro: [
+      {
+        en: "Buddhist temples, vihāras and monasteries usually welcome respectful visitors. Customs differ between traditions, countries and individual places, so what follows are common courtesies rather than rules. When unsure, watch what others do, or quietly ask.",
+        hi: "बौद्ध विहार और मठ सामान्यतः सम्मान रखने वाले आगंतुकों का स्वागत करते हैं। परंपराओं, देशों और स्थानों के अनुसार रीतियाँ भिन्न होती हैं, इसलिए नीचे दी गई बातें नियम नहीं, बल्कि सामान्य शिष्टाचार हैं। संदेह हो तो देखें कि दूसरे क्या करते हैं, या धीरे से पूछ लें।",
+      },
+    ],
+    steps: [
+      {
+        title: { en: "Arriving: footwear and dress", hi: "पहुँचने पर: जूते-चप्पल और वस्त्र" },
+        body: [
+          {
+            en: "Dress modestly, with shoulders and knees covered. Many lay Buddhists in India and Theravāda countries wear white or light clothing to the vihāra; it is customary but not required.",
+            hi: "शालीन वस्त्र पहनें, जिनसे कंधे और घुटने ढके हों। भारत और थेरवाद देशों में अनेक उपासक विहार में सफ़ेद या हल्के रंग के कपड़े पहनते हैं; यह प्रचलित है, पर अनिवार्य नहीं।",
+          },
+        ],
+        cues: [
+          {
+            text: {
+              en: "Remove your shoes before entering the shrine hall, or wherever you see others' footwear left at the door.",
+              hi: "पूजा-कक्ष में जाने से पहले, या जहाँ दरवाज़े पर दूसरों के जूते रखे दिखें, वहाँ अपने जूते उतार दें।",
+            },
+          },
+          {
+            text: { en: "Switch your phone to silent and speak softly.", hi: "फ़ोन को साइलेंट पर रखें और धीमे स्वर में बात करें।" },
+          },
+          {
+            text: { en: "Remove hats and sunglasses inside.", hi: "अंदर टोपी और धूप का चश्मा उतार दें।" },
+          },
+        ],
+      },
+      {
+        title: { en: "At the shrine", hi: "पूजा-स्थान पर" },
+        figures: ["anjali"],
+        body: [
+          {
+            en: "Before the Buddha image, people often join their palms and bow. In many communities this is done three times, sometimes touching the forehead to the floor. Bow in whatever way you are comfortable with, or simply stand quietly.",
+            hi: "बुद्ध प्रतिमा के सामने लोग प्रायः हाथ जोड़कर प्रणाम करते हैं। अनेक समुदायों में यह तीन बार किया जाता है, कभी-कभी माथा ज़मीन से छुआकर। जिस तरह आपको सहज लगे उस तरह प्रणाम करें, या बस शांत खड़े रहें।",
+          },
+        ],
+        cues: [
+          {
+            text: {
+              en: "Avoid pointing your feet towards the Buddha image or towards monastics; tuck them to the side or behind you.",
+              hi: "पैरों का रुख़ बुद्ध प्रतिमा या भिक्षुओं की ओर न करें; उन्हें एक ओर या पीछे की ओर मोड़ लें।",
+            },
+          },
+          {
+            text: {
+              en: "Don't climb on, lean against or pose beside statues and stupas.",
+              hi: "प्रतिमाओं और स्तूपों पर न चढ़ें, न उनसे टेक लगाएँ, न उनके साथ पोज़ देकर तस्वीर लें।",
+            },
+          },
+          {
+            text: {
+              en: "Where it is the custom, walk around stupas and shrines clockwise, keeping them on your right.",
+              hi: "जहाँ यह परंपरा हो, स्तूप और पूजा-स्थान की परिक्रमा घड़ी की दिशा में करें, उन्हें अपनी दाईं ओर रखते हुए।",
+            },
+          },
+        ],
+      },
+      {
+        title: { en: "Greeting monastics", hi: "भिक्षुओं का अभिवादन" },
+        animation: "bow",
+        body: [
+          {
+            en: "Greet monks and nuns with joined palms and a slight bow. In many Theravāda and Indian Buddhist communities, monks are addressed as \"Bhante\".",
+            hi: "भिक्षुओं और भिक्षुणियों का अभिवादन हाथ जोड़कर और हल्का झुककर करें। अनेक थेरवाद और भारतीय बौद्ध समुदायों में भिक्षुओं को \"भंते\" कहकर संबोधित किया जाता है।",
+          },
+        ],
+        cues: [
+          {
+            text: {
+              en: "Where possible, sit at a lower level than a monastic, and don't sit on a seat set aside for them.",
+              hi: "जहाँ संभव हो, भिक्षु से नीचे के स्तर पर बैठें, और उनके लिए रखे आसन पर न बैठें।",
+            },
+          },
+          {
+            text: {
+              en: "In some Theravāda communities, monks do not touch women or take items directly from their hands; an offering may be placed on a cloth or table instead. Follow what others do.",
+              hi: "कुछ थेरवाद समुदायों में भिक्षु महिलाओं को नहीं छूते और न उनके हाथ से सीधे कोई वस्तु लेते हैं; ऐसे में भेंट किसी कपड़े या मेज़ पर रखी जाती है। दूसरों को देखकर उसी तरह करें।",
+            },
+          },
+        ],
+      },
+      {
+        title: { en: "Offerings (dāna)", hi: "दान" },
+        scene: "scene-prepare",
+        body: [
+          {
+            en: "Common offerings are flowers, candles, incense, water, food or everyday necessities. Offer with both hands and give what you can; offerings are always voluntary.",
+            hi: "प्रचलित भेंट हैं फूल, मोमबत्ती, धूप, जल, भोजन या दैनिक उपयोग की वस्तुएँ। दोनों हाथों से अर्पित करें और जितना संभव हो उतना दें; दान हमेशा स्वैच्छिक होता है।",
+          },
+          {
+            en: "In the Theravāda tradition monastics generally eat only before midday, so food is offered in the morning.",
+            hi: "थेरवाद परंपरा में भिक्षु सामान्यतः दोपहर से पहले ही भोजन करते हैं, इसलिए भोजन सुबह के समय दान किया जाता है।",
+          },
+        ],
+      },
+      {
+        title: { en: "Joining chanting or meditation", hi: "वंदना या ध्यान में शामिल होना" },
+        animation: "breathe",
+        body: [
+          {
+            en: "If you arrive during chanting or meditation, enter quietly and sit near the back. You are welcome to listen without joining in, and to follow others' lead on when to stand, bow or sit.",
+            hi: "यदि आप वंदना या ध्यान के समय पहुँचें, तो चुपचाप अंदर आएँ और पीछे की ओर बैठ जाएँ। आप बिना शामिल हुए भी सुन सकते हैं, और कब खड़ा होना, प्रणाम करना या बैठना है, यह दूसरों को देखकर कर सकते हैं।",
+          },
+        ],
+      },
+      {
+        title: { en: "Photography", hi: "फ़ोटोग्राफ़ी" },
+        body: [
+          {
+            en: "Ask before photographing people, monastics or ceremonies, and look for signs: some shrine halls don't allow photos at all. Never use flash during chanting or meditation.",
+            hi: "लोगों, भिक्षुओं या समारोहों की तस्वीर लेने से पहले पूछें, और सूचना-पट देखें: कुछ पूजा-कक्षों में फ़ोटो लेना बिलकुल मना होता है। वंदना या ध्यान के समय कभी फ़्लैश का उपयोग न करें।",
+          },
+        ],
+      },
+    ],
+    closing: {
+      en: "Visitors are rarely expected to know every custom. Quietness, a respectful attitude and a willingness to learn matter far more than getting everything right.",
+      hi: "आगंतुकों से हर रीति जानने की अपेक्षा शायद ही की जाती है। हर बात सही करने से कहीं अधिक महत्वपूर्ण हैं शांति, सम्मान का भाव और सीखने की इच्छा।",
     },
     review: "draft",
   },

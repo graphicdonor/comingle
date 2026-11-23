@@ -11,32 +11,46 @@ import { useT } from "@/lib/i18n/use-t";
 export function PrayerList({ prayers }: { prayers: Prayer[] }) {
   const favs = favourites.use();
   const { translation } = readingPrefs.use();
-  const [filter, setFilter] = useState<"all" | "saved">("all");
+  const [filter, setFilter] = useState<string>("all");
   const { t, lang: ui } = useT();
 
-  const shown = filter === "saved" ? prayers.filter((p) => favs.includes(p.slug)) : prayers;
+  // Filters are derived from the catalogue, so new categories (and, once
+  // there is more than one, traditions) appear without code changes.
+  const categories = Array.from(new Map(prayers.map((p) => [p.category.en, p.category])).values());
+  const filters: { id: string; label: string }[] = [
+    { id: "all", label: t("prayers.filterAll", { n: prayers.length }) },
+    { id: "saved", label: t("prayers.filterSaved", { n: favs.length }) },
+    ...categories.map((c) => ({ id: `cat:${c.en}`, label: c[ui] })),
+  ];
+
+  const shown =
+    filter === "saved"
+      ? prayers.filter((p) => favs.includes(p.slug))
+      : filter.startsWith("cat:")
+        ? prayers.filter((p) => `cat:${p.category.en}` === filter)
+        : prayers;
 
   return (
     <div>
-      <div className="flex gap-2 mb-4">
-        {(["all", "saved"] as const).map((f) => (
+      <div role="group" aria-label={t("prayers.filters")} className="-mx-4 px-4 mb-4 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        {filters.map((f) => (
           <button
-            key={f}
+            key={f.id}
             type="button"
-            aria-pressed={filter === f}
-            onClick={() => setFilter(f)}
+            aria-pressed={filter === f.id}
+            onClick={() => setFilter(f.id)}
             className={cn(
-              "rounded-full px-4 py-1.5 text-xs font-semibold border transition-colors",
-              filter === f ? "bg-[#6D252C] text-white border-[#6D252C]" : "bg-white text-[#6D252C] border-[#6D252C]/25",
+              "flex-shrink-0 rounded-full px-4 py-1.5 text-xs font-semibold border transition-colors whitespace-nowrap",
+              filter === f.id ? "bg-[#6D252C] text-white border-[#6D252C]" : "bg-white text-[#6D252C] border-[#6D252C]/25",
             )}
           >
-            {f === "all" ? t("prayers.filterAll", { n: prayers.length }) : t("prayers.filterSaved", { n: favs.length })}
+            {f.label}
           </button>
         ))}
       </div>
 
       {shown.length === 0 ? (
-        <p className="text-sm text-gray-500 rounded-2xl bg-white border border-[#E7DCC8] px-4 py-6 text-center">
+        <p className="text-sm text-[#7A706B] rounded-2xl bg-white border border-[#E7DCC8] px-4 py-6 text-center">
           {t("prayers.emptySaved")}
         </p>
       ) : (

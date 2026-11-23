@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { useT } from "@/lib/i18n/use-t";
 import type { MessageKey } from "@/lib/i18n/dictionary";
 import { WelcomeFlow } from "./welcome-flow";
+import { SearchButton } from "./search-overlay";
 
 interface NavItem {
   href: string;
@@ -44,6 +45,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <Link href="/app" className="text-lg font-bold tracking-tight text-[#6D252C]">
             WePray
           </Link>
+          <SearchButton />
         </div>
       </header>
 
