@@ -29,7 +29,8 @@ export const SUPPRESSED_ROUTE_PREFIXES = [
   "/pin",
   "/select-communities",
   "/settings",
-  // Marketing pages for the community product
+  // Marketing pages written for the community product (the landing page at
+  // "/" has been rewritten for the practice companion and stays live)
   "/blog",
   "/survey",
   "/dev",
@@ -37,6 +38,5 @@ export const SUPPRESSED_ROUTE_PREFIXES = [
 
 /** True when a page path belongs to a suppressed feature. */
 export function isSuppressedPath(pathname: string): boolean {
-  if (pathname === "/") return true; // community landing page
   return SUPPRESSED_ROUTE_PREFIXES.some((p) => pathname === p || pathname.startsWith(`${p}/`));
 }
