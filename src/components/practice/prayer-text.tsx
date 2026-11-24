@@ -83,6 +83,7 @@ export function PrayerText({
               return (
               <div
                 key={li}
+                data-line={key}
                 onClick={onLineSelect ? () => onLineSelect(key) : undefined}
                 onKeyDown={onLineSelect ? (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onLineSelect(key); } } : undefined}
                 role={onLineSelect ? "button" : undefined}

@@ -1,13 +1,16 @@
 "use client";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Heart, Share2, Volume2, Check } from "lucide-react";
+import { Heart, Share2, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Prayer } from "@/lib/practice/prayers";
 import { readingPrefs, favourites, toggleFavourite, markPrayerOpened } from "@/lib/practice/preferences";
 import { PrayerText, ReviewNotice } from "./prayer-text";
 import { ReadingControls } from "./reading-controls";
 import { useT } from "@/lib/i18n/use-t";
+import { usePrayerVoice } from "@/lib/practice/use-prayer-voice";
+import { useWakeLock } from "@/lib/practice/client-hooks";
+import { ListenPanel, useFollowLine } from "./listen-panel";
 
 export function PrayerReader({ prayer }: { prayer: Prayer }) {
   const prefs = readingPrefs.use();
@@ -17,6 +20,10 @@ export function PrayerReader({ prayer }: { prayer: Prayer }) {
   const lang = prefs.translation;
   const { t, lang: ui } = useT();
   const other = ui === "hi" ? "en" : "hi";
+  const voice = usePrayerVoice(prayer, prefs);
+  const listening = !prayer.audio && voice.status !== "idle";
+  useFollowLine(voice.status === "playing" ? voice.activeLine : null);
+  useWakeLock(prefs.keepAwake && voice.status === "playing");
 
   useEffect(() => {
     markPrayerOpened(prayer.slug);
@@ -81,20 +88,18 @@ export function PrayerReader({ prayer }: { prayer: Prayer }) {
         </div>
       </header>
 
-      <div className="flex items-center gap-3 rounded-2xl bg-white border border-[#E7DCC8] px-4 py-3 mb-4">
-        <div className="w-9 h-9 rounded-full bg-[#F7F2E8] flex items-center justify-center flex-shrink-0">
-          <Volume2 className="h-4 w-4 text-[#885F19]" />
-        </div>
-        <p className="text-sm text-[#5B5350]">
-          {prayer.audio ? prayer.audio.credit : t("prayers.noAudio")}
-        </p>
-      </div>
+      <ListenPanel prayer={prayer} voice={voice} />
 
       <ReadingControls prefs={prefs} className="rounded-2xl bg-white border border-[#E7DCC8] p-3 mb-4" />
 
       <ReviewNotice prayer={prayer} prefs={prefs} />
 
-      <PrayerText prayer={prayer} prefs={prefs} className="mt-5 rounded-3xl bg-[#FFFCF6] border border-[#E7DCC8] px-5 py-6" />
+      <PrayerText
+        prayer={prayer}
+        prefs={prefs}
+        activeLine={listening ? voice.activeLine : null}
+        onLineSelect={!prayer.audio && voice.isSupported ? voice.playFromLine : undefined}
+        className="mt-5 rounded-3xl bg-[#FFFCF6] border border-[#E7DCC8] px-5 py-6" />
 
       <footer className="mt-6 space-y-3 text-sm">
         {prayer.notes && (
