@@ -14,6 +14,7 @@ import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { createClient } from "@supabase/supabase-js";
 import type { Prayer } from "../src/lib/practice/prayers";
+import { SEED_PRAYERS } from "../src/lib/practice/prayers-seed";
 import { paliToDevanagari } from "../src/lib/practice/pali-devanagari";
 import { clipHash, type ClipLang } from "../src/lib/practice/tts-config";
 import type { CmsItem } from "../src/lib/cms/model";
@@ -111,12 +112,6 @@ function clipManifest(prayers: Prayer[], cmsClips: Map<string, Set<string>>) {
 }
 
 async function main() {
-  // The app's content modules import these files, so they must exist before
-  // the prayers are loaded (a fresh checkout has neither).
-  if (!existsSync(CONTENT)) writeFileSync(CONTENT, JSON.stringify(EMPTY) + "\n");
-  if (!existsSync(MANIFEST)) writeFileSync(MANIFEST, "{}\n");
-  const { SEED_PRAYERS } = await import("../src/lib/practice/prayers");
-
   const { content, cmsClips } = await fetchPublished();
   writeFileSync(CONTENT, JSON.stringify(content) + "\n");
   const prayers = content.prayers.length ? (content.prayers as Prayer[]) : SEED_PRAYERS;
