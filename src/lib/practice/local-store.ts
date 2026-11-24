@@ -10,6 +10,8 @@ export interface LocalStore<T> {
   use(): T;
   set(value: T): void;
   get(): T;
+  /** Call `listener` whenever the value changes (in this tab or another). Returns an unsubscribe function. */
+  subscribe(listener: () => void): () => void;
 }
 
 /**
@@ -67,6 +69,7 @@ export function createLocalStore<T>(key: string, fallback: T, parse: (raw: unkno
   return {
     get,
     set,
+    subscribe,
     use: () => useSyncExternalStore(subscribe, get, () => serverValue),
   };
 }

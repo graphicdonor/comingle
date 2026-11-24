@@ -10,6 +10,8 @@ import { getPrayer } from "@/lib/practice/prayers";
 import { ReadingControls, Segmented } from "@/components/practice/reading-controls";
 import { PrayerText } from "@/components/practice/prayer-text";
 import { OfflineSettings } from "./offline-settings";
+import { AccountSection } from "./account-section";
+import { useAccount } from "@/lib/practice/sync";
 
 const PREVIEW = getPrayer("buddha-vandana");
 
@@ -28,6 +30,7 @@ export function PreferencesView() {
   const recent = recentPrayers.use();
   const [cleared, setCleared] = useState<string | null>(null);
   const { t, lang } = useT();
+  const account = useAccount();
 
   function clear(what: "history" | "saved") {
     if (what === "history") recentPrayers.set([]);
@@ -42,6 +45,10 @@ export function PreferencesView() {
         <h1 className="text-[28px] font-bold tracking-tight text-[#2A1A1C]">{t("settings.title")}</h1>
         <p className="mt-1 text-[15px] text-[#5B5350]">{t("settings.intro")}</p>
       </header>
+
+      <Section title={t("account.section")}>
+        <AccountSection />
+      </Section>
 
       <Section title={t("settings.language")}>
         <div className="rounded-3xl bg-white border border-[#E7DCC8] p-4">
@@ -132,7 +139,7 @@ export function PreferencesView() {
         </div>
         <p className="mt-3 flex gap-2 text-xs text-[#6E6560] leading-relaxed">
           <ShieldCheck className="h-4 w-4 flex-shrink-0 text-[#87977A]" />
-          {t("settings.privacyNote")}
+          {account.user ? t("settings.privacyNoteSynced") : t("settings.privacyNote")}
         </p>
       </Section>
 

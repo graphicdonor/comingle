@@ -10,6 +10,7 @@ import type { MessageKey } from "@/lib/i18n/dictionary";
 import { WelcomeFlow } from "./welcome-flow";
 import { SearchButton } from "./search-overlay";
 import { offlinePack, useOnline } from "@/lib/practice/offline";
+import { startAccountSync } from "@/lib/practice/sync";
 import { WifiOff } from "lucide-react";
 
 interface NavItem {
@@ -39,6 +40,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     document.documentElement.lang = lang;
   }, [lang]);
+
+  // Optional account sync: picks up an existing session and keeps the
+  // signed-in user's saved prayers and settings in step across devices.
+  useEffect(() => {
+    startAccountSync();
+  }, []);
 
   // reducedMotion="user": every framer-motion animation in the app respects
   // the device's reduce-motion setting.

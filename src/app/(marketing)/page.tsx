@@ -54,7 +54,7 @@ const POSTURES: { id: FigureId; label: string }[] = [
 
 const FAQ: { q: string; a: string }[] = [
   { q: "Is WePray free?", a: "Yes. WePray is free to use, with no ads and no subscriptions." },
-  { q: "Do I need to create an account?", a: "No. You can use every prayer, guide and meditation without signing up. Your saved prayers and settings stay on your own device." },
+  { q: "Do I need to create an account?", a: "No. You can use every prayer, guide and meditation without signing up, and your saved prayers and settings stay on your own device. If you like, sign in with Google to sync them privately across your devices." },
   { q: "Can I use it without internet?", a: "Yes. Open Settings and choose “Download for offline” once; after that, prayers, guides, meditation and illustrations all work with no connection." },
   { q: "Which Buddhist tradition is it based on?", a: "The prayers are traditional Pali recitations widely used in Theravāda and by Buddhist communities across India. Practices differ between traditions and communities, and the app says so wherever it matters. Every prayer shows its source." },
   { q: "Are the translations reviewed?", a: "Each prayer and guide shows its review status. Hindi and English translations are clearly marked as drafts until a qualified reviewer has checked them." },
@@ -262,7 +262,7 @@ export default function LandingPage() {
             </Reveal>
             <div className="mt-12 grid sm:grid-cols-3 gap-5">
               {[
-                { icon: Lock, title: "No account, no tracking", text: "Use everything without signing up. Your saved prayers, history and settings are stored only on your device. We never receive them." },
+                { icon: Lock, title: "No account needed", text: "Use everything without signing up; your saved prayers, history and settings stay on your device. Prefer them on every device? Sign in with Google to sync them privately." },
                 { icon: CloudDownload, title: "Works without internet", text: "Download everything once from Settings, then practise anywhere, even with no signal." },
                 { icon: ShieldCheck, title: "Calm by design", text: "No ads, no streaks, no pressure. Gentle animations that switch off if you prefer less motion, and support for zoom and screen readers." },
               ].map((c, i) => (
