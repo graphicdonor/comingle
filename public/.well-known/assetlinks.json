@@ -3,6 +3,17 @@
     "relation": ["delegate_permission/common.handle_all_urls"],
     "target": {
       "namespace": "android_app",
+      "package_name": "in.wepray.app",
+      "sha256_cert_fingerprints": [
+        "0B:9C:F4:A5:B3:ED:80:3B:21:F6:01:DF:7A:85:C8:3C:01:90:8A:19:3D:9F:A3:4E:1D:B5:9C:04:3B:B0:E2:B3",
+        "F0:7F:29:A4:45:BB:3C:7C:4A:59:EA:C0:AA:73:DC:62:09:EA:B8:D1:2E:BC:F7:1B:4A:83:EA:67:00:6A:00:94"
+      ]
+    }
+  },
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
       "package_name": "in.wepray.twa",
       "sha256_cert_fingerprints": [
         "76:8F:E9:63:4C:8C:DD:0F:CF:4D:77:E3:03:AD:FA:5C:6D:8F:9F:B6:0D:94:DD:FC:B6:29:32:85:FD:61:21:DA"

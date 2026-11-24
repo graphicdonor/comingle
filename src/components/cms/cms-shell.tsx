@@ -30,7 +30,7 @@ function SignIn({ email, onSignedIn }: { email: string | null; onSignedIn: () =>
         <h1 className="mt-1 text-2xl font-bold text-[#2A1A1C]">Content management</h1>
         {email ? (
           <p className="mt-3 text-sm text-[#7A2A24]">
-            {email} doesn&apos;t have access to the CMS yet. Ask a Super Admin to add this email under Access.
+            {`${email} doesn't have access to the CMS yet. Ask a Super Admin to add this email under Access, or sign in with the admin password below.`}
           </p>
         ) : (
           <p className="mt-2 text-sm text-[#5B5350]">Sign in with the Google account your administrator added, or with the admin password.</p>

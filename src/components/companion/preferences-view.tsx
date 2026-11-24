@@ -12,6 +12,7 @@ import { PrayerText } from "@/components/practice/prayer-text";
 import { OfflineSettings } from "./offline-settings";
 import { AccountSection } from "./account-section";
 import { RemindersSection } from "./reminders-section";
+import { setUsageCounting, usageCounting } from "@/lib/practice/usage";
 import { useAccount } from "@/lib/practice/sync";
 
 const PREVIEW = getPrayer("buddha-vandana");
@@ -27,6 +28,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 export function PreferencesView() {
   const prefs = readingPrefs.use();
+  const counting = usageCounting.use();
   const favs = favourites.use();
   const recent = recentPrayers.use();
   const [cleared, setCleared] = useState<string | null>(null);
@@ -141,6 +143,28 @@ export function PreferencesView() {
               {cleared === "saved" ? t("settings.removed") : t("settings.removeAll")}
             </button>
           </div>
+          <label className="flex items-center justify-between gap-4 px-5 py-4 cursor-pointer">
+            <span>
+              <span className="block font-semibold text-[#2A1A1C]">{t("settings.usage")}</span>
+              <span className="block text-sm text-[#5B5350]">{t("settings.usageHint")}</span>
+            </span>
+            <input
+              type="checkbox"
+              role="switch"
+              checked={counting}
+              onChange={(e) => setUsageCounting(e.target.checked)}
+              className="sr-only peer"
+            />
+            <span
+              aria-hidden
+              className={cn(
+                "relative h-7 w-12 rounded-full transition-colors flex-shrink-0 peer-focus-visible:ring-2 peer-focus-visible:ring-[#6D252C]/40",
+                counting ? "bg-[#6D252C]" : "bg-[#8E847C]",
+              )}
+            >
+              <span className={cn("absolute top-1 h-5 w-5 rounded-full bg-white shadow transition-all", counting ? "left-6" : "left-1")} />
+            </span>
+          </label>
         </div>
         <p className="mt-3 flex gap-2 text-xs text-[#6E6560] leading-relaxed">
           <ShieldCheck className="h-4 w-4 flex-shrink-0 text-[#87977A]" />

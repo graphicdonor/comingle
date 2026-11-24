@@ -7,7 +7,7 @@ import { SPLASH_LAYERS } from "@/lib/splash";
 import { preload } from "react-dom";
 import { SITE_URL } from "@/lib/site-url";
 import { DialogProvider } from "@/components/ui/dialog";
-import { figtreeFont, devanagariFont, paliRomanFont } from "@/lib/fonts";
+import "@/lib/fonts.css";
 
 
 export const metadata: Metadata = {
@@ -58,7 +58,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   // Start fetching the splash artwork with the HTML, before any JavaScript.
   for (const layer of SPLASH_LAYERS) preload(layer.src, { as: "image", type: "image/webp", fetchPriority: "high" });
   return (
-    <html lang="en" className={`${figtreeFont.variable} ${devanagariFont.variable} ${paliRomanFont.variable}`}>
+    <html lang="en">
       <body>
         <DialogProvider>{children}</DialogProvider>
         <SplashScreen />

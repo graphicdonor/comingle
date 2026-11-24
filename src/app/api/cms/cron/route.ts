@@ -3,10 +3,11 @@ import { computeAdminToken } from "@/lib/admin-auth";
 import { CMS_TYPES } from "@/lib/cms/model";
 import { publishDue, rebuildSite } from "@/lib/cms/service";
 import { listItems } from "@/lib/cms/store";
+import { rollUpUsage } from "@/lib/cms/stats";
 
 export const dynamic = "force-dynamic";
 
-/** Called hourly by netlify/functions/cms-scheduler.mts: publishes scheduled items that are due. */
+/** Called hourly by netlify/functions/cms-scheduler.mts: publishes scheduled items that are due, and rolls up usage counts. */
 export async function POST(req: Request) {
   const secret = process.env.ADMIN_SECRET;
   if (!secret || req.headers.get("x-cms-cron") !== computeAdminToken(secret)) {
@@ -15,5 +16,6 @@ export async function POST(req: Request) {
   let published = 0;
   for (const type of CMS_TYPES) published += await publishDue(await listItems(type));
   if (published) await rebuildSite(`${published} scheduled item(s)`);
+  await rollUpUsage().catch((e) => console.error("usage roll-up failed", e));
   return NextResponse.json({ published });
 }

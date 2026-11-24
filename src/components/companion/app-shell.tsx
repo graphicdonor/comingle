@@ -11,6 +11,7 @@ import { WelcomeFlow } from "./welcome-flow";
 import { SearchButton } from "./search-overlay";
 import { offlinePack, useOnline } from "@/lib/practice/offline";
 import { startAccountSync } from "@/lib/practice/sync";
+import { reportDailyUse } from "@/lib/practice/usage";
 import { WifiOff } from "lucide-react";
 
 interface NavItem {
@@ -46,6 +47,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     startAccountSync();
   }, []);
+
+  // Anonymous once-a-day count of devices using the app (Settings → Your data).
+  useEffect(() => {
+    reportDailyUse(lang);
+  }, [lang]);
 
   // reducedMotion="user": every framer-motion animation in the app respects
   // the device's reduce-motion setting.

@@ -1,0 +1,19 @@
+/*
+ * Fonts, bundled with the app (Fontsource) rather than fetched from Google
+ * Fonts at build time, so builds never depend on that download.
+ *
+ * Figtree is the interface and English reading font. It has no Devanagari
+ * glyphs, so the body font stack (globals.css) falls through to Noto Sans
+ * Devanagari for Hindi. Pali in Roman script uses Noto Serif, which covers
+ * its diacritics (ā ī ū ṃ ṅ ñ ṭ ḍ ṇ ḷ). Each font is split by script, and the
+ * browser downloads only the parts a page uses.
+ */
+@import "@fontsource-variable/figtree/index.css";
+@import "@fontsource-variable/noto-sans-devanagari/index.css";
+@import "@fontsource-variable/noto-serif/index.css";
+
+:root {
+  --font-figtree: "Figtree Variable";
+  --font-devanagari: "Noto Sans Devanagari Variable";
+  --font-pali: "Noto Serif Variable";
+}

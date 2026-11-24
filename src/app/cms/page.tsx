@@ -6,6 +6,7 @@ import { CMS_TYPES, STATUSES, TYPE_LABELS, can, type CmsType, type Status } from
 import { api, when } from "@/components/cms/api";
 import { useActor } from "@/components/cms/cms-shell";
 import { Button, Card, StatusBadge } from "@/components/cms/ui";
+import { UsagePanel } from "@/components/cms/usage-panel";
 
 interface Row {
   slug: string;
@@ -101,6 +102,8 @@ export default function CmsDashboard() {
           )}
         </Card>
       )}
+
+      {!empty && <UsagePanel />}
 
       <div className="grid gap-4 md:grid-cols-3">
         {CMS_TYPES.map((t) => {
