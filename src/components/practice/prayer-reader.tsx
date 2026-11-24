@@ -1,7 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Heart, Share2, Check } from "lucide-react";
+import Link from "next/link";
+import { Heart, Share2, Check, ChevronRight, Mic } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Prayer } from "@/lib/practice/prayers";
 import { readingPrefs, favourites, toggleFavourite, markPrayerOpened } from "@/lib/practice/preferences";
@@ -90,6 +91,17 @@ export function PrayerReader({ prayer }: { prayer: Prayer }) {
 
       <ListenPanel prayer={prayer} voice={voice} />
 
+      <Link
+        href={`/practice/${prayer.slug}/pronounce`}
+        className="-mt-2 mb-4 flex items-center gap-3 rounded-2xl bg-white border border-[#E7DCC8] px-4 py-3 hover:border-[#6D252C]/40"
+      >
+        <span className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-[#F7F2E8]">
+          <Mic className="h-4 w-4 text-[#6D252C]" />
+        </span>
+        <span className="text-sm font-semibold text-[#2A1A1C]">{t("pron.open")}</span>
+        <ChevronRight className="ml-auto h-4 w-4 text-[#6D645D]" />
+      </Link>
+
       <ReadingControls prefs={prefs} className="rounded-2xl bg-white border border-[#E7DCC8] p-3 mb-4" />
 
       <ReviewNotice prayer={prayer} prefs={prefs} />
@@ -112,6 +124,15 @@ export function PrayerReader({ prayer }: { prayer: Prayer }) {
           <dd className="font-pali text-[#2A1A1C]">
             {prayer.source.title} — {prayer.source.reference}
           </dd>
+          {prayer.rights?.licence && (
+            <>
+              <dt className="text-[#6E6560]">{t("prayers.rights")}</dt>
+              <dd className="text-[#2A1A1C]">
+                {prayer.rights.licence}
+                {prayer.rights.translator ? ` · ${t("prayers.translator")}: ${prayer.rights.translator}` : ""}
+              </dd>
+            </>
+          )}
           <dt className="text-[#6E6560]">{t("prayers.tradition")}</dt>
           <dd className="text-[#2A1A1C]">{prayer.tradition}</dd>
           <dt className="text-[#6E6560]">{t("prayers.review")}</dt>

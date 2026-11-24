@@ -130,7 +130,7 @@ function VoicePlayer({ voice }: { voice: Voice }) {
         </div>
       </div>
       <p aria-live="polite" className="mt-2 text-xs text-[#6D645D] leading-relaxed">
-        {active ? t("listen.progress", { i: voice.lineNumber, n: voice.lineCount }) : t("listen.voiceNote")}
+        {active ? t("listen.progress", { i: voice.lineNumber, n: voice.lineCount }) : t(voice.aiVoice ? "listen.aiVoiceNote" : "listen.voiceNote")}
       </p>
       {voice.missingHindiVoice && <p className="mt-1 text-xs text-[#885F19] leading-relaxed">{t("listen.noHindiVoice")}</p>}
     </div>

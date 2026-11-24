@@ -1,4 +1,5 @@
 import type { ReviewStatus } from "./prayers";
+import published from "@/lib/cms/published-content.json";
 
 // "Today's verse": one Dhammapada verse per day, rotating by day of the year.
 // Every verse carries its exact reference (PRD §8.5: no unattributed quotes).
@@ -10,9 +11,12 @@ export interface DailyVerse {
   hi: string;
   en: string;
   review: ReviewStatus;
+  /** Show this verse on a particular day ("YYYY-MM-DD"), scheduled from the CMS. */
+  date?: string;
 }
 
-export const DAILY_VERSES: DailyVerse[] = [
+/** The verses built into the app; the CMS starts from these. */
+export const SEED_VERSES: DailyVerse[] = [
   {
     reference: "Dhammapada 5",
     pi: ["Na hi verena verāni, sammantīdha kudācanaṃ;", "Averena ca sammanti, esa dhammo sanantano."],
@@ -72,8 +76,15 @@ export const DAILY_VERSES: DailyVerse[] = [
   },
 ];
 
+/** Published in the CMS, or the built-in set before the CMS has any. */
+export const DAILY_VERSES: DailyVerse[] = (published.verses as unknown as DailyVerse[]).length ? (published.verses as unknown as DailyVerse[]) : SEED_VERSES;
+
 /** Same verse for everyone on a given local calendar day. */
 export function verseForDate(date: Date): DailyVerse {
+  const pad = (n: number) => String(n).padStart(2, "0");
+  const today = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+  const scheduled = DAILY_VERSES.find((v) => v.date === today);
+  if (scheduled) return scheduled;
   const start = new Date(date.getFullYear(), 0, 0);
   const dayOfYear = Math.floor((date.getTime() - start.getTime()) / 86_400_000);
   return DAILY_VERSES[dayOfYear % DAILY_VERSES.length];

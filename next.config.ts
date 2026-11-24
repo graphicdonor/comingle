@@ -14,6 +14,17 @@ const nextConfig: NextConfig = {
         : []),
     ],
   },
+  // Voice clips made in the CMS live in the public "cms-audio" bucket; serve
+  // them from this site so the service worker can keep them for offline use.
+  async rewrites() {
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL) return [];
+    return [
+      {
+        source: "/audio/cms/:path*",
+        destination: `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/cms-audio/:path*`,
+      },
+    ];
+  },
   async headers() {
     return [
       {

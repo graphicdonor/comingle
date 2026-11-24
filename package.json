@@ -3,10 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "tsx scripts/fetch-cms-content.ts",
     "dev": "next dev",
+    "prebuild": "tsx scripts/fetch-cms-content.ts",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "cms:content": "tsx scripts/fetch-cms-content.ts",
+    "audio:generate": "tsx scripts/generate-prayer-audio.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.0",
@@ -31,6 +35,7 @@
     "eslint-config-next": "16.2.9",
     "playwright": "^1.61.1",
     "tailwindcss": "^4",
+    "tsx": "^4.23.15",
     "typescript": "^5"
   }
 }

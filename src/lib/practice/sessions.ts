@@ -17,19 +17,19 @@ export const SESSIONS: PracticeSession[] = [
     id: "morning",
     title: { en: "Morning practice", hi: "प्रातः वंदना" },
     description: {
-      en: "Homage, the Three Refuges and the Five Precepts — a common way to begin the day.",
-      hi: "वंदना, त्रिशरण और पंचशील — दिन आरंभ करने का एक प्रचलित क्रम।",
+      en: "Homage, offerings, the Three Refuges and the Five Precepts — a common way to begin the day.",
+      hi: "वंदना, पूजा, त्रिशरण और पंचशील — दिन आरंभ करने का एक प्रचलित क्रम।",
     },
-    prayerSlugs: ["buddha-vandana", "tisarana", "pancasila"],
+    prayerSlugs: ["buddha-vandana", "buddha-puja", "tisarana", "pancasila"],
   },
   {
     id: "evening",
     title: { en: "Evening practice", hi: "सायं वंदना" },
     description: {
-      en: "Homage, recollecting the Triple Gem and loving-kindness to close the day.",
-      hi: "वंदना, त्रिरत्न अनुस्मृति और मैत्री भावना से दिन का समापन।",
+      en: "Homage, recollecting the Triple Gem, loving-kindness and sharing merit to close the day.",
+      hi: "वंदना, त्रिरत्न अनुस्मृति, मैत्री भावना और पुण्यानुमोदन से दिन का समापन।",
     },
-    prayerSlugs: ["buddha-vandana", "tiratana-anussati", "metta"],
+    prayerSlugs: ["buddha-vandana", "tiratana-anussati", "metta", "punnanumodana"],
   },
 ];
 

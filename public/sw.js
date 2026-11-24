@@ -71,6 +71,12 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
+  // Prayer voice clips — cache-first (file names change with their content)
+  if (url.pathname.startsWith("/audio/")) {
+    event.respondWith(audioResponse(request));
+    return;
+  }
+
   // Icons and images — cache-first
   if (
     url.pathname.startsWith("/icons/") ||
@@ -136,6 +142,38 @@ async function cacheFirst(request, cacheName) {
   } catch {
     return new Response("Network error", { status: 408 });
   }
+}
+
+// Audio is fetched and cached whole, then answered with the byte range the
+// player asked for (Safari only plays media from 206 responses).
+async function audioResponse(request) {
+  let response = await caches.match(request.url, { ignoreVary: true });
+  if (!response) {
+    try {
+      response = await fetch(request.url);
+      if (response.ok) {
+        const cache = await caches.open(STATIC_CACHE);
+        await cache.put(request.url, response.clone());
+      }
+    } catch {
+      return Response.error();
+    }
+  }
+  const range = /bytes=(\d*)-(\d*)/.exec(request.headers.get("range") || "");
+  if (!range || !response.ok) return response;
+  const body = await response.arrayBuffer();
+  const size = body.byteLength;
+  const start = range[1] ? Number(range[1]) : Math.max(0, size - Number(range[2]));
+  const end = range[1] && range[2] ? Math.min(Number(range[2]), size - 1) : size - 1;
+  return new Response(body.slice(start, end + 1), {
+    status: 206,
+    headers: {
+      "Content-Type": response.headers.get("Content-Type") || "audio/mpeg",
+      "Content-Range": `bytes ${start}-${end}/${size}`,
+      "Content-Length": String(end - start + 1),
+      "Accept-Ranges": "bytes",
+    },
+  });
 }
 
 async function networkFirstWithOfflineFallback(request) {

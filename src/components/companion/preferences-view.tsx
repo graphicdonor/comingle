@@ -11,6 +11,7 @@ import { ReadingControls, Segmented } from "@/components/practice/reading-contro
 import { PrayerText } from "@/components/practice/prayer-text";
 import { OfflineSettings } from "./offline-settings";
 import { AccountSection } from "./account-section";
+import { RemindersSection } from "./reminders-section";
 import { useAccount } from "@/lib/practice/sync";
 
 const PREVIEW = getPrayer("buddha-vandana");
@@ -100,6 +101,10 @@ export function PreferencesView() {
             <span className={cn("absolute top-1 h-5 w-5 rounded-full bg-white shadow transition-all", prefs.keepAwake ? "left-6" : "left-1")} />
           </span>
         </label>
+      </Section>
+
+      <Section title={t("remind.section")}>
+        <RemindersSection />
       </Section>
 
       <Section title={t("offline.section")}>

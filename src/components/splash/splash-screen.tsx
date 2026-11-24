@@ -52,9 +52,16 @@ export function SplashScreen() {
   const [skipped, setSkipped] = useState(false);
   const prefersReducedMotion = useReducedMotion();
   const { t, lang } = useT();
-  // The splash is app chrome: not on the public marketing pages.
+  // The splash is app chrome: not on the public marketing pages, nor in the
+  // staff tools (CMS and admin).
   const pathname = usePathname();
-  const isLanding = pathname === "/" || pathname === "/survey" || pathname === "/blog" || pathname.startsWith("/blog/");
+  const isLanding =
+    pathname === "/" ||
+    pathname === "/survey" ||
+    pathname === "/blog" ||
+    pathname.startsWith("/blog/") ||
+    pathname.startsWith("/cms") ||
+    pathname.startsWith("/admin");
 
   useEffect(() => {
     // Every render keeps the same JSX shape; only the timing depends on

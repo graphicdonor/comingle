@@ -6,6 +6,7 @@ import { SESSIONS } from "./sessions";
 import { GUIDES } from "@/lib/learn/guides";
 import manifest from "@/components/visuals/illustrations.json";
 import { SPLASH_LAYERS } from "@/lib/splash";
+import audioManifest from "@/lib/cms/clip-manifest.json";
 
 // "Use without internet" (PRD §7.13). The service worker (public/sw.js)
 // saves every practice page, the build assets they load, and the
@@ -29,6 +30,7 @@ export function offlineUrls(): string[] {
     "/app",
     "/practice",
     ...PRAYERS.map((p) => `/practice/${p.slug}`),
+    ...PRAYERS.map((p) => `/practice/${p.slug}/pronounce`),
     ...SESSIONS.map((s) => `/practice/session/${s.id}`),
     "/meditate",
     "/learn",
@@ -37,6 +39,10 @@ export function offlineUrls(): string[] {
     "/offline",
     ...Object.values(manifest).map((m) => m.src),
     ...SPLASH_LAYERS.map((l) => l.src),
+    // "Listen" voice clips for every prayer line.
+    ...Object.values(audioManifest as Record<string, Record<string, Record<string, { src: string }>>>).flatMap((lines) =>
+      Object.values(lines).flatMap((clips) => Object.values(clips).map((c) => c.src)),
+    ),
     "/icons/icon-192.png",
     "/favicon.svg",
   ];

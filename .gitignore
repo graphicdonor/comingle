@@ -43,3 +43,7 @@ next-env.d.ts
 
 # Local Netlify folder
 .netlify
+
+# Built from the CMS at build time (scripts/fetch-cms-content.ts)
+src/lib/cms/published-content.json
+src/lib/cms/clip-manifest.json

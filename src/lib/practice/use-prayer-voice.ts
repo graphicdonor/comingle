@@ -11,14 +11,28 @@ import {
 import type { Prayer } from "./prayers";
 import type { ReadingPrefs } from "./preferences";
 import { paliToDevanagari } from "./pali-devanagari";
+import audioManifest from "@/lib/cms/clip-manifest.json";
 
-// "Listen" for prayers without a chanting recording yet: reads the prayer
-// aloud line by line with the device's own text-to-speech, so the current
-// line can be highlighted (PRD §7.6 follow-along). Pali is read from its
-// Devanagari form with a Hindi voice, which is the closest available match
-// to Pali sounds; it is an approximation and is labelled as such (PRD §7.5:
-// synthetic voice only when clearly disclosed). A rights-cleared recording,
-// when added to a prayer, replaces this.
+// "Listen": reads a prayer aloud line by line so the current line can be
+// highlighted (PRD §7.6 follow-along). Each line plays from a pre-generated
+// AI voice clip (scripts/generate-prayer-audio.ts, Pali from its Devanagari
+// form) when one exists, otherwise from the device's own text-to-speech.
+// Both are synthetic and labelled as such (PRD §7.5). A rights-cleared
+// chanting recording, when added to a prayer, replaces this.
+
+type ClipLang = "pi" | "hi" | "en";
+type LineClips = Partial<Record<ClipLang, { src: string }>>;
+const CLIPS = audioManifest as Record<string, Record<string, LineClips>>;
+
+/** The AI voice clip for one line of a prayer, if there is one. */
+export function clipSrc(slug: string, line: string, lang: ClipLang): string | null {
+  return CLIPS[slug]?.[line]?.[lang]?.src ?? null;
+}
+
+/** Whether a prayer has AI voice clips. */
+export function hasVoiceClips(slug: string): boolean {
+  return Boolean(CLIPS[slug] && Object.keys(CLIPS[slug]).length);
+}
 
 export interface Segment {
   /** Line key ("section-line"), shared by a line's Pali and its translation. */
@@ -29,6 +43,8 @@ export interface Segment {
   lang: "hi" | "en";
   /** Pali is read a little slower than translations. */
   pali: boolean;
+  /** Pre-generated clip; without one the device voice reads `text`. */
+  src?: string;
 }
 
 export const SPEEDS = [0.75, 1, 1.25, 1.5] as const;
@@ -80,6 +96,7 @@ export function buildSegments(
   prayer: Prayer,
   prefs: ReadingPrefs,
   hindiVoice: boolean,
+  clips: Record<string, LineClips> = CLIPS[prayer.slug] ?? {},
 ): Segment[] {
   const out: Segment[] = [];
   prayer.sections.forEach((section, si) => {
@@ -88,9 +105,12 @@ export function buildSegments(
       section.lines.forEach((line, li) => {
         const key = `${si}-${li}`;
         const step = `${key}#${r}`;
+        const clip = clips[key] ?? {};
         if (prefs.mode !== "translation") {
           out.push(
-            hindiVoice
+            clip.pi
+              ? { line: key, step, text: paliToDevanagari(line.pi), lang: "hi", pali: true, src: clip.pi.src }
+              : hindiVoice
               ? {
                   line: key,
                   step,
@@ -108,6 +128,7 @@ export function buildSegments(
             text: line[prefs.translation],
             lang: prefs.translation,
             pali: false,
+            src: clip[prefs.translation]?.src,
           });
         }
       });
@@ -118,12 +139,30 @@ export function buildSegments(
 
 export type VoiceStatus = "idle" | "playing" | "paused";
 
+// One audio element for every clip: once a tap has started it, the browser
+// lets it continue from clip to clip.
+let player: HTMLAudioElement | null = null;
+function audio(): HTMLAudioElement {
+  player ??= new Audio();
+  player.preload = "auto";
+  return player;
+}
+function silence() {
+  if (player) {
+    player.onended = player.onerror = null;
+    player.pause();
+  }
+  if (supported()) speechSynthesis.cancel();
+}
+
 export function usePrayerVoice(prayer: Prayer, prefs: ReadingPrefs) {
-  const isSupported = useSyncExternalStore(
+  const clipsReady = hasVoiceClips(prayer.slug);
+  const speechReady = useSyncExternalStore(
     () => () => {},
     supported,
     () => false,
   );
+  const isSupported = clipsReady || speechReady;
   const voices = useSyncExternalStore(
     subscribeVoices,
     getVoices,
@@ -150,10 +189,10 @@ export function usePrayerVoice(prayer: Prayer, prefs: ReadingPrefs) {
   });
 
   const speakAt = useCallback((start: number) => {
-    const go = (i: number): void => {
-      if (!supported()) return;
+    // `deviceVoice`: the line's clip couldn't play, so read it aloud instead.
+    const go = (i: number, deviceVoice = false): void => {
       const run = ++token.current;
-      speechSynthesis.cancel();
+      silence();
       const { segments: segs, loop: again } = state.current;
       if (i >= segs.length) {
         if (again && segs.length) return go(0);
@@ -162,6 +201,34 @@ export function usePrayerVoice(prayer: Prayer, prefs: ReadingPrefs) {
         return;
       }
       const seg = segs[i];
+      setIndex(i);
+      setStatus("playing");
+
+      if (seg.src && !deviceVoice) {
+        const a = audio();
+        a.src = seg.src;
+        a.playbackRate = state.current.speed;
+        a.onended = () => {
+          if (token.current === run) go(i + 1);
+        };
+        a.onerror = () => {
+          if (token.current === run) go(i, true);
+        };
+        a.play().catch((e: unknown) => {
+          if (token.current !== run) return;
+          const name = e instanceof DOMException ? e.name : "";
+          // Not allowed to start without a tap: wait for the play button.
+          if (name === "NotAllowedError") setStatus("paused");
+          // The clip can't be played here (format, network): use the device voice.
+          else if (name !== "AbortError") go(i, true);
+        });
+        // Warm the next clip so lines follow each other without a gap.
+        const upcoming = segs[i + 1]?.src;
+        if (upcoming) fetch(upcoming).catch(() => {});
+        return;
+      }
+
+      if (!supported()) return go(i + 1);
       const u = new SpeechSynthesisUtterance(seg.text);
       const voice =
         seg.lang === "hi" ? state.current.hindi : state.current.english;
@@ -180,8 +247,6 @@ export function usePrayerVoice(prayer: Prayer, prefs: ReadingPrefs) {
         )
           go(i + 1);
       };
-      setIndex(i);
-      setStatus("playing");
       speechSynthesis.speak(u);
     };
     go(start);
@@ -189,8 +254,13 @@ export function usePrayerVoice(prayer: Prayer, prefs: ReadingPrefs) {
 
   const stopSpeaking = useCallback(() => {
     token.current++;
-    if (supported()) speechSynthesis.cancel();
+    silence();
   }, []);
+
+  // A new speed applies straight away to a clip that's playing.
+  useEffect(() => {
+    if (player && status === "playing") player.playbackRate = speed;
+  }, [speed, status]);
 
   const play = useCallback(
     () => speakAt(status === "paused" ? index : 0),
@@ -246,7 +316,7 @@ export function usePrayerVoice(prayer: Prayer, prefs: ReadingPrefs) {
     const tok = token;
     return () => {
       tok.current++;
-      if (supported()) speechSynthesis.cancel();
+      silence();
       setStatus("idle");
       setIndex(0);
     };
@@ -262,8 +332,11 @@ export function usePrayerVoice(prayer: Prayer, prefs: ReadingPrefs) {
 
   return {
     isSupported,
+    /** Lines play from AI voice clips rather than the device voice. */
+    aiVoice: clipsReady,
     /** No Hindi voice installed: Pali falls back to Roman script in an English voice. */
-    missingHindiVoice: isSupported && voices.length > 0 && !hindi,
+    missingHindiVoice:
+      speechReady && voices.length > 0 && !hindi && segments.some((s) => !s.src && s.pali),
     status,
     activeLine,
     lineNumber: activeStep ? steps.indexOf(activeStep) + 1 : 0,

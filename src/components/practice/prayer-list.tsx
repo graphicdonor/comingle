@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import type { Prayer } from "@/lib/practice/prayers";
 import { favourites, readingPrefs } from "@/lib/practice/preferences";
 import { useT } from "@/lib/i18n/use-t";
+import { hasVoiceClips } from "@/lib/practice/use-prayer-voice";
 
 export function PrayerList({ prayers }: { prayers: Prayer[] }) {
   const favs = favourites.use();
@@ -77,7 +78,7 @@ export function PrayerList({ prayers }: { prayers: Prayer[] }) {
                     {p.title[translation]}
                   </p>
                   <p className="text-xs text-gray-500 mt-1">
-                    {p.category[ui]} · {t("common.min", { n: p.durationMinutes })} · {p.audio ? t("prayers.audio") : t("prayers.text")}
+                    {p.category[ui]} · {t("common.min", { n: p.durationMinutes })} · {p.audio || hasVoiceClips(p.slug) ? t("prayers.audio") : t("prayers.text")}
                   </p>
                 </div>
                 <ChevronRight className="h-5 w-5 text-gray-300 flex-shrink-0" />
