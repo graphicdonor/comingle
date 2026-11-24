@@ -43,11 +43,14 @@ export function ContactForm({ initialTopic }: { initialTopic?: ContactTopic }) {
 
   if (sent) {
     return (
-      <div className="max-w-xl mx-auto bg-white rounded-3xl shadow-sm p-8 text-center">
-        <CheckCircle2 className="h-12 w-12 text-[#2A5C27] mx-auto" strokeWidth={1.5} />
-        <h1 className="mt-4 text-lg font-bold text-gray-900">Message sent</h1>
-        <p className="mt-2 text-sm text-gray-600 leading-relaxed">Thank you. Our team reads every message and will reply to {replyTo.trim()}.</p>
-        <Link href="/settings" className="mt-6 inline-block text-sm font-semibold text-[#8B1A6B] hover:underline">
+      <div className="max-w-xl mx-auto bg-white rounded-3xl border border-[#E7DCC8] p-8 text-center">
+        <CheckCircle2 className="h-12 w-12 text-[#56634A] mx-auto" strokeWidth={1.5} />
+        <h1 className="mt-4 text-lg font-bold text-[#2A1A1C]">Message sent</h1>
+        <p className="mt-2 text-sm text-[#5B5350] leading-relaxed">Thank you. Our team reads every message and will reply to {replyTo.trim()}.</p>
+        <Link
+          href="/preferences"
+          className="mt-6 inline-flex items-center justify-center rounded-full bg-[#6D252C] px-6 py-2.5 text-sm font-bold text-[#F7F2E8] hover:bg-[#5E1F25] transition-colors"
+        >
           Back to Settings
         </Link>
       </div>
@@ -57,18 +60,18 @@ export function ContactForm({ initialTopic }: { initialTopic?: ContactTopic }) {
   return (
     <div className="max-w-xl mx-auto">
       <div className="flex items-center gap-3 mb-4">
-        <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#8B1A6B]/10">
-          <Mail className="h-5 w-5 text-[#8B1A6B]" />
+        <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#6D252C]/10">
+          <Mail className="h-5 w-5 text-[#6D252C]" />
         </span>
         <div>
-          <h1 className="text-xl font-bold text-gray-900">Contact us</h1>
-          <p className="text-xs text-gray-500">Questions, privacy requests and concerns reach our team here.</p>
+          <h1 className="text-[28px] font-bold tracking-tight text-[#2A1A1C]">Contact us</h1>
+          <p className="text-sm text-[#5B5350]">Questions, corrections, privacy requests and concerns reach our team here.</p>
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} noValidate className="bg-white rounded-3xl shadow-sm p-6 space-y-5">
+      <form onSubmit={handleSubmit} noValidate className="bg-white rounded-3xl border border-[#E7DCC8] p-6 space-y-5">
         <div>
-          <p className="text-sm font-medium text-gray-700 mb-2">What is this about?</p>
+          <p className="text-sm font-medium text-[#2A1A1C] mb-2">What is this about?</p>
           <div className="flex flex-wrap gap-2">
             {CONTACT_TOPICS.map((t) => (
               <button
@@ -77,8 +80,10 @@ export function ContactForm({ initialTopic }: { initialTopic?: ContactTopic }) {
                 aria-pressed={topic === t.id}
                 onClick={() => setTopic(t.id)}
                 className={cn(
-                  "px-3.5 py-1.5 rounded-full text-xs font-semibold border transition-colors",
-                  topic === t.id ? "bg-[#1E2952] text-white border-[#1E2952]" : "border-gray-200 text-gray-600 hover:bg-gray-50"
+                  "px-3.5 py-2 rounded-full text-xs font-semibold border transition-colors",
+                  topic === t.id
+                    ? "bg-[#6D252C] text-[#F7F2E8] border-[#6D252C]"
+                    : "bg-white border-[#E7DCC8] text-[#6D252C] hover:border-[#6D252C]/40 hover:bg-[#F7F2E8]"
                 )}
               >
                 {t.label}
@@ -91,25 +96,26 @@ export function ContactForm({ initialTopic }: { initialTopic?: ContactTopic }) {
           id="message"
           label="Your message"
           rows={6}
+          className="border-[#E7DCC8] focus:border-[#6D252C] focus:ring-[#6D252C]/15 placeholder:text-[#6E6560]/80"
           maxLength={CONTACT_MESSAGE_MAX}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           placeholder="Tell us what you need. For a data request, say what you'd like us to do (for example, send you a copy of your data)."
         />
         <div className="grid sm:grid-cols-2 gap-3">
-          <Input id="name" label="Your name (optional)" value={name} onChange={(e) => setName(e.target.value)} maxLength={100} />
-          <Input id="replyTo" label="Email or phone to reply to" value={replyTo} onChange={(e) => setReplyTo(e.target.value)} maxLength={200} />
+          <Input id="name" label="Your name (optional)" className="border-[#E7DCC8] focus:border-[#6D252C] focus:ring-[#6D252C]/15 placeholder:text-[#6E6560]/80" value={name} onChange={(e) => setName(e.target.value)} maxLength={100} />
+          <Input id="replyTo" label="Email or phone to reply to" className="border-[#E7DCC8] focus:border-[#6D252C] focus:ring-[#6D252C]/15 placeholder:text-[#6E6560]/80" value={replyTo} onChange={(e) => setReplyTo(e.target.value)} maxLength={200} />
         </div>
         {/* Honeypot — hidden from people, tempting to bots. */}
         <input type="text" name="website" value={website} onChange={(e) => setWebsite(e.target.value)} tabIndex={-1} autoComplete="off" aria-hidden className="absolute left-[-9999px] h-0 w-0 opacity-0" />
 
-        {error && <p role="alert" className="text-xs text-red-500">{error}</p>}
+        {error && <p role="alert" className="text-sm text-[#7A2A24]">{error}</p>}
 
-        <Button type="submit" fullWidth loading={loading}>
+        <Button type="submit" fullWidth loading={loading} className="bg-[#6D252C] text-[#F7F2E8] hover:bg-[#5E1F25] py-3.5">
           Send message
         </Button>
-        <p className="text-[11px] text-center text-gray-400">
-          We use your details only to reply to you. See our <Link href="/privacy" className="underline">Privacy Policy</Link>.
+        <p className="text-xs text-center text-[#6D645D]">
+          We use your details only to reply to you. See our <Link href="/privacy" className="underline text-[#6D252C]">Privacy Policy</Link>.
         </p>
       </form>
     </div>

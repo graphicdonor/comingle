@@ -11,67 +11,87 @@ export interface LegalSection {
   body: string;
 }
 
-export const LEGAL_LAST_UPDATED = "23 November 2026";
+export const LEGAL_LAST_UPDATED = "24 November 2026";
 
 export const TERMS_SECTIONS: LegalSection[] = [
   {
     title: "1. About WePray and these terms",
-    body: "WePray is a platform that brings faith communities together, on the web and in our Android app. These Terms & Conditions apply whenever you use any part of WePray.\n\nBy creating an account or using WePray, you agree to these terms and to our Privacy Policy. If you do not agree, please do not use WePray.",
+    body: "WePray is a Buddhist spiritual companion: traditional prayers with translations, guided practice, meditation and learning guides, on the web and in our Android app. Some versions of our apps also include community features (communities, posts, listings, the Matrimonial service and donations); sections 8 to 13 apply only if you use those.\n\nThese Terms & Conditions apply whenever you use any part of WePray. By using WePray, you agree to these terms and to our Privacy Policy. If you do not agree, please do not use WePray.",
   },
   {
     title: "2. Who can use WePray",
-    body: "You must be at least 13 years old to use WePray. If you are under 18, you may use WePray only with the permission of a parent or legal guardian, who agrees to these terms on your behalf and is responsible for your use of WePray.\n\nThe Matrimonial service is only for adults aged 18 or over who are of legal age to marry where they live.\n\nYou agree to give accurate information, to use only one personal account, and to keep your login details secure. You are responsible for activity on your account.",
+    body: "You must be at least 13 years old to use WePray. If you are under 18, you may use WePray only with the permission of a parent or legal guardian, who agrees to these terms on your behalf and is responsible for your use of WePray.",
   },
   {
-    title: "3. Communities",
-    body: "Communities are created and run by members. You can be a member of up to 5 communities at a time. Each community's admins and moderators may set their own rules, which you agree to follow alongside these terms.\n\nWe may remove a community, or content in it, that breaks these terms or the law.",
+    title: "3. Accounts are optional",
+    body: "You can use WePray's prayers, guided practice, meditation timer, guides and search without an account.\n\nIf you choose to sign in (for example with Google, to sync your saved prayers and settings across devices), you agree to give accurate information, to use only one personal account, and to keep your login secure. You are responsible for activity on your account. You can sign out on any device, or delete your account, at any time from Settings.",
   },
   {
-    title: "4. Your content",
+    title: "4. Prayers, translations and guides",
+    body: "WePray's prayers, translations, transliterations, guides, illustrations and design are provided for your personal practice and learning. Buddhist practice differs between traditions, countries and communities; WePray describes common practice and does not claim that any one way is the only correct one.\n\nEach prayer shows its source and the review status of its translations. Some translations and guides are drafts awaiting review and are labelled as such; they may contain errors, and we may correct or change them at any time. Please tell us through Contact us if you notice a mistake.\n\nYou may read, recite and share links to WePray content freely for personal, non-commercial purposes. Please don't copy or republish WePray's translations, guides or illustrations commercially, or present them as your own, without our permission. Traditional source texts remain free for everyone.",
+  },
+  {
+    title: "5. Meditation and wellbeing",
+    body: "Meditation, sitting postures and the breathing guide in WePray are contemplative practices, not medical, psychological or therapeutic treatment, and nothing in WePray is medical advice.\n\nPractise within your own comfort and ability. Never force a posture, and stop if you feel pain, dizziness or distress. If you have a health condition, or are going through emotional difficulty, please seek help from a qualified professional. In India you can call the Tele-MANAS mental health helpline on 14416, and in an emergency call 112.",
+  },
+  {
+    title: "6. Offline use and availability",
+    body: "If you download WePray for offline use, a copy of its content is stored on your device. Offline copies don't update by themselves and may become out of date; you can update or remove them from Settings. We may add, change or remove content and features as WePray develops.",
+  },
+  {
+    title: "7. Your use of WePray",
+    body: "Please use WePray respectfully and lawfully. You must not misuse WePray: for example, by trying to disrupt or break it, to access other people's accounts or data, to scrape or copy it at scale, or to use it to harass anyone.",
+  },
+  {
+    title: "8. Community features: communities",
+    body: "This section and sections 9 to 13 apply only if you use WePray's community features, which are available in some versions of our apps.\n\nCommunities are created and run by members. You can be a member of up to 5 communities at a time. Each community's admins and moderators may set their own rules, which you agree to follow alongside these terms. We may remove a community, or content in it, that breaks these terms or the law.",
+  },
+  {
+    title: "9. Community features: your content",
     body: "You own what you post on WePray: posts, comments, photos, videos, listings, profiles and fundraisers you share. By posting it, you give WePray a non-exclusive, royalty-free licence to host, store, display, resize and share it as needed to run WePray and show it to the people you share it with.\n\nOnly post content you have the right to share. You are responsible for your content and for any information you choose to make public, such as contact details in a listing.",
   },
   {
-    title: "5. Community guidelines",
+    title: "10. Community features: guidelines",
     body: "Treat every member, and every faith, with respect. You must not post or share content that:\n\n• promotes hatred or violence against any person or group, including on the basis of religion, caste, gender or origin;\n• harasses, threatens, bullies or impersonates anyone;\n• is sexual, obscene, or exploits or endangers children in any way;\n• is false or misleading in a way that could cause harm, including fake fundraisers or listings;\n• is spam, a scam, or illegal, or infringes someone else's rights.",
   },
   {
-    title: "6. Moderation, reports and appeals",
+    title: "11. Community features: moderation, reports and appeals",
     body: "To keep WePray safe, posts, comments, photos, profiles, listings and fundraisers are checked by automated moderation, including AI tools, before other members can see them. Content may be published, held for review by a person, or blocked.\n\nYou can report content that breaks these terms, and you can appeal a moderation decision you believe was wrong. We may remove content and suspend or close accounts that break these terms, including automatically after repeated violations.",
   },
   {
-    title: "7. Community services and listings",
-    body: "The Matrimonial, Jobs, Events, Businesses, Housing, Education, Health Care and Legal Aid services let members list profiles, offers and services. These are provided by members, not by WePray. We do not verify anyone's identity, qualifications, properties, offers or claims, and we are not a party to any arrangement between members. Please make your own checks before you meet, pay, hire, rent or share personal details.\n\nHealth Care listings are not medical advice. In an emergency, call 108 or 112.\n\nLegal Aid listings are not legal advice. For free legal aid in India, call the NALSA helpline on 15100.",
+    title: "12. Community features: services and listings",
+    body: "The Matrimonial, Jobs, Events, Businesses, Housing, Education, Health Care and Legal Aid services let members list profiles, offers and services. The Matrimonial service is only for adults aged 18 or over who are of legal age to marry where they live.\n\nListings are provided by members, not by WePray. We do not verify anyone's identity, qualifications, properties, offers or claims, and we are not a party to any arrangement between members. Please make your own checks before you meet, pay, hire, rent or share personal details.\n\nHealth Care listings are not medical advice. In an emergency, call 108 or 112. Legal Aid listings are not legal advice. For free legal aid in India, call the NALSA helpline on 15100.",
   },
   {
-    title: "8. Donations",
-    body: "WePray does not collect, hold or process any money. The Donate tab links to fundraisers and donation platforms run by other organisations, such as Ketto, Milaap and GoFundMe. Any donation you make happens on that platform's own website, under its own terms, fees and receipts.\n\nFundraisers shared by members are reviewed before they appear, but WePray cannot guarantee that a fundraiser is genuine or how its funds are used. Please check a cause before you give, and report anything that looks suspicious.",
+    title: "13. Community features: donations",
+    body: "WePray does not collect, hold or process any money. Donation links lead to fundraisers and platforms run by other organisations, such as Ketto, Milaap and GoFundMe. Any donation you make happens on that platform's own website, under its own terms, fees and receipts.\n\nFundraisers shared by members are reviewed before they appear, but WePray cannot guarantee that a fundraiser is genuine or how its funds are used. Please check a cause before you give, and report anything that looks suspicious.",
   },
   {
-    title: "9. Third-party services and links",
-    body: "WePray links to, and relies on, services run by others, including donation platforms, Google sign-in and app stores. We are not responsible for their content, availability or practices, which are governed by their own terms and policies.",
+    title: "14. Third-party services and links",
+    body: "WePray links to, and relies on, services run by others, including Google sign-in, app stores, hosting providers and donation platforms. We are not responsible for their content, availability or practices, which are governed by their own terms and policies.",
   },
   {
-    title: "10. Surveys and feedback",
-    body: "Surveys and the feedback form are optional. If you send us ideas or suggestions, we may use them to improve WePray without any obligation to you.",
+    title: "15. Feedback",
+    body: "If you send us ideas, corrections or suggestions, we may use them to improve WePray without any obligation to you.",
   },
   {
-    title: "11. Suspending or deleting your account",
-    body: "We may suspend or close accounts that break these terms or put other members at risk. You can delete your account at any time from Settings. Deleting your account removes your profile and the content you created, as described in our Privacy Policy.",
+    title: "16. Suspending or deleting your account",
+    body: "We may suspend or close accounts that break these terms or put others at risk. You can delete your account at any time from Settings. Deleting your account removes it and the information stored in it, as described in our Privacy Policy; anything saved only on your device stays there until you clear it.",
   },
   {
-    title: "12. Disclaimers and limitation of liability",
-    body: "WePray is provided \"as is\" and \"as available\". We work hard to keep it running and safe, but we cannot promise it will always be available, error-free or secure.\n\nTo the fullest extent permitted by law, WePray is not liable for indirect or consequential losses, or for anything arising from content posted by members, from dealings between members, from listings, or from donations made on other platforms.",
+    title: "17. Disclaimers and limitation of liability",
+    body: "WePray is provided \"as is\" and \"as available\". We work hard to keep it accurate, running and safe, but we cannot promise it will always be available, error-free or secure, or that its translations and guides are complete or free of mistakes.\n\nTo the fullest extent permitted by law, WePray is not liable for indirect or consequential losses, or for anything arising from your practice of meditation or postures, from content posted by members, from dealings between members, from listings, or from donations made on other platforms.",
   },
   {
-    title: "13. Governing law",
+    title: "18. Governing law",
     body: "These terms are governed by the laws of India, and any disputes will be subject to the jurisdiction of the courts in India.",
   },
   {
-    title: "14. Changes to these terms",
+    title: "19. Changes to these terms",
     body: "We may update these terms as WePray changes. We will show the new date at the top of this page and let you know about significant changes. If you keep using WePray after changes take effect, you accept the updated terms.",
   },
   {
-    title: "15. Contact",
+    title: "20. Contact",
     body: "If you have questions about these terms, please use our Contact us form: open Settings and choose Contact us, or go to www.wepray.in/contact. Our team reads every message and replies to the email or phone number you give.",
   },
 ];
