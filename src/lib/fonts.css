@@ -5,15 +5,19 @@
  * Figtree is the interface and English reading font. It has no Devanagari
  * glyphs, so the body font stack (globals.css) falls through to Noto Sans
  * Devanagari for Hindi. Pali in Roman script uses Noto Serif, which covers
- * its diacritics (ā ī ū ṃ ṅ ñ ṭ ḍ ṇ ḷ). Each font is split by script, and the
+ * its diacritics (ā ī ū ṃ ṅ ñ ṭ ḍ ṇ ḷ). Cormorant Garamond sets the landing
+ * page's large headlines. Each font is split by script, and the
  * browser downloads only the parts a page uses.
  */
 @import "@fontsource-variable/figtree/index.css";
 @import "@fontsource-variable/noto-sans-devanagari/index.css";
 @import "@fontsource-variable/noto-serif/index.css";
+@import "@fontsource-variable/cormorant-garamond/index.css";
 
 :root {
   --font-figtree: "Figtree Variable";
   --font-devanagari: "Noto Sans Devanagari Variable";
   --font-pali: "Noto Serif Variable";
+  /* Large headlines on the landing page. */
+  --font-display: "Cormorant Garamond Variable";
 }

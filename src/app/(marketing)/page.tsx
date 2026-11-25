@@ -7,7 +7,6 @@ import {
   Flower2,
   GraduationCap,
   HeartHandshake,
-  Languages,
   Lock,
   Mic,
   BellRing,
@@ -18,7 +17,11 @@ import {
   Sun,
   type LucideIcon,
 } from "lucide-react";
+import Image from "next/image";
 import { StandaloneRedirect } from "@/components/landing/standalone-redirect";
+import { LandingHeader } from "@/components/landing/landing-header";
+import { Journey, type Chapter } from "@/components/landing/journey/journey";
+import { STORIES, storyArt } from "@/lib/learn/jataka";
 import { Reveal } from "@/components/landing/motion";
 import { GooglePlayBadge, InstallWebAppButton } from "@/components/landing/get-the-app";
 import { HeroArt, PhoneShot, PrayerDemo, SectionHeading } from "@/components/landing/companion";
@@ -141,6 +144,154 @@ function Cta({ tone = "dark" }: { tone?: "dark" | "light" }) {
   );
 }
 
+
+function ChapterLink({ href, children }: { href: string; children: React.ReactNode }) {
+  return (
+    <Link href={href} className="mt-6 inline-flex items-center gap-2 rounded-full border border-[#F7F2E8]/35 bg-black/15 px-5 py-2.5 text-sm font-bold text-[#F7F2E8] backdrop-blur-sm transition-colors hover:border-[#E9BE73] hover:text-[#E9BE73]">
+      {children} <ArrowRight className="h-4 w-4" />
+    </Link>
+  );
+}
+
+const lead = "mt-5 text-[17px] leading-relaxed text-[#F7F2E8]/85 sm:text-lg";
+const headline = "font-display text-[44px] font-medium leading-[1.02] tracking-tight sm:text-6xl lg:text-7xl";
+
+/** The opening journey: one day of practice, from before dawn to night. */
+function chapters(): Chapter[] {
+  const stories = STORIES.slice(0, 3);
+  return [
+    {
+      id: "dawn",
+      label: "Before dawn",
+      labelHi: "ब्रह्म मुहूर्त",
+      content: (
+        <>
+          <h1>
+            <span className={`block ${headline}`}>
+              Begin in <em className="text-[#E9BE73]">stillness.</em>
+            </span>
+            <span className="mt-4 block text-lg font-semibold sm:text-xl">Buddhist prayers in Pali, with Hindi and English meaning</span>
+          </h1>
+          <p className={lead}>
+            A calm companion for Buddhist practice: traditional Pali prayers read aloud with their meaning, a gentle morning and evening practice, meditation, Jātaka tales and guides for beginners.
+          </p>
+          <p lang="hi" className="mt-2 text-base text-[#F7F2E8]/70">
+            धम्म सीखें। सजगता से अभ्यास करें। करुणा के साथ जिएँ।
+          </p>
+          <div className="mt-7">
+            <Cta tone="light" />
+          </div>
+          <ul className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-sm font-medium text-[#F7F2E8]/75">
+            {["Free", "No account needed", "No ads", "Works offline"].map((t) => (
+              <li key={t} className="inline-flex items-center gap-1.5">
+                <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-[#E9BE73]" /> {t}
+              </li>
+            ))}
+          </ul>
+        </>
+      ),
+    },
+    {
+      id: "sunrise",
+      label: "Sunrise",
+      labelHi: "प्रातः",
+      content: (
+        <>
+          <h2 className={headline}>
+            Take refuge as the <em className="text-[#E9BE73]">sun rises.</em>
+          </h2>
+          <p className={lead}>
+            A morning practice, one prayer at a time: Buddha Vandanā, the Three Refuges and the Five Precepts, in Pali beside their meaning. Listen line by line, slower or faster, and learn to say each word.
+          </p>
+          <ul className="mt-5 flex flex-wrap gap-2">
+            {PRAYERS.slice(0, 4).map((pr) => (
+              <li key={pr.slug}>
+                <Link href={`/practice/${pr.slug}`} className="inline-flex rounded-full bg-[#F7F2E8]/12 px-3.5 py-1.5 font-pali text-[15px] italic text-[#F7F2E8] ring-1 ring-[#F7F2E8]/20 hover:bg-[#F7F2E8]/20">
+                  {pr.title.pi}
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <ChapterLink href="/practice">All {PRAYERS.length} prayers</ChapterLink>
+        </>
+      ),
+    },
+    {
+      id: "midday",
+      label: "Midday",
+      labelHi: "मध्याह्न",
+      content: (
+        <>
+          <h2 className={headline}>
+            Stories older than <em className="text-[#E9BE73]">the tree.</em>
+          </h2>
+          <p className={lead}>
+            Jātaka tales of the Buddha&apos;s earlier lives, the hare in the moon, the banyan deer, the monkey king, retold simply in Hindi and English, each with a painting, narration and its lesson. And a verse of the Dhammapada for every day.
+          </p>
+          <ul className="mt-6 flex gap-3">
+            {stories.map((st) => {
+              const art = storyArt(st.slug);
+              return (
+                <li key={st.slug} className="w-28 sm:w-32">
+                  <Link href={`/learn/jataka/${st.slug}`} className="group block">
+                    {art && <Image src={art} alt="" width={128} height={128} className="aspect-square w-full rounded-2xl object-cover ring-1 ring-[#F7F2E8]/25 transition-transform group-hover:-translate-y-1" />}
+                    <span className="mt-2 block text-[13px] font-semibold leading-snug text-[#F7F2E8]/90">{st.title.en}</span>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+          <ChapterLink href="/learn/jataka">Read the Jātaka tales</ChapterLink>
+        </>
+      ),
+    },
+    {
+      id: "dusk",
+      label: "Dusk",
+      labelHi: "संध्या",
+      content: (
+        <>
+          <h2 className={headline}>
+            Light a lamp. <em className="text-[#E9BE73]">Sit a while.</em>
+          </h2>
+          <p className={lead}>
+            An evening practice to close the day, and {MEDITATIONS.length} meditations, from mindful breathing to loving-kindness, for 3 to 20 minutes with a soft bell. Set a gentle reminder for the time that suits you.
+          </p>
+          <ul className="mt-5 flex flex-wrap gap-2">
+            {MEDITATIONS.slice(0, 4).map((m) => (
+              <li key={m.id} className="rounded-full bg-[#F7F2E8]/12 px-3.5 py-1.5 text-sm text-[#F7F2E8] ring-1 ring-[#F7F2E8]/20">
+                {m.title.en}
+              </li>
+            ))}
+          </ul>
+          <ChapterLink href="/meditate">Start a meditation</ChapterLink>
+        </>
+      ),
+    },
+    {
+      id: "night",
+      label: "Night",
+      labelHi: "रात्रि",
+      content: (
+        <>
+          <h2 className={headline}>
+            Carry the quiet <em className="text-[#E9BE73]">with you.</em>
+          </h2>
+          <p className={lead}>
+            Everything works offline, in Hindi and English, with no account, no ads and no streaks. Your practice stays on your phone. Free on Android and on the web.
+          </p>
+          <p lang="hi" className="mt-2 text-base text-[#F7F2E8]/70">
+            आज ही अभ्यास शुरू करें।
+          </p>
+          <div className="mt-7">
+            <Cta tone="light" />
+          </div>
+        </>
+      ),
+    },
+  ];
+}
+
 export default function LandingPage() {
   const jsonLd = {
     "@context": "https://schema.org",
@@ -189,59 +340,12 @@ export default function LandingPage() {
       <StandaloneRedirect />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      {/* Header */}
-      <header className="sticky top-0 z-40 bg-[#F7F2E8]/85 backdrop-blur-md border-b border-[#E7DCC8]/70">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 h-16 flex items-center gap-6">
-          <Link href="/" aria-label="WePray home" className="text-xl font-bold tracking-tight text-[#6D252C]">
-            WePray
-          </Link>
-          <nav aria-label="Sections" className="hidden md:flex items-center gap-6 text-sm font-medium text-[#5B5350]">
-            <a href="#inside" className="hover:text-[#6D252C]">What&apos;s inside</a>
-            <a href="#library" className="hover:text-[#6D252C]">Prayers</a>
-            <a href="#learn" className="hover:text-[#6D252C]">Learn</a>
-            <a href="#private" className="hover:text-[#6D252C]">Private &amp; offline</a>
-            <a href="#faq" className="hover:text-[#6D252C]">FAQ</a>
-          </nav>
-          <Link href="/app" className="ml-auto rounded-full bg-[#6D252C] px-5 py-2.5 text-sm font-bold text-[#F7F2E8] hover:bg-[#5E1F25]">
-            Open app
-          </Link>
-        </div>
-      </header>
+      <LandingHeader />
 
       <main>
-        {/* Hero */}
-        <section className="relative overflow-hidden">
-          <div aria-hidden className="pointer-events-none absolute -top-40 right-[-10%] h-[620px] w-[620px] rounded-full bg-[radial-gradient(circle,rgba(217,154,56,0.22),transparent_65%)]" />
-          <div className="relative mx-auto max-w-6xl px-4 sm:px-6 pt-12 pb-16 md:pt-20 md:pb-24 grid md:grid-cols-[1.1fr_0.9fr] gap-12 items-center">
-            <div>
-              <p className="inline-flex items-center gap-2 rounded-full bg-white/70 px-3.5 py-1.5 text-xs font-semibold text-[#885F19] ring-1 ring-[#E7DCC8]">
-                <Languages className="h-3.5 w-3.5" /> Pali · हिन्दी · English
-              </p>
-              <h1 className="mt-5 text-4xl sm:text-5xl lg:text-[3.5rem] font-bold tracking-tight leading-[1.05]">
-                A calm companion for <span className="text-[#6D252C]">Buddhist prayer</span> and practice
-              </h1>
-              <p className="mt-5 text-lg sm:text-xl leading-relaxed text-[#5B5350] max-w-xl">
-                Recite traditional Pali prayers with their meaning in Hindi and English, follow a gentle morning or evening practice, sit in meditation, and learn how to pray and sit, at your own pace.
-              </p>
-              <p lang="hi" className="mt-3 text-base text-[#6E6560]">
-                धम्म सीखें। सजगता से अभ्यास करें। करुणा के साथ जिएँ।
-              </p>
-              <div className="mt-8">
-                <Cta />
-              </div>
-              <ul className="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-sm font-medium text-[#5B5350]">
-                {["Free", "No account needed", "No ads", "Works offline"].map((t) => (
-                  <li key={t} className="inline-flex items-center gap-1.5">
-                    <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-[#D99A38]" /> {t}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="relative mx-auto w-full max-w-[380px]">
-              <HeroArt />
-            </div>
-          </div>
-        </section>
+        <Journey chapters={chapters()} />
+        {/* Night gives way to the page. */}
+        <div aria-hidden className="h-40 bg-gradient-to-b from-[#070B1F] to-[#F7F2E8]" />
 
         {/* What's inside */}
         <section id="inside" aria-labelledby="inside-title" className="scroll-mt-20 py-20 md:py-28 bg-[#FFFCF6] border-y border-[#E7DCC8]/70">

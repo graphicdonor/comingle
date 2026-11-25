@@ -177,6 +177,49 @@ body {
   100% { opacity: 0; transform: translate(-15%, -70%) scaleX(1.4); }
 }
 
+/* ── Landing journey (components/landing/journey) ─────────────────────
+   Small looping details; the scroll itself drives the scene in script. */
+.font-display { font-family: var(--font-display), var(--font-devanagari), Georgia, serif; }
+.j-diya-glow { background: radial-gradient(circle, rgba(255, 214, 140, 0.75) 0%, rgba(240, 150, 60, 0.32) 38%, transparent 70%); }
+.j-firefly { width: 4px; height: 4px; background: #FFE9A8; box-shadow: 0 0 10px 3px rgba(255, 220, 130, 0.65); }
+.j-curtain { animation: j-curtain-out 0.6s ease 7s forwards; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .j-mist { animation: j-drift 16s ease-in-out infinite alternate; }
+  .j-mist-2 { animation-duration: 21s; animation-direction: alternate-reverse; }
+  .j-twinkle { animation: twinkle 3s ease-in-out infinite; }
+  .j-float { animation: j-float 6s ease-in-out infinite alternate; }
+  .j-bird { left: -5%; animation: j-bird 14s linear infinite; }
+  .j-flame { transform-origin: 50% 90%; animation: j-flicker 1.4s ease-in-out infinite; }
+  .j-diya-glow { animation: j-glow 2.2s ease-in-out infinite; }
+  .j-firefly { animation: j-firefly 6s ease-in-out infinite; }
+  .j-eq > span { animation: j-eq 0.9s ease-in-out infinite alternate; }
+}
+.j-eq > span { height: 4px; }
+
+@keyframes j-curtain-out { to { opacity: 0; visibility: hidden; } }
+@keyframes j-drift { from { translate: -4% 0; } to { translate: 5% 0; } }
+@keyframes j-float { from { transform: translateY(0); } to { transform: translateY(-6%); } }
+@keyframes j-bird {
+  from { transform: translate(0, 0); }
+  50% { transform: translate(55vw, -18px); }
+  to { transform: translate(112vw, 6px); }
+}
+@keyframes j-flicker {
+  0%, 100% { transform: scale(1, 1); opacity: 0.95; }
+  25% { transform: scale(0.92, 1.12) translateX(4%); }
+  50% { transform: scale(1.05, 0.9); opacity: 0.8; }
+  75% { transform: scale(0.96, 1.06) translateX(-4%); }
+}
+@keyframes j-glow { 0%, 100% { opacity: 0.85; transform: scale(1); } 50% { opacity: 1; transform: scale(1.08); } }
+@keyframes j-firefly {
+  0%, 100% { transform: translate(0, 0); opacity: 0.2; }
+  30% { opacity: 1; }
+  50% { transform: translate(18px, -24px); opacity: 0.6; }
+  80% { transform: translate(-10px, -8px); opacity: 1; }
+}
+@keyframes j-eq { from { height: 3px; } to { height: 12px; } }
+
 /* ── Splash: dawn over the hills ──────────────────────────────────────
    Layered artwork (public/splash) animated in pure CSS, so it starts as
    soon as the stylesheet arrives, before JavaScript. Resting styles are the
