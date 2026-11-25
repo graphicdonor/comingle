@@ -14,7 +14,8 @@ function subscribe(onChange: () => void) {
   };
 }
 
-const overJourney = () => (document.getElementById("journey")?.getBoundingClientRect().bottom ?? 0) > 64;
+/** True while the scene shows behind the header (before the page has slid over it). */
+const overJourney = () => (document.getElementById("page")?.getBoundingClientRect().top ?? 0) > 64;
 
 const NAV = [
   ["#inside", "What's inside"],

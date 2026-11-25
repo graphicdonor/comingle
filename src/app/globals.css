@@ -179,12 +179,12 @@ body {
 
 /* ── Landing journey (components/landing/journey) ─────────────────────
    Small looping details; the scroll itself drives the scene in script. */
-.font-display { font-family: var(--font-display), var(--font-devanagari), Georgia, serif; }
 .j-diya-glow { background: radial-gradient(circle, rgba(255, 214, 140, 0.75) 0%, rgba(240, 150, 60, 0.32) 38%, transparent 70%); }
 .j-firefly { width: 4px; height: 4px; background: #FFE9A8; box-shadow: 0 0 10px 3px rgba(255, 220, 130, 0.65); }
 .j-curtain { animation: j-curtain-out 0.6s ease 7s forwards; }
 
 @media (prefers-reduced-motion: no-preference) {
+  .j-ready .j-enter { animation: j-enter 1.8s cubic-bezier(0.16, 1, 0.3, 1) var(--d, 0s) both; }
   .j-mist { animation: j-drift 16s ease-in-out infinite alternate; }
   .j-mist-2 { animation-duration: 21s; animation-direction: alternate-reverse; }
   .j-twinkle { animation: twinkle 3s ease-in-out infinite; }
@@ -198,6 +198,7 @@ body {
 .j-eq > span { height: 4px; }
 
 @keyframes j-curtain-out { to { opacity: 0; visibility: hidden; } }
+@keyframes j-enter { from { opacity: 0; translate: 0 var(--rise, 6%); } to { opacity: 1; translate: 0 0; } }
 @keyframes j-drift { from { translate: -4% 0; } to { translate: 5% 0; } }
 @keyframes j-float { from { transform: translateY(0); } to { transform: translateY(-6%); } }
 @keyframes j-bird {
