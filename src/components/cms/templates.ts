@@ -26,5 +26,18 @@ export function template(type: CmsType, slug: string): CmsData[CmsType] {
       steps: [{ hi: "पहला चरण", en: "First step" }],
       context: { hi: "परंपरा और संदर्भ", en: "Tradition and context" },
     };
+  if (type === "story")
+    return {
+      slug,
+      number: 1,
+      title: { pi: "Pali title, e.g. Sasa Jātaka", hi: "हिन्दी शीर्षक", en: "English title" },
+      theme: { hi: "गुण, जैसे दान", en: "Quality, e.g. Generosity" },
+      summary: { hi: "एक पंक्ति में कथा", en: "The story in one line" },
+      paragraphs: [{ hi: "पहला अनुच्छेद", en: "First paragraph" }],
+      lesson: { hi: "कथा की सीख", en: "What the story teaches" },
+      minutes: 2,
+      source: { title: "Jātaka (Khuddaka Nikāya)", reference: "Jātaka 1" },
+      review: { hi: DRAFT, en: DRAFT },
+    };
   return { reference: "Dhammapada 1", pi: ["Pali line"], hi: "हिन्दी अनुवाद", en: "English translation", review: "draft" };
 }

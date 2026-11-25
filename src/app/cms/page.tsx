@@ -38,6 +38,8 @@ export default function CmsDashboard() {
   if (!lists) return <Loader2 className="h-6 w-6 animate-spin text-[#6D645D] mx-auto mt-20" aria-label="Loading" />;
 
   const empty = CMS_TYPES.every((t) => lists[t].length === 0);
+  // A content type added since the last import (e.g. Jātaka tales) can be imported on its own.
+  const missing = CMS_TYPES.filter((t) => lists[t].length === 0);
   const queue = CMS_TYPES.flatMap((t) => lists[t].filter((r) => ATTENTION.includes(r.status)).map((r) => ({ ...r, type: t })));
 
   return (
@@ -73,11 +75,13 @@ export default function CmsDashboard() {
         </p>
       )}
 
-      {empty && (
+      {missing.length > 0 && (
         <Card>
-          <h2 className="font-bold">Start with the app&apos;s current content</h2>
+          <h2 className="font-bold">{empty ? "Start with the app\u2019s current content" : `Import ${missing.map((t) => TYPE_LABELS[t].many).join(", ")}`}</h2>
           <p className="mt-1 text-sm text-[#5B5350]">
-            The CMS is empty. Import the prayers, meditations and daily verses the app shows today; they arrive as published, so nothing changes for readers.
+            {empty
+              ? "The CMS is empty. Import the prayers, meditations, daily verses and Jātaka tales the app shows today; they arrive as published, so nothing changes for readers."
+              : `The app has built-in ${missing.map((t) => TYPE_LABELS[t].many).join(", ")} that aren\u2019t in the CMS yet. Import them to edit them here; they arrive as published, and nothing you already have changes.`}
           </p>
           {actor.role === "super_admin" ? (
             <Button
@@ -105,7 +109,7 @@ export default function CmsDashboard() {
 
       {!empty && <UsagePanel />}
 
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {CMS_TYPES.map((t) => {
           const rows = lists[t];
           const counts = STATUSES.map((s) => [s, rows.filter((r) => r.status === s).length] as const).filter(([, n]) => n);

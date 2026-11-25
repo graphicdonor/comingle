@@ -6,10 +6,11 @@ import { CMS_TYPES, STATUS_LABELS, TYPE_LABELS, itemTitle, type CmsItem, type Cm
 import type { Prayer } from "@/lib/practice/prayers";
 import type { MeditationPractice } from "@/lib/practice/meditations";
 import type { DailyVerse } from "@/lib/practice/verses";
+import type { JatakaStory } from "@/lib/learn/jataka";
 import { readingPrefs } from "@/lib/practice/preferences";
 import { PrayerText } from "@/components/practice/prayer-text";
 import { api, ApiError, when } from "@/components/cms/api";
-import { MeditationForm, PrayerForm, VerseForm } from "@/components/cms/forms";
+import { MeditationForm, PrayerForm, StoryForm, VerseForm } from "@/components/cms/forms";
 import { Button, Card, Problems, StatusBadge, TextArea, TextInput } from "@/components/cms/ui";
 
 interface Loaded {
@@ -124,9 +125,11 @@ function Reviews({ loaded, onDone }: { loaded: Loaded; onDone: (item: CmsItem, m
   const langs: { lang: ReviewLang; reviewed: boolean; by?: string }[] =
     item.type === "prayer"
       ? (["pali", "hi", "en"] as const).map((l) => ({ lang: l, reviewed: (item.data as Prayer).review[l].status === "reviewed", by: (item.data as Prayer).review[l].reviewedBy }))
-      : item.type === "verse"
-        ? [{ lang: "hi", reviewed: (item.data as DailyVerse).review === "reviewed" }]
-        : [];
+      : item.type === "story"
+        ? (["hi", "en"] as const).map((l) => ({ lang: l, reviewed: (item.data as JatakaStory).review[l].status === "reviewed", by: (item.data as JatakaStory).review[l].reviewedBy }))
+        : item.type === "verse"
+          ? [{ lang: "hi", reviewed: (item.data as DailyVerse).review === "reviewed" }]
+          : [];
 
   async function set(body: object) {
     setError(null);
@@ -359,7 +362,7 @@ export default function CmsEditor({ params }: { params: Promise<{ type: string; 
     setSaving(false);
   }
 
-  const livePath = type === "prayer" ? `/practice/${slug}` : type === "meditation" ? `/meditate?practice=${slug}` : "/app";
+  const livePath = type === "prayer" ? `/practice/${slug}` : type === "meditation" ? `/meditate?practice=${slug}` : type === "story" ? `/learn/jataka/${slug}` : "/app";
 
   return (
     <div className="space-y-5">
@@ -411,6 +414,7 @@ export default function CmsEditor({ params }: { params: Promise<{ type: string; 
               {type === "prayer" && <PrayerForm value={draft as Prayer} onChange={setDraft} />}
               {type === "meditation" && <MeditationForm value={draft as MeditationPractice} onChange={setDraft} />}
               {type === "verse" && <VerseForm value={draft as DailyVerse} onChange={setDraft} />}
+              {type === "story" && <StoryForm value={draft as JatakaStory} onChange={setDraft} />}
             </fieldset>
           )}
         </div>

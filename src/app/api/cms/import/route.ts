@@ -5,6 +5,7 @@ import { audit, getItem, putItem, putVersion } from "@/lib/cms/store";
 import { SEED_PRAYERS } from "@/lib/practice/prayers";
 import { SEED_MEDITATIONS } from "@/lib/practice/meditations";
 import { SEED_VERSES } from "@/lib/practice/verses";
+import { SEED_STORIES } from "@/lib/learn/jataka";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 26;
@@ -23,6 +24,7 @@ export function POST() {
       ...SEED_PRAYERS.map((p) => ({ type: "prayer" as const, slug: p.slug, data: p })),
       ...SEED_MEDITATIONS.map((m) => ({ type: "meditation" as const, slug: m.id, data: m })),
       ...SEED_VERSES.map((v) => ({ type: "verse" as const, slug: verseSlug(v.reference), data: v })),
+      ...SEED_STORIES.map((s) => ({ type: "story" as const, slug: s.slug, data: s })),
     ];
     let added = 0;
     const base = Date.now();

@@ -9,6 +9,9 @@
 //    scripts/generate-prayer-audio.ts) or made in the CMS (bucket
 //    "cms-audio", served at /audio/cms/…). Lines without a clip use the
 //    device voice.
+// 3. Maps every part of every Jātaka tale (title, paragraphs, lesson) to its
+//    narrated clip in public/audio/stories (made by
+//    scripts/generate-story-audio.ts), in src/lib/cms/story-clips.json.
 
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
@@ -16,13 +19,16 @@ import { createClient } from "@supabase/supabase-js";
 import type { Prayer } from "../src/lib/practice/prayers";
 import { SEED_PRAYERS } from "../src/lib/practice/prayers-seed";
 import { paliToDevanagari } from "../src/lib/practice/pali-devanagari";
-import { clipHash, type ClipLang } from "../src/lib/practice/tts-config";
+import { clipHash, storyClipHash, type ClipLang } from "../src/lib/practice/tts-config";
+import { SEED_STORIES, storyParts, type JatakaStory } from "../src/lib/learn/jataka-seed";
 import type { CmsItem } from "../src/lib/cms/model";
 
 const ROOT = join(__dirname, "..");
 const CONTENT = join(ROOT, "src/lib/cms/published-content.json");
 const MANIFEST = join(ROOT, "src/lib/cms/clip-manifest.json");
 const LOCAL_AUDIO = join(ROOT, "public/audio/prayers");
+const STORY_AUDIO = join(ROOT, "public/audio/stories");
+const STORY_MANIFEST = join(ROOT, "src/lib/cms/story-clips.json");
 
 function env(name: string): string | undefined {
   if (process.env[name]) return process.env[name];
@@ -32,8 +38,8 @@ function env(name: string): string | undefined {
   return line?.slice(name.length + 1).trim().replace(/^["']|["']$/g, "") || undefined;
 }
 
-type Published = { prayers: unknown[]; meditations: unknown[]; verses: unknown[] };
-const EMPTY: Published = { prayers: [], meditations: [], verses: [] };
+type Published = { prayers: unknown[]; meditations: unknown[]; verses: unknown[]; stories: unknown[] };
+const EMPTY: Published = { prayers: [], meditations: [], verses: [], stories: [] };
 
 async function fetchPublished(): Promise<{ content: Published; cmsClips: Map<string, Set<string>> }> {
   const url = env("NEXT_PUBLIC_SUPABASE_URL");
@@ -62,13 +68,18 @@ async function fetchPublished(): Promise<{ content: Published; cmsClips: Map<str
   }
 
   try {
-    const [prayers, meditations, verses] = await Promise.all([items("prayer"), items("meditation"), items("verse")]);
+    const [prayers, meditations, verses, stories] = await Promise.all([items("prayer"), items("meditation"), items("verse"), items("story")]);
     for (const p of prayers) {
       const { data } = await storage.from("cms-audio").list(p.slug, { limit: 1000 });
       cmsClips.set(p.slug, new Set((data ?? []).map((f) => f.name)));
     }
-    const content = { prayers: prayers.map((i) => i.live!.data), meditations: meditations.map((i) => i.live!.data), verses: verses.map((i) => i.live!.data) };
-    console.log(`CMS: ${content.prayers.length} prayers, ${content.meditations.length} meditations, ${content.verses.length} verses published.`);
+    const content = {
+      prayers: prayers.map((i) => i.live!.data),
+      meditations: meditations.map((i) => i.live!.data),
+      verses: verses.map((i) => i.live!.data),
+      stories: stories.map((i) => i.live!.data),
+    };
+    console.log(`CMS: ${content.prayers.length} prayers, ${content.meditations.length} meditations, ${content.verses.length} verses, ${content.stories.length} stories published.`);
     return { content, cmsClips };
   } catch (e) {
     // A build must never ship half the content: fail loudly when the CMS has
@@ -111,11 +122,33 @@ function clipManifest(prayers: Prayer[], cmsClips: Map<string, Set<string>>) {
   return manifest;
 }
 
+function storyManifest(stories: JatakaStory[]) {
+  const manifest: Record<string, Record<string, Partial<Record<"hi" | "en", { src: string }>>>> = {};
+  let found = 0;
+  let missing = 0;
+  for (const story of stories) {
+    const parts: (typeof manifest)[string] = {};
+    for (const lang of ["hi", "en"] as const)
+      for (const part of storyParts(story, lang)) {
+        const file = `${lang}-${storyClipHash(part.text, lang)}.m4a`;
+        if (existsSync(join(STORY_AUDIO, story.slug, file))) {
+          (parts[part.key] ??= {})[lang] = { src: `/audio/stories/${story.slug}/${file}` };
+          found++;
+        } else missing++;
+      }
+    if (Object.keys(parts).length) manifest[story.slug] = parts;
+  }
+  console.log(`Story narration: ${found} parts ready${missing ? `, ${missing} without a clip (device voice)` : ""}.`);
+  return manifest;
+}
+
 async function main() {
   const { content, cmsClips } = await fetchPublished();
   writeFileSync(CONTENT, JSON.stringify(content) + "\n");
   const prayers = content.prayers.length ? (content.prayers as Prayer[]) : SEED_PRAYERS;
   writeFileSync(MANIFEST, JSON.stringify(clipManifest(prayers, cmsClips)) + "\n");
+  const stories = content.stories.length ? (content.stories as JatakaStory[]) : SEED_STORIES;
+  writeFileSync(STORY_MANIFEST, JSON.stringify(storyManifest(stories)) + "\n");
 }
 
 main().catch((e) => {

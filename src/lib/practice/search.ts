@@ -1,4 +1,4 @@
-// In-app search over prayers, guides and meditation practices (PRD §7.2).
+// In-app search over prayers, guides, meditation practices and Jātaka tales (PRD §7.2).
 //
 // Everything is bundled, so search runs on the device with no server call.
 // Matching ignores case and Latin diacritics (typing "tisarana" finds
@@ -9,9 +9,10 @@ import { PRAYERS } from "./prayers";
 import { MEDITATIONS } from "./meditations";
 import { paliToDevanagari } from "./pali-devanagari";
 import { GUIDES } from "@/lib/learn/guides";
+import { STORIES } from "@/lib/learn/jataka";
 import type { UiLang } from "@/lib/i18n/dictionary";
 
-export type ResultKind = "prayer" | "guide" | "meditation";
+export type ResultKind = "prayer" | "guide" | "meditation" | "story";
 
 interface Field {
   text: string;
@@ -98,6 +99,24 @@ function buildIndex(): Entry[] {
       ]),
     ];
     entries.push({ kind: "meditation", id: m.id, href: `/meditate?practice=${m.id}`, title: { ...m.title, pi: m.pali }, fields });
+  }
+
+  for (const st of STORIES) {
+    const fields: Field[] = [
+      { text: st.title.en, weight: 10, lang: "en" },
+      { text: st.title.hi, weight: 10, lang: "hi" },
+      { text: st.title.pi, weight: 10, lang: "pi" },
+      { text: `Jataka ${st.number} जातक`, weight: 8, lang: "en" },
+      { text: st.theme.en, weight: 6, lang: "en" },
+      { text: st.theme.hi, weight: 6, lang: "hi" },
+      { text: st.summary.en, weight: 3, lang: "en" },
+      { text: st.summary.hi, weight: 3, lang: "hi" },
+      ...st.paragraphs.flatMap((p): Field[] => [
+        { text: p.en, weight: 1, lang: "en" },
+        { text: p.hi, weight: 1, lang: "hi" },
+      ]),
+    ];
+    entries.push({ kind: "story", id: st.slug, href: `/learn/jataka/${st.slug}`, title: st.title, fields });
   }
 
   return entries;

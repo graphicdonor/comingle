@@ -3,6 +3,7 @@ import { ArrowDown, ArrowUp, Plus, Trash2 } from "lucide-react";
 import type { Localised, Prayer, PrayerLine, PrayerSection } from "@/lib/practice/prayers";
 import type { MeditationPractice } from "@/lib/practice/meditations";
 import type { DailyVerse } from "@/lib/practice/verses";
+import type { JatakaStory } from "@/lib/learn/jataka";
 import { Button, Card, Field, TextArea, TextInput } from "./ui";
 
 function move<T>(list: T[], i: number, by: -1 | 1): T[] {
@@ -225,6 +226,72 @@ export function MeditationForm({ value, onChange }: { value: MeditationPractice;
       </Card>
       <Card>
         <Bilingual label="Context" value={value.context} onChange={(context) => set({ context })} long />
+      </Card>
+    </div>
+  );
+}
+
+// ── Jātaka tale ───────────────────────────────────────────────────────────
+export function StoryForm({ value, onChange }: { value: JatakaStory; onChange: (v: JatakaStory) => void }) {
+  const set = (patch: Partial<JatakaStory>) => onChange({ ...value, ...patch });
+  return (
+    <div className="space-y-5">
+      <Card className="space-y-4">
+        <h2 className="font-bold">About this story</h2>
+        <div className="grid gap-3 sm:grid-cols-3">
+          <Field label="Title · Pali" hint="e.g. Sasa Jātaka">
+            <TextInput className="font-pali" value={value.title.pi} onChange={(pi) => set({ title: { ...value.title, pi } })} />
+          </Field>
+          <Field label="Title · Hindi">
+            <TextInput lang="hi" value={value.title.hi} onChange={(hi) => set({ title: { ...value.title, hi } })} />
+          </Field>
+          <Field label="Title · English">
+            <TextInput value={value.title.en} onChange={(en) => set({ title: { ...value.title, en } })} />
+          </Field>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-3">
+          <Field label="Jātaka number" hint="1–547">
+            <TextInput type="number" min={1} max={547} value={String(value.number)} onChange={(v) => set({ number: Number(v) || 0, source: { ...value.source, reference: `Jātaka ${Number(v) || ""}` } })} />
+          </Field>
+          <Field label="Reading time (minutes)">
+            <TextInput type="number" min={1} max={60} value={String(value.minutes)} onChange={(v) => set({ minutes: Number(v) || 0 })} />
+          </Field>
+        </div>
+        <Bilingual label="Theme" value={value.theme} onChange={(theme) => set({ theme })} />
+        <Bilingual label="Summary" value={value.summary} onChange={(summary) => set({ summary })} long />
+      </Card>
+      <Card className="space-y-3">
+        <h2 className="font-bold">The story</h2>
+        <p className="text-xs text-[#6D645D]">A short retelling, paragraph by paragraph. Each Hindi paragraph should say the same as its English one.</p>
+        {value.paragraphs.map((p, i) => (
+          <div key={i} className="rounded-xl border border-[#EFE7D8] bg-[#FFFCF6] p-3">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-xs font-semibold text-[#885F19]">Paragraph {i + 1}</span>
+              <RowTools
+                label={`paragraph ${i + 1}`}
+                index={i}
+                count={value.paragraphs.length}
+                onMove={(by) => set({ paragraphs: move(value.paragraphs, i, by) })}
+                onRemove={() => set({ paragraphs: value.paragraphs.filter((_, k) => k !== i) })}
+              />
+            </div>
+            <Bilingual label="Paragraph" value={p} long onChange={(x) => set({ paragraphs: value.paragraphs.map((y, k) => (k === i ? x : y)) })} />
+          </div>
+        ))}
+        <Button variant="ghost" onClick={() => set({ paragraphs: [...value.paragraphs, { hi: "", en: "" }] })}>
+          <Plus className="h-4 w-4" /> Add paragraph
+        </Button>
+      </Card>
+      <Card className="space-y-4">
+        <Bilingual label="What the story teaches" value={value.lesson} onChange={(lesson) => set({ lesson })} long />
+        <div className="grid gap-3 sm:grid-cols-2">
+          <Field label="Source title">
+            <TextInput value={value.source.title} onChange={(title) => set({ source: { ...value.source, title } })} />
+          </Field>
+          <Field label="Source reference">
+            <TextInput value={value.source.reference} onChange={(reference) => set({ source: { ...value.source, reference } })} />
+          </Field>
+        </div>
       </Card>
     </div>
   );

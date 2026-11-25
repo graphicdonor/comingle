@@ -3,6 +3,10 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- Portrait is preferred, not required: keep the app installable on
+         tablets, Chromebooks and other devices without a portrait screen. -->
+    <uses-feature android:name="android.hardware.screen.portrait" android:required="false" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"

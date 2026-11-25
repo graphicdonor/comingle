@@ -47,3 +47,4 @@ next-env.d.ts
 # Built from the CMS at build time (scripts/fetch-cms-content.ts)
 src/lib/cms/published-content.json
 src/lib/cms/clip-manifest.json
+src/lib/cms/story-clips.json

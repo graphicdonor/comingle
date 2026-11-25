@@ -1,0 +1,14 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "resolveJsonModule": true,
+    "paths": {
+      "~/*": ["./src/*"],
+      "@/lib/practice/local-store": ["./src/lib/local-store.ts"],
+      "@/lib/*": ["../src/lib/*"],
+      "@/components/visuals/*": ["../src/components/visuals/*"]
+    }
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"]
+}

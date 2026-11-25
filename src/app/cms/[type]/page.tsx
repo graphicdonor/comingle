@@ -67,7 +67,7 @@ export default function CmsList({ params }: { params: Promise<{ type: string }> 
             }}
           >
             <div className="flex-1 min-w-[16rem]">
-              <Field label="Address (slug)" hint={type === "prayer" ? `The prayer's page will be /practice/${slug || "…"}` : "Lowercase letters, numbers and hyphens"}>
+              <Field label="Address (slug)" hint={type === "prayer" ? `The prayer's page will be /practice/${slug || "…"}` : type === "story" ? `The story's page will be /learn/jataka/${slug || "…"}` : "Lowercase letters, numbers and hyphens"}>
                 <TextInput value={slug} onChange={(v) => setSlug(v.toLowerCase().replace(/[^a-z0-9-]/g, "-"))} placeholder="e.g. karaniya-metta" autoFocus />
               </Field>
             </div>

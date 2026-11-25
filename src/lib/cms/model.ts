@@ -1,6 +1,6 @@
 // Content management for the practice app (PRD §9 and §10).
 //
-// Each piece of content (a prayer, a meditation, a daily verse) is one CMS
+// Each piece of content (a prayer, a meditation, a daily verse, a Jātaka tale) is one CMS
 // item. An item holds the working copy that editors change, and separately
 // the live copy that the app shows, so editing published content never
 // changes the app until it is approved and published again (PRD §10.3).
@@ -10,20 +10,23 @@
 import type { Prayer } from "@/lib/practice/prayers";
 import type { MeditationPractice } from "@/lib/practice/meditations";
 import type { DailyVerse } from "@/lib/practice/verses";
+import type { JatakaStory } from "@/lib/learn/jataka";
 
-export const CMS_TYPES = ["prayer", "meditation", "verse"] as const;
+export const CMS_TYPES = ["prayer", "meditation", "verse", "story"] as const;
 export type CmsType = (typeof CMS_TYPES)[number];
 
 export interface CmsData {
   prayer: Prayer;
   meditation: MeditationPractice;
   verse: DailyVerse;
+  story: JatakaStory;
 }
 
 export const TYPE_LABELS: Record<CmsType, { one: string; many: string }> = {
   prayer: { one: "Prayer", many: "Prayers" },
   meditation: { one: "Meditation", many: "Meditations" },
   verse: { one: "Daily verse", many: "Daily Dhamma" },
+  story: { one: "Jātaka tale", many: "Jātaka tales" },
 };
 
 // ── Publishing states (PRD §10.3) ─────────────────────────────────────────
@@ -197,6 +200,10 @@ export function itemTitle(item: CmsItem): string {
   if (item.type === "meditation") {
     const d = item.data as MeditationPractice;
     return `${d.title.en} (${d.pali})`;
+  }
+  if (item.type === "story") {
+    const d = item.data as JatakaStory;
+    return `${d.title.en} (Jātaka ${d.number})`;
   }
   const d = item.data as DailyVerse;
   return d.reference;

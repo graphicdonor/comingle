@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { BookOpen, Flower2, GraduationCap, Search, X, type LucideIcon } from "lucide-react";
+import { BookOpen, BookText, Flower2, GraduationCap, Search, X, type LucideIcon } from "lucide-react";
 import { normalise, search, type ResultKind } from "@/lib/practice/search";
 import { useT } from "@/lib/i18n/use-t";
 import type { MessageKey } from "@/lib/i18n/dictionary";
@@ -11,6 +11,7 @@ const GROUPS: { kind: ResultKind; label: MessageKey; icon: LucideIcon }[] = [
   { kind: "prayer", label: "search.prayers", icon: BookOpen },
   { kind: "guide", label: "search.guides", icon: GraduationCap },
   { kind: "meditation", label: "search.meditation", icon: Flower2 },
+  { kind: "story", label: "search.stories", icon: BookText },
 ];
 
 const SUGGESTIONS = { en: ["refuge", "metta", "knees", "offerings"], hi: ["शरण", "मैत्री", "घुटने", "दान"] };

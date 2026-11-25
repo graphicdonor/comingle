@@ -5,6 +5,7 @@ import { GUIDES, getGuide } from "@/lib/learn/guides";
 import { useT } from "@/lib/i18n/use-t";
 import { PostureAnimation, PostureFigure } from "@/components/visuals/posture-figure";
 import { GuideSteps } from "./guide-steps";
+import { JatakaSection } from "./jataka-views";
 
 export function LearnIndex() {
   const { t, lang } = useT();
@@ -15,6 +16,7 @@ export function LearnIndex() {
         <h1 className="text-[28px] font-bold tracking-tight text-[#2A1A1C]">{t("learn.title")}</h1>
         <p className="mt-1 text-[15px] text-[#5B5350]">{t("learn.intro")}</p>
       </header>
+      <h2 className="sr-only">{t("learn.guides")}</h2>
       <ul className="space-y-3">
         {GUIDES.map((g) => (
           <li key={g.slug}>
@@ -36,6 +38,7 @@ export function LearnIndex() {
           </li>
         ))}
       </ul>
+      <JatakaSection />
       <p className="text-xs text-[#6D645D] leading-relaxed">{t("learn.more")}</p>
     </div>
   );

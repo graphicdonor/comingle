@@ -21,8 +21,9 @@ android {
         applicationId "in.wepray.app"
         minSdk 24
         targetSdk 36
-        // Play: the native community app was versionCode 2 (1.0.0).
-        versionCode 3
+        // Play: the native community app was versionCode 2 (1.0.0); 3 was
+        // uploaded first, 4 marks the portrait screen as optional.
+        versionCode 4
         versionName "2.0.0"
         manifestPlaceholders = [siteHost: siteHost, launchUrl: launchUrl]
         resValue "string", "app_name", "WePray"

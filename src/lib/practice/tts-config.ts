@@ -25,18 +25,34 @@ export const TTS_INSTRUCTIONS: Record<ClipLang, string> = {
     "Read this English line in a calm, warm, respectful voice with a gentle Indian English accent, at an unhurried pace. Do not add anything.",
 };
 
+// Jātaka tales are narrated rather than recited.
+export type StoryLang = "hi" | "en";
+export const STORY_INSTRUCTIONS: Record<StoryLang, string> = {
+  hi:
+    "Narrate this part of a traditional Buddhist Jātaka story in Hindi, like a gentle storyteller reading to a family: warm, calm and unhurried, " +
+    "with natural expression in dialogue and natural standard Hindi pronunciation. Pronounce Pali names naturally. Do not add anything.",
+  en:
+    "Narrate this part of a traditional Buddhist Jātaka story in English, like a gentle storyteller reading to a family: warm, calm and unhurried, " +
+    "with natural expression in dialogue and a gentle Indian English accent. Pronounce Pali names naturally. Do not add anything.",
+};
+
+/** Content hash in a story clip's file name: `${lang}-${storyClipHash(text, lang)}.m4a`. */
+export function storyClipHash(text: string, lang: StoryLang): string {
+  return createHash("sha256").update([TTS_MODEL, TTS_VOICE, STORY_INSTRUCTIONS[lang], text].join("\u0000")).digest("hex").slice(0, 10);
+}
+
 /** Content hash in a clip's file name: `${lang}-${clipHash(text, lang)}.m4a`. */
 export function clipHash(text: string, lang: ClipLang): string {
   return createHash("sha256").update([TTS_MODEL, TTS_VOICE, TTS_INSTRUCTIONS[lang], text].join("\u0000")).digest("hex").slice(0, 10);
 }
 
 /** Asks OpenAI for one clip. `format` "aac" plays everywhere without re-encoding. */
-export async function synthesize(text: string, lang: ClipLang, key: string, format: "mp3" | "aac" = "mp3"): Promise<Buffer> {
+export async function synthesize(text: string, lang: ClipLang, key: string, format: "mp3" | "aac" = "mp3", instructions: string = TTS_INSTRUCTIONS[lang]): Promise<Buffer> {
   for (let attempt = 1; ; attempt++) {
     const res = await fetch("https://api.openai.com/v1/audio/speech", {
       method: "POST",
       headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ model: TTS_MODEL, voice: TTS_VOICE, input: text, instructions: TTS_INSTRUCTIONS[lang], response_format: format }),
+      body: JSON.stringify({ model: TTS_MODEL, voice: TTS_VOICE, input: text, instructions, response_format: format }),
     });
     if (res.ok) return Buffer.from(await res.arrayBuffer());
     const body = await res.text();

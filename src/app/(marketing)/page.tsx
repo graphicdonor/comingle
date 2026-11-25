@@ -9,6 +9,9 @@ import {
   HeartHandshake,
   Languages,
   Lock,
+  Mic,
+  BellRing,
+  Volume2,
   Search,
   ShieldCheck,
   Sparkles,
@@ -21,26 +24,65 @@ import { GooglePlayBadge, InstallWebAppButton } from "@/components/landing/get-t
 import { HeroArt, PhoneShot, PrayerDemo, SectionHeading } from "@/components/landing/companion";
 import { PostureFigure, type FigureId } from "@/components/visuals/posture-figure";
 import { SITE_URL } from "@/lib/site-url";
+import { PRAYERS } from "@/lib/practice/prayers";
+import { MEDITATIONS } from "@/lib/practice/meditations";
+import { GUIDES } from "@/lib/learn/guides";
+
+const PLAY_URL = "https://play.google.com/store/apps/details?id=in.wepray.app";
 
 export const metadata: Metadata = {
-  title: "WePray — Buddhist prayers, meditation and guides in Hindi and English",
+  title: { absolute: "WePray: Buddhist Prayers in Pali, Hindi & English, with Audio" },
   description:
-    "A calm companion for Buddhist practice: Pali prayers with Hindi and English meaning, guided morning and evening practice, meditation, and simple guides on how to pray and sit. Free, private, no account, works offline.",
+    "Buddha Vandana, Tisarana, Panchsheel, Metta and more Pali prayers with Hindi and English meaning and audio. Meditation, pronunciation help and beginner guides. Free, works offline.",
+  keywords: [
+    "Buddhist prayers",
+    "Buddha Vandana",
+    "Namo Tassa Bhagavato Arahato Sammasambuddhassa",
+    "Buddham Saranam Gacchami",
+    "Tisarana",
+    "Three Refuges",
+    "Pancasila",
+    "Panchsheel",
+    "Five Precepts",
+    "Metta Sutta",
+    "Mangala Sutta",
+    "Dhammapada",
+    "Pali chanting",
+    "Pali prayers with meaning",
+    "Buddhist prayer app",
+    "Buddhist meditation",
+    "Vipassana",
+    "बुद्ध वंदना",
+    "त्रिशरण",
+    "पंचशील",
+    "बौद्ध प्रार्थना",
+    "बुद्धं सरणं गच्छामि",
+  ],
   alternates: { canonical: "/" },
   openGraph: {
-    title: "WePray — Buddhist Spiritual Companion",
-    description: "Pali prayers with Hindi and English meaning, guided practice, meditation and beginner guides. Free, private and offline.",
+    title: "WePray: Buddhist prayers in Pali, Hindi and English",
+    description: "Buddha Vandana, Tisarana, Panchsheel, Metta and more, with meaning and audio. Meditation and beginner guides. Free and offline.",
     url: "/",
     siteName: "WePray",
     type: "website",
+    locale: "en_IN",
+    alternateLocale: ["hi_IN"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "WePray: Buddhist prayers in Pali, Hindi and English",
+    description: "Buddha Vandana, Tisarana, Panchsheel, Metta and more, with meaning and audio. Free and offline.",
   },
 };
 
 const FEATURES: { icon: LucideIcon; title: string; text: string }[] = [
-  { icon: BookOpen, title: "Prayers in three languages", text: "Buddha Vandanā, the Three Refuges, the Five Precepts, the Triple Gem and Mettā, in Pali beside Hindi or English." },
+  { icon: BookOpen, title: "Pali prayers with meaning", text: "Buddha Vandanā, Tisaraṇa, Pañcasīla, Mettā, the Maṅgala Sutta and more, in Pali beside their Hindi or English meaning, in Roman script or Devanagari." },
+  { icon: Volume2, title: "Listen to every prayer", text: "Hear each prayer read aloud line by line, in Pali and in Hindi or English, at a slower or faster speed, and follow along as each line lights up." },
+  { icon: Mic, title: "Pronunciation practice", text: "Learn to say Pali correctly, syllable by syllable, with simple tips on long vowels, aspirated consonants and the niggahīta (ṃ)." },
   { icon: Sun, title: "Morning & evening practice", text: "A short sequence of prayers, one at a time, with nothing to distract you. Tap a line to keep your place." },
-  { icon: Flower2, title: "Meditation", text: "Mindful breathing, loving-kindness, walking meditation or a silent timer, 3 to 20 minutes, with a soft bell." },
-  { icon: GraduationCap, title: "Beginner guides", text: "How to pray, how to sit comfortably and how to visit a temple, with illustrations. No posture is required." },
+  { icon: Flower2, title: "Meditation", text: "Seven practices, from mindful breathing (ānāpānasati) and loving-kindness to walking meditation, for 3 to 20 minutes with a soft bell." },
+  { icon: BellRing, title: "Gentle reminders", text: "Add a daily reminder for your practice to your calendar, at the time that suits you, in the morning or evening." },
+  { icon: GraduationCap, title: "Beginner guides", text: "How to pray at home, how to sit comfortably and how to visit a temple, with illustrations. No posture is required." },
   { icon: Sparkles, title: "A verse each day", text: "A verse from the Dhammapada every day, with its reference and meaning in your language." },
   { icon: Search, title: "Search in any script", text: "Find any prayer, line or guide in English, Hindi or Pali, with or without diacritics." },
 ];
@@ -53,6 +95,26 @@ const POSTURES: { id: FigureId; label: string }[] = [
 ];
 
 const FAQ: { q: string; a: string }[] = [
+  {
+    q: "What is Buddha Vandana?",
+    a: "Buddha Vandanā is the traditional homage that opens most Pali chanting: “Namo tassa bhagavato arahato sammāsambuddhassa”, meaning “Homage to the Blessed One, the Worthy One, the Perfectly Self-Awakened One”. It is recited three times. WePray shows it in Pali with its Hindi and English meaning, and can read it aloud.",
+  },
+  {
+    q: "What does “Buddhaṃ saraṇaṃ gacchāmi” mean?",
+    a: "It means “I go to the Buddha for refuge”. It begins the Tisaraṇa, the Three Refuges, in which one takes refuge in the Buddha, the Dhamma (his teaching) and the Saṅgha (the community of practitioners), each recited three times.",
+  },
+  {
+    q: "What are the Five Precepts (Panchsheel)?",
+    a: "The Pañcasīla, or Panchsheel, are the five training rules of lay Buddhists: to refrain from harming living beings, from taking what is not given, from sexual misconduct, from false speech, and from intoxicants that cloud the mind. In WePray you can read and recite them in Pali with their meaning.",
+  },
+  {
+    q: "Can I listen to the prayers?",
+    a: "Yes. Every prayer can be read aloud line by line, in Pali and in its Hindi or English meaning, with a choice of speed. The voice is computer-generated to help you follow and learn; it is not a recording of a monk or teacher.",
+  },
+  {
+    q: "How do I pray at home as a Buddhist?",
+    a: "Find a quiet place, sit comfortably, take a few calm breaths, then recite Buddha Vandanā, the Three Refuges and the Five Precepts, and close with a wish for the well-being of all beings. WePray’s “How to pray” guide and morning and evening practice walk you through it step by step. Customs differ between communities, and any respectful way is fine.",
+  },
   { q: "Is WePray free?", a: "Yes. WePray is free to use, with no ads and no subscriptions." },
   { q: "Do I need to create an account?", a: "No. You can use every prayer, guide and meditation without signing up, and your saved prayers and settings stay on your own device. If you like, sign in with Google to sync them privately across your devices." },
   { q: "Can I use it without internet?", a: "Yes. Open Settings and choose “Download for offline” once; after that, prayers, guides, meditation and illustrations all work with no connection." },
@@ -82,14 +144,44 @@ function Cta({ tone = "dark" }: { tone?: "dark" | "light" }) {
 export default function LandingPage() {
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    name: "WePray",
-    applicationCategory: "LifestyleApplication",
-    operatingSystem: "Android, Web",
-    inLanguage: ["en", "hi"],
-    description: "Buddhist prayers in Pali with Hindi and English meaning, guided practice, meditation and beginner guides.",
-    url: SITE_URL,
-    offers: { "@type": "Offer", price: "0", priceCurrency: "INR" },
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": `${SITE_URL}/#website`,
+        name: "WePray",
+        url: SITE_URL,
+        inLanguage: ["en", "hi"],
+        description: "Buddhist prayers in Pali with Hindi and English meaning and audio, meditation and beginner guides.",
+      },
+      {
+        "@type": "MobileApplication",
+        "@id": `${SITE_URL}/#app`,
+        name: "WePray",
+        applicationCategory: "LifestyleApplication",
+        operatingSystem: "Android, Web",
+        inLanguage: ["en", "hi"],
+        description: "Buddhist prayers in Pali with Hindi and English meaning and audio, guided practice, meditation, pronunciation practice and beginner guides.",
+        url: SITE_URL,
+        installUrl: PLAY_URL,
+        sameAs: [PLAY_URL],
+        offers: { "@type": "Offer", price: "0", priceCurrency: "INR" },
+        featureList: FEATURES.map((f) => f.title),
+      },
+      {
+        "@type": "ItemList",
+        name: "Buddhist prayers in Pali with Hindi and English meaning",
+        itemListElement: PRAYERS.map((p, i) => ({
+          "@type": "ListItem",
+          position: i + 1,
+          name: `${p.title.pi} (${p.title.en})`,
+          url: `${SITE_URL}/practice/${p.slug}`,
+        })),
+      },
+      {
+        "@type": "FAQPage",
+        mainEntity: FAQ.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+      },
+    ],
   };
 
   return (
@@ -105,7 +197,7 @@ export default function LandingPage() {
           </Link>
           <nav aria-label="Sections" className="hidden md:flex items-center gap-6 text-sm font-medium text-[#5B5350]">
             <a href="#inside" className="hover:text-[#6D252C]">What&apos;s inside</a>
-            <a href="#prayers" className="hover:text-[#6D252C]">Prayers</a>
+            <a href="#library" className="hover:text-[#6D252C]">Prayers</a>
             <a href="#learn" className="hover:text-[#6D252C]">Learn</a>
             <a href="#private" className="hover:text-[#6D252C]">Private &amp; offline</a>
             <a href="#faq" className="hover:text-[#6D252C]">FAQ</a>
@@ -217,6 +309,64 @@ export default function LandingPage() {
           </div>
         </section>
 
+        {/* Prayer library */}
+        <section id="library" aria-labelledby="library-title" className="scroll-mt-20 pb-20 md:pb-28">
+          <div className="mx-auto max-w-6xl px-4 sm:px-6">
+            <Reveal>
+              <SectionHeading
+                id="library-title"
+                eyebrow="Prayer library"
+                title="Buddhist prayers in Pali, with Hindi and English meaning"
+                intro={`${PRAYERS.length} traditional Pali recitations, from Buddha Vandanā and the Three Refuges to the Maṅgala Sutta. Each one shows its source, can be read aloud, and has pronunciation help.`}
+              />
+              <p lang="hi" className="mt-3 max-w-2xl text-base leading-relaxed text-[#6E6560]">
+                बुद्ध वंदना, त्रिशरण, पंचशील, मैत्री भावना और महामंगल सुत्त: पालि पाठ, हिन्दी अर्थ और ऑडियो के साथ।
+              </p>
+            </Reveal>
+            <ul className="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {PRAYERS.map((p) => (
+                <li key={p.slug}>
+                  <Link
+                    href={`/practice/${p.slug}`}
+                    className="group flex h-full flex-col rounded-3xl bg-white border border-[#E7DCC8] p-5 hover:border-[#6D252C]/40 transition-colors"
+                  >
+                    <h3 className="text-lg font-bold text-[#2A1A1C] group-hover:text-[#6D252C]">
+                      {p.title.pi} <span className="font-normal text-[#6E6560]">· {p.title.en}</span>
+                    </h3>
+                    <p lang="hi" className="text-sm text-[#885F19]">{p.title.hi}</p>
+                    {p.sections[0]?.lines[0] && (
+                      <p lang="pi" className="mt-3 text-[15px] italic text-[#5B5350]">“{p.sections[0].lines[0].pi.replace(/[,;:.]+$/, "")}”</p>
+                    )}
+                    <p className="mt-2 text-sm leading-relaxed text-[#5B5350]">{p.summary.en}</p>
+                    <span className="mt-auto pt-3 inline-flex items-center gap-1 text-sm font-bold text-[#6D252C]">
+                      Read with meaning <ArrowRight className="h-3.5 w-3.5" />
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+
+            <div className="mt-16 rounded-3xl bg-[#FFFCF6] border border-[#E7DCC8] p-6 md:p-8">
+              <h3 className="text-2xl font-bold tracking-tight">Buddhist meditation for beginners</h3>
+              <p className="mt-2 text-[15px] leading-relaxed text-[#5B5350] max-w-2xl">
+                Short, guided practices with written steps in Hindi and English and a quiet timer with a soft bell, from 3 to 20 minutes.
+              </p>
+              <ul className="mt-5 grid sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-3">
+                {MEDITATIONS.map((m) => (
+                  <li key={m.id} className="text-[15px]">
+                    <span className="font-semibold text-[#2A1A1C]">{m.title.en}</span>
+                    {m.pali && <span className="text-[#6E6560]"> ({m.pali})</span>}
+                    <span className="block text-sm text-[#5B5350]">{m.summary.en}</span>
+                  </li>
+                ))}
+              </ul>
+              <Link href="/meditate" className="mt-6 inline-flex items-center gap-2 rounded-full border border-[#6D252C]/25 bg-white px-5 py-3 text-sm font-bold text-[#6D252C] hover:border-[#6D252C]">
+                Start a meditation <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          </div>
+        </section>
+
         {/* Learn */}
         <section id="learn" aria-labelledby="learn-title" className="scroll-mt-20 py-20 md:py-28 bg-[#FFFCF6] border-y border-[#E7DCC8]/70">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
@@ -297,7 +447,7 @@ export default function LandingPage() {
         {/* FAQ */}
         <section id="faq" aria-labelledby="faq-title" className="scroll-mt-20 pb-20 md:pb-28">
           <div className="mx-auto max-w-3xl px-4 sm:px-6">
-            <h2 id="faq-title" className="text-center text-3xl font-bold tracking-tight">Questions</h2>
+            <h2 id="faq-title" className="text-center text-3xl font-bold tracking-tight">Questions about Buddhist prayer and WePray</h2>
             <div className="mt-8 divide-y divide-[#E7DCC8] rounded-3xl border border-[#E7DCC8] bg-white">
               {FAQ.map((f) => (
                 <details key={f.q} className="group px-6 py-5">
@@ -339,6 +489,13 @@ export default function LandingPage() {
             <p className="mt-1">Learn the Dhamma. Practise with mindfulness. Live with compassion.</p>
           </div>
           <nav aria-label="Footer" className="flex flex-wrap gap-x-6 gap-y-2">
+            <Link href="/practice" className="hover:text-[#F7F2E8]">Prayers</Link>
+            <Link href="/meditate" className="hover:text-[#F7F2E8]">Meditation</Link>
+            {GUIDES.map((g) => (
+              <Link key={g.slug} href={`/learn/${g.slug}`} className="hover:text-[#F7F2E8]">
+                {g.title.en}
+              </Link>
+            ))}
             <Link href="/privacy" className="hover:text-[#F7F2E8]">Privacy</Link>
             <Link href="/terms" className="hover:text-[#F7F2E8]">Terms</Link>
             <Link href="/contact" className="hover:text-[#F7F2E8]">Contact</Link>

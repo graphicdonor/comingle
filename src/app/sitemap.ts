@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/site-url";
 import { GUIDES } from "@/lib/learn/guides";
 import { PRAYERS } from "@/lib/practice/prayers";
+import { STORIES } from "@/lib/learn/jataka";
 
 // Only the practice companion's public pages; suppressed features
 // (src/lib/features.ts) redirect and are left out.
@@ -24,6 +25,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: now,
       changeFrequency: "monthly" as const,
       priority: 0.7,
+    })),
+    { url: `${SITE_URL}/learn/jataka`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+    ...STORIES.map((s) => ({
+      url: `${SITE_URL}/learn/jataka/${s.slug}`,
+      lastModified: now,
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
     })),
   ];
 }

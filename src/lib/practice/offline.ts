@@ -4,6 +4,8 @@ import { createLocalStore } from "./local-store";
 import { PRAYERS } from "./prayers";
 import { SESSIONS } from "./sessions";
 import { GUIDES } from "@/lib/learn/guides";
+import { STORIES } from "@/lib/learn/jataka";
+import { storyClipUrls } from "@/lib/learn/use-story-voice";
 import manifest from "@/components/visuals/illustrations.json";
 import { SPLASH_LAYERS } from "@/lib/splash";
 import audioManifest from "@/lib/cms/clip-manifest.json";
@@ -35,6 +37,8 @@ export function offlineUrls(): string[] {
     "/meditate",
     "/learn",
     ...GUIDES.map((g) => `/learn/${g.slug}`),
+    "/learn/jataka",
+    ...STORIES.map((s) => `/learn/jataka/${s.slug}`),
     "/preferences",
     "/offline",
     ...Object.values(manifest).map((m) => m.src),
@@ -43,6 +47,8 @@ export function offlineUrls(): string[] {
     ...Object.values(audioManifest as Record<string, Record<string, Record<string, { src: string }>>>).flatMap((lines) =>
       Object.values(lines).flatMap((clips) => Object.values(clips).map((c) => c.src)),
     ),
+    // Narrated Jātaka tales.
+    ...storyClipUrls(),
     "/icons/icon-192.png",
     "/favicon.svg",
   ];

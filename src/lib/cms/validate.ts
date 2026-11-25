@@ -59,11 +59,30 @@ function verse(d: Obj, out: string[]) {
   if (d.date !== undefined && d.date !== "" && !/^\d{4}-\d{2}-\d{2}$/.test(String(d.date))) out.push("Date must be YYYY-MM-DD.");
 }
 
+function story(d: Obj, out: string[]) {
+  if (typeof d.number !== "number" || !Number.isInteger(d.number) || d.number < 1 || d.number > 547) out.push("Jātaka number must be 1–547.");
+  if (!isObj(d.title) || !str(d.title.pi) || !str(d.title.hi) || !str(d.title.en)) out.push("Title: Pali, Hindi and English are required.");
+  localised(d.theme, "Theme", out);
+  localised(d.summary, "Summary", out);
+  if (!Array.isArray(d.paragraphs) || d.paragraphs.length === 0) out.push("Add at least one paragraph.");
+  else d.paragraphs.forEach((p, i) => localised(p, `Paragraph ${i + 1}`, out));
+  localised(d.lesson, "Lesson", out);
+  if (typeof d.minutes !== "number" || d.minutes < 1 || d.minutes > 60) out.push("Reading time must be 1–60 minutes.");
+  if (!isObj(d.source) || !str(d.source.title) || !str(d.source.reference)) out.push("Source title and reference are required.");
+  if (!isObj(d.review)) out.push("Review status is missing.");
+  else
+    for (const k of ["hi", "en"]) {
+      const r = (d.review as Obj)[k];
+      if (!isObj(r) || (r.status !== "draft" && r.status !== "reviewed")) out.push(`Review (${k}) must be draft or reviewed.`);
+    }
+}
+
 export function validate(type: CmsType, data: unknown): string[] {
   const out: string[] = [];
   if (!isObj(data)) return ["Content is missing."];
   if (type === "prayer") prayer(data, out);
   else if (type === "meditation") meditation(data, out);
+  else if (type === "story") story(data, out);
   else verse(data, out);
   return out;
 }

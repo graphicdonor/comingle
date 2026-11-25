@@ -14,6 +14,8 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Local Netlify CLI build output — vendored/generated, not app code.
     ".netlify/**",
+    // The native Android app has its own lint and type-check.
+    "native/**",
   ]),
 ]);
 

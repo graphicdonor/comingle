@@ -1,5 +1,6 @@
 import type { Prayer } from "@/lib/practice/prayers";
 import type { DailyVerse } from "@/lib/practice/verses";
+import type { JatakaStory } from "@/lib/learn/jataka";
 import {
   allowedTransitions,
   can,
@@ -35,6 +36,7 @@ const now = () => new Date().toISOString();
 /** Keeps the item's own identifier in step with its slug. */
 function withSlug<T extends CmsType>(type: T, slug: string, data: CmsData[T]): CmsData[T] {
   if (type === "prayer") return { ...(data as Prayer), slug } as CmsData[T];
+  if (type === "story") return { ...(data as JatakaStory), slug } as CmsData[T];
   if (type === "meditation") return { ...data, id: slug } as CmsData[T];
   return data;
 }
@@ -71,11 +73,12 @@ function reconcileReviews<T extends CmsType>(actor: Actor, type: T, before: CmsI
     if (changed && review === "reviewed" && !(mayReview && old !== "reviewed")) review = "draft";
     return { ...next, review } as CmsData[T];
   }
-  if (type !== "prayer") return data;
+  if (type !== "prayer" && type !== "story") return data;
+  // Prayers are reviewed in Pali, Hindi and English; Jātaka retellings in Hindi and English.
   const next = data as Prayer;
   const prev = before?.data as Prayer | undefined;
   const review = { ...next.review };
-  for (const lang of ["pali", "hi", "en"] as const) {
+  for (const lang of type === "story" ? (["hi", "en"] as const) : (["pali", "hi", "en"] as const)) {
     const old = prev?.review[lang] ?? { status: "draft" as const };
     const textChanged = prev ? languageView(type, prev, lang) !== languageView(type, next, lang) : false;
     if (!canReviewLanguage(actor, lang)) review[lang] = old;
@@ -91,6 +94,9 @@ function reviewsComplete(item: CmsItem): string[] {
   if (item.type === "prayer") {
     const r = (item.data as Prayer).review;
     for (const [k, label] of [["pali", "Pali"], ["hi", "Hindi"], ["en", "English"]] as const) if (r[k].status !== "reviewed") missing.push(`${label} review`);
+  } else if (item.type === "story") {
+    const r = (item.data as JatakaStory).review;
+    for (const [k, label] of [["hi", "Hindi"], ["en", "English"]] as const) if (r[k].status !== "reviewed") missing.push(`${label} review`);
   } else if (item.type === "verse" && (item.data as DailyVerse).review !== "reviewed") missing.push("language review");
   return missing;
 }
@@ -181,7 +187,11 @@ export async function setReview(
     detail = `subject: ${item.subjectReview.status}`;
   } else {
     if (!canReviewLanguage(actor, review.lang)) throw new CmsError("You can't review this language.", 403);
-    if (type === "prayer") {
+    if (type === "story") {
+      if (review.lang === "pali") throw new CmsError("Jātaka retellings are reviewed in Hindi and English.");
+      const d = item.data as JatakaStory;
+      d.review = { ...d.review, [review.lang]: review.reviewed ? { status: "reviewed", reviewedBy: actor.name } : { status: "draft" } };
+    } else if (type === "prayer") {
       const d = item.data as Prayer;
       d.review = { ...d.review, [review.lang]: review.reviewed ? { status: "reviewed", reviewedBy: actor.name } : { status: "draft" } };
     } else if (type === "verse") {
