@@ -126,6 +126,57 @@ body {
    for small Latin labels breaks Hindi words apart. Reset it for Hindi. */
 :lang(hi)[class*="tracking-"] { letter-spacing: normal; }
 
+/* ── Practice scene: the morning / evening picture on Today ────────────
+   components/visuals/practice-scene.tsx. Resting styles are the finished
+   picture; motion only for readers who haven't asked for less. Percent
+   translations are relative to each layer. */
+.ps-rays { opacity: 0.32; }
+.ps-smoke, .ps-birds { opacity: 0; }
+.ps-star { opacity: 0.95; }
+.ps-flame { opacity: 0.8; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .ps-zoom { animation: ps-zoom 20s ease-in-out infinite alternate; }
+  .ps-rise { animation: ps-rise 4.2s cubic-bezier(0.22, 1, 0.36, 1) 0.25s both; }
+  .ps-rays { animation: ps-spin 120s linear infinite; }
+  .ps-rays.ps-rays-in { animation: ps-rays-in 4.2s ease-out both, ps-spin 120s linear infinite; }
+  .ps-mist { animation: ps-mist 9s ease-in-out infinite alternate; }
+  .ps-birds { animation: ps-birds 17.5s ease-in-out 2.5s infinite; }
+  .ps-moon { animation: ps-moon 2.4s cubic-bezier(0.22, 1, 0.36, 1) 0.25s both, ps-float 4s ease-in-out 2.65s infinite alternate; }
+  .ps-star { animation: ps-twinkle var(--d) ease-in-out var(--delay) infinite alternate; }
+  .ps-flame { animation: ps-flicker var(--d) ease-in-out infinite; }
+  .ps-smoke { animation: ps-smoke 5.2s ease-out var(--delay) infinite; }
+  .ps-off * { animation-play-state: paused; }
+}
+
+@keyframes ps-zoom { from { transform: scale(1); } to { transform: scale(1.045); } }
+@keyframes ps-rise { from { translate: 0 var(--rise); } to { translate: 0 0; } }
+@keyframes ps-rays-in { 0%, 60% { opacity: 0; } 100% { opacity: 0.32; } }
+@keyframes ps-spin { to { rotate: 360deg; } }
+@keyframes ps-mist { from { translate: -4% 0; opacity: 0.55; } to { translate: 6% 0; opacity: 0.8; } }
+@keyframes ps-birds {
+  0% { opacity: 0; transform: translate(0, 0); }
+  10% { opacity: 0.9; }
+  73% { opacity: 0.9; }
+  86%, 100% { opacity: 0; transform: translate(var(--fly), var(--up)); }
+}
+@keyframes ps-moon { from { opacity: 0; translate: 0 15%; } to { opacity: 1; translate: 0 0; } }
+@keyframes ps-float { from { transform: translateY(0); } to { transform: translateY(-5%); } }
+@keyframes ps-twinkle { from { opacity: 0.25; } to { opacity: 0.95; } }
+@keyframes ps-flicker {
+  0%, 100% { opacity: 0.6; transform: scale(0.9); }
+  30% { opacity: 1; transform: scale(1.12); }
+  55% { opacity: 0.45; transform: scale(0.88); }
+  75% { opacity: 0.85; transform: scale(1.05); }
+}
+@keyframes ps-smoke {
+  0% { opacity: 0; transform: translate(0, 10%) scaleX(0.8); }
+  20% { opacity: 0.75; }
+  50% { transform: translate(20%, -30%) scaleX(1.1); }
+  70% { opacity: 0.35; }
+  100% { opacity: 0; transform: translate(-15%, -70%) scaleX(1.4); }
+}
+
 /* ── Splash: dawn over the hills ──────────────────────────────────────
    Layered artwork (public/splash) animated in pure CSS, so it starts as
    soon as the stylesheet arrives, before JavaScript. Resting styles are the

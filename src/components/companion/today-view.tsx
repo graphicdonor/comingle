@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Play, Flower2, BookOpen, Lock } from "lucide-react";
-import { SkyScene } from "@/components/visuals/sky-scene";
+import { PracticeScene } from "@/components/visuals/practice-scene";
 import { PostureFigure } from "@/components/visuals/posture-figure";
 import { cn } from "@/lib/utils";
 import { useLocalNow } from "@/lib/practice/client-hooks";
@@ -69,29 +69,31 @@ export function TodayView() {
       {/* Today's practice */}
       <motion.section {...fadeUp(1)} aria-label={t("today.aria.practice")}>
         {session ? (
-          <div className="relative overflow-hidden rounded-[28px] bg-[#6D252C] text-[#F7F2E8] px-6 pt-5 pb-6 shadow-[0_18px_40px_-20px_rgba(109,37,44,0.7)]">
-            <SkyScene key={session.id} variant={session.id} className="pointer-events-none absolute -right-6 -top-2 w-60" />
-
-            <div role="tablist" aria-label={t("today.practiceTime")} className="relative inline-flex rounded-full bg-white/10 p-0.5 mb-5">
-              {SESSIONS.map((s) => (
-                <button
-                  key={s.id}
-                  type="button"
-                  role="tab"
-                  aria-selected={s.id === session.id}
-                  onClick={() => setChosen(s.id)}
-                  className={cn(
-                    "px-3.5 py-1.5 rounded-full text-xs font-semibold transition-colors",
-                    s.id === session.id ? "bg-[#F7F2E8] text-[#6D252C]" : "text-[#F7F2E8]/75 hover:text-[#F7F2E8]",
-                  )}
-                >
-                  {s.id === "morning" ? t("today.morning") : t("today.evening")}
-                </button>
-              ))}
+          <div className="relative overflow-hidden rounded-[28px] bg-[#47151E] text-[#F7F2E8] shadow-[0_18px_40px_-20px_rgba(109,37,44,0.7)]">
+            <div className="relative aspect-[3/2]">
+              <PracticeScene variant={session.id} className="absolute inset-0" />
+              <div role="tablist" aria-label={t("today.practiceTime")} className="absolute left-4 top-4 inline-flex rounded-full bg-[#3A1418]/55 p-1 backdrop-blur-sm">
+                {SESSIONS.map((s) => (
+                  <button
+                    key={s.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={s.id === session.id}
+                    onClick={() => setChosen(s.id)}
+                    className={cn(
+                      "px-3.5 py-1.5 rounded-full text-xs font-semibold transition-colors",
+                      s.id === session.id ? "bg-[#F7F2E8] text-[#6D252C]" : "text-[#F7F2E8] hover:bg-white/10",
+                    )}
+                  >
+                    {s.id === "morning" ? t("today.morning") : t("today.evening")}
+                  </button>
+                ))}
+              </div>
             </div>
 
+            <div className="relative -mt-[18%] px-6 pb-6">
             <motion.div key={`${session.id}-text`} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, ease: EASE }}>
-            <h2 lang={ui} className="relative text-2xl font-bold leading-tight">{session.title[ui]}</h2>
+            <h2 lang={ui} className="relative text-2xl font-bold leading-tight [text-shadow:0_1px_8px_rgba(40,10,14,0.6)]">{session.title[ui]}</h2>
             <p lang={other} className="relative text-sm text-[#F7F2E8]/75">{session.title[other]}</p>
             <p lang={ui} className="relative mt-3 text-sm text-[#F7F2E8]/85 leading-relaxed">{session.description[ui]}</p>
 
@@ -122,6 +124,7 @@ export function TodayView() {
               <Play className="h-4 w-4 fill-current" />
               {t("common.begin", { n: sessionMinutes(session) })}
             </MotionLink>
+            </div>
           </div>
         ) : (
           <div className="h-[396px] rounded-[28px] bg-[#EFE7D8] animate-pulse" aria-hidden />
