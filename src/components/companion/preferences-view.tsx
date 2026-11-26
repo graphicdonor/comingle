@@ -14,6 +14,7 @@ import { AccountSection } from "./account-section";
 import { RemindersSection } from "./reminders-section";
 import { setUsageCounting, usageCounting } from "@/lib/practice/usage";
 import { useAccount } from "@/lib/practice/sync";
+import { SubscribeForm } from "@/components/subscribe-form";
 
 const PREVIEW = getPrayer("buddha-vandana");
 
@@ -170,6 +171,13 @@ export function PreferencesView() {
           <ShieldCheck className="h-4 w-4 flex-shrink-0 text-[#87977A]" />
           {account.user ? t("settings.privacyNoteSynced") : t("settings.privacyNote")}
         </p>
+      </Section>
+
+      <Section title={t("subscribe.title")}>
+        <div className="rounded-3xl bg-white border border-[#E7DCC8] px-5 py-5 space-y-3">
+          <p className="text-[15px] text-[#5B5350]">{t("subscribe.intro")}</p>
+          <SubscribeForm source="web" />
+        </div>
       </Section>
 
       <Section title={t("settings.about")}>

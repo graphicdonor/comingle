@@ -59,6 +59,7 @@ export function SplashScreen() {
   const isLanding =
     pathname === "/" ||
     pathname === "/survey" ||
+    pathname === "/unsubscribe" ||
     pathname === "/blog" ||
     pathname.startsWith("/blog/") ||
     pathname.startsWith("/cms") ||

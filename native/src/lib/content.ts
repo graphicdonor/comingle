@@ -4,7 +4,7 @@ import { PRAYERS as BUNDLED_PRAYERS, type Prayer } from "@/lib/practice/prayers"
 import { MEDITATIONS as BUNDLED_MEDITATIONS, type MeditationPractice } from "@/lib/practice/meditations";
 import { DAILY_VERSES as BUNDLED_VERSES, type DailyVerse } from "@/lib/practice/verses";
 import { SESSIONS, type PracticeSession } from "@/lib/practice/sessions";
-import { STORIES as BUNDLED_STORIES, type JatakaStory } from "@/lib/learn/jataka";
+import { STORIES as BUNDLED_STORIES, mergeStories, type JatakaStory } from "@/lib/learn/jataka";
 import bundledClips from "@/lib/cms/clip-manifest.json";
 import bundledStoryClips from "@/lib/cms/story-clips.json";
 import { SITE } from "./site";
@@ -44,9 +44,9 @@ function valid(c: Partial<Content> | null): c is Content {
   return Boolean(c && Array.isArray(c.prayers) && c.prayers.length && Array.isArray(c.meditations) && Array.isArray(c.verses) && c.clips && typeof c.version === "string");
 }
 
-/** A copy from before stories (or their narration) existed keeps the bundled ones. */
+/** Downloaded stories replace the bundled ones of the same name; bundled ones never go missing. */
 function withStories(c: Content): Content {
-  return { ...c, stories: c.stories?.length ? c.stories : BUNDLED_STORIES, storyClips: c.storyClips ?? BUNDLED.storyClips };
+  return { ...c, stories: mergeStories(c.stories ?? [], BUNDLED_STORIES), storyClips: c.storyClips ?? BUNDLED.storyClips };
 }
 
 let current: Content = BUNDLED;

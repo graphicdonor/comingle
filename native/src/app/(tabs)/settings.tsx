@@ -14,6 +14,7 @@ import { useContent } from "~/lib/content";
 import { offlineState, removeAllClips, saveAllClips } from "~/lib/clip-cache";
 import { setUsageCounting, usageCounting } from "~/lib/usage";
 import { SITE } from "~/lib/site";
+import { SubscribeForm } from "~/components/subscribe";
 
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
@@ -175,6 +176,10 @@ export default function Settings() {
         </View>
         <SwitchRow label={t("settings.usage")} hint={t("settings.usageHint")} value={counting} onChange={setUsageCounting} />
         <Muted style={{ fontSize: 13 }}>{t("settings.privacyNote")}</Muted>
+      </Section>
+
+      <Section title={t("subscribe.title")}>
+        <SubscribeForm />
       </Section>
 
       <Section title={t("settings.about")}>

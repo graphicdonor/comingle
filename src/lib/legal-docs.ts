@@ -11,7 +11,7 @@ export interface LegalSection {
   body: string;
 }
 
-export const LEGAL_LAST_UPDATED = "24 November 2026";
+export const LEGAL_LAST_UPDATED = "26 November 2026";
 
 export const TERMS_SECTIONS: LegalSection[] = [
   {
@@ -103,7 +103,7 @@ export const PRIVACY_SECTIONS: LegalSection[] = [
   },
   {
     title: "2. Information you give us",
-    body: "• Account details: your phone number, or your name and email if you sign in with Google.\n• Profile: your name, username, photo, bio, date of birth, gender, and city and state.\n• Communities: the communities you join or create. Because communities on WePray are faith communities, your memberships can show your religious beliefs. You choose which communities to join.\n• What you post: posts, comments, likes, photos, videos, event and service listings (including any contact details you add), and fundraisers you share.\n• Matrimonial profile, if you create one: details such as date, time and place of birth, education, occupation, income range, marital status and photos, and your messages with other members.\n• Surveys, feedback and messages: your survey answers, anything you send through the Contact us form, and your name and contact details only if you choose to give them.",
+    body: "• Account details: your phone number, or your name and email if you sign in with Google.\n• Profile: your name, username, photo, bio, date of birth, gender, and city and state.\n• Communities: the communities you join or create. Because communities on WePray are faith communities, your memberships can show your religious beliefs. You choose which communities to join.\n• What you post: posts, comments, likes, photos, videos, event and service listings (including any contact details you add), and fundraisers you share.\n• Matrimonial profile, if you create one: details such as date, time and place of birth, education, occupation, income range, marital status and photos, and your messages with other members.\n• Surveys, feedback and messages: your survey answers, anything you send through the Contact us form, and your name and contact details only if you choose to give them.\n• Email updates: if you choose to sign up for email updates (on our website or in the app), your email address, your app language and where you signed up. We use it only to send occasional emails about new prayers, stories and app updates. We never sell or share it, and we delete it when you unsubscribe, using the link in any email we send or by writing to us from the Contact page.",
   },
   {
     title: "3. Information collected automatically",

@@ -736,6 +736,17 @@ export const SEED_STORIES: JatakaStory[] = [
 
 // ── Listening ───────────────────────────────────────────────────────────────
 /** One narrated part of a story: its title, a paragraph, or its lesson. */
+/**
+ * The stories to show: each built-in story, replaced by its CMS version when
+ * one is published (same slug), followed by stories that exist only in the
+ * CMS. So publishing some stories in the CMS never hides the others.
+ */
+export function mergeStories(published: JatakaStory[], seed: JatakaStory[] = SEED_STORIES): JatakaStory[] {
+  const bySlug = new Map(published.map((s) => [s.slug, s]));
+  const seedSlugs = new Set(seed.map((s) => s.slug));
+  return [...seed.map((s) => bySlug.get(s.slug) ?? s), ...published.filter((s) => !seedSlugs.has(s.slug))];
+}
+
 /** Stories with a painting, at /illustrations/jataka/{slug}.webp (and bundled in the app). */
 export const STORY_ART = new Set(SEED_STORIES.map((s) => s.slug));
 

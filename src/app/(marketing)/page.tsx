@@ -42,6 +42,7 @@ import { PRAYERS } from "@/lib/practice/prayers";
 import { MEDITATIONS } from "@/lib/practice/meditations";
 import { SESSIONS, sessionMinutes } from "@/lib/practice/sessions";
 import { GUIDES } from "@/lib/learn/guides";
+import { SubscribeForm } from "@/components/subscribe-form";
 
 const PLAY_URL = "https://play.google.com/store/apps/details?id=in.wepray.app";
 
@@ -880,6 +881,13 @@ export default function LandingPage() {
                 </p>
                 <div className="mt-7">
                   <Cta tone="light" />
+                </div>
+                <div className="mt-10 max-w-lg border-t border-[#F7F2E8]/15 pt-6">
+                  <p className="font-bold text-[#F7F2E8]">Get updates by email</p>
+                  <p className="mt-1 mb-3 text-sm text-[#F7F2E8]/75">
+                    Now and then: new prayers, stories and app updates. No spam.
+                  </p>
+                  <SubscribeForm source="landing" dark />
                 </div>
               </div>
               <div className="hidden md:block w-56">
