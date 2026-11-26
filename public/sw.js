@@ -1,4 +1,4 @@
-const CACHE_VERSION = "v4";
+const CACHE_VERSION = "v5";
 const STATIC_CACHE  = `wepray-static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `wepray-dynamic-${CACHE_VERSION}`;
 // The reader's "use without internet" download. Not versioned: it holds a

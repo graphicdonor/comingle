@@ -2,7 +2,7 @@
   "expo": {
     "name": "WePray",
     "slug": "wepray",
-    "version": "3.0.0",
+    "version": "3.1.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "wepray",
@@ -10,9 +10,10 @@
     "backgroundColor": "#F7F2E8",
     "android": {
       "package": "in.wepray.app",
-      "versionCode": 6,
+      "versionCode": 7,
       "adaptiveIcon": {
-        "backgroundColor": "#FFFFFF",
+        "backgroundColor": "#F2B99D",
+        "backgroundImage": "./assets/images/android-icon-background.png",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
