@@ -2,14 +2,18 @@ import { useMemo, useState } from "react";
 import { FlatList, Pressable, TextInput, View } from "react-native";
 import { router } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { ArrowLeft, BookOpen, BookText, Flower2, GraduationCap, X } from "lucide-react-native";
+import { ArrowLeft, BookOpen, BookText, Flower2, GraduationCap, ScrollText, X } from "lucide-react-native";
 import { search, type ResultKind } from "@/lib/practice/search";
+import { registerDhammapadaSearch } from "@/lib/learn/dhammapada-search";
 import { IconButton } from "~/components/screen";
 import { Muted, T } from "~/components/ui";
 import { C, F, fontFor } from "~/lib/theme";
 import { useT } from "~/lib/i18n";
 
-const ICONS: Record<ResultKind, typeof BookOpen> = { prayer: BookOpen, guide: GraduationCap, meditation: Flower2, story: BookText };
+// The Dhammapada's verses and commentary stories are searchable too.
+registerDhammapadaSearch();
+
+const ICONS: Record<ResultKind, typeof BookOpen> = { prayer: BookOpen, verse: ScrollText, guide: GraduationCap, meditation: Flower2, story: BookText };
 const SUGGESTIONS = ["Buddha Vandanā", "मैत्री", "Tisaraṇa", "breathing", "Jātaka", "how to sit"];
 
 export default function Search() {

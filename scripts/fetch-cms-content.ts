@@ -20,7 +20,8 @@ import type { Prayer } from "../src/lib/practice/prayers";
 import { SEED_PRAYERS } from "../src/lib/practice/prayers-seed";
 import { paliToDevanagari } from "../src/lib/practice/pali-devanagari";
 import { clipHash, storyClipHash, type ClipLang } from "../src/lib/practice/tts-config";
-import { SEED_STORIES, storyParts, type JatakaStory } from "../src/lib/learn/jataka-seed";
+import { SEED_STORIES, storyParts, type JatakaStory, type NarratedStory } from "../src/lib/learn/jataka-seed";
+import { COMMENTARY_STORIES } from "../src/lib/learn/dhammapada-stories";
 import type { CmsItem } from "../src/lib/cms/model";
 
 const ROOT = join(__dirname, "..");
@@ -122,7 +123,7 @@ function clipManifest(prayers: Prayer[], cmsClips: Map<string, Set<string>>) {
   return manifest;
 }
 
-function storyManifest(stories: JatakaStory[]) {
+function storyManifest(stories: NarratedStory[]) {
   const manifest: Record<string, Record<string, Partial<Record<"hi" | "en", { src: string }>>>> = {};
   let found = 0;
   let missing = 0;
@@ -148,7 +149,7 @@ async function main() {
   const prayers = content.prayers.length ? (content.prayers as Prayer[]) : SEED_PRAYERS;
   writeFileSync(MANIFEST, JSON.stringify(clipManifest(prayers, cmsClips)) + "\n");
   const stories = content.stories.length ? (content.stories as JatakaStory[]) : SEED_STORIES;
-  writeFileSync(STORY_MANIFEST, JSON.stringify(storyManifest(stories)) + "\n");
+  writeFileSync(STORY_MANIFEST, JSON.stringify(storyManifest([...stories, ...COMMENTARY_STORIES])) + "\n");
 }
 
 main().catch((e) => {

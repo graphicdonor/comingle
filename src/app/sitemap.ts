@@ -3,6 +3,7 @@ import { SITE_URL } from "@/lib/site-url";
 import { GUIDES } from "@/lib/learn/guides";
 import { PRAYERS } from "@/lib/practice/prayers";
 import { STORIES } from "@/lib/learn/jataka";
+import { CHAPTERS, COMMENTARY_STORIES, VERSES } from "@/lib/learn/dhammapada";
 
 // Only the practice companion's public pages; suppressed features
 // (src/lib/features.ts) redirect and are left out.
@@ -33,5 +34,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly" as const,
       priority: 0.6,
     })),
+    { url: `${SITE_URL}/learn/dhammapada`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    ...CHAPTERS.map((c) => ({ url: `${SITE_URL}/learn/dhammapada/${c.number}`, lastModified: now, changeFrequency: "monthly" as const, priority: 0.7 })),
+    ...VERSES.map((v) => ({ url: `${SITE_URL}/learn/dhammapada/verse/${v.n}`, lastModified: now, changeFrequency: "monthly" as const, priority: 0.6 })),
+    { url: `${SITE_URL}/learn/dhammapada/stories`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
+    ...COMMENTARY_STORIES.map((s) => ({ url: `${SITE_URL}/learn/dhammapada/stories/${s.slug}`, lastModified: now, changeFrequency: "monthly" as const, priority: 0.6 })),
   ];
 }

@@ -11,6 +11,7 @@ import { SESSIONS, sessionForHour, sessionMinutes, sessionPrayers, type Practice
 import { verseForDate } from "@/lib/practice/verses";
 import { getPrayer } from "@/lib/practice/prayers";
 import { readingPrefs, recentPrayers } from "@/lib/practice/preferences";
+import { parseVerseRef, verseHref } from "@/lib/learn/dhammapada-refs";
 import { GUIDES } from "@/lib/learn/guides";
 import { useT } from "@/lib/i18n/use-t";
 import type { MessageKey } from "@/lib/i18n/dictionary";
@@ -147,7 +148,13 @@ export function TodayView() {
               <p lang={lang} className="mt-4 text-[15px] leading-relaxed text-[#4A4340]">{verse[lang]}</p>
             </blockquote>
             <figcaption className="mt-4 flex items-center justify-between gap-3 text-xs">
-              <span className="font-semibold text-[#6D252C]">{verse.reference}</span>
+              {parseVerseRef(verse.reference) ? (
+                <Link href={verseHref(parseVerseRef(verse.reference)!)} className="font-semibold text-[#6D252C] underline-offset-2 hover:underline">
+                  {verse.reference} →
+                </Link>
+              ) : (
+                <span className="font-semibold text-[#6D252C]">{verse.reference}</span>
+              )}
               {verse.review !== "reviewed" && <span className="text-[#6D645D]">{t("today.draftTranslation")}</span>}
             </figcaption>
           </figure>

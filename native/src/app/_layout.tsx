@@ -97,6 +97,11 @@ export default function RootLayout() {
           <Stack.Screen name="learn/[slug]" />
           <Stack.Screen name="learn/jataka/index" />
           <Stack.Screen name="learn/jataka/[slug]" />
+          <Stack.Screen name="learn/dhammapada/index" />
+          <Stack.Screen name="learn/dhammapada/[chapter]" />
+          <Stack.Screen name="learn/dhammapada/verse/[n]" />
+          <Stack.Screen name="learn/dhammapada/stories/index" />
+          <Stack.Screen name="learn/dhammapada/stories/[slug]" />
           <Stack.Screen name="search" options={{ animation: "fade" }} />
         </Stack.Protected>
         <Stack.Protected guard={!welcomed}>

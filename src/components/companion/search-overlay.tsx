@@ -2,13 +2,14 @@
 import Link from "next/link";
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { BookOpen, BookText, Flower2, GraduationCap, Search, X, type LucideIcon } from "lucide-react";
+import { BookOpen, BookText, Flower2, GraduationCap, ScrollText, Search, X, type LucideIcon } from "lucide-react";
 import { normalise, search, type ResultKind } from "@/lib/practice/search";
 import { useT } from "@/lib/i18n/use-t";
 import type { MessageKey } from "@/lib/i18n/dictionary";
 
 const GROUPS: { kind: ResultKind; label: MessageKey; icon: LucideIcon }[] = [
   { kind: "prayer", label: "search.prayers", icon: BookOpen },
+  { kind: "verse", label: "search.verses", icon: ScrollText },
   { kind: "guide", label: "search.guides", icon: GraduationCap },
   { kind: "meditation", label: "search.meditation", icon: Flower2 },
   { kind: "story", label: "search.stories", icon: BookText },
@@ -83,7 +84,16 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
   const { t, lang } = useT();
   const [query, setQuery] = useState("");
   const input = useRef<HTMLInputElement>(null);
-  const results = useMemo(() => search(query, lang), [query, lang]);
+  // The Dhammapada's verses join the index once loaded (it's large, so only when search opens).
+  const [dhpReady, setDhpReady] = useState(false);
+  useEffect(() => {
+    void import("@/lib/learn/dhammapada-search").then((m) => {
+      m.registerDhammapadaSearch();
+      setDhpReady(true);
+    });
+  }, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const results = useMemo(() => search(query, lang), [query, lang, dhpReady]);
   const terms = normalise(query).split(/\s+/).filter(Boolean);
   const other = lang === "hi" ? "en" : "hi";
 

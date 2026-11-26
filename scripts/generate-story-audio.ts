@@ -15,6 +15,7 @@ import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { STORIES, storyParts } from "../src/lib/learn/jataka";
+import { COMMENTARY_STORIES } from "../src/lib/learn/dhammapada-stories";
 import { STORY_INSTRUCTIONS, storyClipHash, synthesize, TTS_MODEL, TTS_VOICE } from "../src/lib/practice/tts-config";
 
 const ROOT = join(__dirname, "..");
@@ -38,7 +39,8 @@ async function main() {
   const jobs: { label: string; text: string; lang: "hi" | "en"; path: string }[] = [];
   let kept = 0;
 
-  for (const story of STORIES) {
+  // Jātaka tales and the Dhammapada commentary stories.
+  for (const story of [...STORIES, ...COMMENTARY_STORIES]) {
     if (only.length && !only.includes(story.slug)) continue;
     const dir = join(OUT_DIR, story.slug);
     mkdirSync(dir, { recursive: true });

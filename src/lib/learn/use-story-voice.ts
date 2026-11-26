@@ -1,9 +1,9 @@
 "use client";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import storyClips from "@/lib/cms/story-clips.json";
-import { storyParts, type JatakaStory } from "./jataka";
+import { storyParts, type NarratedStory } from "./jataka";
 
-// "Listen" for Jātaka tales: plays the narrated clip for each part (title,
+// "Listen" for Jātaka tales and the Dhammapada commentary stories: plays the narrated clip for each part (title,
 // paragraphs, lesson), made ahead of time by scripts/generate-story-audio.ts,
 // or reads a part with the browser's voice when it has no clip yet (a story
 // newly edited in the CMS). The clips are AI-generated and labelled as such.
@@ -26,7 +26,7 @@ export type StoryVoiceStatus = "idle" | "playing" | "paused";
 let player: HTMLAudioElement | null = null;
 const audio = () => (player ??= new Audio());
 
-export function useStoryVoice(story: JatakaStory, lang: Lang) {
+export function useStoryVoice(story: NarratedStory, lang: Lang) {
   const parts = useMemo(() => storyParts(story, lang).map((p) => ({ ...p, src: CLIPS[story.slug]?.[p.key]?.[lang]?.src })), [story, lang]);
   const [status, setStatus] = useState<StoryVoiceStatus>("idle");
   const [index, setIndex] = useState(0);

@@ -6,6 +6,7 @@ import { useT } from "@/lib/i18n/use-t";
 import { PostureAnimation, PostureFigure } from "@/components/visuals/posture-figure";
 import { GuideSteps } from "./guide-steps";
 import { JatakaSection } from "./jataka-views";
+import { DhammapadaSection } from "./dhammapada-card";
 
 export function LearnIndex() {
   const { t, lang } = useT();
@@ -38,6 +39,7 @@ export function LearnIndex() {
           </li>
         ))}
       </ul>
+      <DhammapadaSection />
       <JatakaSection />
       <p className="text-xs text-[#6D645D] leading-relaxed">{t("learn.more")}</p>
     </div>

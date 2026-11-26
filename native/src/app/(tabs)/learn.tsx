@@ -3,6 +3,7 @@ import { router } from "expo-router";
 import { ArrowRight } from "lucide-react-native";
 import { GUIDES } from "@/lib/learn/guides";
 import { StoryCard } from "~/components/story-card";
+import { DhammapadaCard } from "~/components/dhammapada";
 import { useContent } from "~/lib/content";
 import { Screen } from "~/components/screen";
 import { Button, Card, Eyebrow, H1, H2, Muted } from "~/components/ui";
@@ -34,6 +35,7 @@ export default function Learn() {
           <ArrowRight size={20} color={C.burgundy} />
         </Card>
       ))}
+      <DhammapadaCard />
       <View style={{ gap: 6, marginTop: 8 }}>
         <H2>{t("jataka.title")}</H2>
         <Muted style={{ fontSize: 14 }}>{t("jataka.intro")}</Muted>

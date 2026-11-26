@@ -755,7 +755,10 @@ export interface StoryPart {
 const LESSON_INTRO: Localised = { en: "What the story teaches.", hi: "कथा की सीख।" };
 
 /** What "Listen" reads, in order. Clips are made for exactly these texts. */
-export function storyParts(story: JatakaStory, lang: "hi" | "en"): StoryPart[] {
+/** Anything narrated like a Jātaka tale (also the Dhammapada commentary stories). */
+export type NarratedStory = Pick<JatakaStory, "slug" | "title" | "paragraphs" | "lesson">;
+
+export function storyParts(story: NarratedStory, lang: "hi" | "en"): StoryPart[] {
   return [
     { key: "title", text: `${story.title[lang]}.`, paragraph: null },
     ...story.paragraphs.map((p, i) => ({ key: `p${i}`, text: p[lang], paragraph: i })),

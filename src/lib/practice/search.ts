@@ -1,4 +1,7 @@
-// In-app search over prayers, guides, meditation practices and Jātaka tales (PRD §7.2).
+// In-app search over prayers, guides, meditation practices and Jātaka tales
+// (PRD §7.2), plus the Dhammapada's verses and commentary stories once
+// registered (src/lib/learn/dhammapada-search.ts; literature PRD §7.7). The
+// Dhammapada is large, so the website loads it only when search opens.
 //
 // Everything is bundled, so search runs on the device with no server call.
 // Matching ignores case and Latin diacritics (typing "tisarana" finds
@@ -12,9 +15,9 @@ import { GUIDES } from "@/lib/learn/guides";
 import { STORIES } from "@/lib/learn/jataka";
 import type { UiLang } from "@/lib/i18n/dictionary";
 
-export type ResultKind = "prayer" | "guide" | "meditation" | "story";
+export type ResultKind = "prayer" | "verse" | "guide" | "meditation" | "story";
 
-interface Field {
+export interface Field {
   text: string;
   /** Title fields rank above body text. */
   weight: number;
@@ -22,7 +25,7 @@ interface Field {
   lang: UiLang | "pi";
 }
 
-interface Entry {
+export interface Entry {
   kind: ResultKind;
   id: string;
   href: string;
@@ -43,6 +46,14 @@ export interface SearchResult {
 /** Lower-case and strip Latin combining marks (ā → a, ṃ → m). Devanagari is left intact. */
 export function normalise(s: string): string {
   return s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+}
+
+const extra: (() => Entry[])[] = [];
+
+/** Adds more searchable items (built when the index is next needed). */
+export function addToSearch(build: () => Entry[]) {
+  extra.push(build);
+  index = null;
 }
 
 function buildIndex(): Entry[] {
@@ -118,6 +129,8 @@ function buildIndex(): Entry[] {
     ];
     entries.push({ kind: "story", id: st.slug, href: `/learn/jataka/${st.slug}`, title: st.title, fields });
   }
+
+  for (const build of extra) entries.push(...build());
 
   return entries;
 }

@@ -1,0 +1,4571 @@
+{
+ "sources": {
+  "pi": {
+   "title": "Dhammapada, Mahāsaṅgīti Tipiṭaka edition",
+   "by": "SuttaCentral (bilara-data)",
+   "licence": "CC0, public domain",
+   "url": "https://suttacentral.net/dhp"
+  },
+  "en": {
+   "title": "The Dhammapada",
+   "by": "F. Max Müller (1881)",
+   "licence": "Public domain",
+   "url": "https://www.gutenberg.org/ebooks/2017"
+  }
+ },
+ "chapters": [
+  {
+   "number": 1,
+   "pi": "Yamakavagga",
+   "en": "The Pairs",
+   "hi": "जोड़े",
+   "from": 1,
+   "to": 20
+  },
+  {
+   "number": 2,
+   "pi": "Appamādavagga",
+   "en": "Heedfulness",
+   "hi": "अप्रमाद",
+   "from": 21,
+   "to": 32
+  },
+  {
+   "number": 3,
+   "pi": "Cittavagga",
+   "en": "The Mind",
+   "hi": "चित्त",
+   "from": 33,
+   "to": 43
+  },
+  {
+   "number": 4,
+   "pi": "Pupphavagga",
+   "en": "Flowers",
+   "hi": "पुष्प",
+   "from": 44,
+   "to": 59
+  },
+  {
+   "number": 5,
+   "pi": "Bālavagga",
+   "en": "The Fool",
+   "hi": "मूर्ख",
+   "from": 60,
+   "to": 75
+  },
+  {
+   "number": 6,
+   "pi": "Paṇḍitavagga",
+   "en": "The Wise",
+   "hi": "पंडित",
+   "from": 76,
+   "to": 89
+  },
+  {
+   "number": 7,
+   "pi": "Arahantavagga",
+   "en": "The Worthy",
+   "hi": "अर्हत",
+   "from": 90,
+   "to": 99
+  },
+  {
+   "number": 8,
+   "pi": "Sahassavagga",
+   "en": "Thousands",
+   "hi": "सहस्र",
+   "from": 100,
+   "to": 115
+  },
+  {
+   "number": 9,
+   "pi": "Pāpavagga",
+   "en": "Evil",
+   "hi": "पाप",
+   "from": 116,
+   "to": 128
+  },
+  {
+   "number": 10,
+   "pi": "Daṇḍavagga",
+   "en": "Violence",
+   "hi": "दंड",
+   "from": 129,
+   "to": 145
+  },
+  {
+   "number": 11,
+   "pi": "Jarāvagga",
+   "en": "Old Age",
+   "hi": "जरा",
+   "from": 146,
+   "to": 156
+  },
+  {
+   "number": 12,
+   "pi": "Attavagga",
+   "en": "The Self",
+   "hi": "आत्म",
+   "from": 157,
+   "to": 166
+  },
+  {
+   "number": 13,
+   "pi": "Lokavagga",
+   "en": "The World",
+   "hi": "लोक",
+   "from": 167,
+   "to": 178
+  },
+  {
+   "number": 14,
+   "pi": "Buddhavagga",
+   "en": "The Buddha",
+   "hi": "बुद्ध",
+   "from": 179,
+   "to": 196
+  },
+  {
+   "number": 15,
+   "pi": "Sukhavagga",
+   "en": "Happiness",
+   "hi": "सुख",
+   "from": 197,
+   "to": 208
+  },
+  {
+   "number": 16,
+   "pi": "Piyavagga",
+   "en": "Affection",
+   "hi": "प्रिय",
+   "from": 209,
+   "to": 220
+  },
+  {
+   "number": 17,
+   "pi": "Kodhavagga",
+   "en": "Anger",
+   "hi": "क्रोध",
+   "from": 221,
+   "to": 234
+  },
+  {
+   "number": 18,
+   "pi": "Malavagga",
+   "en": "Impurities",
+   "hi": "मल",
+   "from": 235,
+   "to": 255
+  },
+  {
+   "number": 19,
+   "pi": "Dhammaṭṭhavagga",
+   "en": "The Just",
+   "hi": "धर्मनिष्ठ",
+   "from": 256,
+   "to": 272
+  },
+  {
+   "number": 20,
+   "pi": "Maggavagga",
+   "en": "The Path",
+   "hi": "मार्ग",
+   "from": 273,
+   "to": 289
+  },
+  {
+   "number": 21,
+   "pi": "Pakiṇṇakavagga",
+   "en": "Miscellaneous",
+   "hi": "प्रकीर्ण",
+   "from": 290,
+   "to": 305
+  },
+  {
+   "number": 22,
+   "pi": "Nirayavagga",
+   "en": "Hell",
+   "hi": "नरक",
+   "from": 306,
+   "to": 319
+  },
+  {
+   "number": 23,
+   "pi": "Nāgavagga",
+   "en": "The Elephant",
+   "hi": "नाग",
+   "from": 320,
+   "to": 333
+  },
+  {
+   "number": 24,
+   "pi": "Taṇhāvagga",
+   "en": "Craving",
+   "hi": "तृष्णा",
+   "from": 334,
+   "to": 359
+  },
+  {
+   "number": 25,
+   "pi": "Bhikkhuvagga",
+   "en": "The Monk",
+   "hi": "भिक्षु",
+   "from": 360,
+   "to": 382
+  },
+  {
+   "number": 26,
+   "pi": "Brāhmaṇavagga",
+   "en": "The Worthy One",
+   "hi": "ब्राह्मण",
+   "from": 383,
+   "to": 423
+  }
+ ],
+ "verses": [
+  {
+   "n": 1,
+   "chapter": 1,
+   "pi": [
+    "Manopubbaṅgamā dhammā, manoseṭṭhā manomayā;",
+    "Manasā ce paduṭṭhena, bhāsati vā karoti vā;",
+    "Tato naṃ dukkhamanveti, cakkaṃva vahato padaṃ."
+   ],
+   "en": "All that we are is the result of what we have thought: it is founded on our thoughts, it is made up of our thoughts. If a man speaks or acts with an evil thought, pain follows him, as the wheel follows the foot of the ox that draws the carriage.",
+   "story": "Cakkhupālattheravatthu"
+  },
+  {
+   "n": 2,
+   "chapter": 1,
+   "pi": [
+    "Manopubbaṅgamā dhammā, manoseṭṭhā manomayā;",
+    "Manasā ce pasannena, bhāsati vā karoti vā;",
+    "Tato naṃ sukhamanveti, chāyāva anapāyinī."
+   ],
+   "en": "All that we are is the result of what we have thought: it is founded on our thoughts, it is made up of our thoughts. If a man speaks or acts with a pure thought, happiness follows him, like a shadow that never leaves him.",
+   "story": "Maṭṭhakuṇḍalīvatthu"
+  },
+  {
+   "n": 3,
+   "chapter": 1,
+   "pi": [
+    "Akkocchi maṃ avadhi maṃ, ajini maṃ ahāsi me;",
+    "Ye ca taṃ upanayhanti, veraṃ tesaṃ na sammati."
+   ],
+   "en": "\"He abused me, he beat me, he defeated me, he robbed me,\"—in those who harbour such thoughts hatred will never cease.",
+   "story": "Tissattheravatthu"
+  },
+  {
+   "n": 4,
+   "chapter": 1,
+   "pi": [
+    "Akkocchi maṃ avadhi maṃ, ajini maṃ ahāsi me;",
+    "Ye ca taṃ nupanayhanti, veraṃ tesūpasammati."
+   ],
+   "en": "\"He abused me, he beat me, he defeated me, he robbed me,\"—in those who do not harbour such thoughts hatred will cease.",
+   "story": "Tissattheravatthu"
+  },
+  {
+   "n": 5,
+   "chapter": 1,
+   "pi": [
+    "Na hi verena verāni, sammantīdha kudācanaṃ;",
+    "Averena ca sammanti, esa dhammo sanantano."
+   ],
+   "en": "For hatred does not cease by hatred at any time: hatred ceases by love, this is an old rule.",
+   "story": "Kāḷayakkhinīvatthu"
+  },
+  {
+   "n": 6,
+   "chapter": 1,
+   "pi": [
+    "Pare ca na vijānanti, mayamettha yamāmase;",
+    "Ye ca tattha vijānanti, tato sammanti medhagā."
+   ],
+   "en": "The world does not know that we must all come to an end here;—but those who know it, their quarrels cease at once.",
+   "story": "Kosambakavatthu"
+  },
+  {
+   "n": 7,
+   "chapter": 1,
+   "pi": [
+    "Subhānupassiṃ viharantaṃ, indriyesu asaṃvutaṃ;",
+    "Bhojanamhi cāmattaññuṃ, kusītaṃ hīnavīriyaṃ;",
+    "Taṃ ve pasahati māro, vāto rukkhaṃva dubbalaṃ."
+   ],
+   "en": "He who lives looking for pleasures only, his senses uncontrolled, immoderate in his food, idle, and weak, Mara (the tempter) will certainly overthrow him, as the wind throws down a weak tree.",
+   "story": "Mahākāḷattheravatthu"
+  },
+  {
+   "n": 8,
+   "chapter": 1,
+   "pi": [
+    "Asubhānupassiṃ viharantaṃ, Indriyesu susaṃvutaṃ;",
+    "Bhojanamhi ca mattaññuṃ, Saddhaṃ āraddhavīriyaṃ;",
+    "Taṃ ve nappasahati māro, Vāto selaṃva pabbataṃ."
+   ],
+   "en": "He who lives without looking for pleasures, his senses well controlled, moderate in his food, faithful and strong, him Mara will certainly not overthrow, any more than the wind throws down a rocky mountain.",
+   "story": "Mahākāḷattheravatthu"
+  },
+  {
+   "n": 9,
+   "chapter": 1,
+   "pi": [
+    "Anikkasāvo kāsāvaṃ, yo vatthaṃ paridahissati;",
+    "Apeto damasaccena, na so kāsāvamarahati."
+   ],
+   "en": "He who wishes to put on the yellow dress without having cleansed himself from sin, who disregards temperance and truth, is unworthy of the yellow dress.",
+   "story": "Devadattavatthu"
+  },
+  {
+   "n": 10,
+   "chapter": 1,
+   "pi": [
+    "Yo ca vantakasāvassa, sīlesu susamāhito;",
+    "Upeto damasaccena, sa ve kāsāvamarahati."
+   ],
+   "en": "But he who has cleansed himself from sin, is well grounded in all virtues, and regards also temperance and truth, he is indeed worthy of the yellow dress.",
+   "story": "Devadattavatthu"
+  },
+  {
+   "n": 11,
+   "chapter": 1,
+   "pi": [
+    "Asāre sāramatino, sāre cāsāradassino;",
+    "Te sāraṃ nādhigacchanti, micchāsaṅkappagocarā."
+   ],
+   "en": "They who imagine truth in untruth, and see untruth in truth, never arrive at truth, but follow vain desires.",
+   "story": "Sāriputtattheravatthu"
+  },
+  {
+   "n": 12,
+   "chapter": 1,
+   "pi": [
+    "Sārañca sārato ñatvā, asārañca asārato;",
+    "Te sāraṃ adhigacchanti, sammāsaṅkappagocarā."
+   ],
+   "en": "They who know truth in truth, and untruth in untruth, arrive at truth, and follow true desires.",
+   "story": "Sāriputtattheravatthu"
+  },
+  {
+   "n": 13,
+   "chapter": 1,
+   "pi": [
+    "Yathā agāraṃ ducchannaṃ, vuṭṭhī samativijjhati;",
+    "Evaṃ abhāvitaṃ cittaṃ, rāgo samativijjhati."
+   ],
+   "en": "As rain breaks through an ill-thatched house, passion will break through an unreflecting mind.",
+   "story": "Nandattheravatthu"
+  },
+  {
+   "n": 14,
+   "chapter": 1,
+   "pi": [
+    "Yathā agāraṃ suchannaṃ, vuṭṭhī na samativijjhati;",
+    "Evaṃ subhāvitaṃ cittaṃ, rāgo na samativijjhati."
+   ],
+   "en": "As rain does not break through a well-thatched house, passion will not break through a well-reflecting mind.",
+   "story": "Nandattheravatthu"
+  },
+  {
+   "n": 15,
+   "chapter": 1,
+   "pi": [
+    "Idha socati pecca socati, Pāpakārī ubhayattha socati;",
+    "So socati so vihaññati, Disvā kammakiliṭṭhamattano."
+   ],
+   "en": "The evil-doer mourns in this world, and he mourns in the next; he mourns in both. He mourns and suffers when he sees the evil of his own work.",
+   "story": "Cundasūkarikavatthu"
+  },
+  {
+   "n": 16,
+   "chapter": 1,
+   "pi": [
+    "Idha modati pecca modati, Katapuñño ubhayattha modati;",
+    "So modati so pamodati, Disvā kammavisuddhimattano."
+   ],
+   "en": "The virtuous man delights in this world, and he delights in the next; he delights in both. He delights and rejoices, when he sees the purity of his own work.",
+   "story": "Dhammikaupāsakavatthu"
+  },
+  {
+   "n": 17,
+   "chapter": 1,
+   "pi": [
+    "Idha tappati pecca tappati, Pāpakārī ubhayattha tappati;",
+    "“Pāpaṃ me katan”ti tappati, Bhiyyo tappati duggatiṃ gato."
+   ],
+   "en": "The evil-doer suffers in this world, and he suffers in the next; he suffers in both. He suffers when he thinks of the evil he has done; he suffers more when going on the evil path.",
+   "story": "Devadattavatthu"
+  },
+  {
+   "n": 18,
+   "chapter": 1,
+   "pi": [
+    "Idha nandati pecca nandati, Katapuñño ubhayattha nandati;",
+    "“Puññaṃ me katan”ti nandati, Bhiyyo nandati suggatiṃ gato."
+   ],
+   "en": "The virtuous man is happy in this world, and he is happy in the next; he is happy in both. He is happy when he thinks of the good he has done; he is still more happy when going on the good path.",
+   "story": "Sumanadevīvatthu"
+  },
+  {
+   "n": 19,
+   "chapter": 1,
+   "pi": [
+    "Bahumpi ce saṃhita bhāsamāno, Na takkaro hoti naro pamatto;",
+    "Gopova gāvo gaṇayaṃ paresaṃ, Na bhāgavā sāmaññassa hoti."
+   ],
+   "en": "The thoughtless man, even if he can recite a large portion (of the law), but is not a doer of it, has no share in the priesthood, but is like a cowherd counting the cows of others.",
+   "story": "Dvesahāyakabhikkhuvatthu"
+  },
+  {
+   "n": 20,
+   "chapter": 1,
+   "pi": [
+    "Appampi ce saṃhita bhāsamāno, Dhammassa hoti anudhammacārī;",
+    "Rāgañca dosañca pahāya mohaṃ, Sammappajāno suvimuttacitto;",
+    "Anupādiyāno idha vā huraṃ vā, Sa bhāgavā sāmaññassa hoti."
+   ],
+   "en": "The follower of the law, even if he can recite only a small portion (of the law), but, having forsaken passion and hatred and foolishness, possesses true knowledge and serenity of mind, he, caring for nothing in this world or that to come, has indeed a share in the priesthood.",
+   "story": "Dvesahāyakabhikkhuvatthu"
+  },
+  {
+   "n": 21,
+   "chapter": 2,
+   "pi": [
+    "Appamādo amatapadaṃ, pamādo maccuno padaṃ;",
+    "Appamattā na mīyanti, ye pamattā yathā matā."
+   ],
+   "en": "Earnestness is the path of immortality (Nirvana), thoughtlessness the path of death. Those who are in earnest do not die, those who are thoughtless are as if dead already.",
+   "story": "Sāmāvatīvatthu"
+  },
+  {
+   "n": 22,
+   "chapter": 2,
+   "pi": [
+    "Evaṃ visesato ñatvā, appamādamhi paṇḍitā;",
+    "Appamāde pamodanti, ariyānaṃ gocare ratā."
+   ],
+   "en": "Those who are advanced in earnestness, having understood this clearly, delight in earnestness, and rejoice in the knowledge of the Ariyas (the elect).",
+   "story": "Sāmāvatīvatthu"
+  },
+  {
+   "n": 23,
+   "chapter": 2,
+   "pi": [
+    "Te jhāyino sātatikā, niccaṃ daḷhaparakkamā;",
+    "Phusanti dhīrā nibbānaṃ, yogakkhemaṃ anuttaraṃ."
+   ],
+   "en": "These wise people, meditative, steady, always possessed of strong powers, attain to Nirvana, the highest happiness.",
+   "story": "Sāmāvatīvatthu"
+  },
+  {
+   "n": 24,
+   "chapter": 2,
+   "pi": [
+    "Uṭṭhānavato satīmato, Sucikammassa nisammakārino;",
+    "Saññatassa dhammajīvino, Appamattassa yasobhivaḍḍhati."
+   ],
+   "en": "If an earnest person has roused himself, if he is not forgetful, if his deeds are pure, if he acts with consideration, if he restrains himself, and lives according to law,—then his glory will increase.",
+   "story": "Kumbaghosakaseṭṭhivatthu"
+  },
+  {
+   "n": 25,
+   "chapter": 2,
+   "pi": [
+    "Uṭṭhānenappamādena, saṃyamena damena ca;",
+    "Dīpaṃ kayirātha medhāvī, yaṃ ogho nābhikīrati."
+   ],
+   "en": "By rousing himself, by earnestness, by restraint and control, the wise man may make for himself an island which no flood can overwhelm.",
+   "story": "Cūḷapanthakavatthu"
+  },
+  {
+   "n": 26,
+   "chapter": 2,
+   "pi": [
+    "Pamādamanuyuñjanti, bālā dummedhino janā;",
+    "Appamādañca medhāvī, dhanaṃ seṭṭhaṃva rakkhati."
+   ],
+   "en": "Fools follow after vanity, men of evil wisdom. The wise man keeps earnestness as his best jewel.",
+   "story": "Bālanakkhattasaṅghuṭṭhavatthu"
+  },
+  {
+   "n": 27,
+   "chapter": 2,
+   "pi": [
+    "Mā pamādamanuyuñjetha, mā kāmaratisanthavaṃ;",
+    "Appamatto hi jhāyanto, pappoti vipulaṃ sukhaṃ."
+   ],
+   "en": "Follow not after vanity, nor after the enjoyment of love and lust! He who is earnest and meditative, obtains ample joy.",
+   "story": "Bālanakkhattasaṅghuṭṭhavatthu"
+  },
+  {
+   "n": 28,
+   "chapter": 2,
+   "pi": [
+    "Pamādaṃ appamādena, yadā nudati paṇḍito;",
+    "Paññāpāsādamāruyha, asoko sokiniṃ pajaṃ;",
+    "Pabbataṭṭhova bhūmaṭṭhe, dhīro bāle avekkhati."
+   ],
+   "en": "When the learned man drives away vanity by earnestness, he, the wise, climbing the terraced heights of wisdom, looks down upon the fools, serene he looks upon the toiling crowd, as one that stands on a mountain looks down upon them that stand upon the plain.",
+   "story": "Mahākassapattheravatthu"
+  },
+  {
+   "n": 29,
+   "chapter": 2,
+   "pi": [
+    "Appamatto pamattesu, suttesu bahujāgaro;",
+    "Abalassaṃva sīghasso, hitvā yāti sumedhaso."
+   ],
+   "en": "Earnest among the thoughtless, awake among the sleepers, the wise man advances like a racer, leaving behind the hack.",
+   "story": "Pamattāpamattadvesahāyakabhikkhuvatthu"
+  },
+  {
+   "n": 30,
+   "chapter": 2,
+   "pi": [
+    "Appamādena maghavā, devānaṃ seṭṭhataṃ gato;",
+    "Appamādaṃ pasaṃsanti, pamādo garahito sadā."
+   ],
+   "en": "By earnestness did Maghavan (Indra) rise to the lordship of the gods. People praise earnestness; thoughtlessness is always blamed.",
+   "story": "Maghavatthu"
+  },
+  {
+   "n": 31,
+   "chapter": 2,
+   "pi": [
+    "Appamādarato bhikkhu, pamāde bhayadassi vā;",
+    "Saṃyojanaṃ aṇuṃ thūlaṃ, ḍahaṃ aggīva gacchati."
+   ],
+   "en": "A Bhikshu (mendicant) who delights in earnestness, who looks with fear on thoughtlessness, moves about like fire, burning all his fetters, small or large.",
+   "story": "Aññatarabhikkhuvatthu"
+  },
+  {
+   "n": 32,
+   "chapter": 2,
+   "pi": [
+    "Appamādarato bhikkhu, pamāde bhayadassi vā;",
+    "Abhabbo parihānāya, nibbānasseva santike."
+   ],
+   "en": "A Bhikshu (mendicant) who delights in reflection, who looks with fear on thoughtlessness, cannot fall away (from his perfect state)—he is close upon Nirvana.",
+   "story": "Nigamavāsitissattheravatthu"
+  },
+  {
+   "n": 33,
+   "chapter": 3,
+   "pi": [
+    "Phandanaṃ capalaṃ cittaṃ, dūrakkhaṃ dunnivārayaṃ;",
+    "Ujuṃ karoti medhāvī, usukārova tejanaṃ."
+   ],
+   "en": "As a fletcher makes straight his arrow, a wise man makes straight his trembling and unsteady thought, which is difficult to guard, difficult to hold back.",
+   "story": "Meghiyattheravatthu"
+  },
+  {
+   "n": 34,
+   "chapter": 3,
+   "pi": [
+    "Vārijova thale khitto, okamokataubbhato;",
+    "Pariphandatidaṃ cittaṃ, māradheyyaṃ pahātave."
+   ],
+   "en": "As a fish taken from his watery home and thrown on dry ground, our thought trembles all over in order to escape the dominion of Mara (the tempter).",
+   "story": "Meghiyattheravatthu"
+  },
+  {
+   "n": 35,
+   "chapter": 3,
+   "pi": [
+    "Dunniggahassa lahuno, yatthakāmanipātino;",
+    "Cittassa damatho sādhu, cittaṃ dantaṃ sukhāvahaṃ."
+   ],
+   "en": "It is good to tame the mind, which is difficult to hold in and flighty, rushing wherever it listeth; a tamed mind brings happiness.",
+   "story": "Aññatarabhikkhuvatthu"
+  },
+  {
+   "n": 36,
+   "chapter": 3,
+   "pi": [
+    "Sududdasaṃ sunipuṇaṃ, yatthakāmanipātinaṃ;",
+    "Cittaṃ rakkhetha medhāvī, cittaṃ guttaṃ sukhāvahaṃ."
+   ],
+   "en": "Let the wise man guard his thoughts, for they are difficult to perceive, very artful, and they rush wherever they list: thoughts well guarded bring happiness.",
+   "story": "Aññataraukkaṇṭhitabhikkhuvatthu"
+  },
+  {
+   "n": 37,
+   "chapter": 3,
+   "pi": [
+    "Dūraṅgamaṃ ekacaraṃ, asarīraṃ guhāsayaṃ;",
+    "Ye cittaṃ saṃyamissanti, mokkhanti mārabandhanā."
+   ],
+   "en": "Those who bridle their mind which travels far, moves about alone, is without a body, and hides in the chamber (of the heart), will be free from the bonds of Mara (the tempter).",
+   "story": "Saṅgharakkhitabhāgineyyattheravatthu"
+  },
+  {
+   "n": 38,
+   "chapter": 3,
+   "pi": [
+    "Anavaṭṭhitacittassa, saddhammaṃ avijānato;",
+    "Pariplavapasādassa, paññā na paripūrati."
+   ],
+   "en": "If a man's thoughts are unsteady, if he does not know the true law, if his peace of mind is troubled, his knowledge will never be perfect.",
+   "story": "Cittahatthattheravatthu"
+  },
+  {
+   "n": 39,
+   "chapter": 3,
+   "pi": [
+    "Anavassutacittassa, ananvāhatacetaso;",
+    "Puññapāpapahīnassa, natthi jāgarato bhayaṃ."
+   ],
+   "en": "If a man's thoughts are not dissipated, if his mind is not perplexed, if he has ceased to think of good or evil, then there is no fear for him while he is watchful.",
+   "story": "Cittahatthattheravatthu"
+  },
+  {
+   "n": 40,
+   "chapter": 3,
+   "pi": [
+    "Kumbhūpamaṃ kāyamimaṃ viditvā, Nagarūpamaṃ cittamidaṃ ṭhapetvā;",
+    "Yodhetha māraṃ paññāvudhena, Jitañca rakkhe anivesano siyā."
+   ],
+   "en": "Knowing that this body is (fragile) like a jar, and making this thought firm like a fortress, one should attack Mara (the tempter) with the weapon of knowledge, one should watch him when conquered, and should never rest.",
+   "story": "Pañcasatabhikkhuvatthu"
+  },
+  {
+   "n": 41,
+   "chapter": 3,
+   "pi": [
+    "Aciraṃ vatayaṃ kāyo, pathaviṃ adhisessati;",
+    "Chuddho apetaviññāṇo, niratthaṃva kaliṅgaraṃ."
+   ],
+   "en": "Before long, alas! this body will lie on the earth, despised, without understanding, like a useless log.",
+   "story": "Pūtigattatissattheravatthu"
+  },
+  {
+   "n": 42,
+   "chapter": 3,
+   "pi": [
+    "Diso disaṃ yaṃ taṃ kayirā, verī vā pana verinaṃ;",
+    "Micchāpaṇihitaṃ cittaṃ, pāpiyo naṃ tato kare."
+   ],
+   "en": "Whatever a hater may do to a hater, or an enemy to an enemy, a wrongly-directed mind will do us greater mischief.",
+   "story": "Nandagopālakavatthu"
+  },
+  {
+   "n": 43,
+   "chapter": 3,
+   "pi": [
+    "Na taṃ mātā pitā kayirā, aññe vāpi ca ñātakā;",
+    "Sammāpaṇihitaṃ cittaṃ, seyyaso naṃ tato kare."
+   ],
+   "en": "Not a mother, not a father will do so much, nor any other relative; a well-directed mind will do us greater service.",
+   "story": "Soreyyavatthu"
+  },
+  {
+   "n": 44,
+   "chapter": 4,
+   "pi": [
+    "Ko imaṃ pathaviṃ vicessati, Yamalokañca imaṃ sadevakaṃ;",
+    "Ko dhammapadaṃ sudesitaṃ, Kusalo pupphamiva pacessati."
+   ],
+   "en": "Who shall overcome this earth, and the world of Yama (the lord of the departed), and the world of the gods? Who shall find out the plainly shown path of virtue, as a clever man finds out the (right) flower?",
+   "story": "Pathavikathāpasutapañcasatabhikkhuvatthu"
+  },
+  {
+   "n": 45,
+   "chapter": 4,
+   "pi": [
+    "Sekho pathaviṃ vicessati, Yamalokañca imaṃ sadevakaṃ;",
+    "Sekho dhammapadaṃ sudesitaṃ, Kusalo pupphamiva pacessati."
+   ],
+   "en": "The disciple will overcome the earth, and the world of Yama, and the world of the gods. The disciple will find out the plainly shown path of virtue, as a clever man finds out the (right) flower.",
+   "story": "Pathavikathāpasutapañcasatabhikkhuvatthu"
+  },
+  {
+   "n": 46,
+   "chapter": 4,
+   "pi": [
+    "Pheṇūpamaṃ kāyamimaṃ viditvā, Marīcidhammaṃ abhisambudhāno;",
+    "Chetvāna mārassa papupphakāni, Adassanaṃ maccurājassa gacche."
+   ],
+   "en": "He who knows that this body is like froth, and has learnt that it is as unsubstantial as a mirage, will break the flower-pointed arrow of Mara, and never see the king of death.",
+   "story": "Marīcikammaṭṭhānikabhikkhuvatthu"
+  },
+  {
+   "n": 47,
+   "chapter": 4,
+   "pi": [
+    "Pupphāni heva pacinantaṃ, byāsattamanasaṃ naraṃ;",
+    "Suttaṃ gāmaṃ mahoghova, maccu ādāya gacchati."
+   ],
+   "en": "Death carries off a man who is gathering flowers and whose mind is distracted, as a flood carries off a sleeping village.",
+   "story": "Viṭaṭūbhavatthu"
+  },
+  {
+   "n": 48,
+   "chapter": 4,
+   "pi": [
+    "Pupphāni heva pacinantaṃ, byāsattamanasaṃ naraṃ;",
+    "Atittaññeva kāmesu, antako kurute vasaṃ."
+   ],
+   "en": "Death subdues a man who is gathering flowers, and whose mind is distracted, before he is satiated in his pleasures.",
+   "story": "Patipūjikakumārivatthu"
+  },
+  {
+   "n": 49,
+   "chapter": 4,
+   "pi": [
+    "Yathāpi bhamaro pupphaṃ, vaṇṇagandhamaheṭhayaṃ;",
+    "Paleti rasamādāya, evaṃ gāme munī care."
+   ],
+   "en": "As the bee collects nectar and departs without injuring the flower, or its colour or scent, so let a sage dwell in his village.",
+   "story": "Macchariyakosiyaseṭṭhivatthu"
+  },
+  {
+   "n": 50,
+   "chapter": 4,
+   "pi": [
+    "Na paresaṃ vilomāni, na paresaṃ katākataṃ;",
+    "Attanova avekkheyya, katāni akatāni ca."
+   ],
+   "en": "Not the perversities of others, not their sins of commission or omission, but his own misdeeds and negligences should a sage take notice of.",
+   "story": "Pāveyyaājīvakavatthu"
+  },
+  {
+   "n": 51,
+   "chapter": 4,
+   "pi": [
+    "Yathāpi ruciraṃ pupphaṃ, vaṇṇavantaṃ agandhakaṃ;",
+    "Evaṃ subhāsitā vācā, aphalā hoti akubbato."
+   ],
+   "en": "Like a beautiful flower, full of colour, but without scent, are the fine but fruitless words of him who does not act accordingly.",
+   "story": "Chattapāṇiupāsakavatthu"
+  },
+  {
+   "n": 52,
+   "chapter": 4,
+   "pi": [
+    "Yathāpi ruciraṃ pupphaṃ, Vaṇṇavantaṃ sagandhakaṃ;",
+    "Evaṃ subhāsitā vācā, Saphalā hoti kubbato."
+   ],
+   "en": "But, like a beautiful flower, full of colour and full of scent, are the fine and fruitful words of him who acts accordingly.",
+   "story": "Chattapāṇiupāsakavatthu"
+  },
+  {
+   "n": 53,
+   "chapter": 4,
+   "pi": [
+    "Yathāpi puppharāsimhā, kayirā mālāguṇe bahū;",
+    "Evaṃ jātena maccena, kattabbaṃ kusalaṃ bahuṃ."
+   ],
+   "en": "As many kinds of wreaths can be made from a heap of flowers, so many good things may be achieved by a mortal when once he is born.",
+   "story": "Visākhāvatthu"
+  },
+  {
+   "n": 54,
+   "chapter": 4,
+   "pi": [
+    "Na pupphagandho paṭivātameti, Na candanaṃ tagaramallikā vā;",
+    "Satañca gandho paṭivātameti, Sabbā disā sappuriso pavāyati."
+   ],
+   "en": "The scent of flowers does not travel against the wind, nor (that of) sandal-wood, or of Tagara and Mallika flowers; but the odour of good people travels even against the wind; a good man pervades every place.",
+   "story": "Ānandattherapañhavatthu"
+  },
+  {
+   "n": 55,
+   "chapter": 4,
+   "pi": [
+    "Candanaṃ tagaraṃ vāpi, uppalaṃ atha vassikī;",
+    "Etesaṃ gandhajātānaṃ, sīlagandho anuttaro."
+   ],
+   "en": "Sandal-wood or Tagara, a lotus-flower, or a Vassiki, among these sorts of perfumes, the perfume of virtue is unsurpassed.",
+   "story": "Ānandattherapañhavatthu"
+  },
+  {
+   "n": 56,
+   "chapter": 4,
+   "pi": [
+    "Appamatto ayaṃ gandho, yāyaṃ tagaracandanī;",
+    "Yo ca sīlavataṃ gandho, vāti devesu uttamo."
+   ],
+   "en": "Mean is the scent that comes from Tagara and sandal-wood;—the perfume of those who possess virtue rises up to the gods as the highest.",
+   "story": "Mahākassapattherapiṇḍapātadinnavatthu"
+  },
+  {
+   "n": 57,
+   "chapter": 4,
+   "pi": [
+    "Tesaṃ sampannasīlānaṃ, appamādavihārinaṃ;",
+    "Sammadaññāvimuttānaṃ, māro maggaṃ na vindati."
+   ],
+   "en": "Of the people who possess these virtues, who live without thoughtlessness, and who are emancipated through true knowledge, Mara, the tempter, never finds the way.",
+   "story": "Godhikattheraparinibbānavatthu"
+  },
+  {
+   "n": 58,
+   "chapter": 4,
+   "pi": [
+    "Yathā saṅkāradhānasmiṃ, ujjhitasmiṃ mahāpathe;",
+    "Padumaṃ tattha jāyetha, sucigandhaṃ manoramaṃ."
+   ],
+   "en": "As on a heap of rubbish cast upon the highway the lily will grow full of sweet perfume and delight, thus the disciple of the truly enlightened Buddha shines forth by his knowledge among those who are like rubbish, among the people that walk in darkness.",
+   "story": "Garahadinnavatthu",
+   "enWith": [
+    58,
+    59
+   ]
+  },
+  {
+   "n": 59,
+   "chapter": 4,
+   "pi": [
+    "Evaṃ saṅkārabhūtesu, andhabhūte puthujjane;",
+    "Atirocati paññāya, sammāsambuddhasāvako."
+   ],
+   "en": "As on a heap of rubbish cast upon the highway the lily will grow full of sweet perfume and delight, thus the disciple of the truly enlightened Buddha shines forth by his knowledge among those who are like rubbish, among the people that walk in darkness.",
+   "story": "Garahadinnavatthu",
+   "enWith": [
+    58,
+    59
+   ]
+  },
+  {
+   "n": 60,
+   "chapter": 5,
+   "pi": [
+    "Dīghā jāgarato ratti, dīghaṃ santassa yojanaṃ;",
+    "Dīgho bālāna saṃsāro, saddhammaṃ avijānataṃ."
+   ],
+   "en": "Long is the night to him who is awake; long is a mile to him who is tired; long is life to the foolish who do not know the true law.",
+   "story": "Aññatarapurisavatthu"
+  },
+  {
+   "n": 61,
+   "chapter": 5,
+   "pi": [
+    "Carañce nādhigaccheyya, Seyyaṃ sadisamattano;",
+    "Ekacariyaṃ daḷhaṃ kayirā, Natthi bāle sahāyatā."
+   ],
+   "en": "If a traveller does not meet with one who is his better, or his equal, let him firmly keep to his solitary journey; there is no companionship with a fool.",
+   "story": "Mahākassapasaddhivihārikavatthu"
+  },
+  {
+   "n": 62,
+   "chapter": 5,
+   "pi": [
+    "Puttā matthi dhanaṃ matthi, iti bālo vihaññati;",
+    "Attā hi attano natthi, kuto puttā kuto dhanaṃ."
+   ],
+   "en": "\"These sons belong to me, and this wealth belongs to me,\" with such thoughts a fool is tormented. He himself does not belong to himself; how much less sons and wealth?",
+   "story": "Ānandaseṭṭhivatthu"
+  },
+  {
+   "n": 63,
+   "chapter": 5,
+   "pi": [
+    "Yo bālo maññati bālyaṃ, paṇḍito vāpi tena so;",
+    "Bālo ca paṇḍitamānī, sa ve “bālo”ti vuccati."
+   ],
+   "en": "The fool who knows his foolishness, is wise at least so far. But a fool who thinks himself wise, he is called a fool indeed.",
+   "story": "Gaṇṭhibhedakacoravatthu"
+  },
+  {
+   "n": 64,
+   "chapter": 5,
+   "pi": [
+    "Yāvajīvampi ce bālo, paṇḍitaṃ payirupāsati;",
+    "Na so dhammaṃ vijānāti, dabbī sūparasaṃ yathā."
+   ],
+   "en": "If a fool be associated with a wise man even all his life, he will perceive the truth as little as a spoon perceives the taste of soup.",
+   "story": "Udāyittheravatthu"
+  },
+  {
+   "n": 65,
+   "chapter": 5,
+   "pi": [
+    "Muhuttamapi ce viññū, paṇḍitaṃ payirupāsati;",
+    "Khippaṃ dhammaṃ vijānāti, jivhā sūparasaṃ yathā."
+   ],
+   "en": "If an intelligent man be associated for one minute only with a wise man, he will soon perceive the truth, as the tongue perceives the taste of soup.",
+   "story": "Tiṃsapāveyyakabhikkhuvatthu"
+  },
+  {
+   "n": 66,
+   "chapter": 5,
+   "pi": [
+    "Caranti bālā dummedhā, amitteneva attanā;",
+    "Karontā pāpakaṃ kammaṃ, yaṃ hoti kaṭukapphalaṃ."
+   ],
+   "en": "Fools of little understanding have themselves for their greatest enemies, for they do evil deeds which must bear bitter fruits.",
+   "story": "Suppabuddhakuṭṭhivatthu"
+  },
+  {
+   "n": 67,
+   "chapter": 5,
+   "pi": [
+    "Na taṃ kammaṃ kataṃ sādhu, yaṃ katvā anutappati;",
+    "Yassa assumukho rodaṃ, vipākaṃ paṭisevati."
+   ],
+   "en": "That deed is not well done of which a man must repent, and the reward of which he receives crying and with a tearful face.",
+   "story": "Kassakavatthu"
+  },
+  {
+   "n": 68,
+   "chapter": 5,
+   "pi": [
+    "Tañca kammaṃ kataṃ sādhu, yaṃ katvā nānutappati;",
+    "Yassa patīto sumano, vipākaṃ paṭisevati."
+   ],
+   "en": "No, that deed is well done of which a man does not repent, and the reward of which he receives gladly and cheerfully.",
+   "story": "Sumanamālākāravatthu"
+  },
+  {
+   "n": 69,
+   "chapter": 5,
+   "pi": [
+    "Madhuṃvā maññati bālo, yāva pāpaṃ na paccati;",
+    "Yadā ca paccati pāpaṃ, atha dukkhaṃ nigacchati."
+   ],
+   "en": "As long as the evil deed done does not bear fruit, the fool thinks it is like honey; but when it ripens, then the fool suffers grief.",
+   "story": "Uppalavaṇṇattherīvatthu"
+  },
+  {
+   "n": 70,
+   "chapter": 5,
+   "pi": [
+    "Māse māse kusaggena, bālo bhuñjeyya bhojanaṃ;",
+    "Na so saṅkhātadhammānaṃ, kalaṃ agghati soḷasiṃ."
+   ],
+   "en": "Let a fool month after month eat his food (like an ascetic) with the tip of a blade of Kusa grass, yet he is not worth the sixteenth particle of those who have well weighed the law.",
+   "story": "Jambukattheravatthu"
+  },
+  {
+   "n": 71,
+   "chapter": 5,
+   "pi": [
+    "Na hi pāpaṃ kataṃ kammaṃ, Sajjukhīraṃva muccati;",
+    "Ḍahantaṃ bālamanveti, Bhasmacchannova pāvako."
+   ],
+   "en": "An evil deed, like newly-drawn milk, does not turn (suddenly); smouldering, like fire covered by ashes, it follows the fool.",
+   "story": "Ahipetavatthu"
+  },
+  {
+   "n": 72,
+   "chapter": 5,
+   "pi": [
+    "Yāvadeva anatthāya, ñattaṃ bālassa jāyati;",
+    "Hanti bālassa sukkaṃsaṃ, muddhamassa vipātayaṃ."
+   ],
+   "en": "And when the evil deed, after it has become known, brings sorrow to the fool, then it destroys his bright lot, nay, it cleaves his head.",
+   "story": "Saṭṭhikūṭapetavatthu"
+  },
+  {
+   "n": 73,
+   "chapter": 5,
+   "pi": [
+    "Asantaṃ bhāvanamiccheyya, Purekkhārañca bhikkhusu;",
+    "Āvāsesu ca issariyaṃ, Pūjaṃ parakulesu ca."
+   ],
+   "en": "Let the fool wish for a false reputation, for precedence among the Bhikshus, for lordship in the convents, for worship among other people!",
+   "story": "Cittagahapativatthu"
+  },
+  {
+   "n": 74,
+   "chapter": 5,
+   "pi": [
+    "Mameva kata maññantu, gihī pabbajitā ubho;",
+    "Mamevātivasā assu, kiccākiccesu kismici;",
+    "Iti bālassa saṅkappo, icchā māno ca vaḍḍhati."
+   ],
+   "en": "\"May both the layman and he who has left the world think that this is done by me; may they be subject to me in everything which is to be done or is not to be done,\" thus is the mind of the fool, and his desire and pride increase.",
+   "story": "Cittagahapativatthu"
+  },
+  {
+   "n": 75,
+   "chapter": 5,
+   "pi": [
+    "Aññā hi lābhūpanisā, aññā nibbānagāminī;",
+    "Evametaṃ abhiññāya, bhikkhu buddhassa sāvako;",
+    "Sakkāraṃ nābhinandeyya, vivekamanubrūhaye."
+   ],
+   "en": "\"One is the road that leads to wealth, another the road that leads to Nirvana;\" if the Bhikshu, the disciple of Buddha, has learnt this, he will not yearn for honour, he will strive after separation from the world.",
+   "story": "Vanavāsitissasāmaṇeravatthu"
+  },
+  {
+   "n": 76,
+   "chapter": 6,
+   "pi": [
+    "Nidhīnaṃva pavattāraṃ, yaṃ passe vajjadassinaṃ;",
+    "Niggayhavādiṃ medhāviṃ, tādisaṃ paṇḍitaṃ bhaje;",
+    "Tādisaṃ bhajamānassa, seyyo hoti na pāpiyo."
+   ],
+   "en": "If you see an intelligent man who tells you where true treasures are to be found, who shows what is to be avoided, and administers reproofs, follow that wise man; it will be better, not worse, for those who follow him.",
+   "story": "Rādhattheravatthu"
+  },
+  {
+   "n": 77,
+   "chapter": 6,
+   "pi": [
+    "Ovadeyyānusāseyya, asabbhā ca nivāraye;",
+    "Satañhi so piyo hoti, asataṃ hoti appiyo."
+   ],
+   "en": "Let him admonish, let him teach, let him forbid what is improper!—he will be beloved of the good, by the bad he will be hated.",
+   "story": "Assajipunabbasukavatthu"
+  },
+  {
+   "n": 78,
+   "chapter": 6,
+   "pi": [
+    "Na bhaje pāpake mitte, na bhaje purisādhame;",
+    "Bhajetha mitte kalyāṇe, bhajetha purisuttame."
+   ],
+   "en": "Do not have evil-doers for friends, do not have low people for friends: have virtuous people for friends, have for friends the best of men.",
+   "story": "Channattheravatthu"
+  },
+  {
+   "n": 79,
+   "chapter": 6,
+   "pi": [
+    "Dhammapīti sukhaṃ seti, vippasannena cetasā;",
+    "Ariyappavedite dhamme, sadā ramati paṇḍito."
+   ],
+   "en": "He who drinks in the law lives happily with a serene mind: the sage rejoices always in the law, as preached by the elect (Ariyas).",
+   "story": "Mahākappinattheravatthu"
+  },
+  {
+   "n": 80,
+   "chapter": 6,
+   "pi": [
+    "Udakañhi nayanti nettikā, Usukārā namayanti tejanaṃ;",
+    "Dāruṃ namayanti tacchakā, Attānaṃ damayanti paṇḍitā."
+   ],
+   "en": "Well-makers lead the water (wherever they like); fletchers bend the arrow; carpenters bend a log of wood; wise people fashion themselves.",
+   "story": "Paṇḍitasāmaṇeravatthu"
+  },
+  {
+   "n": 81,
+   "chapter": 6,
+   "pi": [
+    "Selo yathā ekaghano, vātena na samīrati;",
+    "Evaṃ nindāpasaṃsāsu, na samiñjanti paṇḍitā."
+   ],
+   "en": "As a solid rock is not shaken by the wind, wise people falter not amidst blame and praise.",
+   "story": "Lakuṇḍakabhaddiyattheravatthu"
+  },
+  {
+   "n": 82,
+   "chapter": 6,
+   "pi": [
+    "Yathāpi rahado gambhīro, vippasanno anāvilo;",
+    "Evaṃ dhammāni sutvāna, vippasīdanti paṇḍitā."
+   ],
+   "en": "Wise people, after they have listened to the laws, become serene, like a deep, smooth, and still lake.",
+   "story": "Kāṇamātāvatthu"
+  },
+  {
+   "n": 83,
+   "chapter": 6,
+   "pi": [
+    "Sabbattha ve sappurisā cajanti, Na kāmakāmā lapayanti santo;",
+    "Sukhena phuṭṭhā atha vā dukhena, Na uccāvacaṃ paṇḍitā dassayanti."
+   ],
+   "en": "Good people walk on whatever befall, the good do not prattle, longing for pleasure; whether touched by happiness or sorrow wise people never appear elated or depressed.",
+   "story": "Pañcasatabhikkhuvatthu"
+  },
+  {
+   "n": 84,
+   "chapter": 6,
+   "pi": [
+    "Na attahetu na parassa hetu, Na puttamicche na dhanaṃ na raṭṭhaṃ;",
+    "Na iccheyya adhammena samiddhimattano, Sa sīlavā paññavā dhammiko siyā."
+   ],
+   "en": "If, whether for his own sake, or for the sake of others, a man wishes neither for a son, nor for wealth, nor for lordship, and if he does not wish for his own success by unfair means, then he is good, wise, and virtuous.",
+   "story": "Dhammikattheravatthu"
+  },
+  {
+   "n": 85,
+   "chapter": 6,
+   "pi": [
+    "Appakā te manussesu, ye janā pāragāmino;",
+    "Athāyaṃ itarā pajā, tīramevānudhāvati."
+   ],
+   "en": "Few are there among men who arrive at the other shore (become Arhats); the other people here run up and down the shore.",
+   "story": "Dhammassavanattheravatthu"
+  },
+  {
+   "n": 86,
+   "chapter": 6,
+   "pi": [
+    "Ye ca kho sammadakkhāte, dhamme dhammānuvattino;",
+    "Te janā pāramessanti, maccudheyyaṃ suduttaraṃ."
+   ],
+   "en": "But those who, when the law has been well preached to them, follow the law, will pass across the dominion of death, however difficult to overcome.",
+   "story": "Dhammassavanattheravatthu"
+  },
+  {
+   "n": 87,
+   "chapter": 6,
+   "pi": [
+    "Kaṇhaṃ dhammaṃ vippahāya, Sukkaṃ bhāvetha paṇḍito;",
+    "Okā anokamāgamma, Viveke yattha dūramaṃ."
+   ],
+   "en": "A wise man should leave the dark state (of ordinary life), and follow the bright state (of the Bhikshu). After going from his home to a homeless state, he should in his retirement look for enjoyment where there seemed to be no enjoyment. Leaving all pleasures behind, and calling nothing his own, the wise man should purge himself from all the troubles of the mind.",
+   "story": "Pañcasataāgantukabhikkhuvatthu",
+   "enWith": [
+    87,
+    88
+   ]
+  },
+  {
+   "n": 88,
+   "chapter": 6,
+   "pi": [
+    "Tatrābhiratimiccheyya, hitvā kāme akiñcano;",
+    "Pariyodapeyya attānaṃ, cittaklesehi paṇḍito."
+   ],
+   "en": "A wise man should leave the dark state (of ordinary life), and follow the bright state (of the Bhikshu). After going from his home to a homeless state, he should in his retirement look for enjoyment where there seemed to be no enjoyment. Leaving all pleasures behind, and calling nothing his own, the wise man should purge himself from all the troubles of the mind.",
+   "story": "Pañcasataāgantukabhikkhuvatthu",
+   "enWith": [
+    87,
+    88
+   ]
+  },
+  {
+   "n": 89,
+   "chapter": 6,
+   "pi": [
+    "Yesaṃ sambodhiyaṅgesu, sammā cittaṃ subhāvitaṃ;",
+    "Ādānapaṭinissagge, anupādāya ye ratā;",
+    "Khīṇāsavā jutimanto, te loke parinibbutā."
+   ],
+   "en": "Those whose mind is well grounded in the (seven) elements of knowledge, who without clinging to anything, rejoice in freedom from attachment, whose appetites have been conquered, and who are full of light, are free (even) in this world.",
+   "story": "Pañcasataāgantukabhikkhuvatthu"
+  },
+  {
+   "n": 90,
+   "chapter": 7,
+   "pi": [
+    "Gataddhino visokassa, vippamuttassa sabbadhi;",
+    "Sabbaganthappahīnassa, pariḷāho na vijjati."
+   ],
+   "en": "There is no suffering for him who has finished his journey, and abandoned grief, who has freed himself on all sides, and thrown off all fetters.",
+   "story": "Jīvakapañhavatthu"
+  },
+  {
+   "n": 91,
+   "chapter": 7,
+   "pi": [
+    "Uyyuñjanti satīmanto, na nikete ramanti te;",
+    "Haṃsāva pallalaṃ hitvā, okamokaṃ jahanti te."
+   ],
+   "en": "They depart with their thoughts well-collected, they are not happy in their abode; like swans who have left their lake, they leave their house and home.",
+   "story": "Mahākassapattheravatthu"
+  },
+  {
+   "n": 92,
+   "chapter": 7,
+   "pi": [
+    "Yesaṃ sannicayo natthi, ye pariññātabhojanā;",
+    "Suññato animitto ca, vimokkho yesaṃ gocaro;",
+    "Ākāseva sakuntānaṃ, gati tesaṃ durannayā."
+   ],
+   "en": "Men who have no riches, who live on recognised food, who have perceived void and unconditioned freedom (Nirvana), their path is difficult to understand, like that of birds in the air.",
+   "story": "Belaṭṭhasīsattheravatthu"
+  },
+  {
+   "n": 93,
+   "chapter": 7,
+   "pi": [
+    "Yassāsavā parikkhīṇā, āhāre ca anissito;",
+    "Suññato animitto ca, vimokkho yassa gocaro;",
+    "Ākāseva sakuntānaṃ, padaṃ tassa durannayaṃ."
+   ],
+   "en": "He whose appetites are stilled, who is not absorbed in enjoyment, who has perceived void and unconditioned freedom (Nirvana), his path is difficult to understand, like that of birds in the air.",
+   "story": "Anuruddhattheravatthu"
+  },
+  {
+   "n": 94,
+   "chapter": 7,
+   "pi": [
+    "Yassindriyāni samathaṅgatāni, Assā yathā sārathinā sudantā;",
+    "Pahīnamānassa anāsavassa, Devāpi tassa pihayanti tādino."
+   ],
+   "en": "The gods even envy him whose senses, like horses well broken in by the driver, have been subdued, who is free from pride, and free from appetites.",
+   "story": "Mahākaccāyanattheravatthu"
+  },
+  {
+   "n": 95,
+   "chapter": 7,
+   "pi": [
+    "Pathavisamo no virujjhati, Indakhilupamo tādi subbato;",
+    "Rahadova apetakaddamo, Saṃsārā na bhavanti tādino."
+   ],
+   "en": "Such a one who does his duty is tolerant like the earth, like Indra's bolt; he is like a lake without mud; no new births are in store for him.",
+   "story": "Sāriputtattheravatthu"
+  },
+  {
+   "n": 96,
+   "chapter": 7,
+   "pi": [
+    "Santaṃ tassa manaṃ hoti, santā vācā ca kamma ca;",
+    "Sammadaññāvimuttassa, upasantassa tādino."
+   ],
+   "en": "His thought is quiet, quiet are his word and deed, when he has obtained freedom by true knowledge, when he has thus become a quiet man.",
+   "story": "Kosambivāsitissattherasāmaṇeravatthu"
+  },
+  {
+   "n": 97,
+   "chapter": 7,
+   "pi": [
+    "Assaddho akataññū ca, sandhicchedo ca yo naro;",
+    "Hatāvakāso vantāso, sa ve uttamaporiso."
+   ],
+   "en": "The man who is free from credulity, but knows the uncreated, who has cut all ties, removed all temptations, renounced all desires, he is the greatest of men.",
+   "story": "Sāriputtattheravatthu"
+  },
+  {
+   "n": 98,
+   "chapter": 7,
+   "pi": [
+    "Gāme vā yadi vāraññe, Ninne vā yadi vā thale;",
+    "Yattha arahanto viharanti, Taṃ bhūmirāmaṇeyyakaṃ."
+   ],
+   "en": "In a hamlet or in a forest, in the deep water or on the dry land, wherever venerable persons (Arhanta) dwell, that place is delightful.",
+   "story": "Khadiravaniyarevatattheravatthu"
+  },
+  {
+   "n": 99,
+   "chapter": 7,
+   "pi": [
+    "Ramaṇīyāni araññāni, yattha na ramatī jano;",
+    "Vītarāgā ramissanti, na te kāmagavesino."
+   ],
+   "en": "Forests are delightful; where the world finds no delight, there the passionless will find delight, for they look not for pleasures.",
+   "story": "Aññataraitthivatthu"
+  },
+  {
+   "n": 100,
+   "chapter": 8,
+   "pi": [
+    "Sahassamapi ce vācā, anatthapadasaṃhitā;",
+    "Ekaṃ atthapadaṃ seyyo, yaṃ sutvā upasammati."
+   ],
+   "en": "Even though a speech be a thousand (of words), but made up of senseless words, one word of sense is better, which if a man hears, he becomes quiet.",
+   "story": "Tambadāṭhikacoraghātakavatthu"
+  },
+  {
+   "n": 101,
+   "chapter": 8,
+   "pi": [
+    "Sahassamapi ce gāthā, anatthapadasaṃhitā;",
+    "Ekaṃ gāthāpadaṃ seyyo, yaṃ sutvā upasammati."
+   ],
+   "en": "Even though a Gatha (poem) be a thousand (of words), but made up of senseless words, one word of a Gatha is better, which if a man hears, he becomes quiet.",
+   "story": "Bāhiyadārucīriyattheravatthu"
+  },
+  {
+   "n": 102,
+   "chapter": 8,
+   "pi": [
+    "Yo ca gāthā sataṃ bhāse, anatthapadasaṃhitā;",
+    "Ekaṃ dhammapadaṃ seyyo, yaṃ sutvā upasammati."
+   ],
+   "en": "Though a man recite a hundred Gathas made up of senseless words, one word of the law is better, which if a man hears, he becomes quiet.",
+   "story": "Kuṇḍalakesitherīvatthu"
+  },
+  {
+   "n": 103,
+   "chapter": 8,
+   "pi": [
+    "Yo sahassaṃ sahassena, saṅgāme mānuse jine;",
+    "Ekañca jeyyamattānaṃ, sa ve saṅgāmajuttamo."
+   ],
+   "en": "If one man conquer in battle a thousand times thousand men, and if another conquer himself, he is the greatest of conquerors.",
+   "story": "Kuṇḍalakesitherīvatthu"
+  },
+  {
+   "n": 104,
+   "chapter": 8,
+   "pi": [
+    "Attā have jitaṃ seyyo, yā cāyaṃ itarā pajā;",
+    "Attadantassa posassa, niccaṃ saññatacārino."
+   ],
+   "en": "One's own self conquered is better than all other people; not even a god, a Gandharva, not Mara with Brahman could change into defeat the victory of a man who has vanquished himself, and always lives under restraint.",
+   "story": "Anatthapucchakabrāhmaṇavatthu",
+   "enWith": [
+    104,
+    105
+   ]
+  },
+  {
+   "n": 105,
+   "chapter": 8,
+   "pi": [
+    "Neva devo na gandhabbo, na māro saha brahmunā;",
+    "Jitaṃ apajitaṃ kayirā, tathārūpassa jantuno."
+   ],
+   "en": "One's own self conquered is better than all other people; not even a god, a Gandharva, not Mara with Brahman could change into defeat the victory of a man who has vanquished himself, and always lives under restraint.",
+   "story": "Anatthapucchakabrāhmaṇavatthu",
+   "enWith": [
+    104,
+    105
+   ]
+  },
+  {
+   "n": 106,
+   "chapter": 8,
+   "pi": [
+    "Māse māse sahassena, yo yajetha sataṃ samaṃ;",
+    "Ekañca bhāvitattānaṃ, muhuttamapi pūjaye;",
+    "Sāyeva pūjanā seyyo, yañce vassasataṃ hutaṃ."
+   ],
+   "en": "If a man for a hundred years sacrifice month after month with a thousand, and if he but for one moment pay homage to a man whose soul is grounded (in true knowledge), better is that homage than sacrifice for a hundred years.",
+   "story": "Sāriputtattherassa mātulabrāhmaṇavatthu"
+  },
+  {
+   "n": 107,
+   "chapter": 8,
+   "pi": [
+    "Yo ca vassasataṃ jantu, aggiṃ paricare vane;",
+    "Ekañca bhāvitattānaṃ, muhuttamapi pūjaye;",
+    "Sāyeva pūjanā seyyo, yañce vassasataṃ hutaṃ."
+   ],
+   "en": "If a man for a hundred years worship Agni (fire) in the forest, and if he but for one moment pay homage to a man whose soul is grounded (in true knowledge), better is that homage than sacrifice for a hundred years.",
+   "story": "Sāriputtattherassa bhāgineyyavatthu"
+  },
+  {
+   "n": 108,
+   "chapter": 8,
+   "pi": [
+    "Yaṃ kiñci yiṭṭhaṃ va hutaṃ va loke, Saṃvaccharaṃ yajetha puññapekkho;",
+    "Sabbampi taṃ na catubhāgameti, Abhivādanā ujjugatesu seyyo."
+   ],
+   "en": "Whatever a man sacrifice in this world as an offering or as an oblation for a whole year in order to gain merit, the whole of it is not worth a quarter (a farthing); reverence shown to the righteous is better.",
+   "story": "Sāriputtatherassa sahāyakabrāhmaṇavatthu"
+  },
+  {
+   "n": 109,
+   "chapter": 8,
+   "pi": [
+    "Abhivādanasīlissa, niccaṃ vuḍḍhāpacāyino;",
+    "Cattāro dhammā vaḍḍhanti, āyu vaṇṇo sukhaṃ balaṃ."
+   ],
+   "en": "He who always greets and constantly reveres the aged, four things will increase to him, viz. life, beauty, happiness, power.",
+   "story": "Āyuvaḍḍhanakumāravatthu"
+  },
+  {
+   "n": 110,
+   "chapter": 8,
+   "pi": [
+    "Yo ca vassasataṃ jīve, dussīlo asamāhito;",
+    "Ekāhaṃ jīvitaṃ seyyo, sīlavantassa jhāyino."
+   ],
+   "en": "But he who lives a hundred years, vicious and unrestrained, a life of one day is better if a man is virtuous and reflecting.",
+   "story": "Saṅkiccasāmaṇeravatthu"
+  },
+  {
+   "n": 111,
+   "chapter": 8,
+   "pi": [
+    "Yo ca vassasataṃ jīve, duppañño asamāhito;",
+    "Ekāhaṃ jīvitaṃ seyyo, paññavantassa jhāyino."
+   ],
+   "en": "And he who lives a hundred years, ignorant and unrestrained, a life of one day is better if a man is wise and reflecting.",
+   "story": "Khāṇukoṇḍaññattheravatthu"
+  },
+  {
+   "n": 112,
+   "chapter": 8,
+   "pi": [
+    "Yo ca vassasataṃ jīve, kusīto hīnavīriyo;",
+    "Ekāhaṃ jīvitaṃ seyyo, vīriyamārabhato daḷhaṃ."
+   ],
+   "en": "And he who lives a hundred years, idle and weak, a life of one day is better if a man has attained firm strength.",
+   "story": "Sabbadāsattheravatthu"
+  },
+  {
+   "n": 113,
+   "chapter": 8,
+   "pi": [
+    "Yo ca vassasataṃ jīve, apassaṃ udayabbayaṃ;",
+    "Ekāhaṃ jīvitaṃ seyyo, passato udayabbayaṃ."
+   ],
+   "en": "And he who lives a hundred years, not seeing beginning and end, a life of one day is better if a man sees beginning and end.",
+   "story": "Paṭācārātherīvatthu"
+  },
+  {
+   "n": 114,
+   "chapter": 8,
+   "pi": [
+    "Yo ca vassasataṃ jīve, apassaṃ amataṃ padaṃ;",
+    "Ekāhaṃ jīvitaṃ seyyo, passato amataṃ padaṃ."
+   ],
+   "en": "And he who lives a hundred years, not seeing the immortal place, a life of one day is better if a man sees the immortal place.",
+   "story": "Kisāgotamīvatthu"
+  },
+  {
+   "n": 115,
+   "chapter": 8,
+   "pi": [
+    "Yo ca vassasataṃ jīve, apassaṃ dhammamuttamaṃ;",
+    "Ekāhaṃ jīvitaṃ seyyo, passato dhammamuttamaṃ."
+   ],
+   "en": "And he who lives a hundred years, not seeing the highest law, a life of one day is better if a man sees the highest law.",
+   "story": "Bahuputtikattherīvatthu"
+  },
+  {
+   "n": 116,
+   "chapter": 9,
+   "pi": [
+    "Abhittharetha kalyāṇe, pāpā cittaṃ nivāraye;",
+    "Dandhañhi karoto puññaṃ, pāpasmiṃ ramatī mano."
+   ],
+   "en": "If a man would hasten towards the good, he should keep his thought away from evil; if a man does what is good slothfully, his mind delights in evil.",
+   "story": "Cūḷekasāṭakabrāhmaṇavatthu"
+  },
+  {
+   "n": 117,
+   "chapter": 9,
+   "pi": [
+    "Pāpañce puriso kayirā, Na naṃ kayirā punappunaṃ;",
+    "Na tamhi chandaṃ kayirātha, Dukkho pāpassa uccayo."
+   ],
+   "en": "If a man commits a sin, let him not do it again; let him not delight in sin: pain is the outcome of evil.",
+   "story": "Seyyasakattheravatthu"
+  },
+  {
+   "n": 118,
+   "chapter": 9,
+   "pi": [
+    "Puññañce puriso kayirā, kayirā naṃ punappunaṃ;",
+    "Tamhi chandaṃ kayirātha, sukho puññassa uccayo."
+   ],
+   "en": "If a man does what is good, let him do it again; let him delight in it: happiness is the outcome of good.",
+   "story": "Lājadevadhītāvatthu"
+  },
+  {
+   "n": 119,
+   "chapter": 9,
+   "pi": [
+    "Pāpopi passati bhadraṃ, Yāva pāpaṃ na paccati;",
+    "Yadā ca paccati pāpaṃ, Atha pāpo pāpāni passati."
+   ],
+   "en": "Even an evil-doer sees happiness as long as his evil deed has not ripened; but when his evil deed has ripened, then does the evil-doer see evil.",
+   "story": "Anāthapiṇḍikaseṭṭhivatthu"
+  },
+  {
+   "n": 120,
+   "chapter": 9,
+   "pi": [
+    "Bhadropi passati pāpaṃ, Yāva bhadraṃ na paccati;",
+    "Yadā ca paccati bhadraṃ, Atha bhadro bhadrāni passati."
+   ],
+   "en": "Even a good man sees evil days, as long as his good deed has not ripened; but when his good deed has ripened, then does the good man see happy days.",
+   "story": "Anāthapiṇḍikaseṭṭhivatthu"
+  },
+  {
+   "n": 121,
+   "chapter": 9,
+   "pi": [
+    "Māvamaññetha pāpassa, na mantaṃ āgamissati;",
+    "Udabindunipātena, udakumbhopi pūrati;",
+    "Bālo pūrati pāpassa, thokaṃ thokampi ācinaṃ."
+   ],
+   "en": "Let no man think lightly of evil, saying in his heart, It will not come nigh unto me. Even by the falling of water-drops a water-pot is filled; the fool becomes full of evil, even if he gather it little by little.",
+   "story": "Asaññataparikkhāravatthu"
+  },
+  {
+   "n": 122,
+   "chapter": 9,
+   "pi": [
+    "Māvamaññetha puññassa, na mandaṃ āgamissati;",
+    "Udabindunipātena, udakumbhopi pūrati;",
+    "Dhīro pūrati puññassa, thokaṃ thokampi ācinaṃ."
+   ],
+   "en": "Let no man think lightly of good, saying in his heart, It will not come nigh unto me. Even by the falling of water-drops a water-pot is filled; the wise man becomes full of good, even if he gather it little by little.",
+   "story": "Biḷālapādakaseṭṭhivatthu"
+  },
+  {
+   "n": 123,
+   "chapter": 9,
+   "pi": [
+    "Vāṇijova bhayaṃ maggaṃ, appasattho mahaddhano;",
+    "Visaṃ jīvitukāmova, pāpāni parivajjaye."
+   ],
+   "en": "Let a man avoid evil deeds, as a merchant, if he has few companions and carries much wealth, avoids a dangerous road; as a man who loves life avoids poison.",
+   "story": "Mahādhanavāṇijavatthu"
+  },
+  {
+   "n": 124,
+   "chapter": 9,
+   "pi": [
+    "Pāṇimhi ce vaṇo nāssa, hareyya pāṇinā visaṃ;",
+    "Nābbaṇaṃ visamanveti, natthi pāpaṃ akubbato."
+   ],
+   "en": "He who has no wound on his hand, may touch poison with his hand; poison does not affect one who has no wound; nor is there evil for one who does not commit evil.",
+   "story": "Kukkuṭamittanesādavatthu"
+  },
+  {
+   "n": 125,
+   "chapter": 9,
+   "pi": [
+    "Yo appaduṭṭhassa narassa dussati, Suddhassa posassa anaṅgaṇassa;",
+    "Tameva bālaṃ pacceti pāpaṃ, Sukhumo rajo paṭivātaṃva khitto."
+   ],
+   "en": "If a man offend a harmless, pure, and innocent person, the evil falls back upon that fool, like light dust thrown up against the wind.",
+   "story": "Kokasunakhaluddakavatthu"
+  },
+  {
+   "n": 126,
+   "chapter": 9,
+   "pi": [
+    "Gabbhameke uppajjanti, nirayaṃ pāpakammino;",
+    "Saggaṃ sugatino yanti, parinibbanti anāsavā."
+   ],
+   "en": "Some people are born again; evil-doers go to hell; righteous people go to heaven; those who are free from all worldly desires attain Nirvana.",
+   "story": "Maṇikārakulūpakatissattheravatthu"
+  },
+  {
+   "n": 127,
+   "chapter": 9,
+   "pi": [
+    "Na antalikkhe na samuddamajjhe, Na pabbatānaṃ vivaraṃ pavissa;",
+    "Na vijjatī so jagatippadeso, Yatthaṭṭhito mucceyya pāpakammā."
+   ],
+   "en": "Not in the sky, not in the midst of the sea, not if we enter into the clefts of the mountains, is there known a spot in the whole world where a man might be freed from an evil deed.",
+   "story": "Tayojanavatthu"
+  },
+  {
+   "n": 128,
+   "chapter": 9,
+   "pi": [
+    "Na antalikkhe na samuddamajjhe, Na pabbatānaṃ vivaraṃ pavissa;",
+    "Na vijjatī so jagatippadeso, Yatthaṭṭhitaṃ nappasaheyya maccu."
+   ],
+   "en": "Not in the sky, not in the midst of the sea, not if we enter into the clefts of the mountains, is there known a spot in the whole world where death could not overcome (the mortal).",
+   "story": "Suppabuddhasakyavatthu"
+  },
+  {
+   "n": 129,
+   "chapter": 10,
+   "pi": [
+    "Sabbe tasanti daṇḍassa, sabbe bhāyanti maccuno;",
+    "Attānaṃ upamaṃ katvā, na haneyya na ghātaye."
+   ],
+   "en": "All men tremble at punishment, all men fear death; remember that you are like unto them, and do not kill, nor cause slaughter.",
+   "story": "Chabbaggiyabhikkhuvatthu"
+  },
+  {
+   "n": 130,
+   "chapter": 10,
+   "pi": [
+    "Sabbe tasanti daṇḍassa, sabbesaṃ jīvitaṃ piyaṃ;",
+    "Attānaṃ upamaṃ katvā, na haneyya na ghātaye."
+   ],
+   "en": "All men tremble at punishment, all men love life; remember that thou art like unto them, and do not kill, nor cause slaughter.",
+   "story": "Chabbaggiyavatthu"
+  },
+  {
+   "n": 131,
+   "chapter": 10,
+   "pi": [
+    "Sukhakāmāni bhūtāni, yo daṇḍena vihiṃsati;",
+    "Attano sukhamesāno, pecca so na labhate sukhaṃ."
+   ],
+   "en": "He who seeking his own happiness punishes or kills beings who also long for happiness, will not find happiness after death.",
+   "story": "Sambahulakumārakavatthu"
+  },
+  {
+   "n": 132,
+   "chapter": 10,
+   "pi": [
+    "Sukhakāmāni bhūtāni, yo daṇḍena na hiṃsati;",
+    "Attano sukhamesāno, pecca so labhate sukhaṃ."
+   ],
+   "en": "He who seeking his own happiness does not punish or kill beings who also long for happiness, will find happiness after death.",
+   "story": "Sambahulakumārakavatthu"
+  },
+  {
+   "n": 133,
+   "chapter": 10,
+   "pi": [
+    "Māvoca pharusaṃ kañci, vuttā paṭivadeyyu taṃ;",
+    "Dukkhā hi sārambhakathā, paṭidaṇḍā phuseyyu taṃ."
+   ],
+   "en": "Do not speak harshly to anybody; those who are spoken to will answer thee in the same way. Angry speech is painful, blows for blows will touch thee.",
+   "story": "Koṇḍadhānattheravatthu"
+  },
+  {
+   "n": 134,
+   "chapter": 10,
+   "pi": [
+    "Sace neresi attānaṃ, kaṃso upahato yathā;",
+    "Esa pattosi nibbānaṃ, sārambho te na vijjati."
+   ],
+   "en": "If, like a shattered metal plate (gong), thou utter not, then thou hast reached Nirvana; contention is not known to thee.",
+   "story": "Koṇḍadhānattheravatthu"
+  },
+  {
+   "n": 135,
+   "chapter": 10,
+   "pi": [
+    "Yathā daṇḍena gopālo, gāvo pājeti gocaraṃ;",
+    "Evaṃ jarā ca maccu ca, āyuṃ pājenti pāṇinaṃ."
+   ],
+   "en": "As a cowherd with his staff drives his cows into the stable, so do Age and Death drive the life of men.",
+   "story": "Uposathikaitthīnaṃvatthu"
+  },
+  {
+   "n": 136,
+   "chapter": 10,
+   "pi": [
+    "Atha pāpāni kammāni, karaṃ bālo na bujjhati;",
+    "Sehi kammehi dummedho, aggidaḍḍhova tappati."
+   ],
+   "en": "A fool does not know when he commits his evil deeds: but the wicked man burns by his own deeds, as if burnt by fire.",
+   "story": "Ajagarapetavatthu"
+  },
+  {
+   "n": 137,
+   "chapter": 10,
+   "pi": [
+    "Yo daṇḍena adaṇḍesu, appaduṭṭhesu dussati;",
+    "Dasannamaññataraṃ ṭhānaṃ, khippameva nigacchati."
+   ],
+   "en": "He who inflicts pain on innocent and harmless persons, will soon come to one of these ten states:",
+   "story": "Mahāmoggallānattheravatthu"
+  },
+  {
+   "n": 138,
+   "chapter": 10,
+   "pi": [
+    "Vedanaṃ pharusaṃ jāniṃ, sarīrassa va bhedanaṃ;",
+    "Garukaṃ vāpi ābādhaṃ, cittakkhepaṃ va pāpuṇe."
+   ],
+   "en": "He will have cruel suffering, loss, injury of the body, heavy affliction, or loss of mind,",
+   "story": "Mahāmoggallānattheravatthu"
+  },
+  {
+   "n": 139,
+   "chapter": 10,
+   "pi": [
+    "Rājato vā upasaggaṃ, Abbhakkhānaṃ va dāruṇaṃ;",
+    "Parikkhayaṃ va ñātīnaṃ, Bhogānaṃ va pabhaṅguraṃ."
+   ],
+   "en": "Or a misfortune coming from the king, or a fearful accusation, or loss of relations, or destruction of treasures,",
+   "story": "Mahāmoggallānattheravatthu"
+  },
+  {
+   "n": 140,
+   "chapter": 10,
+   "pi": [
+    "Atha vāssa agārāni, aggi ḍahati pāvako;",
+    "Kāyassa bhedā duppañño, nirayaṃ sopapajjati."
+   ],
+   "en": "Or lightning-fire will burn his houses; and when his body is destroyed, the fool will go to hell.",
+   "story": "Mahāmoggallānattheravatthu"
+  },
+  {
+   "n": 141,
+   "chapter": 10,
+   "pi": [
+    "Na naggacariyā na jaṭā na paṅkā, Nānāsakā thaṇḍilasāyikā vā;",
+    "Rajojallaṃ ukkuṭikappadhānaṃ, Sodhenti maccaṃ avitiṇṇakaṅkhaṃ."
+   ],
+   "en": "Not nakedness, not platted hair, not dirt, not fasting, or lying on the earth, not rubbing with dust, not sitting motionless, can purify a mortal who has not overcome desires.",
+   "story": "Bahubhaṇḍikabhikkhuvatthu"
+  },
+  {
+   "n": 142,
+   "chapter": 10,
+   "pi": [
+    "Alaṅkato cepi samaṃ careyya, Santo danto niyato brahmacārī;",
+    "Sabbesu bhūtesu nidhāya daṇḍaṃ, So brāhmaṇo so samaṇo sa bhikkhu."
+   ],
+   "en": "He who, though dressed in fine apparel, exercises tranquillity, is quiet, subdued, restrained, chaste, and has ceased to find fault with all other beings, he indeed is a Brahmana, an ascetic (sramana), a friar (bhikshu).",
+   "story": "Santatimahāmattavatthu"
+  },
+  {
+   "n": 143,
+   "chapter": 10,
+   "pi": [
+    "Hirīnisedho puriso, koci lokasmi vijjati;",
+    "Yo niddaṃ apabodheti, asso bhadro kasāmiva."
+   ],
+   "en": "Is there in this world any man so restrained by humility that he does not mind reproof, as a well-trained horse the whip?",
+   "story": "Pilotikatissattheravatthu"
+  },
+  {
+   "n": 144,
+   "chapter": 10,
+   "pi": [
+    "Asso yathā bhadro kasāniviṭṭho, Ātāpino saṃvegino bhavātha;",
+    "Saddhāya sīlena ca vīriyena ca, Samādhinā dhammavinicchayena ca;",
+    "Sampannavijjācaraṇā patissatā, Jahissatha dukkhamidaṃ anappakaṃ."
+   ],
+   "en": "Like a well-trained horse when touched by the whip, be ye active and lively, and by faith, by virtue, by energy, by meditation, by discernment of the law you will overcome this great pain (of reproof), perfect in knowledge and in behaviour, and never forgetful.",
+   "story": "Pilotikatissattheravatthu"
+  },
+  {
+   "n": 145,
+   "chapter": 10,
+   "pi": [
+    "Udakañhi nayanti nettikā, Usukārā namayanti tejanaṃ;",
+    "Dāruṃ namayanti tacchakā, Attānaṃ damayanti subbatā."
+   ],
+   "en": "Well-makers lead the water (wherever they like); fletchers bend the arrow; carpenters bend a log of wood; good people fashion themselves.",
+   "story": "Sukhasāmaṇeravatthu"
+  },
+  {
+   "n": 146,
+   "chapter": 11,
+   "pi": [
+    "Ko nu hāso kimānando, niccaṃ pajjalite sati;",
+    "Andhakārena onaddhā, padīpaṃ na gavesatha."
+   ],
+   "en": "How is there laughter, how is there joy, as this world is always burning? Why do you not seek a light, ye who are surrounded by darkness?",
+   "story": "Visākhāyasahāyikānaṃvatthu"
+  },
+  {
+   "n": 147,
+   "chapter": 11,
+   "pi": [
+    "Passa cittakataṃ bimbaṃ, arukāyaṃ samussitaṃ;",
+    "Āturaṃ bahusaṅkappaṃ, yassa natthi dhuvaṃ ṭhiti."
+   ],
+   "en": "Look at this dressed-up lump, covered with wounds, joined together, sickly, full of many thoughts, which has no strength, no hold!",
+   "story": "Sirimāvatthu"
+  },
+  {
+   "n": 148,
+   "chapter": 11,
+   "pi": [
+    "Parijiṇṇamidaṃ rūpaṃ, roganīḷaṃ pabhaṅguraṃ;",
+    "Bhijjati pūtisandeho, maraṇantañhi jīvitaṃ."
+   ],
+   "en": "This body is wasted, full of sickness, and frail; this heap of corruption breaks to pieces, life indeed ends in death.",
+   "story": "Uttarātherīvatthu"
+  },
+  {
+   "n": 149,
+   "chapter": 11,
+   "pi": [
+    "Yānimāni apatthāni, alābūneva sārade;",
+    "Kāpotakāni aṭṭhīni, tāni disvāna kā rati."
+   ],
+   "en": "Those white bones, like gourds thrown away in the autumn, what pleasure is there in looking at them?",
+   "story": "Sambahulaadhimānikabhikkhuvatthu"
+  },
+  {
+   "n": 150,
+   "chapter": 11,
+   "pi": [
+    "Aṭṭhīnaṃ nagaraṃ kataṃ, maṃsalohitalepanaṃ;",
+    "Yattha jarā ca maccu ca, māno makkho ca ohito."
+   ],
+   "en": "After a stronghold has been made of the bones, it is covered with flesh and blood, and there dwell in it old age and death, pride and deceit.",
+   "story": "Janapadakalyāṇīrūpanandātherīvatthu"
+  },
+  {
+   "n": 151,
+   "chapter": 11,
+   "pi": [
+    "Jīranti ve rājarathā sucittā, Atho sarīrampi jaraṃ upeti;",
+    "Satañca dhammo na jaraṃ upeti, Santo have sabbhi pavedayanti."
+   ],
+   "en": "The brilliant chariots of kings are destroyed, the body also approaches destruction, but the virtue of good people never approaches destruction,—thus do the good say to the good.",
+   "story": "Mallikādevīvatthu"
+  },
+  {
+   "n": 152,
+   "chapter": 11,
+   "pi": [
+    "Appassutāyaṃ puriso, balībaddhova jīrati;",
+    "Maṃsāni tassa vaḍḍhanti, paññā tassa na vaḍḍhati."
+   ],
+   "en": "A man who has learnt little, grows old like an ox; his flesh grows, but his knowledge does not grow.",
+   "story": "Lāḷudāyītheravatthu"
+  },
+  {
+   "n": 153,
+   "chapter": 11,
+   "pi": [
+    "Anekajātisaṃsāraṃ, sandhāvissaṃ anibbisaṃ;",
+    "Gahakāraṃ gavesanto, dukkhā jāti punappunaṃ."
+   ],
+   "en": "Looking for the maker of this tabernacle, I shall have to run through a course of many births, so long as I do not find (him); and painful is birth again and again. But now, maker of the tabernacle, thou hast been seen; thou shalt not make up this tabernacle again. All thy rafters are broken, thy ridge-pole is sundered; the mind, approaching the Eternal (visankhara, nirvana), has attained to the extinction of all desires.",
+   "story": "Udānavatthu",
+   "enWith": [
+    153,
+    154
+   ]
+  },
+  {
+   "n": 154,
+   "chapter": 11,
+   "pi": [
+    "Gahakāraka diṭṭhosi, puna gehaṃ na kāhasi;",
+    "Sabbā te phāsukā bhaggā, gahakūṭaṃ visaṅkhataṃ;",
+    "Visaṅkhāragataṃ cittaṃ, taṇhānaṃ khayamajjhagā."
+   ],
+   "en": "Looking for the maker of this tabernacle, I shall have to run through a course of many births, so long as I do not find (him); and painful is birth again and again. But now, maker of the tabernacle, thou hast been seen; thou shalt not make up this tabernacle again. All thy rafters are broken, thy ridge-pole is sundered; the mind, approaching the Eternal (visankhara, nirvana), has attained to the extinction of all desires.",
+   "story": "Udānavatthu",
+   "enWith": [
+    153,
+    154
+   ]
+  },
+  {
+   "n": 155,
+   "chapter": 11,
+   "pi": [
+    "Acaritvā brahmacariyaṃ, aladdhā yobbane dhanaṃ;",
+    "Jiṇṇakoñcāva jhāyanti, khīṇamaccheva pallale."
+   ],
+   "en": "Men who have not observed proper discipline, and have not gained treasure in their youth, perish like old herons in a lake without fish.",
+   "story": "Mahādhanaseṭṭhiputtavatthu"
+  },
+  {
+   "n": 156,
+   "chapter": 11,
+   "pi": [
+    "Acaritvā brahmacariyaṃ, aladdhā yobbane dhanaṃ;",
+    "Senti cāpātikhīṇāva, purāṇāni anutthunaṃ."
+   ],
+   "en": "Men who have not observed proper discipline, and have not gained treasure in their youth, lie, like broken bows, sighing after the past.",
+   "story": "Mahādhanaseṭṭhiputtavatthu"
+  },
+  {
+   "n": 157,
+   "chapter": 12,
+   "pi": [
+    "Attānañce piyaṃ jaññā, rakkheyya naṃ surakkhitaṃ;",
+    "Tiṇṇaṃ aññataraṃ yāmaṃ, paṭijaggeyya paṇḍito."
+   ],
+   "en": "If a man hold himself dear, let him watch himself carefully; during one at least out of the three watches a wise man should be watchful.",
+   "story": "Bodhirājakumāravatthu"
+  },
+  {
+   "n": 158,
+   "chapter": 12,
+   "pi": [
+    "Attānameva paṭhamaṃ, patirūpe nivesaye;",
+    "Athaññamanusāseyya, na kilisseyya paṇḍito."
+   ],
+   "en": "Let each man direct himself first to what is proper, then let him teach others; thus a wise man will not suffer.",
+   "story": "Upanandasakyaputtattheravatthu"
+  },
+  {
+   "n": 159,
+   "chapter": 12,
+   "pi": [
+    "Attānañce tathā kayirā, yathāññamanusāsati;",
+    "Sudanto vata dametha, attā hi kira duddamo."
+   ],
+   "en": "If a man make himself as he teaches others to be, then, being himself well subdued, he may subdue (others); one's own self is indeed difficult to subdue.",
+   "story": "Padhānikatissattheravatthu"
+  },
+  {
+   "n": 160,
+   "chapter": 12,
+   "pi": [
+    "Attā hi attano nātho, ko hi nātho paro siyā;",
+    "Attanā hi sudantena, nāthaṃ labhati dullabhaṃ."
+   ],
+   "en": "Self is the lord of self, who else could be the lord? With self well subdued, a man finds a lord such as few can find.",
+   "story": "Kumārakassapamātuttherivatthu"
+  },
+  {
+   "n": 161,
+   "chapter": 12,
+   "pi": [
+    "Attanā hi kataṃ pāpaṃ, Attajaṃ attasambhavaṃ;",
+    "Abhimatthati dummedhaṃ, Vajiraṃvasmamayaṃ maṇiṃ."
+   ],
+   "en": "The evil done by oneself, self-begotten, self-bred, crushes the foolish, as a diamond breaks a precious stone.",
+   "story": "Mahākālaupāsakavatthu"
+  },
+  {
+   "n": 162,
+   "chapter": 12,
+   "pi": [
+    "Yassa accantadussilyaṃ, māluvā sālamivotthataṃ;",
+    "Karoti so tathattānaṃ, yathā naṃ icchatī diso."
+   ],
+   "en": "He whose wickedness is very great brings himself down to that state where his enemy wishes him to be, as a creeper does with the tree which it surrounds.",
+   "story": "Devadattavatthu"
+  },
+  {
+   "n": 163,
+   "chapter": 12,
+   "pi": [
+    "Sukarāni asādhūni, attano ahitāni ca;",
+    "Yaṃ ve hitañca sādhuñca, taṃ ve paramadukkaraṃ."
+   ],
+   "en": "Bad deeds, and deeds hurtful to ourselves, are easy to do; what is beneficial and good, that is very difficult to do.",
+   "story": "Saṅghabhedaparisakkanavatthu"
+  },
+  {
+   "n": 164,
+   "chapter": 12,
+   "pi": [
+    "Yo sāsanaṃ arahataṃ, ariyānaṃ dhammajīvinaṃ;",
+    "Paṭikkosati dummedho, diṭṭhiṃ nissāya pāpikaṃ;",
+    "Phalāni kaṭṭhakasseva, attaghātāya phallati."
+   ],
+   "en": "The foolish man who scorns the rule of the venerable (Arahat), of the elect (Ariya), of the virtuous, and follows false doctrine, he bears fruit to his own destruction, like the fruits of the Katthaka reed.",
+   "story": "Kālattheravatthu"
+  },
+  {
+   "n": 165,
+   "chapter": 12,
+   "pi": [
+    "Attanā hi kataṃ pāpaṃ, attanā saṅkilissati;",
+    "Attanā akataṃ pāpaṃ, attanāva visujjhati;",
+    "Suddhī asuddhi paccattaṃ, nāñño aññaṃ visodhaye."
+   ],
+   "en": "By oneself the evil is done, by oneself one suffers; by oneself evil is left undone, by oneself one is purified. Purity and impurity belong to oneself, no one can purify another.",
+   "story": "Cūḷakālaupāsakavatthu"
+  },
+  {
+   "n": 166,
+   "chapter": 12,
+   "pi": [
+    "Attadatthaṃ paratthena, bahunāpi na hāpaye;",
+    "Attadatthamabhiññāya, sadatthapasuto siyā."
+   ],
+   "en": "Let no one forget his own duty for the sake of another's, however great; let a man, after he has discerned his own duty, be always attentive to his duty.",
+   "story": "Attadatthattheravatthu"
+  },
+  {
+   "n": 167,
+   "chapter": 13,
+   "pi": [
+    "Hīnaṃ dhammaṃ na seveyya, pamādena na saṃvase;",
+    "Micchādiṭṭhiṃ na seveyya, na siyā lokavaḍḍhano."
+   ],
+   "en": "Do not follow the evil law! Do not live on in thoughtlessness! Do not follow false doctrine! Be not a friend of the world.",
+   "story": "Daharabhikkhuvatthu"
+  },
+  {
+   "n": 168,
+   "chapter": 13,
+   "pi": [
+    "Uttiṭṭhe nappamajjeyya, dhammaṃ sucaritaṃ care;",
+    "Dhammacārī sukhaṃ seti, asmiṃ loke paramhi ca."
+   ],
+   "en": "Rouse thyself! do not be idle! Follow the law of virtue! The virtuous rests in bliss in this world and in the next.",
+   "story": "Suddhodanavatthu"
+  },
+  {
+   "n": 169,
+   "chapter": 13,
+   "pi": [
+    "Dhammaṃ care sucaritaṃ, na naṃ duccaritaṃ care;",
+    "Dhammacārī sukhaṃ seti, asmiṃ loke paramhi ca."
+   ],
+   "en": "Follow the law of virtue; do not follow that of sin. The virtuous rests in bliss in this world and in the next.",
+   "story": "Suddhodanavatthu"
+  },
+  {
+   "n": 170,
+   "chapter": 13,
+   "pi": [
+    "Yathā pubbuḷakaṃ passe, yathā passe marīcikaṃ;",
+    "Evaṃ lokaṃ avekkhantaṃ, maccurājā na passati."
+   ],
+   "en": "Look upon the world as a bubble, look upon it as a mirage: the king of death does not see him who thus looks down upon the world.",
+   "story": "Pañcasatavipassakabhikkhuvatthu"
+  },
+  {
+   "n": 171,
+   "chapter": 13,
+   "pi": [
+    "Etha passathimaṃ lokaṃ, cittaṃ rājarathūpamaṃ;",
+    "Yattha bālā visīdanti, natthi saṅgo vijānataṃ."
+   ],
+   "en": "Come, look at this glittering world, like unto a royal chariot; the foolish are immersed in it, but the wise do not touch it.",
+   "story": "Abhayarājakumāravatthu"
+  },
+  {
+   "n": 172,
+   "chapter": 13,
+   "pi": [
+    "Yo ca pubbe pamajjitvā, pacchā so nappamajjati;",
+    "Somaṃ lokaṃ pabhāseti, abbhā muttova candimā."
+   ],
+   "en": "He who formerly was reckless and afterwards became sober, brightens up this world, like the moon when freed from clouds.",
+   "story": "Sammajjanattheravatthu"
+  },
+  {
+   "n": 173,
+   "chapter": 13,
+   "pi": [
+    "Yassa pāpaṃ kataṃ kammaṃ, kusalena pidhīyati;",
+    "Somaṃ lokaṃ pabhāseti, abbhā muttova candimā."
+   ],
+   "en": "He whose evil deeds are covered by good deeds, brightens up this world, like the moon when freed from clouds.",
+   "story": "Aṅgulimālattheravatthu"
+  },
+  {
+   "n": 174,
+   "chapter": 13,
+   "pi": [
+    "Andhabhūto ayaṃ loko, tanukettha vipassati;",
+    "Sakuṇo jālamuttova, appo saggāya gacchati."
+   ],
+   "en": "This world is dark, few only can see here; a few only go to heaven, like birds escaped from the net.",
+   "story": "Pesakāradhītāvatthu"
+  },
+  {
+   "n": 175,
+   "chapter": 13,
+   "pi": [
+    "Haṃsādiccapathe yanti, ākāse yanti iddhiyā;",
+    "Nīyanti dhīrā lokamhā, jetvā māraṃ savāhiniṃ."
+   ],
+   "en": "The swans go on the path of the sun, they go through the ether by means of their miraculous power; the wise are led out of this world, when they have conquered Mara and his train.",
+   "story": "Tiṃsabhikkhuvatthu"
+  },
+  {
+   "n": 176,
+   "chapter": 13,
+   "pi": [
+    "Ekaṃ dhammaṃ atītassa, musāvādissa jantuno;",
+    "Vitiṇṇaparalokassa, natthi pāpaṃ akāriyaṃ."
+   ],
+   "en": "If a man has transgressed one law, and speaks lies, and scoffs at another world, there is no evil he will not do.",
+   "story": "Ciñcamāṇavikāvatthu"
+  },
+  {
+   "n": 177,
+   "chapter": 13,
+   "pi": [
+    "Na ve kadariyā devalokaṃ vajanti, Bālā have nappasaṃsanti dānaṃ;",
+    "Dhīro ca dānaṃ anumodamāno, Teneva so hoti sukhī parattha."
+   ],
+   "en": "The uncharitable do not go to the world of the gods; fools only do not praise liberality; a wise man rejoices in liberality, and through it becomes blessed in the other world.",
+   "story": "Asadisadānavatthu"
+  },
+  {
+   "n": 178,
+   "chapter": 13,
+   "pi": [
+    "Pathabyā ekarajjena, saggassa gamanena vā;",
+    "Sabbalokādhipaccena, sotāpattiphalaṃ varaṃ."
+   ],
+   "en": "Better than sovereignty over the earth, better than going to heaven, better than lordship over all worlds, is the reward of the first step in holiness.",
+   "story": "Anāthapiṇḍikaputtakālavatthu"
+  },
+  {
+   "n": 179,
+   "chapter": 14,
+   "pi": [
+    "Yassa jitaṃ nāvajīyati, Jitaṃ yassa noyāti koci loke;",
+    "Taṃ buddhamanantagocaraṃ, Apadaṃ kena padena nessatha."
+   ],
+   "en": "He whose conquest is not conquered again, into whose conquest no one in this world enters, by what track can you lead him, the Awakened, the Omniscient, the trackless?",
+   "story": "Māradhītaravatthu"
+  },
+  {
+   "n": 180,
+   "chapter": 14,
+   "pi": [
+    "Yassa jālinī visattikā, Taṇhā natthi kuhiñci netave;",
+    "Taṃ buddhamanantagocaraṃ, Apadaṃ kena padena nessatha."
+   ],
+   "en": "He whom no desire with its snares and poisons can lead astray, by what track can you lead him, the Awakened, the Omniscient, the trackless?",
+   "story": "Māradhītaravatthu"
+  },
+  {
+   "n": 181,
+   "chapter": 14,
+   "pi": [
+    "Ye jhānapasutā dhīrā, nekkhammūpasame ratā;",
+    "Devāpi tesaṃ pihayanti, sambuddhānaṃ satīmataṃ."
+   ],
+   "en": "Even the gods envy those who are awakened and not forgetful, who are given to meditation, who are wise, and who delight in the repose of retirement (from the world).",
+   "story": "Devorohaṇavatthu"
+  },
+  {
+   "n": 182,
+   "chapter": 14,
+   "pi": [
+    "Kiccho manussapaṭilābho, kicchaṃ maccāna jīvitaṃ;",
+    "Kicchaṃ saddhammassavanaṃ, kiccho buddhānamuppādo."
+   ],
+   "en": "Difficult (to obtain) is the conception of men, difficult is the life of mortals, difficult is the hearing of the True Law, difficult is the birth of the Awakened (the attainment of Buddhahood).",
+   "story": "Erakapattanāgarājavatthu"
+  },
+  {
+   "n": 183,
+   "chapter": 14,
+   "pi": [
+    "Sabbapāpassa akaraṇaṃ, kusalassa upasampadā;",
+    "Sacittapariyodapanaṃ, etaṃ buddhāna sāsanaṃ."
+   ],
+   "en": "Not to commit any sin, to do good, and to purify one's mind, that is the teaching of (all) the Awakened.",
+   "story": "Ānandattherapañhavatthu"
+  },
+  {
+   "n": 184,
+   "chapter": 14,
+   "pi": [
+    "Khantī paramaṃ tapo titikkhā, Nibbānaṃ paramaṃ vadanti buddhā;",
+    "Na hi pabbajito parūpaghātī, Na samaṇo hoti paraṃ viheṭhayanto."
+   ],
+   "en": "The Awakened call patience the highest penance, long-suffering the highest Nirvana; for he is not an anchorite (pravragita) who strikes others, he is not an ascetic (sramana) who insults others.",
+   "story": "Ānandattherapañhavatthu"
+  },
+  {
+   "n": 185,
+   "chapter": 14,
+   "pi": [
+    "Anūpavādo anūpaghāto, Pātimokkhe ca saṃvaro;",
+    "Mattaññutā ca bhattasmiṃ, Pantañca sayanāsanaṃ;",
+    "Adhicitte ca āyogo, Etaṃ buddhāna sāsanaṃ."
+   ],
+   "en": "Not to blame, not to strike, to live restrained under the law, to be moderate in eating, to sleep and sit alone, and to dwell on the highest thoughts,—this is the teaching of the Awakened.",
+   "story": "Ānandattherapañhavatthu"
+  },
+  {
+   "n": 186,
+   "chapter": 14,
+   "pi": [
+    "Na kahāpaṇavassena, titti kāmesu vijjati;",
+    "Appassādā dukhā kāmā, iti viññāya paṇḍito."
+   ],
+   "en": "There is no satisfying lusts, even by a shower of gold pieces; he who knows that lusts have a short taste and cause pain, he is wise;",
+   "story": "Anabhiratabhikkhuvatthu"
+  },
+  {
+   "n": 187,
+   "chapter": 14,
+   "pi": [
+    "Api dibbesu kāmesu, ratiṃ so nādhigacchati;",
+    "Taṇhakkhayarato hoti, sammāsambuddhasāvako."
+   ],
+   "en": "Even in heavenly pleasures he finds no satisfaction, the disciple who is fully awakened delights only in the destruction of all desires.",
+   "story": "Anabhiratabhikkhuvatthu"
+  },
+  {
+   "n": 188,
+   "chapter": 14,
+   "pi": [
+    "Bahuṃ ve saraṇaṃ yanti, pabbatāni vanāni ca;",
+    "Ārāmarukkhacetyāni, manussā bhayatajjitā."
+   ],
+   "en": "Men, driven by fear, go to many a refuge, to mountains and forests, to groves and sacred trees.",
+   "story": "Aggidattabrāhmaṇavatthu"
+  },
+  {
+   "n": 189,
+   "chapter": 14,
+   "pi": [
+    "Netaṃ kho saraṇaṃ khemaṃ, netaṃ saraṇamuttamaṃ;",
+    "Netaṃ saraṇamāgamma, sabbadukkhā pamuccati."
+   ],
+   "en": "But that is not a safe refuge, that is not the best refuge; a man is not delivered from all pains after having gone to that refuge.",
+   "story": "Aggidattabrāhmaṇavatthu"
+  },
+  {
+   "n": 190,
+   "chapter": 14,
+   "pi": [
+    "Yo ca buddhañca dhammañca, saṅghañca saraṇaṃ gato;",
+    "Cattāri ariyasaccāni, sammappaññāya passati."
+   ],
+   "en": "He who takes refuge with Buddha, the Law, and the Church; he who, with clear understanding, sees the four holy truths:—",
+   "story": "Aggidattabrāhmaṇavatthu"
+  },
+  {
+   "n": 191,
+   "chapter": 14,
+   "pi": [
+    "Dukkhaṃ dukkhasamuppādaṃ, dukkhassa ca atikkamaṃ;",
+    "Ariyaṃ caṭṭhaṅgikaṃ maggaṃ, dukkhūpasamagāminaṃ."
+   ],
+   "en": "Viz. pain, the origin of pain, the destruction of pain, and the eightfold holy way that leads to the quieting of pain;—",
+   "story": "Aggidattabrāhmaṇavatthu"
+  },
+  {
+   "n": 192,
+   "chapter": 14,
+   "pi": [
+    "Etaṃ kho saraṇaṃ khemaṃ, etaṃ saraṇamuttamaṃ;",
+    "Etaṃ saraṇamāgamma, sabbadukkhā pamuccati."
+   ],
+   "en": "That is the safe refuge, that is the best refuge; having gone to that refuge, a man is delivered from all pain.",
+   "story": "Aggidattabrāhmaṇavatthu"
+  },
+  {
+   "n": 193,
+   "chapter": 14,
+   "pi": [
+    "Dullabho purisājañño, na so sabbattha jāyati;",
+    "Yattha so jāyati dhīro, taṃ kulaṃ sukhamedhati."
+   ],
+   "en": "A supernatural person (a Buddha) is not easily found, he is not born everywhere. Wherever such a sage is born, that race prospers.",
+   "story": "Ānandattherapañhavatthu"
+  },
+  {
+   "n": 194,
+   "chapter": 14,
+   "pi": [
+    "Sukho buddhānamuppādo, sukhā saddhammadesanā;",
+    "Sukhā saṅghassa sāmaggī, samaggānaṃ tapo sukho."
+   ],
+   "en": "Happy is the arising of the awakened, happy is the teaching of the True Law, happy is peace in the church, happy is the devotion of those who are at peace.",
+   "story": "Sambahulabhikkhuvatthu"
+  },
+  {
+   "n": 195,
+   "chapter": 14,
+   "pi": [
+    "Pūjārahe pūjayato, buddhe yadi va sāvake;",
+    "Papañcasamatikkante, tiṇṇasokapariddave."
+   ],
+   "en": "He who pays homage to those who deserve homage, whether the awakened (Buddha) or their disciples, those who have overcome the host (of evils), and crossed the flood of sorrow, he who pays homage to such as have found deliverance and know no fear, his merit can never be measured by anybody.",
+   "story": "Kassapadasabalassasuvaṇṇacetiyavatthu",
+   "enWith": [
+    195,
+    196
+   ]
+  },
+  {
+   "n": 196,
+   "chapter": 14,
+   "pi": [
+    "Te tādise pūjayato, nibbute akutobhaye;",
+    "Na sakkā puññaṃ saṅkhātuṃ, imettamapi kenaci.",
+    "Paṭhamabhāṇavāraṃ."
+   ],
+   "en": "He who pays homage to those who deserve homage, whether the awakened (Buddha) or their disciples, those who have overcome the host (of evils), and crossed the flood of sorrow, he who pays homage to such as have found deliverance and know no fear, his merit can never be measured by anybody.",
+   "story": "Kassapadasabalassasuvaṇṇacetiyavatthu",
+   "enWith": [
+    195,
+    196
+   ]
+  },
+  {
+   "n": 197,
+   "chapter": 15,
+   "pi": [
+    "Susukhaṃ vata jīvāma, verinesu averino;",
+    "Verinesu manussesu, viharāma averino."
+   ],
+   "en": "Let us live happily then, not hating those who hate us! among men who hate us let us dwell free from hatred!",
+   "story": "Ñātikalahavūpasamanavatthu"
+  },
+  {
+   "n": 198,
+   "chapter": 15,
+   "pi": [
+    "Susukhaṃ vata jīvāma, āturesu anāturā;",
+    "Āturesu manussesu, viharāma anāturā."
+   ],
+   "en": "Let us live happily then, free from ailments among the ailing! among men who are ailing let us dwell free from ailments!",
+   "story": "Ñātikalahavūpasamanavatthu"
+  },
+  {
+   "n": 199,
+   "chapter": 15,
+   "pi": [
+    "Susukhaṃ vata jīvāma, ussukesu anussukā;",
+    "Ussukesu manussesu, viharāma anussukā."
+   ],
+   "en": "Let us live happily then, free from greed among the greedy! among men who are greedy let us dwell free from greed!",
+   "story": "Ñātikalahavūpasamanavatthu"
+  },
+  {
+   "n": 200,
+   "chapter": 15,
+   "pi": [
+    "Susukhaṃ vata jīvāma, yesaṃ no natthi kiñcanaṃ;",
+    "Pītibhakkhā bhavissāma, devā ābhassarā yathā."
+   ],
+   "en": "Let us live happily then, though we call nothing our own! We shall be like the bright gods, feeding on happiness!",
+   "story": "Māravatthu"
+  },
+  {
+   "n": 201,
+   "chapter": 15,
+   "pi": [
+    "Jayaṃ veraṃ pasavati, dukkhaṃ seti parājito;",
+    "Upasanto sukhaṃ seti, hitvā jayaparājayaṃ."
+   ],
+   "en": "Victory breeds hatred, for the conquered is unhappy. He who has given up both victory and defeat, he, the contented, is happy.",
+   "story": "Kosalaraññoparājayavatthu"
+  },
+  {
+   "n": 202,
+   "chapter": 15,
+   "pi": [
+    "Natthi rāgasamo aggi, Natthi dosasamo kali;",
+    "Natthi khandhasamā dukkhā, Natthi santiparaṃ sukhaṃ."
+   ],
+   "en": "There is no fire like passion; there is no losing throw like hatred; there is no pain like this body; there is no happiness higher than rest.",
+   "story": "Aññatarakuladārikāvatthu"
+  },
+  {
+   "n": 203,
+   "chapter": 15,
+   "pi": [
+    "Jighacchāparamā rogā, saṅkhāraparamā dukhā;",
+    "Etaṃ ñatvā yathābhūtaṃ, nibbānaṃ paramaṃ sukhaṃ."
+   ],
+   "en": "Hunger is the worst of diseases, the body the greatest of pains; if one knows this truly, that is Nirvana, the highest happiness.",
+   "story": "Ekaupāsakavatthu"
+  },
+  {
+   "n": 204,
+   "chapter": 15,
+   "pi": [
+    "Ārogyaparamā lābhā, Santuṭṭhiparamaṃ dhanaṃ;",
+    "Vissāsaparamā ñāti, Nibbānaṃ paramaṃ sukhaṃ."
+   ],
+   "en": "Health is the greatest of gifts, contentedness the best riches; trust is the best of relationships, Nirvana the highest happiness.",
+   "story": "Pasenadikosalavatthu"
+  },
+  {
+   "n": 205,
+   "chapter": 15,
+   "pi": [
+    "Pavivekarasaṃ pitvā, rasaṃ upasamassa ca;",
+    "Niddaro hoti nippāpo, dhammapītirasaṃ pivaṃ."
+   ],
+   "en": "He who has tasted the sweetness of solitude and tranquillity, is free from fear and free from sin, while he tastes the sweetness of drinking in the law.",
+   "story": "Tissattheravatthu"
+  },
+  {
+   "n": 206,
+   "chapter": 15,
+   "pi": [
+    "Sāhu dassanamariyānaṃ, sannivāso sadā sukho;",
+    "Adassanena bālānaṃ, niccameva sukhī siyā."
+   ],
+   "en": "The sight of the elect (Arya) is good, to live with them is always happiness; if a man does not see fools, he will be truly happy.",
+   "story": "Sakkavatthu"
+  },
+  {
+   "n": 207,
+   "chapter": 15,
+   "pi": [
+    "Bālasaṅgatacārī hi, dīghamaddhāna socati;",
+    "Dukkho bālehi saṃvāso, amitteneva sabbadā;",
+    "Dhīro ca sukhasaṃvāso, ñātīnaṃva samāgamo."
+   ],
+   "en": "He who walks in the company of fools suffers a long way; company with fools, as with an enemy, is always painful; company with the wise is pleasure, like meeting with kinsfolk.",
+   "story": "Sakkavatthu"
+  },
+  {
+   "n": 208,
+   "chapter": 15,
+   "pi": [
+    "Tasmā hi— Dhīrañca paññañca bahussutañca,",
+    "Dhorayhasīlaṃ vatavantamariyaṃ; Taṃ tādisaṃ sappurisaṃ sumedhaṃ,",
+    "Bhajetha nakkhattapathaṃva candimā."
+   ],
+   "en": "Therefore, one ought to follow the wise, the intelligent, the learned, the much enduring, the dutiful, the elect; one ought to follow a good and wise man, as the moon follows the path of the stars.",
+   "story": "Sakkavatthu"
+  },
+  {
+   "n": 209,
+   "chapter": 16,
+   "pi": [
+    "Ayoge yuñjamattānaṃ, yogasmiñca ayojayaṃ;",
+    "Atthaṃ hitvā piyaggāhī, pihetattānuyoginaṃ."
+   ],
+   "en": "He who gives himself to vanity, and does not give himself to meditation, forgetting the real aim (of life) and grasping at pleasure, will in time envy him who has exerted himself in meditation.",
+   "story": "Tayojanapabbajitavatthu"
+  },
+  {
+   "n": 210,
+   "chapter": 16,
+   "pi": [
+    "Mā piyehi samāgañchi, appiyehi kudācanaṃ;",
+    "Piyānaṃ adassanaṃ dukkhaṃ, appiyānañca dassanaṃ."
+   ],
+   "en": "Let no man ever look for what is pleasant, or what is unpleasant. Not to see what is pleasant is pain, and it is pain to see what is unpleasant.",
+   "story": "Tayojanapabbajitavatthu"
+  },
+  {
+   "n": 211,
+   "chapter": 16,
+   "pi": [
+    "Tasmā piyaṃ na kayirātha, piyāpāyo hi pāpako;",
+    "Ganthā tesaṃ na vijjanti, yesaṃ natthi piyāppiyaṃ."
+   ],
+   "en": "Let, therefore, no man love anything; loss of the beloved is evil. Those who love nothing and hate nothing, have no fetters.",
+   "story": "Tayojanapabbajitavatthu"
+  },
+  {
+   "n": 212,
+   "chapter": 16,
+   "pi": [
+    "Piyato jāyatī soko, piyato jāyatī bhayaṃ;",
+    "Piyato vippamuttassa, natthi soko kuto bhayaṃ."
+   ],
+   "en": "From pleasure comes grief, from pleasure comes fear; he who is free from pleasure knows neither grief nor fear.",
+   "story": "Aññatarakuṭumbikavatthu"
+  },
+  {
+   "n": 213,
+   "chapter": 16,
+   "pi": [
+    "Pemato jāyatī soko, pemato jāyatī bhayaṃ;",
+    "Pemato vippamuttassa, natthi soko kuto bhayaṃ."
+   ],
+   "en": "From affection comes grief, from affection comes fear; he who is free from affection knows neither grief nor fear.",
+   "story": "Visākhāvatthu"
+  },
+  {
+   "n": 214,
+   "chapter": 16,
+   "pi": [
+    "Ratiyā jāyatī soko, ratiyā jāyatī bhayaṃ;",
+    "Ratiyā vippamuttassa, natthi soko kuto bhayaṃ."
+   ],
+   "en": "From lust comes grief, from lust comes fear; he who is free from lust knows neither grief nor fear.",
+   "story": "Licchavīvatthu"
+  },
+  {
+   "n": 215,
+   "chapter": 16,
+   "pi": [
+    "Kāmato jāyatī soko, kāmato jāyatī bhayaṃ;",
+    "Kāmato vippamuttassa, natthi soko kuto bhayaṃ."
+   ],
+   "en": "From love comes grief, from love comes fear; he who is free from love knows neither grief nor fear.",
+   "story": "Anitthigandhakumāravatthu"
+  },
+  {
+   "n": 216,
+   "chapter": 16,
+   "pi": [
+    "Taṇhāya jāyatī soko, taṇhāya jāyatī bhayaṃ;",
+    "Taṇhāya vippamuttassa, natthi soko kuto bhayaṃ."
+   ],
+   "en": "From greed comes grief, from greed comes fear; he who is free from greed knows neither grief nor fear.",
+   "story": "Aññatarabrāhmaṇavatthu"
+  },
+  {
+   "n": 217,
+   "chapter": 16,
+   "pi": [
+    "Sīladassanasampannaṃ, dhammaṭṭhaṃ saccavedinaṃ;",
+    "Attano kamma kubbānaṃ, taṃ jano kurute piyaṃ."
+   ],
+   "en": "He who possesses virtue and intelligence, who is just, speaks the truth, and does what is his own business, him the world will hold dear.",
+   "story": "Pañcasatadārakavatthu"
+  },
+  {
+   "n": 218,
+   "chapter": 16,
+   "pi": [
+    "Chandajāto anakkhāte, Manasā ca phuṭo siyā;",
+    "Kāmesu ca appaṭibaddhacitto, Uddhaṃsototi vuccati."
+   ],
+   "en": "He in whom a desire for the Ineffable (Nirvana) has sprung up, who is satisfied in his mind, and whose thoughts are not bewildered by love, he is called urdhvamsrotas (carried upwards by the stream).",
+   "story": "Ekaanāgāmittheravatthu"
+  },
+  {
+   "n": 219,
+   "chapter": 16,
+   "pi": [
+    "Cirappavāsiṃ purisaṃ, dūrato sotthimāgataṃ;",
+    "Ñātimittā suhajjā ca, abhinandanti āgataṃ."
+   ],
+   "en": "Kinsmen, friends, and lovers salute a man who has been long away, and returns safe from afar.",
+   "story": "Nandiyavatthu"
+  },
+  {
+   "n": 220,
+   "chapter": 16,
+   "pi": [
+    "Tatheva katapuññampi, asmā lokā paraṃ gataṃ;",
+    "Puññāni paṭigaṇhanti, piyaṃ ñātīva āgataṃ."
+   ],
+   "en": "In like manner his good works receive him who has done good, and has gone from this world to the other;—as kinsmen receive a friend on his return.",
+   "story": "Nandiyavatthu"
+  },
+  {
+   "n": 221,
+   "chapter": 17,
+   "pi": [
+    "Kodhaṃ jahe vippajaheyya mānaṃ, Saṃyojanaṃ sabbamatikkameyya;",
+    "Taṃ nāmarūpasmimasajjamānaṃ, Akiñcanaṃ nānupatanti dukkhā."
+   ],
+   "en": "Let a man leave anger, let him forsake pride, let him overcome all bondage! No sufferings befall the man who is not attached to name and form, and who calls nothing his own.",
+   "story": "Rohinīkhattiyakaññāvatthu"
+  },
+  {
+   "n": 222,
+   "chapter": 17,
+   "pi": [
+    "Yo ve uppatitaṃ kodhaṃ, rathaṃ bhantaṃva vāraye;",
+    "Tamahaṃ sārathiṃ brūmi, rasmiggāho itaro jano."
+   ],
+   "en": "He who holds back rising anger like a rolling chariot, him I call a real driver; other people are but holding the reins.",
+   "story": "Aññatarabhikkhuvatthu"
+  },
+  {
+   "n": 223,
+   "chapter": 17,
+   "pi": [
+    "Akkodhena jine kodhaṃ, asādhuṃ sādhunā jine;",
+    "Jine kadariyaṃ dānena, saccenālikavādinaṃ."
+   ],
+   "en": "Let a man overcome anger by love, let him overcome evil by good; let him overcome the greedy by liberality, the liar by truth!",
+   "story": "Uttarāupāsikavatthu"
+  },
+  {
+   "n": 224,
+   "chapter": 17,
+   "pi": [
+    "Saccaṃ bhaṇe na kujjheyya, dajjā appampi yācito;",
+    "Etehi tīhi ṭhānehi, gacche devāna santike."
+   ],
+   "en": "Speak the truth, do not yield to anger; give, if thou art asked for little; by these three steps thou wilt go near the gods.",
+   "story": "Mahāmoggallānapañhavatthu"
+  },
+  {
+   "n": 225,
+   "chapter": 17,
+   "pi": [
+    "Ahiṃsakā ye munayo, niccaṃ kāyena saṃvutā;",
+    "Te yanti accutaṃ ṭhānaṃ, yattha gantvā na socare."
+   ],
+   "en": "The sages who injure nobody, and who always control their body, they will go to the unchangeable place (Nirvana), where, if they have gone, they will suffer no more.",
+   "story": "Buddhapitubrāhmaṇavatthu"
+  },
+  {
+   "n": 226,
+   "chapter": 17,
+   "pi": [
+    "Sadā jāgaramānānaṃ, ahorattānusikkhinaṃ;",
+    "Nibbānaṃ adhimuttānaṃ, atthaṃ gacchanti āsavā."
+   ],
+   "en": "Those who are ever watchful, who study day and night, and who strive after Nirvana, their passions will come to an end.",
+   "story": "Puṇṇadāsīvatthu"
+  },
+  {
+   "n": 227,
+   "chapter": 17,
+   "pi": [
+    "Porāṇametaṃ atula, netaṃ ajjatanāmiva;",
+    "Nindanti tuṇhimāsīnaṃ, nindanti bahubhāṇinaṃ;",
+    "Mitabhāṇimpi nindanti, natthi loke anindito."
+   ],
+   "en": "This is an old saying, O Atula, this is not only of to-day: `They blame him who sits silent, they blame him who speaks much, they also blame him who says little; there is no one on earth who is not blamed.'",
+   "story": "Atulaupāsakavatthu"
+  },
+  {
+   "n": 228,
+   "chapter": 17,
+   "pi": [
+    "Na cāhu na ca bhavissati, na cetarahi vijjati;",
+    "Ekantaṃ nindito poso, ekantaṃ vā pasaṃsito."
+   ],
+   "en": "There never was, there never will be, nor is there now, a man who is always blamed, or a man who is always praised.",
+   "story": "Atulaupāsakavatthu"
+  },
+  {
+   "n": 229,
+   "chapter": 17,
+   "pi": [
+    "Yañce viññū pasaṃsanti, anuvicca suve suve;",
+    "Acchiddavuttiṃ medhāviṃ, paññāsīlasamāhitaṃ."
+   ],
+   "en": "But he whom those who discriminate praise continually day after day, as without blemish, wise, rich in knowledge and virtue, who would dare to blame him, like a coin made of gold from the Gambu river? Even the gods praise him, he is praised even by Brahman.",
+   "story": "Atulaupāsakavatthu",
+   "enWith": [
+    229,
+    230
+   ]
+  },
+  {
+   "n": 230,
+   "chapter": 17,
+   "pi": [
+    "Nikkhaṃ jambonadasseva, ko taṃ ninditumarahati;",
+    "Devāpi naṃ pasaṃsanti, brahmunāpi pasaṃsito."
+   ],
+   "en": "But he whom those who discriminate praise continually day after day, as without blemish, wise, rich in knowledge and virtue, who would dare to blame him, like a coin made of gold from the Gambu river? Even the gods praise him, he is praised even by Brahman.",
+   "story": "Atulaupāsakavatthu",
+   "enWith": [
+    229,
+    230
+   ]
+  },
+  {
+   "n": 231,
+   "chapter": 17,
+   "pi": [
+    "Kāyappakopaṃ rakkheyya, kāyena saṃvuto siyā;",
+    "Kāyaduccaritaṃ hitvā, kāyena sucaritaṃ care."
+   ],
+   "en": "Beware of bodily anger, and control thy body! Leave the sins of the body, and with thy body practise virtue!",
+   "story": "Chabbaggiyavatthu"
+  },
+  {
+   "n": 232,
+   "chapter": 17,
+   "pi": [
+    "Vacīpakopaṃ rakkheyya, vācāya saṃvuto siyā;",
+    "Vacīduccaritaṃ hitvā, vācāya sucaritaṃ care."
+   ],
+   "en": "Beware of the anger of the tongue, and control thy tongue! Leave the sins of the tongue, and practise virtue with thy tongue!",
+   "story": "Chabbaggiyavatthu"
+  },
+  {
+   "n": 233,
+   "chapter": 17,
+   "pi": [
+    "Manopakopaṃ rakkheyya, manasā saṃvuto siyā;",
+    "Manoduccaritaṃ hitvā, manasā sucaritaṃ care."
+   ],
+   "en": "Beware of the anger of the mind, and control thy mind! Leave the sins of the mind, and practise virtue with thy mind!",
+   "story": "Chabbaggiyavatthu"
+  },
+  {
+   "n": 234,
+   "chapter": 17,
+   "pi": [
+    "Kāyena saṃvutā dhīrā, atho vācāya saṃvutā;",
+    "Manasā saṃvutā dhīrā, te ve suparisaṃvutā."
+   ],
+   "en": "The wise who control their body, who control their tongue, the wise who control their mind, are indeed well controlled.",
+   "story": "Chabbaggiyavatthu"
+  },
+  {
+   "n": 235,
+   "chapter": 18,
+   "pi": [
+    "Paṇḍupalāsova dānisi, Yamapurisāpi ca te upaṭṭhitā;",
+    "Uyyogamukhe ca tiṭṭhasi, Pātheyyampi ca te na vijjati."
+   ],
+   "en": "Thou art now like a sear leaf, the messengers of death (Yama) have come near to thee; thou standest at the door of thy departure, and thou hast no provision for thy journey.",
+   "story": "Goghātakaputtavatthu"
+  },
+  {
+   "n": 236,
+   "chapter": 18,
+   "pi": [
+    "So karohi dīpamattano, Khippaṃ vāyama paṇḍito bhava;",
+    "Niddhantamalo anaṅgaṇo, Dibbaṃ ariyabhūmiṃ upehisi."
+   ],
+   "en": "Make thyself an island, work hard, be wise! When thy impurities are blown away, and thou art free from guilt, thou wilt enter into the heavenly world of the elect (Ariya).",
+   "story": "Goghātakaputtavatthu"
+  },
+  {
+   "n": 237,
+   "chapter": 18,
+   "pi": [
+    "Upanītavayo ca dānisi, Sampayātosi yamassa santikaṃ;",
+    "Vāso te natthi antarā, Pātheyyampi ca te na vijjati."
+   ],
+   "en": "Thy life has come to an end, thou art come near to death (Yama), there is no resting-place for thee on the road, and thou hast no provision for thy journey.",
+   "story": "Goghātakaputtavatthu"
+  },
+  {
+   "n": 238,
+   "chapter": 18,
+   "pi": [
+    "So karohi dīpamattano, Khippaṃ vāyama paṇḍito bhava;",
+    "Niddhantamalo anaṅgaṇo, Na punaṃ jātijaraṃ upehisi."
+   ],
+   "en": "Make thyself an island, work hard, be wise! When thy impurities are blown away, and thou art free from guilt, thou wilt not enter again into birth and decay.",
+   "story": "Goghātakaputtavatthu"
+  },
+  {
+   "n": 239,
+   "chapter": 18,
+   "pi": [
+    "Anupubbena medhāvī, thokaṃ thokaṃ khaṇe khaṇe;",
+    "Kammāro rajatasseva, niddhame malamattano."
+   ],
+   "en": "Let a wise man blow off the impurities of his self, as a smith blows off the impurities of silver one by one, little by little, and from time to time.",
+   "story": "Aññatarabrāhmaṇavatthu"
+  },
+  {
+   "n": 240,
+   "chapter": 18,
+   "pi": [
+    "Ayasāva malaṃ samuṭṭhitaṃ, Tatuṭṭhāya tameva khādati;",
+    "Evaṃ atidhonacārinaṃ, Sāni kammāni nayanti duggatiṃ."
+   ],
+   "en": "As the impurity which springs from the iron, when it springs from it, destroys it; thus do a transgressor's own works lead him to the evil path.",
+   "story": "Tissattheravatthu"
+  },
+  {
+   "n": 241,
+   "chapter": 18,
+   "pi": [
+    "Asajjhāyamalā mantā, anuṭṭhānamalā gharā;",
+    "Malaṃ vaṇṇassa kosajjaṃ, pamādo rakkhato malaṃ."
+   ],
+   "en": "The taint of prayers is non-repetition; the taint of houses, non-repair; the taint of the body is sloth; the taint of a watchman, thoughtlessness.",
+   "story": "Lāḷudāyīvatthu"
+  },
+  {
+   "n": 242,
+   "chapter": 18,
+   "pi": [
+    "Malitthiyā duccaritaṃ, maccheraṃ dadato malaṃ;",
+    "Malā ve pāpakā dhammā, asmiṃ loke paramhi ca."
+   ],
+   "en": "Bad conduct is the taint of woman, greediness the taint of a benefactor; tainted are all evil ways in this world and in the next.",
+   "story": "Aññatarakulaputtavatthu"
+  },
+  {
+   "n": 243,
+   "chapter": 18,
+   "pi": [
+    "Tato malā malataraṃ, avijjā paramaṃ malaṃ;",
+    "Etaṃ malaṃ pahantvāna, nimmalā hotha bhikkhavo."
+   ],
+   "en": "But there is a taint worse than all taints,—ignorance is the greatest taint. O mendicants! throw off that taint, and become taintless!",
+   "story": "Aññatarakulaputtavatthu"
+  },
+  {
+   "n": 244,
+   "chapter": 18,
+   "pi": [
+    "Sujīvaṃ ahirikena, kākasūrena dhaṃsinā;",
+    "Pakkhandinā pagabbhena, saṅkiliṭṭhena jīvitaṃ."
+   ],
+   "en": "Life is easy to live for a man who is without shame, a crow hero, a mischief-maker, an insulting, bold, and wretched fellow.",
+   "story": "Cūḷasāribhikkhuvatthu"
+  },
+  {
+   "n": 245,
+   "chapter": 18,
+   "pi": [
+    "Hirīmatā ca dujjīvaṃ, niccaṃ sucigavesinā;",
+    "Alīnenāppagabbhena, suddhājīvena passatā."
+   ],
+   "en": "But life is hard to live for a modest man, who always looks for what is pure, who is disinterested, quiet, spotless, and intelligent.",
+   "story": "Cūḷasāribhikkhuvatthu"
+  },
+  {
+   "n": 246,
+   "chapter": 18,
+   "pi": [
+    "Yo pāṇamatipāteti, musāvādañca bhāsati;",
+    "Loke adinnamādiyati, paradārañca gacchati."
+   ],
+   "en": "He who destroys life, who speaks untruth, who in this world takes what is not given him, who goes to another man's wife;",
+   "story": "Pañcaupāsakavatthu"
+  },
+  {
+   "n": 247,
+   "chapter": 18,
+   "pi": [
+    "Surāmerayapānañca, yo naro anuyuñjati;",
+    "Idheva meso lokasmiṃ, mūlaṃ khaṇati attano."
+   ],
+   "en": "And the man who gives himself to drinking intoxicating liquors, he, even in this world, digs up his own root.",
+   "story": "Pañcaupāsakavatthu"
+  },
+  {
+   "n": 248,
+   "chapter": 18,
+   "pi": [
+    "Evaṃ bho purisa jānāhi, pāpadhammā asaññatā;",
+    "Mā taṃ lobho adhammo ca, ciraṃ dukkhāya randhayuṃ."
+   ],
+   "en": "O man, know this, that the unrestrained are in a bad state; take care that greediness and vice do not bring thee to grief for a long time!",
+   "story": "Pañcaupāsakavatthu"
+  },
+  {
+   "n": 249,
+   "chapter": 18,
+   "pi": [
+    "Dadāti ve yathāsaddhaṃ, yathāpasādanaṃ jano;",
+    "Tattha yo ca maṅku bhavati, paresaṃ pānabhojane;",
+    "Na so divā vā rattiṃ vā, samādhimadhigacchati."
+   ],
+   "en": "The world gives according to their faith or according to their pleasure: if a man frets about the food and the drink given to others, he will find no rest either by day or by night.",
+   "story": "Tissadaharavatthu"
+  },
+  {
+   "n": 250,
+   "chapter": 18,
+   "pi": [
+    "Yassa cetaṃ samucchinnaṃ, mūlaghaccaṃ samūhataṃ;",
+    "Sa ve divā vā rattiṃ vā, samādhimadhigacchati."
+   ],
+   "en": "He in whom that feeling is destroyed, and taken out with the very root, finds rest by day and by night.",
+   "story": "Tissadaharavatthu"
+  },
+  {
+   "n": 251,
+   "chapter": 18,
+   "pi": [
+    "Natthi rāgasamo aggi, natthi dosasamo gaho;",
+    "Natthi mohasamaṃ jālaṃ, natthi taṇhāsamā nadī."
+   ],
+   "en": "There is no fire like passion, there is no shark like hatred, there is no snare like folly, there is no torrent like greed.",
+   "story": "Pañcaupāsakavatthu"
+  },
+  {
+   "n": 252,
+   "chapter": 18,
+   "pi": [
+    "Sudassaṃ vajjamaññesaṃ, attano pana duddasaṃ;",
+    "Paresaṃ hi so vajjāni, opunāti yathā bhusaṃ;",
+    "Attano pana chādeti, kaliṃva kitavā saṭho."
+   ],
+   "en": "The fault of others is easily perceived, but that of oneself is difficult to perceive; a man winnows his neighbour's faults like chaff, but his own fault he hides, as a cheat hides the bad die from the gambler.",
+   "story": "Meṇḍakaseṭṭhivatthu"
+  },
+  {
+   "n": 253,
+   "chapter": 18,
+   "pi": [
+    "Paravajjānupassissa, niccaṃ ujjhānasaññino;",
+    "Āsavā tassa vaḍḍhanti, ārā so āsavakkhayā."
+   ],
+   "en": "If a man looks after the faults of others, and is always inclined to be offended, his own passions will grow, and he is far from the destruction of passions.",
+   "story": "Ujjhānasaññittheravatthu"
+  },
+  {
+   "n": 254,
+   "chapter": 18,
+   "pi": [
+    "Ākāseva padaṃ natthi, samaṇo natthi bāhire;",
+    "Papañcābhiratā pajā, nippapañcā tathāgatā."
+   ],
+   "en": "There is no path through the air, a man is not a Samana by outward acts. The world delights in vanity, the Tathagatas (the Buddhas) are free from vanity.",
+   "story": "Subhaddaparibbājakavatthu"
+  },
+  {
+   "n": 255,
+   "chapter": 18,
+   "pi": [
+    "Ākāseva padaṃ natthi, samaṇo natthi bāhire;",
+    "Saṅkhārā sassatā natthi, natthi buddhānamiñjitaṃ."
+   ],
+   "en": "There is no path through the air, a man is not a Samana by outward acts. No creatures are eternal; but the awakened (Buddha) are never shaken.",
+   "story": "Subhaddaparibbājakavatthu"
+  },
+  {
+   "n": 256,
+   "chapter": 19,
+   "pi": [
+    "Na tena hoti dhammaṭṭho, yenatthaṃ sāhasā naye;",
+    "Yo ca atthaṃ anatthañca, ubho niccheyya paṇḍito."
+   ],
+   "en": "A man is not just if he carries a matter by violence; no, he who distinguishes both right and wrong, who is learned and leads others, not by violence, but by law and equity, and who is guarded by the law and intelligent, he is called just.",
+   "story": "Vinicchayamahāmattavatthu",
+   "enWith": [
+    256,
+    257
+   ]
+  },
+  {
+   "n": 257,
+   "chapter": 19,
+   "pi": [
+    "Asāhasena dhammena, samena nayatī pare;",
+    "Dhammassa gutto medhāvī, “dhammaṭṭho”ti pavuccati."
+   ],
+   "en": "A man is not just if he carries a matter by violence; no, he who distinguishes both right and wrong, who is learned and leads others, not by violence, but by law and equity, and who is guarded by the law and intelligent, he is called just.",
+   "story": "Vinicchayamahāmattavatthu",
+   "enWith": [
+    256,
+    257
+   ]
+  },
+  {
+   "n": 258,
+   "chapter": 19,
+   "pi": [
+    "Na tena paṇḍito hoti, yāvatā bahu bhāsati;",
+    "Khemī averī abhayo, “paṇḍito”ti pavuccati."
+   ],
+   "en": "A man is not learned because he talks much; he who is patient, free from hatred and fear, he is called learned.",
+   "story": "Chabbaggiyavatthu"
+  },
+  {
+   "n": 259,
+   "chapter": 19,
+   "pi": [
+    "Na tāvatā dhammadharo, yāvatā bahu bhāsati;",
+    "Yo ca appampi sutvāna, dhammaṃ kāyena passati;",
+    "Sa ve dhammadharo hoti, yo dhammaṃ nappamajjati."
+   ],
+   "en": "A man is not a supporter of the law because he talks much; even if a man has learnt little, but sees the law bodily, he is a supporter of the law, a man who never neglects the law.",
+   "story": "Ekudānakhīṇāsavavatthu"
+  },
+  {
+   "n": 260,
+   "chapter": 19,
+   "pi": [
+    "Na tena thero so hoti, yenassa palitaṃ siro;",
+    "Paripakko vayo tassa, “moghajiṇṇo”ti vuccati."
+   ],
+   "en": "A man is not an elder because his head is grey; his age may be ripe, but he is called `Old-in-vain.'",
+   "story": "Lakuṇḍakabhaddiyattheravatthu"
+  },
+  {
+   "n": 261,
+   "chapter": 19,
+   "pi": [
+    "Yamhi saccañca dhammo ca, ahiṃsā saṃyamo damo;",
+    "Sa ve vantamalo dhīro, “thero” iti pavuccati."
+   ],
+   "en": "He in whom there is truth, virtue, love, restraint, moderation, he who is free from impurity and is wise, he is called an elder.",
+   "story": "Lakuṇḍakabhaddiyattheravatthu"
+  },
+  {
+   "n": 262,
+   "chapter": 19,
+   "pi": [
+    "Na vākkaraṇamattena, vaṇṇapokkharatāya vā;",
+    "Sādhurūpo naro hoti, issukī maccharī saṭho."
+   ],
+   "en": "An envious greedy, dishonest man does not become respectable by means of much talking only, or by the beauty of his complexion.",
+   "story": "Sambahulabhikkhuvatthu"
+  },
+  {
+   "n": 263,
+   "chapter": 19,
+   "pi": [
+    "Yassa cetaṃ samucchinnaṃ, mūlaghaccaṃ samūhataṃ;",
+    "Sa vantadoso medhāvī, “sādhurūpo”ti vuccati."
+   ],
+   "en": "He in whom all this is destroyed, and taken out with the very root, he, when freed from hatred and wise, is called respectable.",
+   "story": "Sambahulabhikkhuvatthu"
+  },
+  {
+   "n": 264,
+   "chapter": 19,
+   "pi": [
+    "Na muṇḍakena samaṇo, abbato alikaṃ bhaṇaṃ;",
+    "Icchālobhasamāpanno, samaṇo kiṃ bhavissati."
+   ],
+   "en": "Not by tonsure does an undisciplined man who speaks falsehood become a Samana; can a man be a Samana who is still held captive by desire and greediness?",
+   "story": "Hatthakavatthu"
+  },
+  {
+   "n": 265,
+   "chapter": 19,
+   "pi": [
+    "Yo ca sameti pāpāni, aṇuṃthūlāni sabbaso;",
+    "Samitattā hi pāpānaṃ, “samaṇo”ti pavuccati."
+   ],
+   "en": "He who always quiets the evil, whether small or large, he is called a Samana (a quiet man), because he has quieted all evil.",
+   "story": "Hatthakavatthu"
+  },
+  {
+   "n": 266,
+   "chapter": 19,
+   "pi": [
+    "Na tena bhikkhu so hoti, yāvatā bhikkhate pare;",
+    "Vissaṃ dhammaṃ samādāya, bhikkhu hoti na tāvatā."
+   ],
+   "en": "A man is not a mendicant (Bhikshu) simply because he asks others for alms; he who adopts the whole law is a Bhikshu, not he who only begs.",
+   "story": "Aññatarabrāhmaṇavatthu"
+  },
+  {
+   "n": 267,
+   "chapter": 19,
+   "pi": [
+    "Yodha puññañca pāpañca, bāhetvā brahmacariyavā;",
+    "Saṅkhāya loke carati, sa ve “bhikkhū”ti vuccati."
+   ],
+   "en": "He who is above good and evil, who is chaste, who with knowledge passes through the world, he indeed is called a Bhikshu.",
+   "story": "Aññatarabrāhmaṇavatthu"
+  },
+  {
+   "n": 268,
+   "chapter": 19,
+   "pi": [
+    "Na monena munī hoti, mūḷharūpo aviddasu;",
+    "Yo ca tulaṃva paggayha, varamādāya paṇḍito."
+   ],
+   "en": "A man is not a Muni because he observes silence (mona, i.e. mauna), if he is foolish and ignorant; but the wise who, taking the balance, chooses the good and avoids evil, he is a Muni, and is a Muni thereby; he who in this world weighs both sides is called a Muni.",
+   "story": "Titthiyavatthu",
+   "enWith": [
+    268,
+    269
+   ]
+  },
+  {
+   "n": 269,
+   "chapter": 19,
+   "pi": [
+    "Pāpāni parivajjeti, sa munī tena so muni;",
+    "Yo munāti ubho loke, “muni” tena pavuccati."
+   ],
+   "en": "A man is not a Muni because he observes silence (mona, i.e. mauna), if he is foolish and ignorant; but the wise who, taking the balance, chooses the good and avoids evil, he is a Muni, and is a Muni thereby; he who in this world weighs both sides is called a Muni.",
+   "story": "Titthiyavatthu",
+   "enWith": [
+    268,
+    269
+   ]
+  },
+  {
+   "n": 270,
+   "chapter": 19,
+   "pi": [
+    "Na tena ariyo hoti, yena pāṇāni hiṃsati;",
+    "Ahiṃsā sabbapāṇānaṃ, “ariyo”ti pavuccati."
+   ],
+   "en": "A man is not an elect (Ariya) because he injures living creatures; because he has pity on all living creatures, therefore is a man called Ariya.",
+   "story": "Bālisikavatthu"
+  },
+  {
+   "n": 271,
+   "chapter": 19,
+   "pi": [
+    "Na sīlabbatamattena, bāhusaccena vā pana;",
+    "Atha vā samādhilābhena, vivittasayanena vā."
+   ],
+   "en": "Not only by discipline and vows, not only by much learning, not by entering into a trance, not by sleeping alone, do I earn the happiness of release which no worldling can know. Bhikshu, be not confident as long as thou hast not attained the extinction of desires.",
+   "story": "Sambahulasīlādisampannabhikkhuvatthu",
+   "enWith": [
+    271,
+    272
+   ]
+  },
+  {
+   "n": 272,
+   "chapter": 19,
+   "pi": [
+    "Phusāmi nekkhammasukhaṃ, aputhujjanasevitaṃ;",
+    "Bhikkhu vissāsamāpādi, appatto āsavakkhayaṃ."
+   ],
+   "en": "Not only by discipline and vows, not only by much learning, not by entering into a trance, not by sleeping alone, do I earn the happiness of release which no worldling can know. Bhikshu, be not confident as long as thou hast not attained the extinction of desires.",
+   "story": "Sambahulasīlādisampannabhikkhuvatthu",
+   "enWith": [
+    271,
+    272
+   ]
+  },
+  {
+   "n": 273,
+   "chapter": 20,
+   "pi": [
+    "Maggānaṭṭhaṅgiko seṭṭho, saccānaṃ caturo padā;",
+    "Virāgo seṭṭho dhammānaṃ, dvipadānañca cakkhumā."
+   ],
+   "en": "The best of ways is the eightfold; the best of truths the four words; the best of virtues passionlessness; the best of men he who has eyes to see.",
+   "story": "Pañcasatabhikkhuvatthu"
+  },
+  {
+   "n": 274,
+   "chapter": 20,
+   "pi": [
+    "Eseva maggo natthañño, Dassanassa visuddhiyā;",
+    "Etañhi tumhe paṭipajjatha, Mārassetaṃ pamohanaṃ."
+   ],
+   "en": "This is the way, there is no other that leads to the purifying of intelligence. Go on this way! Everything else is the deceit of Mara (the tempter).",
+   "story": "Pañcasatabhikkhuvatthu"
+  },
+  {
+   "n": 275,
+   "chapter": 20,
+   "pi": [
+    "Etañhi tumhe paṭipannā, dukkhassantaṃ karissatha;",
+    "Akkhāto vo mayā maggo, aññāya sallakantanaṃ."
+   ],
+   "en": "If you go on this way, you will make an end of pain! The way was preached by me, when I had understood the removal of the thorns (in the flesh).",
+   "story": "Pañcasatabhikkhuvatthu"
+  },
+  {
+   "n": 276,
+   "chapter": 20,
+   "pi": [
+    "Tumhehi kiccamātappaṃ, akkhātāro tathāgatā;",
+    "Paṭipannā pamokkhanti, jhāyino mārabandhanā."
+   ],
+   "en": "You yourself must make an effort. The Tathagatas (Buddhas) are only preachers. The thoughtful who enter the way are freed from the bondage of Mara.",
+   "story": "Pañcasatabhikkhuvatthu"
+  },
+  {
+   "n": 277,
+   "chapter": 20,
+   "pi": [
+    "“Sabbe saṅkhārā aniccā”ti, yadā paññāya passati;",
+    "Atha nibbindati dukkhe, esa maggo visuddhiyā."
+   ],
+   "en": "`All created things perish,' he who knows and sees this becomes passive in pain; this is the way to purity.",
+   "story": "Aniccalakkhaṇavatthu"
+  },
+  {
+   "n": 278,
+   "chapter": 20,
+   "pi": [
+    "“Sabbe saṅkhārā dukkhā”ti, yadā paññāya passati;",
+    "Atha nibbindati dukkhe, esa maggo visuddhiyā."
+   ],
+   "en": "`All created things are grief and pain,' he who knows and sees this becomes passive in pain; this is the way that leads to purity.",
+   "story": "Dukkhalakkhaṇavatthu"
+  },
+  {
+   "n": 279,
+   "chapter": 20,
+   "pi": [
+    "“Sabbe dhammā anattā”ti, yadā paññāya passati;",
+    "Atha nibbindati dukkhe, esa maggo visuddhiyā."
+   ],
+   "en": "`All forms are unreal,' he who knows and sees this becomes passive in pain; this is the way that leads to purity.",
+   "story": "Anattalakkhaṇavatthu"
+  },
+  {
+   "n": 280,
+   "chapter": 20,
+   "pi": [
+    "Uṭṭhānakālamhi anuṭṭhahāno, Yuvā balī ālasiyaṃ upeto;",
+    "Saṃsannasaṅkappamano kusīto, Paññāya maggaṃ alaso na vindati."
+   ],
+   "en": "He who does not rouse himself when it is time to rise, who, though young and strong, is full of sloth, whose will and thought are weak, that lazy and idle man will never find the way to knowledge.",
+   "story": "Padhānakammikatissattheravatthu"
+  },
+  {
+   "n": 281,
+   "chapter": 20,
+   "pi": [
+    "Vācānurakkhī manasā susaṃvuto, Kāyena ca nākusalaṃ kayirā;",
+    "Ete tayo kammapathe visodhaye, Ārādhaye maggamisippaveditaṃ."
+   ],
+   "en": "Watching his speech, well restrained in mind, let a man never commit any wrong with his body! Let a man but keep these three roads of action clear, and he will achieve the way which is taught by the wise.",
+   "story": "Sūkarapetavatthu"
+  },
+  {
+   "n": 282,
+   "chapter": 20,
+   "pi": [
+    "Yogā ve jāyatī bhūri, ayogā bhūrisaṅkhayo;",
+    "Etaṃ dvedhāpathaṃ ñatvā, bhavāya vibhavāya ca;",
+    "Tathāttānaṃ niveseyya, yathā bhūri pavaḍḍhati."
+   ],
+   "en": "Through zeal knowledge is gotten, through lack of zeal knowledge is lost; let a man who knows this double path of gain and loss thus place himself that knowledge may grow.",
+   "story": "Poṭṭhilattheravatthu"
+  },
+  {
+   "n": 283,
+   "chapter": 20,
+   "pi": [
+    "Vanaṃ chindatha mā rukkhaṃ, vanato jāyate bhayaṃ;",
+    "Chetvā vanañca vanathañca, nibbanā hotha bhikkhavo."
+   ],
+   "en": "Cut down the whole forest (of lust), not a tree only! Danger comes out of the forest (of lust). When you have cut down both the forest (of lust) and its undergrowth, then, Bhikshus, you will be rid of the forest and free!",
+   "story": "Pañcamahallakabhikkhuvatthu"
+  },
+  {
+   "n": 284,
+   "chapter": 20,
+   "pi": [
+    "Yāva hi vanatho na chijjati, Aṇumattopi narassa nārisu;",
+    "Paṭibaddhamanova tāva so, Vaccho khīrapakova mātari."
+   ],
+   "en": "So long as the love of man towards women, even the smallest, is not destroyed, so long is his mind in bondage, as the calf that drinks milk is to its mother.",
+   "story": "Pañcamahallakabhikkhuvatthu"
+  },
+  {
+   "n": 285,
+   "chapter": 20,
+   "pi": [
+    "Ucchinda sinehamattano, Kumudaṃ sāradikaṃva pāṇinā;",
+    "Santimaggameva brūhaya, Nibbānaṃ sugatena desitaṃ."
+   ],
+   "en": "Cut out the love of self, like an autumn lotus, with thy hand! Cherish the road of peace. Nirvana has been shown by Sugata (Buddha).",
+   "story": "Suvaṇṇakārattheravatthu"
+  },
+  {
+   "n": 286,
+   "chapter": 20,
+   "pi": [
+    "Idha vassaṃ vasissāmi, idha hemantagimhisu;",
+    "Iti bālo vicinteti, antarāyaṃ na bujjhati."
+   ],
+   "en": "`Here I shall dwell in the rain, here in winter and summer,' thus the fool meditates, and does not think of his death.",
+   "story": "Mahādhanavāṇijavatthu"
+  },
+  {
+   "n": 287,
+   "chapter": 20,
+   "pi": [
+    "Taṃ puttapasusammattaṃ, byāsattamanasaṃ naraṃ;",
+    "Suttaṃ gāmaṃ mahoghova, maccu ādāya gacchati."
+   ],
+   "en": "Death comes and carries off that man, praised for his children and flocks, his mind distracted, as a flood carries off a sleeping village.",
+   "story": "Kisāgotamīvatthu"
+  },
+  {
+   "n": 288,
+   "chapter": 20,
+   "pi": [
+    "Na santi puttā tāṇāya, na pitā nāpi bandhavā;",
+    "Antakenādhipannassa, natthi ñātīsu tāṇatā."
+   ],
+   "en": "Sons are no help, nor a father, nor relations; there is no help from kinsfolk for one whom death has seized.",
+   "story": "Paṭācārāvatthu"
+  },
+  {
+   "n": 289,
+   "chapter": 20,
+   "pi": [
+    "Etamatthavasaṃ ñatvā, paṇḍito sīlasaṃvuto;",
+    "Nibbānagamanaṃ maggaṃ, khippameva visodhaye."
+   ],
+   "en": "A wise and good man who knows the meaning of this, should quickly clear the way that leads to Nirvana.",
+   "story": "Paṭācārāvatthu"
+  },
+  {
+   "n": 290,
+   "chapter": 21,
+   "pi": [
+    "Mattāsukhapariccāgā, passe ce vipulaṃ sukhaṃ;",
+    "Caje mattāsukhaṃ dhīro, sampassaṃ vipulaṃ sukhaṃ."
+   ],
+   "en": "If by leaving a small pleasure one sees a great pleasure, let a wise man leave the small pleasure, and look to the great.",
+   "story": "Attanopubbakammavatthu"
+  },
+  {
+   "n": 291,
+   "chapter": 21,
+   "pi": [
+    "Paradukkhūpadhānena, attano sukhamicchati;",
+    "Verasaṃsaggasaṃsaṭṭho, verā so na parimuccati."
+   ],
+   "en": "He who, by causing pain to others, wishes to obtain pleasure for himself, he, entangled in the bonds of hatred, will never be free from hatred.",
+   "story": "Kukkuṭaṇḍakhādikāvatthu"
+  },
+  {
+   "n": 292,
+   "chapter": 21,
+   "pi": [
+    "Yañhi kiccaṃ apaviddhaṃ, akiccaṃ pana karīyati;",
+    "Unnaḷānaṃ pamattānaṃ, tesaṃ vaḍḍhanti āsavā."
+   ],
+   "en": "What ought to be done is neglected, what ought not to be done is done; the desires of unruly, thoughtless people are always increasing.",
+   "story": "Bhaddiyānaṃbhikkhūnaṃvatthu"
+  },
+  {
+   "n": 293,
+   "chapter": 21,
+   "pi": [
+    "Yesañca susamāraddhā, niccaṃ kāyagatā sati;",
+    "Akiccaṃ te na sevanti, kicce sātaccakārino;",
+    "Satānaṃ sampajānānaṃ, atthaṃ gacchanti āsavā."
+   ],
+   "en": "But they whose whole watchfulness is always directed to their body, who do not follow what ought not to be done, and who steadfastly do what ought to be done, the desires of such watchful and wise people will come to an end.",
+   "story": "Bhaddiyānaṃbhikkhūnaṃvatthu"
+  },
+  {
+   "n": 294,
+   "chapter": 21,
+   "pi": [
+    "Mātaraṃ pitaraṃ hantvā, rājāno dve ca khattiye;",
+    "Raṭṭhaṃ sānucaraṃ hantvā, anīgho yāti brāhmaṇo."
+   ],
+   "en": "A true Brahmana goes scatheless, though he have killed father and mother, and two valiant kings, though he has destroyed a kingdom with all its subjects.",
+   "story": "Lakuṇḍakabhaddiyavatthu"
+  },
+  {
+   "n": 295,
+   "chapter": 21,
+   "pi": [
+    "Mātaraṃ pitaraṃ hantvā, rājāno dve ca sotthiye;",
+    "Veyagghapañcamaṃ hantvā, anīgho yāti brāhmaṇo."
+   ],
+   "en": "A true Brahmana goes scatheless, though he have killed father and mother, and two holy kings, and an eminent man besides.",
+   "story": "Lakuṇḍakabhaddiyavatthu"
+  },
+  {
+   "n": 296,
+   "chapter": 21,
+   "pi": [
+    "Suppabuddhaṃ pabujjhanti, sadā gotamasāvakā;",
+    "Yesaṃ divā ca ratto ca, niccaṃ buddhagatā sati."
+   ],
+   "en": "The disciples of Gotama (Buddha) are always well awake, and their thoughts day and night are always set on Buddha.",
+   "story": "Dārusākaṭikaputtavatthu"
+  },
+  {
+   "n": 297,
+   "chapter": 21,
+   "pi": [
+    "Suppabuddhaṃ pabujjhanti, sadā gotamasāvakā;",
+    "Yesaṃ divā ca ratto ca, niccaṃ dhammagatā sati."
+   ],
+   "en": "The disciples of Gotama are always well awake, and their thoughts day and night are always set on the law.",
+   "story": "Dārusākaṭikaputtavatthu"
+  },
+  {
+   "n": 298,
+   "chapter": 21,
+   "pi": [
+    "Suppabuddhaṃ pabujjhanti, sadā gotamasāvakā;",
+    "Yesaṃ divā ca ratto ca, niccaṃ saṅghagatā sati."
+   ],
+   "en": "The disciples of Gotama are always well awake, and their thoughts day and night are always set on the church.",
+   "story": "Dārusākaṭikaputtavatthu"
+  },
+  {
+   "n": 299,
+   "chapter": 21,
+   "pi": [
+    "Suppabuddhaṃ pabujjhanti, sadā gotamasāvakā;",
+    "Yesaṃ divā ca ratto ca, niccaṃ kāyagatā sati."
+   ],
+   "en": "The disciples of Gotama are always well awake, and their thoughts day and night are always set on their body.",
+   "story": "Dārusākaṭikaputtavatthu"
+  },
+  {
+   "n": 300,
+   "chapter": 21,
+   "pi": [
+    "Suppabuddhaṃ pabujjhanti, sadā gotamasāvakā;",
+    "Yesaṃ divā ca ratto ca, ahiṃsāya rato mano."
+   ],
+   "en": "The disciples of Gotama are always well awake, and their mind day and night always delights in compassion.",
+   "story": "Dārusākaṭikaputtavatthu"
+  },
+  {
+   "n": 301,
+   "chapter": 21,
+   "pi": [
+    "Suppabuddhaṃ pabujjhanti, sadā gotamasāvakā;",
+    "Yesaṃ divā ca ratto ca, bhāvanāya rato mano."
+   ],
+   "en": "The disciples of Gotama are always well awake, and their mind day and night always delights in meditation.",
+   "story": "Dārusākaṭikaputtavatthu"
+  },
+  {
+   "n": 302,
+   "chapter": 21,
+   "pi": [
+    "Duppabbajjaṃ durabhiramaṃ, Durāvāsā gharā dukhā;",
+    "Dukkhosamānasaṃvāso, Dukkhānupatitaddhagū;",
+    "Tasmā na caddhagū siyā, Na ca dukkhānupatito siyā."
+   ],
+   "en": "It is hard to leave the world (to become a friar), it is hard to enjoy the world; hard is the monastery, painful are the houses; painful it is to dwell with equals (to share everything in common) and the itinerant mendicant is beset with pain. Therefore let no man be an itinerant mendicant and he will not be beset with pain.",
+   "story": "Vajjiputtakabhikkhuvatthu"
+  },
+  {
+   "n": 303,
+   "chapter": 21,
+   "pi": [
+    "Saddho sīlena sampanno, yasobhogasamappito;",
+    "Yaṃ yaṃ padesaṃ bhajati, tattha tattheva pūjito."
+   ],
+   "en": "Whatever place a faithful, virtuous, celebrated, and wealthy man chooses, there he is respected.",
+   "story": "Cittagahapativatthu"
+  },
+  {
+   "n": 304,
+   "chapter": 21,
+   "pi": [
+    "Dūre santo pakāsenti, himavantova pabbato;",
+    "Asantettha na dissanti, rattiṃ khittā yathā sarā."
+   ],
+   "en": "Good people shine from afar, like the snowy mountains; bad people are not seen, like arrows shot by night.",
+   "story": "Cūḷasubhaddāvatthu"
+  },
+  {
+   "n": 305,
+   "chapter": 21,
+   "pi": [
+    "Ekāsanaṃ ekaseyyaṃ, eko caramatandito;",
+    "Eko damayamattānaṃ, vanante ramito siyā."
+   ],
+   "en": "He alone who, without ceasing, practises the duty of sitting alone and sleeping alone, he, subduing himself, will rejoice in the destruction of all desires alone, as if living in a forest.",
+   "story": "Ekavihārittheravatthu"
+  },
+  {
+   "n": 306,
+   "chapter": 22,
+   "pi": [
+    "Abhūtavādī nirayaṃ upeti, Yo vāpi katvā na karomi cāha;",
+    "Ubhopi te pecca samā bhavanti, Nihīnakammā manujā parattha."
+   ],
+   "en": "He who says what is not, goes to hell; he also who, having done a thing, says I have not done it. After death both are equal, they are men with evil deeds in the next world.",
+   "story": "Sundarīparibbājikāvatthu"
+  },
+  {
+   "n": 307,
+   "chapter": 22,
+   "pi": [
+    "Kāsāvakaṇṭhā bahavo, pāpadhammā asaññatā;",
+    "Pāpā pāpehi kammehi, nirayaṃ te upapajjare."
+   ],
+   "en": "Many men whose shoulders are covered with the yellow gown are ill-conditioned and unrestrained; such evil-doers by their evil deeds go to hell.",
+   "story": "Duccaritaphalapīḷitavatthu"
+  },
+  {
+   "n": 308,
+   "chapter": 22,
+   "pi": [
+    "Seyyo ayoguḷo bhutto, tatto aggisikhūpamo;",
+    "Yañce bhuñjeyya dussīlo, raṭṭhapiṇḍamasaññato."
+   ],
+   "en": "Better it would be to swallow a heated iron ball, like flaring fire, than that a bad unrestrained fellow should live on the charity of the land.",
+   "story": "Vaggumudātīriyabhikkhuvatthu"
+  },
+  {
+   "n": 309,
+   "chapter": 22,
+   "pi": [
+    "Cattāri ṭhānāni naro pamatto, Āpajjati paradārūpasevī;",
+    "Apuññalābhaṃ na nikāmaseyyaṃ, Nindaṃ tatīyaṃ nirayaṃ catutthaṃ."
+   ],
+   "en": "Four things does a wreckless man gain who covets his neighbour's wife,—a bad reputation, an uncomfortable bed, thirdly, punishment, and lastly, hell.",
+   "story": "Khemakaseṭṭhiputtavatthu"
+  },
+  {
+   "n": 310,
+   "chapter": 22,
+   "pi": [
+    "Apuññalābho ca gatī ca pāpikā, Bhītassa bhītāya ratī ca thokikā;",
+    "Rājā ca daṇḍaṃ garukaṃ paṇeti, Tasmā naro paradāraṃ na seve."
+   ],
+   "en": "There is bad reputation, and the evil way (to hell), there is the short pleasure of the frightened in the arms of the frightened, and the king imposes heavy punishment; therefore let no man think of his neighbour's wife.",
+   "story": "Khemakaseṭṭhiputtavatthu"
+  },
+  {
+   "n": 311,
+   "chapter": 22,
+   "pi": [
+    "Kuso yathā duggahito, hatthamevānukantati;",
+    "Sāmaññaṃ dupparāmaṭṭhaṃ, nirayāyupakaḍḍhati."
+   ],
+   "en": "As a grass-blade, if badly grasped, cuts the arm, badly-practised asceticism leads to hell.",
+   "story": "Dubbacabhikkhuvatthu"
+  },
+  {
+   "n": 312,
+   "chapter": 22,
+   "pi": [
+    "Yaṃ kiñci sithilaṃ kammaṃ, saṅkiliṭṭhañca yaṃ vataṃ;",
+    "Saṅkassaraṃ brahmacariyaṃ, na taṃ hoti mahapphalaṃ."
+   ],
+   "en": "An act carelessly performed, a broken vow, and hesitating obedience to discipline, all this brings no great reward.",
+   "story": "Dubbacabhikkhuvatthu"
+  },
+  {
+   "n": 313,
+   "chapter": 22,
+   "pi": [
+    "Kayirā ce kayirāthenaṃ, daḷhamenaṃ parakkame;",
+    "Sithilo hi paribbājo, bhiyyo ākirate rajaṃ."
+   ],
+   "en": "If anything is to be done, let a man do it, let him attack it vigorously! A careless pilgrim only scatters the dust of his passions more widely.",
+   "story": "Dubbacabhikkhuvatthu"
+  },
+  {
+   "n": 314,
+   "chapter": 22,
+   "pi": [
+    "Akataṃ dukkaṭaṃ seyyo, pacchā tappati dukkaṭaṃ;",
+    "Katañca sukataṃ seyyo, yaṃ katvā nānutappati."
+   ],
+   "en": "An evil deed is better left undone, for a man repents of it afterwards; a good deed is better done, for having done it, one does not repent.",
+   "story": "Issāpakataitthivatthu"
+  },
+  {
+   "n": 315,
+   "chapter": 22,
+   "pi": [
+    "Nagaraṃ yathā paccantaṃ, guttaṃ santarabāhiraṃ;",
+    "Evaṃ gopetha attānaṃ, khaṇo vo mā upaccagā;",
+    "Khaṇātītā hi socanti, nirayamhi samappitā."
+   ],
+   "en": "Like a well-guarded frontier fort, with defences within and without, so let a man guard himself. Not a moment should escape, for they who allow the right moment to pass, suffer pain when they are in hell.",
+   "story": "Sambahulabhikkhuvatthu"
+  },
+  {
+   "n": 316,
+   "chapter": 22,
+   "pi": [
+    "Alajjitāye lajjanti, lajjitāye na lajjare;",
+    "Micchādiṭṭhisamādānā, sattā gacchanti duggatiṃ."
+   ],
+   "en": "They who are ashamed of what they ought not to be ashamed of, and are not ashamed of what they ought to be ashamed of, such men, embracing false doctrines enter the evil path.",
+   "story": "Nigaṇṭhavatthu"
+  },
+  {
+   "n": 317,
+   "chapter": 22,
+   "pi": [
+    "Abhaye bhayadassino, bhaye cābhayadassino;",
+    "Micchādiṭṭhisamādānā, sattā gacchanti duggatiṃ."
+   ],
+   "en": "They who fear when they ought not to fear, and fear not when they ought to fear, such men, embracing false doctrines, enter the evil path.",
+   "story": "Nigaṇṭhavatthu"
+  },
+  {
+   "n": 318,
+   "chapter": 22,
+   "pi": [
+    "Avajje vajjamatino, vajje cāvajjadassino;",
+    "Micchādiṭṭhisamādānā, sattā gacchanti duggatiṃ."
+   ],
+   "en": "They who forbid when there is nothing to be forbidden, and forbid not when there is something to be forbidden, such men, embracing false doctrines, enter the evil path.",
+   "story": "Titthiyasāvakavatthu"
+  },
+  {
+   "n": 319,
+   "chapter": 22,
+   "pi": [
+    "Vajjañca vajjato ñatvā, avajjañca avajjato;",
+    "Sammādiṭṭhisamādānā, sattā gacchanti suggatiṃ."
+   ],
+   "en": "They who know what is forbidden as forbidden, and what is not forbidden as not forbidden, such men, embracing the true doctrine, enter the good path.",
+   "story": "Titthiyasāvakavatthu"
+  },
+  {
+   "n": 320,
+   "chapter": 23,
+   "pi": [
+    "Ahaṃ nāgova saṅgāme, cāpato patitaṃ saraṃ;",
+    "Ativākyaṃ titikkhissaṃ, dussīlo hi bahujjano."
+   ],
+   "en": "Silently shall I endure abuse as the elephant in battle endures the arrow sent from the bow: for the world is ill-natured.",
+   "story": "Attadantavatthu"
+  },
+  {
+   "n": 321,
+   "chapter": 23,
+   "pi": [
+    "Dantaṃ nayanti samitiṃ, dantaṃ rājābhirūhati;",
+    "Danto seṭṭho manussesu, yotivākyaṃ titikkhati."
+   ],
+   "en": "They lead a tamed elephant to battle, the king mounts a tamed elephant; the tamed is the best among men, he who silently endures abuse.",
+   "story": "Attadantavatthu"
+  },
+  {
+   "n": 322,
+   "chapter": 23,
+   "pi": [
+    "Varamassatarā dantā, ājānīyā ca sindhavā;",
+    "Kuñjarā ca mahānāgā, attadanto tato varaṃ."
+   ],
+   "en": "Mules are good, if tamed, and noble Sindhu horses, and elephants with large tusks; but he who tames himself is better still.",
+   "story": "Attadantavatthu"
+  },
+  {
+   "n": 323,
+   "chapter": 23,
+   "pi": [
+    "Na hi etehi yānehi, gaccheyya agataṃ disaṃ;",
+    "Yathāttanā sudantena, danto dantena gacchati."
+   ],
+   "en": "For with these animals does no man reach the untrodden country (Nirvana), where a tamed man goes on a tamed animal, viz. on his own well-tamed self.",
+   "story": "Hatthācariyapubbakabhikkhuvatthu"
+  },
+  {
+   "n": 324,
+   "chapter": 23,
+   "pi": [
+    "Dhanapālo nāma kuñjaro, Kaṭukabhedano dunnivārayo;",
+    "Baddho kabaḷaṃ na bhuñjati, Sumarati nāgavanassa kuñjaro."
+   ],
+   "en": "The elephant called Dhanapalaka, his temples running with sap, and difficult to hold, does not eat a morsel when bound; the elephant longs for the elephant grove.",
+   "story": "Parijiṇṇabrāhmaṇaputtavatthu"
+  },
+  {
+   "n": 325,
+   "chapter": 23,
+   "pi": [
+    "Middhī yadā hoti mahagghaso ca, Niddāyitā samparivattasāyī;",
+    "Mahāvarāhova nivāpapuṭṭho, Punappunaṃ gabbhamupeti mando."
+   ],
+   "en": "If a man becomes fat and a great eater, if he is sleepy and rolls himself about, that fool, like a hog fed on wash, is born again and again.",
+   "story": "Pasenadikosalavatthu"
+  },
+  {
+   "n": 326,
+   "chapter": 23,
+   "pi": [
+    "Idaṃ pure cittamacāri cārikaṃ, Yenicchakaṃ yatthakāmaṃ yathāsukhaṃ;",
+    "Tadajjahaṃ niggahessāmi yoniso, Hatthippabhinnaṃ viya aṅkusaggaho."
+   ],
+   "en": "This mind of mine went formerly wandering about as it liked, as it listed, as it pleased; but I shall now hold it in thoroughly, as the rider who holds the hook holds in the furious elephant.",
+   "story": "Sānusāmaṇeravatthu"
+  },
+  {
+   "n": 327,
+   "chapter": 23,
+   "pi": [
+    "Appamādaratā hotha, sacittamanurakkhatha;",
+    "Duggā uddharathattānaṃ, paṅke sannova kuñjaro."
+   ],
+   "en": "Be not thoughtless, watch your thoughts! Draw yourself out of the evil way, like an elephant sunk in mud.",
+   "story": "Pāveyyakahatthivatthu"
+  },
+  {
+   "n": 328,
+   "chapter": 23,
+   "pi": [
+    "Sace labhetha nipakaṃ sahāyaṃ, Saddhiṃ caraṃ sādhuvihāridhīraṃ;",
+    "Abhibhuyya sabbāni parissayāni, Careyya tenattamano satīmā."
+   ],
+   "en": "If a man find a prudent companion who walks with him, is wise, and lives soberly, he may walk with him, overcoming all dangers, happy, but considerate.",
+   "story": "Sambahulabhikkhuvatthu"
+  },
+  {
+   "n": 329,
+   "chapter": 23,
+   "pi": [
+    "No ce labhetha nipakaṃ sahāyaṃ, Saddhiṃ caraṃ sādhuvihāridhīraṃ;",
+    "Rājāva raṭṭhaṃ vijitaṃ pahāya, Eko care mātaṅgaraññeva nāgo."
+   ],
+   "en": "If a man find no prudent companion who walks with him, is wise, and lives soberly, let him walk alone, like a king who has left his conquered country behind,—like an elephant in the forest.",
+   "story": "Sambahulabhikkhuvatthu"
+  },
+  {
+   "n": 330,
+   "chapter": 23,
+   "pi": [
+    "Ekassa caritaṃ seyyo, Natthi bāle sahāyatā;",
+    "Eko care na ca pāpāni kayirā, Appossukko mātaṅgaraññeva nāgo."
+   ],
+   "en": "It is better to live alone, there is no companionship with a fool; let a man walk alone, let him commit no sin, with few wishes, like an elephant in the forest.",
+   "story": "Sambahulabhikkhuvatthu"
+  },
+  {
+   "n": 331,
+   "chapter": 23,
+   "pi": [
+    "Atthamhi jātamhi sukhā sahāyā, Tuṭṭhī sukhā yā itarītarena;",
+    "Puññaṃ sukhaṃ jīvitasaṅkhayamhi, Sabbassa dukkhassa sukhaṃ pahānaṃ."
+   ],
+   "en": "If an occasion arises, friends are pleasant; enjoyment is pleasant, whatever be the cause; a good work is pleasant in the hour of death; the giving up of all grief is pleasant.",
+   "story": "Māravatthu"
+  },
+  {
+   "n": 332,
+   "chapter": 23,
+   "pi": [
+    "Sukhā matteyyatā loke, atho petteyyatā sukhā;",
+    "Sukhā sāmaññatā loke, atho brahmaññatā sukhā."
+   ],
+   "en": "Pleasant in the world is the state of a mother, pleasant the state of a father, pleasant the state of a Samana, pleasant the state of a Brahmana.",
+   "story": "Māravatthu"
+  },
+  {
+   "n": 333,
+   "chapter": 23,
+   "pi": [
+    "Sukhaṃ yāva jarā sīlaṃ, sukhā saddhā patiṭṭhitā;",
+    "Sukho paññāya paṭilābho, pāpānaṃ akaraṇaṃ sukhaṃ."
+   ],
+   "en": "Pleasant is virtue lasting to old age, pleasant is a faith firmly rooted; pleasant is attainment of intelligence, pleasant is avoiding of sins.",
+   "story": "Māravatthu"
+  },
+  {
+   "n": 334,
+   "chapter": 24,
+   "pi": [
+    "Manujassa pamattacārino, Taṇhā vaḍḍhati māluvā viya;",
+    "So plavatī hurā huraṃ, Phalamicchaṃva vanasmi vānaro."
+   ],
+   "en": "The thirst of a thoughtless man grows like a creeper; he runs from life to life, like a monkey seeking fruit in the forest.",
+   "story": "Kapilamacchavatthu"
+  },
+  {
+   "n": 335,
+   "chapter": 24,
+   "pi": [
+    "Yaṃ esā sahate jammī, taṇhā loke visattikā;",
+    "Sokā tassa pavaḍḍhanti, abhivaṭṭhaṃva bīraṇaṃ."
+   ],
+   "en": "Whomsoever this fierce thirst overcomes, full of poison, in this world, his sufferings increase like the abounding Birana grass.",
+   "story": "Kapilamacchavatthu"
+  },
+  {
+   "n": 336,
+   "chapter": 24,
+   "pi": [
+    "Yo cetaṃ sahate jammiṃ, taṇhaṃ loke duraccayaṃ;",
+    "Sokā tamhā papatanti, udabinduva pokkharā."
+   ],
+   "en": "He who overcomes this fierce thirst, difficult to be conquered in this world, sufferings fall off from him, like water-drops from a lotus leaf.",
+   "story": "Kapilamacchavatthu"
+  },
+  {
+   "n": 337,
+   "chapter": 24,
+   "pi": [
+    "Taṃ vo vadāmi bhaddaṃ vo, yāvantettha samāgatā;",
+    "Taṇhāya mūlaṃ khaṇatha, usīratthova bīraṇaṃ;",
+    "Mā vo naḷaṃva sotova, māro bhañji punappunaṃ."
+   ],
+   "en": "This salutary word I tell you, `Do ye, as many as are here assembled, dig up the root of thirst, as he who wants the sweet-scented Usira root must dig up the Birana grass, that Mara (the tempter) may not crush you again and again, as the stream crushes the reeds.'",
+   "story": "Kapilamacchavatthu"
+  },
+  {
+   "n": 338,
+   "chapter": 24,
+   "pi": [
+    "Yathāpi mūle anupaddave daḷhe, Chinnopi rukkho punareva rūhati;",
+    "Evampi taṇhānusaye anūhate, Nibbattatī dukkhamidaṃ punappunaṃ."
+   ],
+   "en": "As a tree, even though it has been cut down, is firm so long as its root is safe, and grows again, thus, unless the feeders of thirst are destroyed, the pain (of life) will return again and again.",
+   "story": "Sūkarapotikāvatthu"
+  },
+  {
+   "n": 339,
+   "chapter": 24,
+   "pi": [
+    "Yassa chattiṃsati sotā, manāpasavanā bhusā;",
+    "Mahāvahanti duddiṭṭhiṃ, saṅkappā rāganissitā."
+   ],
+   "en": "He whose thirst running towards pleasure is exceeding strong in the thirty-six channels, the waves will carry away that misguided man, viz. his desires which are set on passion.",
+   "story": "Sūkarapotikāvatthu"
+  },
+  {
+   "n": 340,
+   "chapter": 24,
+   "pi": [
+    "Savanti sabbadhi sotā, latā uppajja tiṭṭhati;",
+    "Tañca disvā lataṃ jātaṃ, mūlaṃ paññāya chindatha."
+   ],
+   "en": "The channels run everywhere, the creeper (of passion) stands sprouting; if you see the creeper springing up, cut its root by means of knowledge.",
+   "story": "Sūkarapotikāvatthu"
+  },
+  {
+   "n": 341,
+   "chapter": 24,
+   "pi": [
+    "Saritāni sinehitāni ca, Somanassāni bhavanti jantuno;",
+    "Te sātasitā sukhesino, Te ve jātijarūpagā narā."
+   ],
+   "en": "A creature's pleasures are extravagant and luxurious; sunk in lust and looking for pleasure, men undergo (again and again) birth and decay.",
+   "story": "Sūkarapotikāvatthu"
+  },
+  {
+   "n": 342,
+   "chapter": 24,
+   "pi": [
+    "Tasiṇāya purakkhatā pajā, Parisappanti sasova bandhito;",
+    "Saṃyojanasaṅgasattakā, Dukkhamupenti punappunaṃ cirāya."
+   ],
+   "en": "Men, driven on by thirst, run about like a snared hare; held in fetters and bonds, they undergo pain for a long time, again and again.",
+   "story": "Sūkarapotikāvatthu"
+  },
+  {
+   "n": 343,
+   "chapter": 24,
+   "pi": [
+    "Tasiṇāya purakkhatā pajā, Parisappanti sasova bandhito;",
+    "Tasmā tasiṇaṃ vinodaye, Ākaṅkhanta virāgamattano."
+   ],
+   "en": "Men, driven on by thirst, run about like a snared hare; let therefore the mendicant drive out thirst, by striving after passionlessness for himself.",
+   "story": "Sūkarapotikāvatthu"
+  },
+  {
+   "n": 344,
+   "chapter": 24,
+   "pi": [
+    "Yo nibbanatho vanādhimutto, Vanamutto vanameva dhāvati;",
+    "Taṃ puggalametha passatha, Mutto bandhanameva dhāvati."
+   ],
+   "en": "He who having got rid of the forest (of lust) (i.e. after having reached Nirvana) gives himself over to forest-life (i.e. to lust), and who, when removed from the forest (i.e. from lust), runs to the forest (i.e. to lust), look at that man! though free, he runs into bondage.",
+   "story": "Vibbhantabhikkhuvatthu"
+  },
+  {
+   "n": 345,
+   "chapter": 24,
+   "pi": [
+    "Na taṃ daḷhaṃ bandhanamāhu dhīrā, Yadāyasaṃ dārujapabbajañca;",
+    "Sārattarattā maṇikuṇḍalesu, Puttesu dāresu ca yā apekkhā."
+   ],
+   "en": "Wise people do not call that a strong fetter which is made of iron, wood, or hemp; far stronger is the care for precious stones and rings, for sons and a wife.",
+   "story": "Bandhanāgāravatthu"
+  },
+  {
+   "n": 346,
+   "chapter": 24,
+   "pi": [
+    "Etaṃ daḷhaṃ bandhanamāhu dhīrā, Ohārinaṃ sithilaṃ duppamuñcaṃ;",
+    "Etampi chetvāna paribbajanti, Anapekkhino kāmasukhaṃ pahāya."
+   ],
+   "en": "That fetter wise people call strong which drags down, yields, but is difficult to undo; after having cut this at last, people leave the world, free from cares, and leaving desires and pleasures behind.",
+   "story": "Bandhanāgāravatthu"
+  },
+  {
+   "n": 347,
+   "chapter": 24,
+   "pi": [
+    "Ye rāgarattānupatanti sotaṃ, Sayaṅkataṃ makkaṭakova jālaṃ;",
+    "Etampi chetvāna vajanti dhīrā, Anapekkhino sabbadukkhaṃ pahāya."
+   ],
+   "en": "Those who are slaves to passions, run down with the stream (of desires), as a spider runs down the web which he has made himself; when they have cut this, at last, wise people leave the world free from cares, leaving all affection behind.",
+   "story": "Khemātherīvatthu"
+  },
+  {
+   "n": 348,
+   "chapter": 24,
+   "pi": [
+    "Muñca pure muñca pacchato, Majjhe muñca bhavassa pāragū;",
+    "Sabbattha vimuttamānaso, Na punaṃ jātijaraṃ upehisi."
+   ],
+   "en": "Give up what is before, give up what is behind, give up what is in the middle, when thou goest to the other shore of existence; if thy mind is altogether free, thou wilt not again enter into birth and decay.",
+   "story": "Uggasenavatthu"
+  },
+  {
+   "n": 349,
+   "chapter": 24,
+   "pi": [
+    "Vitakkamathitassa jantuno, Tibbarāgassa subhānupassino;",
+    "Bhiyyo taṇhā pavaḍḍhati, Esa kho daḷhaṃ karoti bandhanaṃ."
+   ],
+   "en": "If a man is tossed about by doubts, full of strong passions, and yearning only for what is delightful, his thirst will grow more and more, and he will indeed make his fetters strong.",
+   "story": "Cūḷadhanuggahapaṇḍitavatthu"
+  },
+  {
+   "n": 350,
+   "chapter": 24,
+   "pi": [
+    "Vitakkūpasame ca yo rato, Asubhaṃ bhāvayate sadā sato;",
+    "Esa kho byanti kāhiti, Esa checchati mārabandhanaṃ."
+   ],
+   "en": "If a man delights in quieting doubts, and, always reflecting, dwells on what is not delightful (the impurity of the body, &c.), he certainly will remove, nay, he will cut the fetter of Mara.",
+   "story": "Cūḷadhanuggahapaṇḍitavatthu"
+  },
+  {
+   "n": 351,
+   "chapter": 24,
+   "pi": [
+    "Niṭṭhaṅgato asantāsī, vītataṇho anaṅgaṇo;",
+    "Acchindi bhavasallāni, antimoyaṃ samussayo."
+   ],
+   "en": "He who has reached the consummation, who does not tremble, who is without thirst and without sin, he has broken all the thorns of life: this will be his last body.",
+   "story": "Māravatthu"
+  },
+  {
+   "n": 352,
+   "chapter": 24,
+   "pi": [
+    "Vītataṇho anādāno, Niruttipadakovido;",
+    "Akkharānaṃ sannipātaṃ, Jaññā pubbāparāni ca;",
+    "Sa ve “antimasārīro, Mahāpañño mahāpuriso”ti vuccati."
+   ],
+   "en": "He who is without thirst and without affection, who understands the words and their interpretation, who knows the order of letters (those which are before and which are after), he has received his last body, he is called the great sage, the great man.",
+   "story": "Māravatthu"
+  },
+  {
+   "n": 353,
+   "chapter": 24,
+   "pi": [
+    "Sabbābhibhū sabbavidūhamasmi, Sabbesu dhammesu anūpalitto;",
+    "Sabbañjaho taṇhakkhaye vimutto, Sayaṃ abhiññāya kamuddiseyyaṃ."
+   ],
+   "en": "`I have conquered all, I know all, in all conditions of life I am free from taint; I have left all, and through the destruction of thirst I am free; having learnt myself, whom shall I teach?'",
+   "story": "Upakājīvakavatthu"
+  },
+  {
+   "n": 354,
+   "chapter": 24,
+   "pi": [
+    "Sabbadānaṃ dhammadānaṃ jināti, Sabbarasaṃ dhammaraso jināti;",
+    "Sabbaratiṃ dhammarati jināti, Taṇhakkhayo sabbadukkhaṃ jināti."
+   ],
+   "en": "The gift of the law exceeds all gifts; the sweetness of the law exceeds all sweetness; the delight in the law exceeds all delights; the extinction of thirst overcomes all pain.",
+   "story": "Sakkapañhavatthu"
+  },
+  {
+   "n": 355,
+   "chapter": 24,
+   "pi": [
+    "Hananti bhogā dummedhaṃ, no ca pāragavesino;",
+    "Bhogataṇhāya dummedho, hanti aññeva attanaṃ."
+   ],
+   "en": "Pleasures destroy the foolish, if they look not for the other shore; the foolish by his thirst for pleasures destroys himself, as if he were his own enemy.",
+   "story": "Aputtakaseṭṭhivatthu"
+  },
+  {
+   "n": 356,
+   "chapter": 24,
+   "pi": [
+    "Tiṇadosāni khettāni, rāgadosā ayaṃ pajā;",
+    "Tasmā hi vītarāgesu, dinnaṃ hoti mahapphalaṃ."
+   ],
+   "en": "The fields are damaged by weeds, mankind is damaged by passion: therefore a gift bestowed on the passionless brings great reward.",
+   "story": "Aṅkuravatthu"
+  },
+  {
+   "n": 357,
+   "chapter": 24,
+   "pi": [
+    "Tiṇadosāni khettāni, dosadosā ayaṃ pajā;",
+    "Tasmā hi vītadosesu, dinnaṃ hoti mahapphalaṃ."
+   ],
+   "en": "The fields are damaged by weeds, mankind is damaged by hatred: therefore a gift bestowed on those who do not hate brings great reward.",
+   "story": "Aṅkuravatthu"
+  },
+  {
+   "n": 358,
+   "chapter": 24,
+   "pi": [
+    "Tiṇadosāni khettāni, mohadosā ayaṃ pajā;",
+    "Tasmā hi vītamohesu, dinnaṃ hoti mahapphalaṃ."
+   ],
+   "en": "The fields are damaged by weeds, mankind is damaged by vanity: therefore a gift bestowed on those who are free from vanity brings great reward.",
+   "story": "Aṅkuravatthu"
+  },
+  {
+   "n": 359,
+   "chapter": 24,
+   "pi": [
+    "Tiṇadosāni khettāni, icchādosā ayaṃ pajā;",
+    "Tasmā hi vigaticchesu, dinnaṃ hoti mahapphalaṃ."
+   ],
+   "en": "The fields are damaged by weeds, mankind is damaged by lust: therefore a gift bestowed on those who are free from lust brings great reward.",
+   "story": "Aṅkuravatthu"
+  },
+  {
+   "n": 360,
+   "chapter": 25,
+   "pi": [
+    "Cakkhunā saṃvaro sādhu, sādhu sotena saṃvaro;",
+    "Ghānena saṃvaro sādhu, sādhu jivhāya saṃvaro."
+   ],
+   "en": "Restraint in the eye is good, good is restraint in the ear, in the nose restraint is good, good is restraint in the tongue.",
+   "story": "Pañcabhikkhuvatthu"
+  },
+  {
+   "n": 361,
+   "chapter": 25,
+   "pi": [
+    "Kāyena saṃvaro sādhu, sādhu vācāya saṃvaro;",
+    "Manasā saṃvaro sādhu, sādhu sabbattha saṃvaro;",
+    "Sabbattha saṃvuto bhikkhu, sabbadukkhā pamuccati."
+   ],
+   "en": "In the body restraint is good, good is restraint in speech, in thought restraint is good, good is restraint in all things. A Bhikshu, restrained in all things, is freed from all pain.",
+   "story": "Pañcabhikkhuvatthu"
+  },
+  {
+   "n": 362,
+   "chapter": 25,
+   "pi": [
+    "Hatthasaṃyato pādasaṃyato, Vācāsaṃyato saṃyatuttamo;",
+    "Ajjhattarato samāhito, Eko santusito tamāhu bhikkhuṃ."
+   ],
+   "en": "He who controls his hand, he who controls his feet, he who controls his speech, he who is well controlled, he who delights inwardly, who is collected, who is solitary and content, him they call Bhikshu.",
+   "story": "Haṃsaghātakabhikkhuvatthu"
+  },
+  {
+   "n": 363,
+   "chapter": 25,
+   "pi": [
+    "Yo mukhasaṃyato bhikkhu, mantabhāṇī anuddhato;",
+    "Atthaṃ dhammañca dīpeti, madhuraṃ tassa bhāsitaṃ."
+   ],
+   "en": "The Bhikshu who controls his mouth, who speaks wisely and calmly, who teaches the meaning and the law, his word is sweet.",
+   "story": "Kokālikavatthu"
+  },
+  {
+   "n": 364,
+   "chapter": 25,
+   "pi": [
+    "Dhammārāmo dhammarato, dhammaṃ anuvicintayaṃ;",
+    "Dhammaṃ anussaraṃ bhikkhu, saddhammā na parihāyati."
+   ],
+   "en": "He who dwells in the law, delights in the law, meditates on the law, follows the law, that Bhikshu will never fall away from the true law.",
+   "story": "Dhammārāmattheravatthu"
+  },
+  {
+   "n": 365,
+   "chapter": 25,
+   "pi": [
+    "Salābhaṃ nātimaññeyya, nāññesaṃ pihayaṃ care;",
+    "Aññesaṃ pihayaṃ bhikkhu, samādhiṃ nādhigacchati."
+   ],
+   "en": "Let him not despise what he has received, nor ever envy others: a mendicant who envies others does not obtain peace of mind.",
+   "story": "Vipakkhasevakabhikkhuvatthu"
+  },
+  {
+   "n": 366,
+   "chapter": 25,
+   "pi": [
+    "Appalābhopi ce bhikkhu, salābhaṃ nātimaññati;",
+    "Taṃ ve devā pasaṃsanti, suddhājīviṃ atanditaṃ."
+   ],
+   "en": "A Bhikshu who, though he receives little, does not despise what he has received, even the gods will praise him, if his life is pure, and if he is not slothful.",
+   "story": "Vipakkhasevakabhikkhuvatthu"
+  },
+  {
+   "n": 367,
+   "chapter": 25,
+   "pi": [
+    "Sabbaso nāmarūpasmiṃ, yassa natthi mamāyitaṃ;",
+    "Asatā ca na socati, sa ve “bhikkhū”ti vuccati."
+   ],
+   "en": "He who never identifies himself with name and form, and does not grieve over what is no more, he indeed is called a Bhikshu.",
+   "story": "Pañcaggadāyakabrāhmaṇavatthu"
+  },
+  {
+   "n": 368,
+   "chapter": 25,
+   "pi": [
+    "Mettāvihārī yo bhikkhu, pasanno buddhasāsane;",
+    "Adhigacche padaṃ santaṃ, saṅkhārūpasamaṃ sukhaṃ."
+   ],
+   "en": "The Bhikshu who acts with kindness, who is calm in the doctrine of Buddha, will reach the quiet place (Nirvana), cessation of natural desires, and happiness.",
+   "story": "Sambahulabhikkhuvatthu"
+  },
+  {
+   "n": 369,
+   "chapter": 25,
+   "pi": [
+    "Siñca bhikkhu imaṃ nāvaṃ, sittā te lahumessati;",
+    "Chetvā rāgañca dosañca, tato nibbānamehisi."
+   ],
+   "en": "O Bhikshu, empty this boat! if emptied, it will go quickly; having cut off passion and hatred thou wilt go to Nirvana.",
+   "story": "Sambahulabhikkhuvatthu"
+  },
+  {
+   "n": 370,
+   "chapter": 25,
+   "pi": [
+    "Pañca chinde pañca jahe, pañca cuttari bhāvaye;",
+    "Pañca saṅgātigo bhikkhu, “oghatiṇṇo”ti vuccati."
+   ],
+   "en": "Cut off the five (senses), leave the five, rise above the five. A Bhikshu, who has escaped from the five fetters, he is called Oghatinna, `saved from the flood.'",
+   "story": "Sambahulabhikkhuvatthu"
+  },
+  {
+   "n": 371,
+   "chapter": 25,
+   "pi": [
+    "Jhāya bhikkhu mā pamādo, Mā te kāmaguṇe ramessu cittaṃ;",
+    "Mā lohaguḷaṃ gilī pamatto, Mā kandi “dukkhamidan”ti dayhamāno."
+   ],
+   "en": "Meditate, O Bhikshu, and be not heedless! Do not direct thy thought to what gives pleasure that thou mayest not for thy heedlessness have to swallow the iron ball (in hell), and that thou mayest not cry out when burning, `This is pain.'",
+   "story": "Sambahulabhikkhuvatthu"
+  },
+  {
+   "n": 372,
+   "chapter": 25,
+   "pi": [
+    "Natthi jhānaṃ apaññassa, paññā natthi ajhāyato;",
+    "Yamhi jhānañca paññā ca, sa ve nibbānasantike."
+   ],
+   "en": "Without knowledge there is no meditation, without meditation there is no knowledge: he who has knowledge and meditation is near unto Nirvana.",
+   "story": "Sambahulabhikkhuvatthu"
+  },
+  {
+   "n": 373,
+   "chapter": 25,
+   "pi": [
+    "Suññāgāraṃ paviṭṭhassa, santacittassa bhikkhuno;",
+    "Amānusī rati hoti, sammā dhammaṃ vipassato."
+   ],
+   "en": "A Bhikshu who has entered his empty house, and whose mind is tranquil, feels a more than human delight when he sees the law clearly.",
+   "story": "Sambahulabhikkhuvatthu"
+  },
+  {
+   "n": 374,
+   "chapter": 25,
+   "pi": [
+    "Yato yato sammasati, khandhānaṃ udayabbayaṃ;",
+    "Labhatī pītipāmojjaṃ, amataṃ taṃ vijānataṃ."
+   ],
+   "en": "As soon as he has considered the origin and destruction of the elements (khandha) of the body, he finds happiness and joy which belong to those who know the immortal (Nirvana).",
+   "story": "Sambahulabhikkhuvatthu"
+  },
+  {
+   "n": 375,
+   "chapter": 25,
+   "pi": [
+    "Tatrāyamādi bhavati, idha paññassa bhikkhuno;",
+    "Indriyagutti santuṭṭhi, pātimokkhe ca saṃvaro."
+   ],
+   "en": "And this is the beginning here for a wise Bhikshu: watchfulness over the senses, contentedness, restraint under the law; keep noble friends whose life is pure, and who are not slothful.",
+   "story": "Sambahulabhikkhuvatthu"
+  },
+  {
+   "n": 376,
+   "chapter": 25,
+   "pi": [
+    "Mitte bhajassu kalyāṇe, suddhājīve atandite;",
+    "Paṭisanthāravutyassa, ācārakusalo siyā;",
+    "Tato pāmojjabahulo, dukkhassantaṃ karissati."
+   ],
+   "en": "Let him live in charity, let him be perfect in his duties; then in the fulness of delight he will make an end of suffering.",
+   "story": "Sambahulabhikkhuvatthu"
+  },
+  {
+   "n": 377,
+   "chapter": 25,
+   "pi": [
+    "Vassikā viya pupphāni, maddavāni pamuñcati;",
+    "Evaṃ rāgañca dosañca, vippamuñcetha bhikkhavo."
+   ],
+   "en": "As the Vassika plant sheds its withered flowers, men should shed passion and hatred, O ye Bhikshus!",
+   "story": "Pañcasatabhikkhuvatthu"
+  },
+  {
+   "n": 378,
+   "chapter": 25,
+   "pi": [
+    "Santakāyo santavāco, santavā susamāhito;",
+    "Vantalokāmiso bhikkhu, “upasanto”ti vuccati."
+   ],
+   "en": "The Bhikshu whose body and tongue and mind are quieted, who is collected, and has rejected the baits of the world, he is called quiet.",
+   "story": "Santakāyattheravatthu"
+  },
+  {
+   "n": 379,
+   "chapter": 25,
+   "pi": [
+    "Attanā codayattānaṃ, paṭimaṃsetha attanā;",
+    "So attagutto satimā, sukhaṃ bhikkhu vihāhisi."
+   ],
+   "en": "Rouse thyself by thyself, examine thyself by thyself, thus self-protected and attentive wilt thou live happily, O Bhikshu!",
+   "story": "Naṅgalakulattheravatthu"
+  },
+  {
+   "n": 380,
+   "chapter": 25,
+   "pi": [
+    "Attā hi attano nātho, ko hi nātho paro siyā;",
+    "Attā hi attano gati, tasmā saṃyamamattānaṃ;",
+    "Assaṃ bhadraṃva vāṇijo."
+   ],
+   "en": "For self is the lord of self, self is the refuge of self; therefore curb thyself as the merchant curbs a good horse.",
+   "story": "Naṅgalakulattheravatthu"
+  },
+  {
+   "n": 381,
+   "chapter": 25,
+   "pi": [
+    "Pāmojjabahulo bhikkhu, pasanno buddhasāsane;",
+    "Adhigacche padaṃ santaṃ, saṅkhārūpasamaṃ sukhaṃ."
+   ],
+   "en": "The Bhikshu, full of delight, who is calm in the doctrine of Buddha will reach the quiet place (Nirvana), cessation of natural desires, and happiness.",
+   "story": "Vakkalittheravatthu"
+  },
+  {
+   "n": 382,
+   "chapter": 25,
+   "pi": [
+    "Yo have daharo bhikkhu, yuñjati buddhasāsane;",
+    "Somaṃ lokaṃ pabhāseti, abbhā muttova candimā."
+   ],
+   "en": "He who, even as a young Bhikshu, applies himself to the doctrine of Buddha, brightens up this world, like the moon when free from clouds.",
+   "story": "Sumanasāmaṇeravatthu"
+  },
+  {
+   "n": 383,
+   "chapter": 26,
+   "pi": [
+    "Chinda sotaṃ parakkamma, kāme panuda brāhmaṇa;",
+    "Saṅkhārānaṃ khayaṃ ñatvā, akataññūsi brāhmaṇa."
+   ],
+   "en": "Stop the stream valiantly, drive away the desires, O Brahmana! When you have understood the destruction of all that was made, you will understand that which was not made.",
+   "story": "Pasādabahulabrāhmaṇavatthu"
+  },
+  {
+   "n": 384,
+   "chapter": 26,
+   "pi": [
+    "Yadā dvayesu dhammesu, pāragū hoti brāhmaṇo;",
+    "Athassa sabbe saṃyogā, atthaṃ gacchanti jānato."
+   ],
+   "en": "If the Brahmana has reached the other shore in both laws (in restraint and contemplation), all bonds vanish from him who has obtained knowledge.",
+   "story": "Sambahulabhikkhuvatthu"
+  },
+  {
+   "n": 385,
+   "chapter": 26,
+   "pi": [
+    "Yassa pāraṃ apāraṃ vā, pārāpāraṃ na vijjati;",
+    "Vītaddaraṃ visaṃyuttaṃ, tamahaṃ brūmi brāhmaṇaṃ."
+   ],
+   "en": "He for whom there is neither this nor that shore, nor both, him, the fearless and unshackled, I call indeed a Brahmana.",
+   "story": "Māravatthu"
+  },
+  {
+   "n": 386,
+   "chapter": 26,
+   "pi": [
+    "Jhāyiṃ virajamāsīnaṃ, katakiccamanāsavaṃ;",
+    "Uttamatthamanuppattaṃ, tamahaṃ brūmi brāhmaṇaṃ."
+   ],
+   "en": "He who is thoughtful, blameless, settled, dutiful, without passions, and who has attained the highest end, him I call indeed a Brahmana.",
+   "story": "Aññatarabrāhmaṇavatthu"
+  },
+  {
+   "n": 387,
+   "chapter": 26,
+   "pi": [
+    "Divā tapati ādicco, rattimābhāti candimā;",
+    "Sannaddho khattiyo tapati, jhāyī tapati brāhmaṇo;",
+    "Atha sabbamahorattiṃ, buddho tapati tejasā."
+   ],
+   "en": "The sun is bright by day, the moon shines by night, the warrior is bright in his armour, the Brahmana is bright in his meditation; but Buddha, the Awakened, is bright with splendour day and night.",
+   "story": "Ānandattheravatthu"
+  },
+  {
+   "n": 388,
+   "chapter": 26,
+   "pi": [
+    "Bāhitapāpoti brāhmaṇo, Samacariyā samaṇoti vuccati;",
+    "Pabbājayamattano malaṃ, Tasmā “pabbajito”ti vuccati."
+   ],
+   "en": "Because a man is rid of evil, therefore he is called Brahmana; because he walks quietly, therefore he is called Samana; because he has sent away his own impurities, therefore he is called Pravragita (Pabbagita, a pilgrim).",
+   "story": "Aññatarabrāhmaṇapabbajitavatthu"
+  },
+  {
+   "n": 389,
+   "chapter": 26,
+   "pi": [
+    "Na brāhmaṇassa pahareyya, nāssa muñcetha brāhmaṇo;",
+    "Dhī brāhmaṇassa hantāraṃ, tato dhī yassa muñcati."
+   ],
+   "en": "No one should attack a Brahmana, but no Brahmana (if attacked) should let himself fly at his aggressor! Woe to him who strikes a Brahmana, more woe to him who flies at his aggressor!",
+   "story": "Sāriputtattheravatthu"
+  },
+  {
+   "n": 390,
+   "chapter": 26,
+   "pi": [
+    "Na brāhmaṇassetadakiñci seyyo, Yadā nisedho manaso piyehi;",
+    "Yato yato hiṃsamano nivattati, Tato tato sammatimeva dukkhaṃ."
+   ],
+   "en": "It advantages a Brahmana not a little if he holds his mind back from the pleasures of life; when all wish to injure has vanished, pain will cease.",
+   "story": "Sāriputtattheravatthu"
+  },
+  {
+   "n": 391,
+   "chapter": 26,
+   "pi": [
+    "Yassa kāyena vācāya, manasā natthi dukkaṭaṃ;",
+    "Saṃvutaṃ tīhi ṭhānehi, tamahaṃ brūmi brāhmaṇaṃ."
+   ],
+   "en": "Him I call indeed a Brahmana who does not offend by body, word, or thought, and is controlled on these three points.",
+   "story": "Mahāpajāpatigotamīvatthu"
+  },
+  {
+   "n": 392,
+   "chapter": 26,
+   "pi": [
+    "Yamhā dhammaṃ vijāneyya, sammāsambuddhadesitaṃ;",
+    "Sakkaccaṃ taṃ namasseyya, aggihuttaṃva brāhmaṇo."
+   ],
+   "en": "After a man has once understood the law as taught by the Well-awakened (Buddha), let him worship it carefully, as the Brahmana worships the sacrificial fire.",
+   "story": "Sāriputtattheravatthu"
+  },
+  {
+   "n": 393,
+   "chapter": 26,
+   "pi": [
+    "Na jaṭāhi na gottena, na jaccā hoti brāhmaṇo;",
+    "Yamhi saccañca dhammo ca, so sucī so ca brāhmaṇo."
+   ],
+   "en": "A man does not become a Brahmana by his platted hair, by his family, or by birth; in whom there is truth and righteousness, he is blessed, he is a Brahmana.",
+   "story": "Jaṭilabrāhmaṇavatthu"
+  },
+  {
+   "n": 394,
+   "chapter": 26,
+   "pi": [
+    "Kiṃ te jaṭāhi dummedha, kiṃ te ajinasāṭiyā;",
+    "Abbhantaraṃ te gahanaṃ, bāhiraṃ parimajjasi."
+   ],
+   "en": "What is the use of platted hair, O fool! what of the raiment of goat-skins? Within thee there is ravening, but the outside thou makest clean.",
+   "story": "Kuhakabrāhmaṇavatthu"
+  },
+  {
+   "n": 395,
+   "chapter": 26,
+   "pi": [
+    "Paṃsukūladharaṃ jantuṃ, kisaṃ dhamanisanthataṃ;",
+    "Ekaṃ vanasmiṃ jhāyantaṃ, tamahaṃ brūmi brāhmaṇaṃ."
+   ],
+   "en": "The man who wears dirty raiments, who is emaciated and covered with veins, who lives alone in the forest, and meditates, him I call indeed a Brahmana.",
+   "story": "Kisāgotamīvatthu"
+  },
+  {
+   "n": 396,
+   "chapter": 26,
+   "pi": [
+    "Na cāhaṃ brāhmaṇaṃ brūmi, yonijaṃ mattisambhavaṃ;",
+    "Bhovādi nāma so hoti, sace hoti sakiñcano;",
+    "Akiñcanaṃ anādānaṃ, tamahaṃ brūmi brāhmaṇaṃ."
+   ],
+   "en": "I do not call a man a Brahmana because of his origin or of his mother. He is indeed arrogant, and he is wealthy: but the poor, who is free from all attachments, him I call indeed a Brahmana.",
+   "story": "Ekabrāhmaṇavatthu"
+  },
+  {
+   "n": 397,
+   "chapter": 26,
+   "pi": [
+    "Sabbasaṃyojanaṃ chetvā, yo ve na paritassati;",
+    "Saṅgātigaṃ visaṃyuttaṃ, tamahaṃ brūmi brāhmaṇaṃ."
+   ],
+   "en": "Him I call indeed a Brahmana who has cut all fetters, who never trembles, is independent and unshackled.",
+   "story": "Uggasenaseṭṭhiputtavatthu"
+  },
+  {
+   "n": 398,
+   "chapter": 26,
+   "pi": [
+    "Chetvā naddhiṃ varattañca, sandānaṃ sahanukkamaṃ;",
+    "Ukkhittapalighaṃ buddhaṃ, tamahaṃ brūmi brāhmaṇaṃ."
+   ],
+   "en": "Him I call indeed a Brahmana who has cut the strap and the thong, the chain with all that pertains to it, who has burst the bar, and is awakened.",
+   "story": "Dvebrāhmaṇavatthu"
+  },
+  {
+   "n": 399,
+   "chapter": 26,
+   "pi": [
+    "Akkosaṃ vadhabandhañca, aduṭṭho yo titikkhati;",
+    "Khantībalaṃ balānīkaṃ, tamahaṃ brūmi brāhmaṇaṃ."
+   ],
+   "en": "Him I call indeed a Brahmana who, though he has committed no offence, endures reproach, bonds, and stripes, who has endurance for his force, and strength for his army.",
+   "story": "Akkosakabhāradvājavatthu"
+  },
+  {
+   "n": 400,
+   "chapter": 26,
+   "pi": [
+    "Akkodhanaṃ vatavantaṃ, sīlavantaṃ anussadaṃ;",
+    "Dantaṃ antimasārīraṃ, tamahaṃ brūmi brāhmaṇaṃ."
+   ],
+   "en": "Him I call indeed a Brahmana who is free from anger, dutiful, virtuous, without appetite, who is subdued, and has received his last body.",
+   "story": "Sāriputtattheravatthu"
+  },
+  {
+   "n": 401,
+   "chapter": 26,
+   "pi": [
+    "Vāri pokkharapatteva, āraggeriva sāsapo;",
+    "Yo na limpati kāmesu, tamahaṃ brūmi brāhmaṇaṃ."
+   ],
+   "en": "Him I call indeed a Brahmana who does not cling to pleasures, like water on a lotus leaf, like a mustard seed on the point of a needle.",
+   "story": "Uppalavaṇṇāttherīvatthu"
+  },
+  {
+   "n": 402,
+   "chapter": 26,
+   "pi": [
+    "Yo dukkhassa pajānāti, idheva khayamattano;",
+    "Pannabhāraṃ visaṃyuttaṃ, tamahaṃ brūmi brāhmaṇaṃ."
+   ],
+   "en": "Him I call indeed a Brahmana who, even here, knows the end of his suffering, has put down his burden, and is unshackled.",
+   "story": "Aññatarabrāhmaṇavatthu"
+  },
+  {
+   "n": 403,
+   "chapter": 26,
+   "pi": [
+    "Gambhīrapaññaṃ medhāviṃ, maggāmaggassa kovidaṃ;",
+    "Uttamatthamanuppattaṃ, tamahaṃ brūmi brāhmaṇaṃ."
+   ],
+   "en": "Him I call indeed a Brahmana whose knowledge is deep, who possesses wisdom, who knows the right way and the wrong, and has attained the highest end.",
+   "story": "Khemābhikkhunīvatthu"
+  },
+  {
+   "n": 404,
+   "chapter": 26,
+   "pi": [
+    "Asaṃsaṭṭhaṃ gahaṭṭhehi, anāgārehi cūbhayaṃ;",
+    "Anokasārimappicchaṃ, tamahaṃ brūmi brāhmaṇaṃ."
+   ],
+   "en": "Him I call indeed a Brahmana who keeps aloof both from laymen and from mendicants, who frequents no houses, and has but few desires.",
+   "story": "Pabbhāravāsitissattheravatthu"
+  },
+  {
+   "n": 405,
+   "chapter": 26,
+   "pi": [
+    "Nidhāya daṇḍaṃ bhūtesu, tasesu thāvaresu ca;",
+    "Yo na hanti na ghāteti, tamahaṃ brūmi brāhmaṇaṃ."
+   ],
+   "en": "Him I call indeed a Brahmana who finds no fault with other beings, whether feeble or strong, and does not kill nor cause slaughter.",
+   "story": "Aññatarabhikkhuvatthu"
+  },
+  {
+   "n": 406,
+   "chapter": 26,
+   "pi": [
+    "Aviruddhaṃ viruddhesu, attadaṇḍesu nibbutaṃ;",
+    "Sādānesu anādānaṃ, tamahaṃ brūmi brāhmaṇaṃ."
+   ],
+   "en": "Him I call indeed a Brahmana who is tolerant with the intolerant, mild with fault-finders, and free from passion among the passionate.",
+   "story": "Sāmaṇerānaṃvatthu"
+  },
+  {
+   "n": 407,
+   "chapter": 26,
+   "pi": [
+    "Yassa rāgo ca doso ca, māno makkho ca pātito;",
+    "Sāsaporiva āraggā, tamahaṃ brūmi brāhmaṇaṃ."
+   ],
+   "en": "Him I call indeed a Brahmana from whom anger and hatred, pride and envy have dropt like a mustard seed from the point of a needle.",
+   "story": "Mahāpanthakattheravatthu"
+  },
+  {
+   "n": 408,
+   "chapter": 26,
+   "pi": [
+    "Akakkasaṃ viññāpaniṃ, giraṃ saccamudīraye;",
+    "Yāya nābhisaje kañci, tamahaṃ brūmi brāhmaṇaṃ."
+   ],
+   "en": "Him I call indeed a Brahmana who utters true speech, instructive and free from harshness, so that he offend no one.",
+   "story": "Pilindavacchattheravatthu"
+  },
+  {
+   "n": 409,
+   "chapter": 26,
+   "pi": [
+    "Yodha dīghaṃ va rassaṃ vā, aṇuṃ thūlaṃ subhāsubhaṃ;",
+    "Loke adinnaṃ nādiyati, tamahaṃ brūmi brāhmaṇaṃ."
+   ],
+   "en": "Him I call indeed a Brahmana who takes nothing in the world that is not given him, be it long or short, small or large, good or bad.",
+   "story": "Aññatarattheravatthu"
+  },
+  {
+   "n": 410,
+   "chapter": 26,
+   "pi": [
+    "Āsā yassa na vijjanti, asmiṃ loke paramhi ca;",
+    "Nirāsāsaṃ visaṃyuttaṃ, tamahaṃ brūmi brāhmaṇaṃ."
+   ],
+   "en": "Him I call indeed a Brahmana who fosters no desires for this world or for the next, has no inclinations, and is unshackled.",
+   "story": "Sāriputtattheravatthu"
+  },
+  {
+   "n": 411,
+   "chapter": 26,
+   "pi": [
+    "Yassālayā na vijjanti, aññāya akathaṅkathī;",
+    "Amatogadhamanuppattaṃ, tamahaṃ brūmi brāhmaṇaṃ."
+   ],
+   "en": "Him I call indeed a Brahmana who has no interests, and when he has understood (the truth), does not say How, how? and who has reached the depth of the Immortal.",
+   "story": "Mahāmoggallānattheravatthu"
+  },
+  {
+   "n": 412,
+   "chapter": 26,
+   "pi": [
+    "Yodha puññañca pāpañca, ubho saṅgamupaccagā;",
+    "Asokaṃ virajaṃ suddhaṃ, tamahaṃ brūmi brāhmaṇaṃ."
+   ],
+   "en": "Him I call indeed a Brahmana who in this world is above good and evil, above the bondage of both, free from grief from sin, and from impurity.",
+   "story": "Revatattheravatthu"
+  },
+  {
+   "n": 413,
+   "chapter": 26,
+   "pi": [
+    "Candaṃva vimalaṃ suddhaṃ, vippasannamanāvilaṃ;",
+    "Nandībhavaparikkhīṇaṃ, tamahaṃ brūmi brāhmaṇaṃ."
+   ],
+   "en": "Him I call indeed a Brahmana who is bright like the moon, pure, serene, undisturbed, and in whom all gaiety is extinct.",
+   "story": "Candābhattheravatthu"
+  },
+  {
+   "n": 414,
+   "chapter": 26,
+   "pi": [
+    "Yomaṃ palipathaṃ duggaṃ, saṃsāraṃ mohamaccagā;",
+    "Tiṇṇo pāraṅgato jhāyī, anejo akathaṅkathī;",
+    "Anupādāya nibbuto, tamahaṃ brūmi brāhmaṇaṃ."
+   ],
+   "en": "Him I call indeed a Brahmana who has traversed this miry road, the impassable world and its vanity, who has gone through, and reached the other shore, is thoughtful, guileless, free from doubts, free from attachment, and content.",
+   "story": "Sīvalittheravatthu"
+  },
+  {
+   "n": 415,
+   "chapter": 26,
+   "pi": [
+    "Yodha kāme pahantvāna, anāgāro paribbaje;",
+    "Kāmabhavaparikkhīṇaṃ, tamahaṃ brūmi brāhmaṇaṃ."
+   ],
+   "en": "Him I call indeed a Brahmana who in this world, leaving all desires, travels about without a home, and in whom all concupiscence is extinct.",
+   "story": "Sundarasamuddattheravatthu"
+  },
+  {
+   "n": 416,
+   "chapter": 26,
+   "pi": [
+    "Yodha taṇhaṃ pahantvāna, anāgāro paribbaje;",
+    "Taṇhābhavaparikkhīṇaṃ, tamahaṃ brūmi brāhmaṇaṃ."
+   ],
+   "en": "Him I call indeed a Brahmana who, leaving all longings, travels about without a home, and in whom all covetousness is extinct.",
+   "story": "Jaṭilattheravatthu"
+  },
+  {
+   "n": 417,
+   "chapter": 26,
+   "pi": [
+    "Hitvā mānusakaṃ yogaṃ, dibbaṃ yogaṃ upaccagā;",
+    "Sabbayogavisaṃyuttaṃ, tamahaṃ brūmi brāhmaṇaṃ."
+   ],
+   "en": "Him I call indeed a Brahmana who, after leaving all bondage to men, has risen above all bondage to the gods, and is free from all and every bondage.",
+   "story": "Naṭaputtakattheravatthu"
+  },
+  {
+   "n": 418,
+   "chapter": 26,
+   "pi": [
+    "Hitvā ratiñca aratiñca, sītibhūtaṃ nirūpadhiṃ;",
+    "Sabbalokābhibhuṃ vīraṃ, tamahaṃ brūmi brāhmaṇaṃ."
+   ],
+   "en": "Him I call indeed a Brahmana who has left what gives pleasure and what gives pain, who is cold, and free from all germs (of renewed life), the hero who has conquered all the worlds.",
+   "story": "Naṭaputtakattheravatthu"
+  },
+  {
+   "n": 419,
+   "chapter": 26,
+   "pi": [
+    "Cutiṃ yo vedi sattānaṃ, upapattiñca sabbaso;",
+    "Asattaṃ sugataṃ buddhaṃ, tamahaṃ brūmi brāhmaṇaṃ."
+   ],
+   "en": "Him I call indeed a Brahmana who knows the destruction and the return of beings everywhere, who is free from bondage, welfaring (Sugata), and awakened (Buddha).",
+   "story": "Vaṅgīsattheravatthu"
+  },
+  {
+   "n": 420,
+   "chapter": 26,
+   "pi": [
+    "Yassa gatiṃ na jānanti, devā gandhabbamānusā;",
+    "Khīṇāsavaṃ arahantaṃ, tamahaṃ brūmi brāhmaṇaṃ."
+   ],
+   "en": "Him I call indeed a Brahmana whose path the gods do not know, nor spirits (Gandharvas), nor men, whose passions are extinct, and who is an Arhat (venerable).",
+   "story": "Vaṅgīsattheravatthu"
+  },
+  {
+   "n": 421,
+   "chapter": 26,
+   "pi": [
+    "Yassa pure ca pacchā ca, majjhe ca natthi kiñcanaṃ;",
+    "Akiñcanaṃ anādānaṃ, tamahaṃ brūmi brāhmaṇaṃ."
+   ],
+   "en": "Him I call indeed a Brahmana who calls nothing his own, whether it be before, behind, or between, who is poor, and free from the love of the world.",
+   "story": "Dhammadinnāttherīvatthu"
+  },
+  {
+   "n": 422,
+   "chapter": 26,
+   "pi": [
+    "Usabhaṃ pavaraṃ vīraṃ, mahesiṃ vijitāvinaṃ;",
+    "Anejaṃ nhātakaṃ buddhaṃ, tamahaṃ brūmi brāhmaṇaṃ."
+   ],
+   "en": "Him I call indeed a Brahmana, the manly, the noble, the hero, the great sage, the conqueror, the impassible, the accomplished, the awakened.",
+   "story": "Aṅgulimālattheravatthu"
+  },
+  {
+   "n": 423,
+   "chapter": 26,
+   "pi": [
+    "Pubbenivāsaṃ yo vedi, saggāpāyañca passati;",
+    "Atho jātikkhayaṃ patto, abhiññāvosito muni;",
+    "Sabbavositavosānaṃ, tamahaṃ brūmi brāhmaṇaṃ."
+   ],
+   "en": "Him I call indeed a Brahmana who knows his former abodes, who sees heaven and hell, has reached the end of births, is perfect in knowledge, a sage, and whose perfections are all perfect.",
+   "story": "Devahitabrāhmaṇavatthu"
+  }
+ ]
+}

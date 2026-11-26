@@ -8,6 +8,7 @@ import { STORIES } from "@/lib/learn/jataka";
 import { storyClipUrls } from "@/lib/learn/use-story-voice";
 import manifest from "@/components/visuals/illustrations.json";
 import { LOTUS_ART, SPLASH_LAYERS, lotusSrc } from "@/lib/splash";
+import { COMMENTARY_SLUGS, chapterHref, commentaryHref } from "@/lib/learn/dhammapada-refs";
 import audioManifest from "@/lib/cms/clip-manifest.json";
 
 // "Use without internet" (PRD §7.13). The service worker (public/sw.js)
@@ -39,6 +40,12 @@ export function offlineUrls(): string[] {
     ...GUIDES.map((g) => `/learn/${g.slug}`),
     "/learn/jataka",
     ...STORIES.map((s) => `/learn/jataka/${s.slug}`),
+    // The Dhammapada's home, chapters and commentary stories (verse pages are
+    // kept as they're read; there are 423).
+    "/learn/dhammapada",
+    ...Array.from({ length: 26 }, (_, i) => chapterHref(i + 1)),
+    "/learn/dhammapada/stories",
+    ...COMMENTARY_SLUGS.map(commentaryHref),
     "/preferences",
     "/offline",
     ...Object.values(manifest).map((m) => m.src),

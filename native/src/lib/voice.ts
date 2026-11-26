@@ -14,7 +14,7 @@ import {
 } from "@/lib/practice/use-prayer-voice";
 import type { ReadingPrefs } from "@/lib/practice/preferences";
 import type { Prayer } from "@/lib/practice/prayers";
-import { storyParts, type JatakaStory } from "@/lib/learn/jataka";
+import { storyParts, type NarratedStory } from "@/lib/learn/jataka";
 import { clipUri, saveClip } from "./clip-cache";
 import { useContent } from "./content";
 
@@ -352,7 +352,7 @@ export function playOnce(opts: {
 
 export const STORY_SPEEDS = [0.85, 1, 1.15, 1.3] as const;
 
-export function useStoryVoice(story: JatakaStory, lang: "hi" | "en") {
+export function useStoryVoice(story: NarratedStory, lang: "hi" | "en") {
   const content = useContent();
   const parts = useMemo(
     () => storyParts(story, lang).map((p) => ({ ...p, src: content.storyClips[story.slug]?.[p.key]?.[lang]?.src })),
