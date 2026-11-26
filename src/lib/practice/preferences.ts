@@ -58,3 +58,16 @@ export function toggleFavourite(slug: string) {
 
 /** Whether the first-launch welcome screens have been completed or skipped. */
 export const welcomeDone = createLocalStore<boolean>("practice:welcomed", false, (raw) => raw === true, true);
+
+/** Sounds for sitting with eyes closed (meditation timer). */
+export interface MeditationSoundPrefs {
+  /** A soft swell to breathe with: in 4 s, out 6 s. */
+  breath: boolean;
+  /** When a light chime marks time: off, halfway, every 5 minutes, every minute. */
+  chime: "off" | "half" | "5" | "1";
+}
+
+export const meditationSounds = createLocalStore<MeditationSoundPrefs>("practice:meditation-sounds", { breath: false, chime: "half" }, (raw) => {
+  const r = (raw ?? {}) as Partial<MeditationSoundPrefs>;
+  return { breath: r.breath === true, chime: pick(r.chime, ["off", "half", "5", "1"] as const, "half") };
+});

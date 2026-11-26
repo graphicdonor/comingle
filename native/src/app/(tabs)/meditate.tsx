@@ -1,13 +1,19 @@
 import { useState } from "react";
 import { Pressable, Switch, View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
-import { Play } from "lucide-react-native";
+import { Play, Volume2 } from "lucide-react-native";
 import { MEDITATION_DURATIONS } from "@/lib/practice/meditations";
+import { meditationSounds } from "@/lib/practice/preferences";
+import { CHIME_OPTIONS, type ChimeOption } from "@/lib/practice/meditation-sounds";
+import type { MessageKey } from "@/lib/i18n/dictionary";
+import { previewBreath, ringChime, stopBreath } from "~/lib/bell";
 import { Screen } from "~/components/screen";
-import { Button, Card, H1, H2, Muted, T } from "~/components/ui";
+import { Button, Card, H1, H2, Muted, Segmented, T } from "~/components/ui";
 import { C, F } from "~/lib/theme";
 import { useT } from "~/lib/i18n";
 import { useContent } from "~/lib/content";
+
+const CHIME_LABELS: Record<ChimeOption, MessageKey> = { off: "meditate.chimeOff", half: "meditate.chimeHalf", "5": "meditate.chime5", "1": "meditate.chime1" };
 
 export default function Meditate() {
   const { t, lang } = useT();
@@ -19,6 +25,7 @@ export default function Meditate() {
     return (MEDITATION_DURATIONS as readonly number[]).includes(m) ? m : 10;
   });
   const [guide, setGuide] = useState(false);
+  const sounds = meditationSounds.use();
   const id = picked ?? (content.meditations.some((m) => m.id === params.practice) ? params.practice! : content.meditations[0].id);
   const practice = content.meditations.find((m) => m.id === id)!;
 
@@ -95,10 +102,57 @@ export default function Meditate() {
         <Switch value={guide} onValueChange={setGuide} trackColor={{ true: C.burgundy, false: C.line }} thumbColor={C.paper} accessibilityLabel={t("meditate.guide")} />
       </View>
 
+      <Card style={{ gap: 14 }}>
+        <View style={{ gap: 2 }}>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+            <Volume2 size={18} color={C.gold} />
+            <T bold style={{ fontSize: 16 }}>
+              {t("meditate.sounds")}
+            </T>
+          </View>
+          <Muted style={{ fontSize: 13 }}>{t("meditate.soundsHint")}</Muted>
+        </View>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
+          <View style={{ flex: 1 }}>
+            <T bold>{t("meditate.breathSound")}</T>
+            <Muted style={{ fontSize: 13 }}>{t("meditate.breathSoundHint")}</Muted>
+          </View>
+          <Switch
+            value={sounds.breath}
+            onValueChange={(on) => {
+              meditationSounds.set({ ...sounds, breath: on });
+              if (on) previewBreath();
+              else stopBreath();
+            }}
+            trackColor={{ true: C.burgundy, false: C.line }}
+            thumbColor={C.paper}
+            accessibilityLabel={t("meditate.breathSound")}
+          />
+        </View>
+        <View style={{ gap: 8 }}>
+          <View>
+            <T bold>{t("meditate.chime")}</T>
+            <Muted style={{ fontSize: 13 }}>{t("meditate.chimeHint")}</Muted>
+          </View>
+          <Segmented
+            label={t("meditate.chime")}
+            value={sounds.chime}
+            options={CHIME_OPTIONS.map((o) => ({ value: o, label: t(CHIME_LABELS[o]) }))}
+            onChange={(o) => {
+              meditationSounds.set({ ...sounds, chime: o });
+              if (o !== "off") ringChime();
+            }}
+          />
+        </View>
+      </Card>
+
       <Button
         label={t("common.begin", { n: minutes })}
         icon={<Play size={18} color={C.cream} fill={C.cream} />}
-        onPress={() => router.push({ pathname: "/meditate/session", params: { practice: id, minutes: String(minutes), guide: guide ? "1" : "0" } })}
+        onPress={() => {
+          stopBreath();
+          router.push({ pathname: "/meditate/session", params: { practice: id, minutes: String(minutes), guide: guide ? "1" : "0" } });
+        }}
       />
       <Muted style={{ fontSize: 13, textAlign: "center" }}>{t("meditate.disclaimer")}</Muted>
     </Screen>

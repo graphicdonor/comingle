@@ -7,14 +7,15 @@ import * as Notifications from "expo-notifications";
 import { StatusBar } from "expo-status-bar";
 import Svg, { Circle } from "react-native-svg";
 import { Pause, Play, X } from "lucide-react-native";
-import { readingPrefs } from "@/lib/practice/preferences";
+import { meditationSounds, readingPrefs } from "@/lib/practice/preferences";
 import { Button, Muted, T } from "~/components/ui";
 import { IconButton } from "~/components/screen";
 import { Animation } from "~/components/figure";
 import { C, F } from "~/lib/theme";
 import { useT } from "~/lib/i18n";
 import { useContent } from "~/lib/content";
-import { ringBell } from "~/lib/bell";
+import { breathAt, ringBell, ringChime, ringEndBell, stopBreath } from "~/lib/bell";
+import { BREATH_CYCLE_MS, BREATH_IN_MS, chimeTimes } from "@/lib/practice/meditation-sounds";
 import { CHANNEL } from "~/lib/notifications";
 
 function KeepAwake() {
@@ -50,6 +51,10 @@ export default function MeditationTimer() {
   const practice = content.meditations.find((m) => m.id === params.practice) ?? content.meditations[0];
   const total = Math.max(1, Number(params.minutes) || 10) * 60;
   const guide = params.guide === "1";
+  const sounds = meditationSounds.use();
+  const chimed = useRef(new Set<number>());
+  const cyclePos = useRef(0);
+  const [phase, setPhase] = useState<"in" | "out">("in");
 
   const [left, setLeft] = useState(total);
   const [paused, setPaused] = useState(false);
@@ -78,20 +83,38 @@ export default function MeditationTimer() {
 
   // Count from the clock, so time stays right even if the app was in the background.
   useEffect(() => {
-    if (paused || done) return;
+    if (paused || done) {
+      stopBreath();
+      return;
+    }
     const tick = () => {
-      const remaining = Math.max(0, Math.round((endAt.current - Date.now()) / 1000));
+      const leftMs = Math.max(0, endAt.current - Date.now());
+      const remaining = Math.round(leftMs / 1000);
       setLeft(remaining);
       if (remaining === 0) {
         setDone(true);
         cancelNotice();
-        ringBell();
+        stopBreath();
+        ringEndBell();
+        return;
+      }
+      const elapsed = total * 1000 - leftMs;
+      cyclePos.current = elapsed % BREATH_CYCLE_MS;
+      setPhase(cyclePos.current < BREATH_IN_MS ? "in" : "out");
+      if (sounds.breath) breathAt(elapsed);
+      // Time chimes; one missed while the app was asleep isn't played late.
+      for (const at of chimeTimes(sounds.chime, total)) {
+        if (elapsed >= at * 1000 && !chimed.current.has(at)) {
+          chimed.current.add(at);
+          if (elapsed - at * 1000 < 3000) ringChime();
+        }
       }
     };
     tick();
-    const id = setInterval(tick, 500);
+    const id = setInterval(tick, 250);
     return () => clearInterval(id);
-  }, [paused, done]);
+  }, [paused, done, total, sounds.breath, sounds.chime]);
+  useEffect(() => stopBreath, []);
 
   const togglePause = () => {
     if (paused) {
@@ -105,27 +128,19 @@ export default function MeditationTimer() {
     }
   };
 
-  // Breathing guide: in 4 s, out 6 s.
+  // Breathing guide: in 4 s, out 6 s, following the session clock (as the
+  // breath sound does), so the two stay together after a pause.
   const [scale] = useState(() => new Animated.Value(0.6));
-  const [phase, setPhase] = useState<"in" | "out">("in");
   useEffect(() => {
-    if (!guide || paused || done) return;
-    let live = true;
-    const cycle = () => {
-      if (!live) return;
-      setPhase("in");
-      Animated.timing(scale, { toValue: 1, duration: 4000, easing: Easing.inOut(Easing.sin), useNativeDriver: true }).start(({ finished }) => {
-        if (!finished || !live) return;
-        setPhase("out");
-        Animated.timing(scale, { toValue: 0.6, duration: 6000, easing: Easing.inOut(Easing.sin), useNativeDriver: true }).start(({ finished: f }) => f && cycle());
-      });
-    };
-    cycle();
-    return () => {
-      live = false;
+    if (!guide || paused || done) {
       scale.stopAnimation();
-    };
-  }, [guide, paused, done, scale]);
+      return;
+    }
+    const pos = cyclePos.current;
+    const inhale = phase === "in";
+    const duration = Math.max(200, inhale ? BREATH_IN_MS - pos : BREATH_CYCLE_MS - pos);
+    Animated.timing(scale, { toValue: inhale ? 1 : 0.6, duration, easing: Easing.inOut(Easing.sin), useNativeDriver: true }).start();
+  }, [guide, paused, done, phase, scale]);
 
   const mm = String(Math.floor(left / 60)).padStart(2, "0");
   const ss = String(left % 60).padStart(2, "0");
@@ -147,6 +162,7 @@ export default function MeditationTimer() {
             setLeft(total);
             setPaused(false);
             setDone(false);
+            chimed.current = new Set();
             ringBell();
             armNotice(total);
           }} style={{ alignSelf: "stretch" }} />
@@ -182,7 +198,7 @@ export default function MeditationTimer() {
             {mm}:{ss}
           </T>
           <T style={{ color: "rgba(247,242,232,0.7)", fontSize: 15 }} accessibilityLiveRegion="polite">
-            {paused ? t("meditate.paused") : guide ? t(phase === "in" ? "meditate.in" : "meditate.out") : " "}
+            {paused ? t("meditate.paused") : guide || sounds.breath ? t(phase === "in" ? "meditate.in" : "meditate.out") : " "}
           </T>
         </View>
 

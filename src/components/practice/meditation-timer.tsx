@@ -1,15 +1,41 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { Pause, Play, Square } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Pause, Play, Square, Volume2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { MEDITATIONS, MEDITATION_DURATIONS, type MeditationPractice } from "@/lib/practice/meditations";
-import { readingPrefs } from "@/lib/practice/preferences";
-import { ringBell, useWakeLock } from "@/lib/practice/client-hooks";
+import { meditationSounds, readingPrefs } from "@/lib/practice/preferences";
+import { useWakeLock } from "@/lib/practice/client-hooks";
+import { meditationAudio } from "@/lib/practice/meditation-audio";
+import { BREATH_CYCLE_MS, BREATH_IN_MS, CHIME_OPTIONS, chimeTimes, type ChimeOption } from "@/lib/practice/meditation-sounds";
+import type { MessageKey } from "@/lib/i18n/dictionary";
 import { PostureFigure } from "@/components/visuals/posture-figure";
 import { useT } from "@/lib/i18n/use-t";
 
 type Phase = "setup" | "running" | "paused" | "ended";
+
+const CHIME_LABELS: Record<ChimeOption, MessageKey> = { off: "meditate.chimeOff", half: "meditate.chimeHalf", "5": "meditate.chime5", "1": "meditate.chime1" };
+
+function Switch({ checked, onChange, label, hint }: { checked: boolean; onChange: (v: boolean) => void; label: string; hint: string }) {
+  return (
+    <label className="flex items-center justify-between gap-4 cursor-pointer">
+      <span>
+        <span className="block font-semibold text-[#2A1A1C]">{label}</span>
+        <span className="block text-sm text-[#5B5350]">{hint}</span>
+      </span>
+      <input type="checkbox" role="switch" checked={checked} onChange={(e) => onChange(e.target.checked)} className="sr-only peer" />
+      <span
+        aria-hidden
+        className={cn(
+          "relative h-7 w-12 rounded-full transition-colors flex-shrink-0 peer-focus-visible:ring-2 peer-focus-visible:ring-[#6D252C]/40",
+          checked ? "bg-[#6D252C]" : "bg-[#8E847C]",
+        )}
+      >
+        <span className={cn("absolute top-1 h-5 w-5 rounded-full bg-white shadow transition-all", checked ? "left-6" : "left-1")} />
+      </span>
+    </label>
+  );
+}
 
 function formatTime(ms: number) {
   const total = Math.ceil(ms / 1000);
@@ -27,6 +53,8 @@ export function MeditationTimer({ initialPractice, initialMinutes }: { initialPr
   const [endAt, setEndAt] = useState(0);
   const [remaining, setRemaining] = useState(0);
   const [breathGuide, setBreathGuide] = useState(false);
+  const sounds = meditationSounds.use();
+  const chimed = useRef(new Set<number>());
   const practice = MEDITATIONS.find((m) => m.id === practiceId) ?? MEDITATIONS[0];
 
   useWakeLock(prefs.keepAwake && (phase === "running" || phase === "paused"));
@@ -40,16 +68,34 @@ export function MeditationTimer({ initialPractice, initialMinutes }: { initialPr
       if (left <= 0) {
         setRemaining(0);
         setPhase("ended");
-        ringBell();
-      } else {
-        setRemaining(left);
+        meditationAudio.stopBreath();
+        meditationAudio.end();
+        return;
+      }
+      setRemaining(left);
+      const elapsed = minutes * 60_000 - left;
+      if (sounds.breath) meditationAudio.breathAt(elapsed);
+      // Time chimes; one missed while the page was asleep isn't played late.
+      for (const at of chimeTimes(sounds.chime, minutes * 60)) {
+        if (elapsed >= at * 1000 && !chimed.current.has(at)) {
+          chimed.current.add(at);
+          if (elapsed - at * 1000 < 3000) meditationAudio.chime();
+        }
       }
     }, 250);
     return () => clearInterval(id);
-  }, [phase, endAt]);
+  }, [phase, endAt, minutes, sounds.breath, sounds.chime]);
+
+  // Silence the breath when paused, ended or leaving the page.
+  useEffect(() => {
+    if (phase !== "running") meditationAudio.stopBreath();
+  }, [phase]);
+  useEffect(() => () => meditationAudio.stopBreath(), []);
 
   function start() {
-    ringBell();
+    meditationAudio.prepare();
+    meditationAudio.bell();
+    chimed.current = new Set();
     const ms = minutes * 60_000;
     setRemaining(ms);
     setEndAt(Date.now() + ms);
@@ -135,22 +181,52 @@ export function MeditationTimer({ initialPractice, initialMinutes }: { initialPr
           <p className="mt-4 text-xs text-[#6E6560] leading-relaxed">{practice.context[ui]}</p>
         </div>
 
-        <label className="flex items-center justify-between gap-4 rounded-3xl bg-white border border-[#E7DCC8] px-5 py-4 cursor-pointer">
-          <span>
-            <span className="block font-semibold text-[#2A1A1C]">{t("meditate.guide")}</span>
-            <span className="block text-sm text-[#5B5350]">{t("meditate.guideHint")}</span>
-          </span>
-          <input type="checkbox" role="switch" checked={breathGuide} onChange={(e) => setBreathGuide(e.target.checked)} className="sr-only peer" />
-          <span
-            aria-hidden
-            className={cn(
-              "relative h-7 w-12 rounded-full transition-colors flex-shrink-0 peer-focus-visible:ring-2 peer-focus-visible:ring-[#6D252C]/40",
-              breathGuide ? "bg-[#6D252C]" : "bg-[#8E847C]",
-            )}
-          >
-            <span className={cn("absolute top-1 h-5 w-5 rounded-full bg-white shadow transition-all", breathGuide ? "left-6" : "left-1")} />
-          </span>
-        </label>
+        <div className="rounded-3xl bg-white border border-[#E7DCC8] px-5 py-4">
+          <Switch checked={breathGuide} onChange={setBreathGuide} label={t("meditate.guide")} hint={t("meditate.guideHint")} />
+        </div>
+
+        <section aria-labelledby="sounds-heading" className="rounded-3xl bg-white border border-[#E7DCC8] px-5 py-5 space-y-5">
+          <div>
+            <p id="sounds-heading" className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-[#885F19]">
+              <Volume2 className="h-4 w-4" /> {t("meditate.sounds")}
+            </p>
+            <p className="mt-1 text-sm text-[#5B5350]">{t("meditate.soundsHint")}</p>
+          </div>
+          <Switch
+            checked={sounds.breath}
+            onChange={(on) => {
+              meditationSounds.set({ ...sounds, breath: on });
+              if (on) meditationAudio.previewBreath();
+              else meditationAudio.stopBreath();
+            }}
+            label={t("meditate.breathSound")}
+            hint={t("meditate.breathSoundHint")}
+          />
+          <div>
+            <p className="font-semibold text-[#2A1A1C]">{t("meditate.chime")}</p>
+            <p className="text-sm text-[#5B5350]">{t("meditate.chimeHint")}</p>
+            <div role="radiogroup" aria-label={t("meditate.chime")} className="mt-3 grid grid-cols-4 gap-2">
+              {CHIME_OPTIONS.map((o) => (
+                <button
+                  key={o}
+                  type="button"
+                  role="radio"
+                  aria-checked={sounds.chime === o}
+                  onClick={() => {
+                    meditationSounds.set({ ...sounds, chime: o });
+                    if (o !== "off") meditationAudio.chime();
+                  }}
+                  className={cn(
+                    "rounded-2xl px-1 py-2.5 text-center text-[13px] font-semibold leading-tight border transition-colors",
+                    sounds.chime === o ? "bg-[#6D252C] border-[#6D252C] text-[#F7F2E8]" : "bg-white border-[#E7DCC8] text-[#2A1A1C]",
+                  )}
+                >
+                  {t(CHIME_LABELS[o])}
+                </button>
+              ))}
+            </div>
+          </div>
+        </section>
 
         <button type="button" onClick={start} className="w-full flex items-center justify-center gap-2 rounded-full bg-[#6D252C] text-[#F7F2E8] py-4 text-[15px] font-bold">
           <Play className="h-4 w-4 fill-current" /> {t("common.begin", { n: minutes })}
@@ -165,7 +241,8 @@ export function MeditationTimer({ initialPractice, initialMinutes }: { initialPr
   const totalMs = minutes * 60_000;
   const elapsed = totalMs - remaining;
   const progress = totalMs ? Math.min(1, Math.max(0, elapsed / totalMs)) : 0;
-  const inhale = elapsed % 10_000 < 4_000;
+  const inhale = elapsed % BREATH_CYCLE_MS < BREATH_IN_MS;
+  const showBreath = breathGuide || sounds.breath;
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#3A1418] text-[#F7F2E8] px-6">
@@ -229,7 +306,7 @@ export function MeditationTimer({ initialPractice, initialMinutes }: { initialPr
               <span role="timer" aria-live="off" className="text-5xl font-semibold tabular-nums tracking-tight">
                 {formatTime(remaining)}
               </span>
-              {breathGuide && phase === "running" && (
+              {showBreath && phase === "running" && (
                 <span className="mt-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#E9BE73]">
                   {inhale ? t("meditate.in") : t("meditate.out")}
                 </span>
