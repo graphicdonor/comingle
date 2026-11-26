@@ -221,9 +221,9 @@ body {
 }
 @keyframes j-eq { from { height: 3px; } to { height: 12px; } }
 
-/* ── Splash: dawn over the hills ──────────────────────────────────────
-   Layered artwork (public/splash) animated in pure CSS, so it starts as
-   soon as the stylesheet arrives, before JavaScript. Resting styles are the
+/* ── Dawn over the hills ───────────────────────────────────────────────
+   The sunrise painting (public/splash), used by the welcome flow and the
+   landing page, animated in pure CSS. Resting styles are the
    final frame; each animation starts from its first keyframe (fill-mode:
    both). Percent translations are relative to the layer, i.e. the artwork. */
 .sp-dawn { animation: sp-fade 2.2s ease-in-out 0.1s both; }
@@ -234,7 +234,6 @@ body {
 .sp-near { animation: sp-near 1.5s cubic-bezier(0.16, 1, 0.3, 1) both; }
 .splash-letter { display: inline-block; animation: splash-letter 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
 .splash-phrase { animation: splash-phrase 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
-.splash-progress { transform-origin: left; animation: splash-progress 2.1s ease-in-out 0.3s both; }
 
 @keyframes sp-fade { from { opacity: 0; } to { opacity: 1; } }
 @keyframes sp-rays-in { from { opacity: 0; } to { opacity: 0.9; } }
@@ -245,23 +244,100 @@ body {
 @keyframes sp-near { from { transform: translateY(8%); } to { transform: translateY(0); } }
 @keyframes splash-letter { from { opacity: 0; transform: translateY(14px); filter: blur(6px); } to { opacity: 1; transform: none; filter: none; } }
 @keyframes splash-phrase { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
-@keyframes splash-progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 
 @media (prefers-reduced-motion: reduce) {
   .sp-dawn, .sp-rays, .sp-sun, .sp-far, .sp-mist, .sp-near,
-  .splash-letter, .splash-phrase, .splash-progress { animation: none; }
+  .splash-letter, .splash-phrase { animation: none; }
   .sp-rays { opacity: 0.9; }
 }
 
+/* ── Lotus splash: the lotus portal (splash-screen.tsx) ─────────────────
+   Pure CSS, so it plays the moment the artwork is ready, before JavaScript.
+   Timings come in as --d (delay) and --for (duration) from LOTUS in
+   lib/splash.ts; sizes are fractions of --L, the open flower's width.
+   Each animation starts from its first keyframe (fill-mode: both). */
+.splash-root { --L: min(86vw, 52svh); }
+.lp-lotus { width: 0; height: 0; }
+.lp-lotus > *, .lp-flower > * { position: absolute; left: 0; top: 0; }
+
+.lp-water { animation: lp-water 1.8s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.lp-pad { translate: -50% -50%; animation: lp-fade 1.4s ease-out var(--d) both, lp-drift 7s ease-in-out var(--d) infinite alternate; }
+.lp-glow {
+  width: calc(var(--L) * 1.3); aspect-ratio: 1; translate: -50% -50%; border-radius: 9999px;
+  background: radial-gradient(circle, rgba(255, 196, 170, 0.42) 0%, rgba(240, 130, 150, 0.16) 35%, transparent 65%);
+  animation: lp-fade 1.2s ease-out var(--d) both;
+}
+.lp-ripple {
+  width: var(--L); aspect-ratio: 1; translate: -50% -50%; border-radius: 9999px;
+  border: 1.5px solid rgba(255, 228, 186, 0.6); box-shadow: 0 0 12px rgba(255, 210, 150, 0.25);
+  animation: lp-ripple var(--for) cubic-bezier(0.2, 0.7, 0.3, 1) var(--d) both;
+}
+.lp-bud { translate: -50% -55%; animation: lp-bud-rise var(--for) cubic-bezier(0.22, 1, 0.36, 1) var(--d) both; }
+.lp-bud-burst { animation: lp-bud-burst var(--for) ease-in var(--d) both; }
+.lp-flower { animation: lp-turn var(--for) cubic-bezier(0.5, 0, 0.75, 0.6) var(--d) both; }
+/* Each petal stands on the flower's centre and points out at its angle. */
+.lp-petal { transform: translateX(-50%) translateY(-100%) rotate(var(--a)); transform-origin: 50% 100%; }
+.lp-open { transform-origin: 50% 100%; animation: lp-open var(--for) cubic-bezier(0.2, 1.25, 0.4, 1) var(--d) both; }
+.lp-centre { translate: -50% -50%; animation: lp-centre var(--for) cubic-bezier(0.3, 1.6, 0.5, 1) var(--d) both; }
+.lp-burst {
+  width: var(--L); aspect-ratio: 1; translate: -50% -50%; border-radius: 9999px; mix-blend-mode: screen;
+  background: radial-gradient(circle, rgba(255, 246, 214, 1) 0%, rgba(255, 214, 130, 0.7) 22%, rgba(255, 170, 120, 0.25) 45%, transparent 65%);
+  animation: lp-burst var(--for) cubic-bezier(0.2, 0.8, 0.3, 1) var(--d) both;
+}
+.lp-speck {
+  translate: -50% -50%; border-radius: 9999px; background: #FFF1C9; box-shadow: 0 0 10px 4px rgba(255, 204, 110, 0.9);
+  animation: lp-speck 1.6s cubic-bezier(0.15, 0.8, 0.3, 1) var(--d) both;
+}
+.lp-wheel { translate: -50% -50%; animation: lp-wheel var(--for) cubic-bezier(0.16, 1, 0.3, 1) var(--d) both; }
+.lp-wheel-glow {
+  position: absolute; inset: -35%; border-radius: 9999px;
+  background: radial-gradient(circle, rgba(255, 210, 120, 0.5) 0%, rgba(255, 180, 90, 0.18) 40%, transparent 68%);
+  animation: lp-pulse 2.4s ease-in-out infinite alternate;
+}
+.lp-spin { animation: lp-spin 26s linear infinite; }
+.lp-wait { box-shadow: 0 0 24px 8px rgba(255, 210, 130, 0.45); animation: lp-breathe 1.6s ease-in-out infinite alternate; transition: opacity 0.3s; }
+
+@keyframes lp-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes lp-water { from { opacity: 0; transform: scale(1.18); } to { opacity: 1; transform: scale(1); } }
+@keyframes lp-drift { from { transform: rotate(0deg) translate(0, 0); } to { transform: rotate(var(--turn)) translate(2%, -3%); } }
+@keyframes lp-ripple { from { opacity: 0.9; transform: scale(0.08); } to { opacity: 0; transform: scale(2.3); } }
+@keyframes lp-bud-rise { from { opacity: 0; transform: translateY(40%) scale(0.3); } to { opacity: 1; transform: none; } }
+@keyframes lp-bud-burst { from { opacity: 1; transform: none; } to { opacity: 0; transform: scale(1.4); } }
+@keyframes lp-open {
+  from { opacity: 0; transform: perspective(600px) rotateX(-88deg) scale(0.35); }
+  25% { opacity: 1; }
+  to { opacity: 1; transform: perspective(600px) rotateX(0deg) scale(1); }
+}
+@keyframes lp-centre { from { opacity: 0; transform: scale(0) rotate(-90deg); } to { opacity: 1; transform: none; } }
+@keyframes lp-burst { from { opacity: 0; transform: scale(0.15); } 18% { opacity: 1; } to { opacity: 0; transform: scale(2.8); } }
+@keyframes lp-speck {
+  from { opacity: 0; transform: translate(0, 0) scale(0.4); }
+  12% { opacity: 1; }
+  to { opacity: 0; transform: translate(calc(var(--x) * var(--L)), calc(var(--y) * var(--L) - var(--L) * 0.3)) scale(1); }
+}
+@keyframes lp-turn { from { opacity: 1; transform: none; } to { opacity: 0; transform: rotate(75deg) scale(1.18); } }
+@keyframes lp-wheel { from { opacity: 0; transform: scale(0.2) rotate(-240deg); } to { opacity: 1; transform: none; } }
+@keyframes lp-spin { to { rotate: 360deg; } }
+@keyframes lp-pulse { from { opacity: 0.65; transform: scale(0.94); } to { opacity: 1; transform: scale(1.06); } }
+@keyframes lp-breathe { from { opacity: 0.35; transform: scale(0.7); } to { opacity: 0.9; transform: scale(1.3); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .splash-root *, .splash-root { animation: none !important; }
+  .lp-bud, .lp-flower, .lp-burst, .lp-ripple, .lp-speck, .lp-wait { display: none; }
+}
+
 /* The artwork starts hidden and paused; the inline script in splash-screen.tsx
-   marks it ready only once every layer has fully downloaded (immediately when
+   marks it ready only once every image has fully downloaded (immediately when
    cached). So however slowly the page arrives, a half-loaded image is never
-   painted: the scene fades in whole and plays from the start. */
-.sp-layer { opacity: 0; animation-play-state: paused; transition: opacity 0.4s ease; }
-html[data-splash="ready"] .sp-layer { opacity: 1; animation-play-state: running; }
+   painted: the scene appears whole and plays from the start. */
+.lp-stage { opacity: 0; transition: opacity 0.35s ease; }
+.lp-stage, .lp-stage * { animation-play-state: paused; }
+html[data-splash="ready"] .lp-stage { opacity: 1; }
+html[data-splash="ready"] .lp-stage, html[data-splash="ready"] .lp-stage * { animation-play-state: running; }
+html[data-splash="ready"] .lp-wait { opacity: 0; }
 
 /* Safety net that needs no JavaScript: if the app's code hasn't arrived to
-   dismiss the splash within 6 seconds (very slow connections), it fades
+   dismiss the splash within 8 seconds (very slow connections), it fades
    itself out to reveal the already-rendered page underneath. */
-.splash-root { animation: splash-autohide 0.6s ease 6s forwards; }
+.splash-root { animation: splash-autohide 0.6s ease 8s forwards; }
 @keyframes splash-autohide { to { opacity: 0; visibility: hidden; } }

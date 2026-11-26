@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ArrowRight,
+  BookHeart,
   BookOpen,
   CloudDownload,
   Flower2,
@@ -11,7 +12,6 @@ import {
   Mic,
   BellRing,
   Volume2,
-  Search,
   ShieldCheck,
   Sparkles,
   Sun,
@@ -40,6 +40,7 @@ import {
 import { SITE_URL } from "@/lib/site-url";
 import { PRAYERS } from "@/lib/practice/prayers";
 import { MEDITATIONS } from "@/lib/practice/meditations";
+import { SESSIONS, sessionMinutes } from "@/lib/practice/sessions";
 import { GUIDES } from "@/lib/learn/guides";
 
 const PLAY_URL = "https://play.google.com/store/apps/details?id=in.wepray.app";
@@ -49,7 +50,7 @@ export const metadata: Metadata = {
     absolute: "WePray: Buddhist Prayers in Pali, Hindi & English, with Audio",
   },
   description:
-    "Buddha Vandana, Tisarana, Panchsheel, Metta and more Pali prayers with Hindi and English meaning and audio. Meditation, pronunciation help and beginner guides. Free, works offline.",
+    "Buddha Vandana, Tisarana, Panchsheel and more Pali prayers with Hindi and English meaning and audio, plus meditation, Jātaka tales and beginner guides. Free, no ads, works offline.",
   keywords: [
     "Buddhist prayers",
     "Buddha Vandana",
@@ -67,12 +68,15 @@ export const metadata: Metadata = {
     "Pali prayers with meaning",
     "Buddhist prayer app",
     "Buddhist meditation",
+    "Jataka tales",
+    "Jataka stories in Hindi",
     "Vipassana",
     "बुद्ध वंदना",
     "त्रिशरण",
     "पंचशील",
     "बौद्ध प्रार्थना",
     "बुद्धं सरणं गच्छामि",
+    "जातक कथाएँ",
   ],
   alternates: { canonical: "/" },
   openGraph: {
@@ -97,47 +101,47 @@ const FEATURES: { icon: LucideIcon; title: string; text: string }[] = [
   {
     icon: BookOpen,
     title: "Pali prayers with meaning",
-    text: "Buddha Vandanā, Tisaraṇa, Pañcasīla, Mettā, the Maṅgala Sutta and more, in Pali beside their Hindi or English meaning, in Roman script or Devanagari.",
+    text: "Ten traditional recitations, from Buddha Vandanā and the Three Refuges to the Maṅgala Sutta, with Hindi or English meaning beside every line, in Roman script or Devanagari.",
   },
   {
     icon: Volume2,
-    title: "Listen to every prayer",
-    text: "Hear each prayer read aloud line by line, in Pali and in Hindi or English, at a slower or faster speed, and follow along as each line lights up.",
+    title: "Read aloud, line by line",
+    text: "Hear every line in Pali and in your language, and follow as it lights up. Slow it down while you learn, speed it up once you know it.",
   },
   {
     icon: Mic,
-    title: "Pronunciation practice",
-    text: "Learn to say Pali correctly, syllable by syllable, with simple tips on long vowels, aspirated consonants and the niggahīta (ṃ).",
+    title: "Say it right",
+    text: "Practise Pali syllable by syllable, with simple tips on long vowels, aspirated consonants and the ṃ. On the web, record yourself and compare.",
   },
   {
     icon: Sun,
     title: "Morning & evening practice",
-    text: "A short sequence of prayers, one at a time, with nothing to distract you. Tap a line to keep your place.",
+    text: "A few minutes at sunrise and at dusk: a short sequence of prayers, one at a time, with nothing else on the screen.",
+  },
+  {
+    icon: BookHeart,
+    title: "Jātaka tales",
+    text: "Stories of the Buddha's past lives, painted and narrated in Hindi and English, each ending with its lesson. Lovely to share with children.",
   },
   {
     icon: Flower2,
-    title: "Meditation",
-    text: "Seven practices, from mindful breathing (ānāpānasati) and loving-kindness to walking meditation, for 3 to 20 minutes with a soft bell.",
+    title: "Guided meditation",
+    text: "Seven practices, from mindful breathing (ānāpānasati) to loving-kindness and walking meditation, for 3 to 20 minutes, ending with a soft bell.",
   },
   {
     icon: BellRing,
     title: "Gentle reminders",
-    text: "Add a daily reminder for your practice to your calendar, at the time that suits you, in the morning or evening.",
+    text: "A quiet nudge at the time you choose: a notification in the Android app, or a calendar reminder on the web.",
   },
   {
     icon: GraduationCap,
-    title: "Beginner guides",
-    text: "How to pray at home, how to sit comfortably and how to visit a temple, with illustrations. No posture is required.",
+    title: "Guides for beginners",
+    text: "How to pray at home, how to sit, from a chair to full lotus, and how to visit a temple, illustrated step by step.",
   },
   {
     icon: Sparkles,
     title: "A verse each day",
-    text: "A verse from the Dhammapada every day, with its reference and meaning in your language.",
-  },
-  {
-    icon: Search,
-    title: "Search in any script",
-    text: "Find any prayer, line or guide in English, Hindi or Pali, with or without diacritics.",
+    text: "A new verse of the Dhammapada every day, with its meaning in your language and where it comes from.",
   },
 ];
 
@@ -163,15 +167,23 @@ const FAQ: { q: string; a: string }[] = [
   },
   {
     q: "Can I listen to the prayers?",
-    a: "Yes. Every prayer can be read aloud line by line, in Pali and in its Hindi or English meaning, with a choice of speed. The voice is computer-generated to help you follow and learn; it is not a recording of a monk or teacher.",
+    a: "Yes. Every prayer can be read aloud line by line, in Pali and in its Hindi or English meaning, at the speed you choose. The voice is AI-generated, to help you follow and learn; it is not a recording of a monk or teacher.",
   },
   {
     q: "How do I pray at home as a Buddhist?",
     a: "Find a quiet place, sit comfortably, take a few calm breaths, then recite Buddha Vandanā, the Three Refuges and the Five Precepts, and close with a wish for the well-being of all beings. WePray’s “How to pray” guide and morning and evening practice walk you through it step by step. Customs differ between communities, and any respectful way is fine.",
   },
   {
+    q: "What are Jātaka tales?",
+    a: "The Jātakas are stories of the Buddha's earlier lives, 547 of them in the Pali Canon. In each, the Bodhisatta, the one who would become the Buddha, lives as a king, a merchant or an animal and practises a quality like generosity, patience or truthfulness. WePray retells ten of them simply in Hindi and English, each with a painting, narration and its lesson.",
+  },
+  {
+    q: "Is there an Android app?",
+    a: "Yes. WePray is free on Google Play, with offline listening, controls on the lock screen and daily reminder notifications. On any other phone or computer, use it in your browser or install it as a web app.",
+  },
+  {
     q: "Is WePray free?",
-    a: "Yes. WePray is free to use, with no ads and no subscriptions.",
+    a: "Yes. WePray is free, with no ads, no subscriptions and nothing to unlock.",
   },
   {
     q: "Do I need to create an account?",
@@ -236,12 +248,17 @@ function ChapterLink({
 }
 
 const lead = "mt-5 text-[17px] leading-relaxed text-[#F7F2E8]/85 sm:text-lg";
+const hindi = "mt-2 text-base text-[#F7F2E8]/70";
 const headline =
   "text-[40px] font-bold leading-[1.04] tracking-[-0.025em] sm:text-[56px] lg:text-[64px]";
 
 /** The opening journey: one day of practice, from before dawn to night. */
 function chapters(): Chapter[] {
   const stories = STORIES.slice(0, 3);
+  const minutes = (id: string) =>
+    sessionMinutes(SESSIONS.find((x) => x.id === id)!);
+  const morningMinutes = minutes("morning");
+  const eveningMinutes = minutes("evening");
   return [
     {
       id: "dawn",
@@ -258,28 +275,26 @@ function chapters(): Chapter[] {
             </span>
           </h1>
           <p className={lead}>
-            A calm companion for Buddhist practice: traditional Pali prayers
-            read aloud with their meaning, a gentle morning and evening
-            practice, meditation, Jātaka tales and guides for beginners.
+            Recite Buddha Vandanā, the Three Refuges and the Five Precepts with
+            their meaning beside every line. Listen along, sit in meditation and
+            learn at your own pace.
           </p>
-          <p lang="hi" className="mt-2 text-base text-[#F7F2E8]/70">
-            धम्म सीखें। सजगता से अभ्यास करें। करुणा के साथ जिएँ।
+          <p lang="hi" className={hindi}>
+            बुद्ध वंदना, त्रिशरण और पंचशील: पालि पाठ, हिन्दी अर्थ और ऑडियो के साथ।
           </p>
           <div className="mt-7">
             <Cta tone="light" />
           </div>
           <ul className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-sm font-medium text-[#F7F2E8]/75">
-            {["Free", "No account needed", "No ads", "Works offline"].map(
-              (t) => (
-                <li key={t} className="inline-flex items-center gap-1.5">
-                  <span
-                    aria-hidden
-                    className="h-1.5 w-1.5 rounded-full bg-[#E9BE73]"
-                  />{" "}
-                  {t}
-                </li>
-              ),
-            )}
+            {["Free", "No ads", "No sign-up", "Works offline"].map((t) => (
+              <li key={t} className="inline-flex items-center gap-1.5">
+                <span
+                  aria-hidden
+                  className="h-1.5 w-1.5 rounded-full bg-[#E9BE73]"
+                />{" "}
+                {t}
+              </li>
+            ))}
           </ul>
         </>
       ),
@@ -295,9 +310,12 @@ function chapters(): Chapter[] {
             <span className="text-[#E9BE73]">sun rises.</span>
           </h2>
           <p className={lead}>
-            A morning practice, one prayer at a time: Buddha Vandanā, the Three
-            Refuges and the Five Precepts, in Pali beside their meaning. Listen
-            line by line, slower or faster, and learn to say each word.
+            A {morningMinutes}-minute morning practice, one prayer at a time.
+            Press play and follow each line as it&apos;s read aloud, then learn
+            to say it yourself.
+          </p>
+          <p lang="hi" className={hindi}>
+            हर सुबह, कुछ मिनट की वंदना से दिन की शुरुआत।
           </p>
           <ul className="mt-5 flex flex-wrap gap-2">
             {PRAYERS.slice(0, 4).map((pr) => (
@@ -312,7 +330,7 @@ function chapters(): Chapter[] {
             ))}
           </ul>
           <ChapterLink href="/practice">
-            All {PRAYERS.length} prayers
+            Explore all {PRAYERS.length} prayers
           </ChapterLink>
         </>
       ),
@@ -327,10 +345,10 @@ function chapters(): Chapter[] {
             Stories older than <span className="text-[#E9BE73]">the tree.</span>
           </h2>
           <p className={lead}>
-            Jātaka tales of the Buddha&apos;s earlier lives, the hare in the
-            moon, the banyan deer, the monkey king, retold simply in Hindi and
-            English, each with a painting, narration and its lesson. And a verse
-            of the Dhammapada for every day.
+            {`The hare who gave himself, the deer king who saved a mother, the monkey who became a bridge. ${STORIES.length} Jātaka tales of the Buddha's past lives, painted, narrated and told simply, each with its lesson.`}
+          </p>
+          <p lang="hi" className={hindi}>
+            जातक कथाएँ, चित्रों और आवाज़ के साथ, हिन्दी में।
           </p>
           <ul className="mt-6 flex gap-3">
             {stories.map((st) => {
@@ -372,10 +390,12 @@ function chapters(): Chapter[] {
             Light a lamp. <span className="text-[#E9BE73]">Sit a while.</span>
           </h2>
           <p className={lead}>
-            An evening practice to close the day, and {MEDITATIONS.length}{" "}
-            meditations, from mindful breathing to loving-kindness, for 3 to 20
-            minutes with a soft bell. Set a gentle reminder for the time that
-            suits you.
+            Close the day with a {eveningMinutes}-minute evening practice, or
+            sit with one of {MEDITATIONS.length} guided meditations, 3 to 20
+            minutes, ending with a soft bell.
+          </p>
+          <p lang="hi" className={hindi}>
+            संध्या वंदना और ध्यान, कोमल घंटी के साथ।
           </p>
           <ul className="mt-5 flex flex-wrap gap-2">
             {MEDITATIONS.slice(0, 4).map((m) => (
@@ -401,12 +421,12 @@ function chapters(): Chapter[] {
             Carry the quiet <span className="text-[#E9BE73]">with you.</span>
           </h2>
           <p className={lead}>
-            Everything works offline, in Hindi and English, with no account, no
-            ads and no streaks. Your practice stays on your phone. Free on
-            Android and on the web.
+            Download once and pray anywhere, even without internet. No ads, no
+            streaks, no sign-up: your practice stays on your phone. Free on
+            Android and the web.
           </p>
-          <p lang="hi" className="mt-2 text-base text-[#F7F2E8]/70">
-            आज ही अभ्यास शुरू करें।
+          <p lang="hi" className={hindi}>
+            आज ही अभ्यास शुरू करें। निःशुल्क, बिना विज्ञापन।
           </p>
           <div className="mt-7">
             <Cta tone="light" />
@@ -428,7 +448,7 @@ export default function LandingPage() {
         url: SITE_URL,
         inLanguage: ["en", "hi"],
         description:
-          "Buddhist prayers in Pali with Hindi and English meaning and audio, meditation and beginner guides.",
+          "Buddhist prayers in Pali with Hindi and English meaning and audio, meditation, Jātaka tales and beginner guides.",
       },
       {
         "@type": "MobileApplication",
@@ -438,7 +458,7 @@ export default function LandingPage() {
         operatingSystem: "Android, Web",
         inLanguage: ["en", "hi"],
         description:
-          "Buddhist prayers in Pali with Hindi and English meaning and audio, guided practice, meditation, pronunciation practice and beginner guides.",
+          "Buddhist prayers in Pali with Hindi and English meaning and audio, morning and evening practice, guided meditation, pronunciation practice, Jātaka tales and beginner guides.",
         url: SITE_URL,
         installUrl: PLAY_URL,
         sameAs: [PLAY_URL],
@@ -494,8 +514,8 @@ export default function LandingPage() {
                 <SectionHeading
                   id="inside-title"
                   eyebrow="What's inside"
-                  title="Everything you need for a daily practice"
-                  intro="Simple, quiet and respectful, so the app gets out of the way of your practice."
+                  title="Everything for a daily practice, nothing in the way"
+                  intro="Prayer, meditation and learning in one quiet place, in Hindi and English. No ads, no streaks, no noise."
                   center
                 />
               </Reveal>
@@ -569,7 +589,7 @@ export default function LandingPage() {
                   id="prayers-title"
                   eyebrow="Try it here"
                   title="Pali, with its meaning beside every line"
-                  intro="Read Pali alone, with a translation, or the translation by itself. Choose Hindi or English, and Roman script or Devanagari. Try it on the Three Refuges."
+                  intro="Read the Pali alone, with its meaning, or the meaning by itself, in Hindi or English, in Roman script or Devanagari. Try it below on the Three Refuges."
                 />
                 <ul className="mt-6 space-y-2 text-[15px] text-[#5B5350]">
                   {[
@@ -605,7 +625,7 @@ export default function LandingPage() {
                   id="library-title"
                   eyebrow="Prayer library"
                   title="Buddhist prayers in Pali, with Hindi and English meaning"
-                  intro={`${PRAYERS.length} traditional Pali recitations, from Buddha Vandanā and the Three Refuges to the Maṅgala Sutta. Each one shows its source, can be read aloud, and has pronunciation help.`}
+                  intro={`${PRAYERS.length} traditional Pali recitations, from Buddha Vandanā and the Three Refuges to the Maṅgala Sutta. Each one shows where it comes from, can be read aloud and comes with pronunciation help.`}
                 />
                 <p
                   lang="hi"
@@ -696,7 +716,7 @@ export default function LandingPage() {
                   id="learn-title"
                   eyebrow="New to practice?"
                   title="Learn how to pray and how to sit"
-                  intro="Gentle, illustrated guides for beginners: how to pray at home, comfortable postures from a chair to the lotus, and how to visit a temple respectfully. Tap a cue to see it on the figure."
+                  intro="Never prayed before? Start here. Short, illustrated guides on how to pray at home, how to sit comfortably, from a chair to the lotus, and how to visit a temple respectfully."
                   center
                 />
               </Reveal>
@@ -752,17 +772,17 @@ export default function LandingPage() {
                   {
                     icon: Lock,
                     title: "No account needed",
-                    text: "Use everything without signing up; your saved prayers, history and settings stay on your device. Prefer them on every device? Sign in with Google to sync them privately.",
+                    text: "Use everything without signing up. Your saved prayers and settings stay on your device; sign in with Google only if you want them on all your devices.",
                   },
                   {
                     icon: CloudDownload,
                     title: "Works without internet",
-                    text: "Download everything once from Settings, then practise anywhere, even with no signal.",
+                    text: "Download once from Settings, then pray anywhere: on a train, in the hills, in a temple with no signal.",
                   },
                   {
                     icon: ShieldCheck,
                     title: "Calm by design",
-                    text: "No ads, no streaks, no pressure. Gentle animations that switch off if you prefer less motion, and support for zoom and screen readers.",
+                    text: "No ads, no streaks, no pressure to come back. Gentle motion that switches off if you prefer less, and support for zoom and screen readers.",
                   },
                 ].map((c, i) => (
                   <Reveal key={c.title} delay={i * 0.08}>
@@ -855,8 +875,8 @@ export default function LandingPage() {
                   Begin your practice today
                 </h2>
                 <p className="mt-3 text-lg text-[#F7F2E8]/80">
-                  Free, private, in Hindi and English.{" "}
-                  <span lang="hi">आज ही अभ्यास शुरू करें।</span>
+                  A few minutes a day is enough to begin. Free, private, in
+                  Hindi and English. <span lang="hi">आज ही अभ्यास शुरू करें।</span>
                 </p>
                 <div className="mt-7">
                   <Cta tone="light" />

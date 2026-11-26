@@ -9,7 +9,7 @@ import { ReadingControls } from "@/components/practice/reading-controls";
 /**
  * The splash artwork as a hero card: the same layers, with the sun rising and
  * rays turning (the "sp-*" animations in globals.css, minus the splash's
- * hold-until-loaded gating, which only applies to the "sp-layer" class).
+ * hold-until-loaded gating).
  */
 export function HeroArt({ className = "" }: { className?: string }) {
   return (

@@ -3,7 +3,7 @@ import "./globals.css";
 import { ServiceWorkerRegister } from "@/components/pwa/sw-register";
 import { InstallPrompt } from "@/components/pwa/install-prompt";
 import { SplashScreen } from "@/components/splash/splash-screen";
-import { SPLASH_LAYERS } from "@/lib/splash";
+import { LOTUS_ART, lotusSrc } from "@/lib/splash";
 import { preload } from "react-dom";
 import { SITE_URL } from "@/lib/site-url";
 import { DialogProvider } from "@/components/ui/dialog";
@@ -56,7 +56,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   // Start fetching the splash artwork with the HTML, before any JavaScript.
-  for (const layer of SPLASH_LAYERS) preload(layer.src, { as: "image", type: "image/webp", fetchPriority: "high" });
+  for (const name of LOTUS_ART) preload(lotusSrc(name), { as: "image", type: "image/webp", fetchPriority: "high" });
   return (
     <html lang="en">
       <body>

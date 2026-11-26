@@ -7,7 +7,7 @@ import { GUIDES } from "@/lib/learn/guides";
 import { STORIES } from "@/lib/learn/jataka";
 import { storyClipUrls } from "@/lib/learn/use-story-voice";
 import manifest from "@/components/visuals/illustrations.json";
-import { SPLASH_LAYERS } from "@/lib/splash";
+import { LOTUS_ART, SPLASH_LAYERS, lotusSrc } from "@/lib/splash";
 import audioManifest from "@/lib/cms/clip-manifest.json";
 
 // "Use without internet" (PRD §7.13). The service worker (public/sw.js)
@@ -43,6 +43,7 @@ export function offlineUrls(): string[] {
     "/offline",
     ...Object.values(manifest).map((m) => m.src),
     ...SPLASH_LAYERS.map((l) => l.src),
+    ...LOTUS_ART.map(lotusSrc),
     // "Listen" voice clips for every prayer line.
     ...Object.values(audioManifest as Record<string, Record<string, Record<string, { src: string }>>>).flatMap((lines) =>
       Object.values(lines).flatMap((clips) => Object.values(clips).map((c) => c.src)),

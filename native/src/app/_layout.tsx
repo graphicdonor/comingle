@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { AppState } from "react-native";
 import { Stack, router } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
@@ -22,6 +22,7 @@ import { refreshContent } from "~/lib/content";
 import { uiLang } from "~/lib/i18n";
 import { reportDailyUse } from "~/lib/usage";
 import { routeFor } from "~/lib/notifications";
+import { LotusSplash } from "~/components/lotus-splash";
 
 void SplashScreen.preventAutoHideAsync();
 
@@ -39,6 +40,8 @@ export default function RootLayout() {
   });
   const ready = loaded || Boolean(error);
   const welcomed = welcomeDone.use();
+  // The lotus portal plays once, each time the app starts.
+  const [intro, setIntro] = useState(true);
 
   useEffect(() => {
     if (ready) SplashScreen.hide();
@@ -100,6 +103,7 @@ export default function RootLayout() {
           <Stack.Screen name="welcome" options={{ animation: "fade" }} />
         </Stack.Protected>
       </Stack>
+      {intro && <LotusSplash onDone={() => setIntro(false)} />}
     </SafeAreaProvider>
   );
 }

@@ -1,51 +1,52 @@
 "use client";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import { useT } from "@/lib/i18n/use-t";
-import { SPLASH_LAYERS } from "@/lib/splash";
+import { LOTUS, LOTUS_PADS, LOTUS_PETALS, LOTUS_SPECKS, LOTUS_Y, lotusSrc } from "@/lib/splash";
 
-const EASE = [0.16, 1, 0.3, 1] as const;
-/** When the splash starts fading, measured from the start of page load. */
-const HOLD_MS = 2700;
-/** Minimum time it stays after JavaScript wakes up, so a slow load never cuts it off abruptly. */
+/** Minimum time it stays after JavaScript wakes up, so it never vanishes abruptly. */
 const MIN_AFTER_HYDRATION_MS = 500;
-const FADE_MS = 600;
-const REDUCED_HOLD_MS = 600;
-/** Once the artwork is ready, let the sunrise play this long before fading. */
-const PLAY_AFTER_READY_MS = 2100;
-/** Never keep someone waiting longer than this, however slow the connection. */
-const MAX_MS = 6000;
+const REDUCED_HOLD_MS = 700;
+/** If the artwork still hasn't arrived by now (slow connection), skip the splash. */
+const GIVE_UP_MS = 2600;
+/** Never keep someone waiting longer than this. */
+const MAX_MS = 7500;
 
 type SplashWindow = Window & { __splashReadyAt?: number };
 
 /**
  * Inline script, run while the HTML is parsed (before the app's JavaScript):
- * marks the artwork ready once every layer has fully downloaded, or at once
+ * marks the artwork ready once every image has fully downloaded, or at once
  * if they're cached. Until then CSS keeps the scene hidden and paused.
  */
 const WAIT_FOR_ART = `(function(){var root=document.documentElement;try{
-var imgs=document.querySelectorAll(".sp-layer"),left=0;
+var imgs=document.querySelectorAll(".lp-img"),left=0;
 function ready(){window.__splashReadyAt=performance.now();root.dataset.splash="ready";window.dispatchEvent(new Event("splash-art-ready"));}
 function tick(){if(--left===0)ready();}
 for(var i=0;i<imgs.length;i++){if(!imgs[i].complete){left++;imgs[i].addEventListener("load",tick);imgs[i].addEventListener("error",tick);}}
 if(left===0)ready();
 }catch(e){root.dataset.splash="ready";}})();`;
 
-const delay = (s: number) => ({ animationDelay: `${s}s` });
+/** Inline CSS variables (custom properties aren't in CSSProperties). */
+const vars = (v: Record<string, string | number>) => v as CSSProperties;
+const s = (n: number) => `${n}s`;
+
+/** Aspect ratios (width ÷ height) of the petal images. */
+const PETAL_ASPECT = { "petal-outer": 346 / 560, "petal-inner": 230 / 420 } as Record<string, number>;
 
 /**
- * Dawn over the hills: the pre-dawn sky warms, the sun rises from behind the
- * hills as its rays turn slowly, the hills settle in at different speeds for
- * depth, mist drifts, and a meditator sits on the nearest hill facing the
- * sunrise. The name and tagline appear in the sky above. Calm rather than
- * flashy (PRD §2.2), skippable with a tap, a still frame for reduced motion.
+ * The lotus portal: dark water at night, a bud rises and ripples spread,
+ * three rings of petals unfold in turn, the golden centre lights up in a
+ * burst of light, then the flower turns away as the Dharma wheel spins out
+ * of it with the name beneath, and the camera dives through the wheel into
+ * the app. Skippable with a tap; a still frame for reduced motion.
  *
- * The animation is pure CSS ("Splash" in globals.css), so it begins as soon
- * as the stylesheet loads, before JavaScript; the layers are preloaded from
- * the root layout. JavaScript only times the fade-out, counted from the start
- * of page load. Shown once per full page load, visible on both server and
- * client render so nothing flashes during hydration.
+ * The motion is pure CSS ("Lotus splash" in globals.css), timed from
+ * LOTUS in lib/splash.ts (shared with the Android app), so it starts the
+ * moment the artwork is ready, before JavaScript. JavaScript only times the
+ * dive. Shown once per full page load, on both server and client render so
+ * nothing flashes during hydration.
  */
 export function SplashScreen() {
   const [phase, setPhase] = useState<"visible" | "done">("visible");
@@ -64,23 +65,20 @@ export function SplashScreen() {
     pathname.startsWith("/admin");
 
   useEffect(() => {
-    // Every render keeps the same JSX shape; only the timing depends on
-    // client-only values, and setState stays in timer callbacks.
     if (prefersReducedMotion) {
       const timer = setTimeout(() => setPhase("done"), REDUCED_HOLD_MS);
       return () => clearTimeout(timer);
     }
     let timer: ReturnType<typeof setTimeout>;
     const schedule = () => {
-      // Fade out at HOLD_MS after page load, but give the sunrise time to play
-      // once the artwork is ready, and never stay longer than MAX_MS overall.
+      // Dive in once the whole bloom has played; if the artwork is still on
+      // its way, wait a little and then let the reader in without it.
       const now = performance.now();
       const readyAt = (window as SplashWindow).__splashReadyAt;
-      const target = readyAt === undefined ? MAX_MS : Math.min(Math.max(HOLD_MS, readyAt + PLAY_AFTER_READY_MS), MAX_MS);
+      const target = readyAt === undefined ? GIVE_UP_MS : Math.min(readyAt + LOTUS.total * 1000, MAX_MS);
       timer = setTimeout(() => setPhase("done"), Math.max(target - now, MIN_AFTER_HYDRATION_MS));
     };
     schedule();
-    // If the art is still arriving, reschedule the moment it's ready.
     const onReady = () => {
       clearTimeout(timer);
       schedule();
@@ -96,9 +94,9 @@ export function SplashScreen() {
     setSkipped(true);
     setPhase("done");
   };
-  const fadeSeconds = skipped ? 0.22 : prefersReducedMotion ? 0.15 : FADE_MS / 1000;
+  const dive = skipped ? 0.3 : prefersReducedMotion ? 0.15 : LOTUS.dive;
 
-  // "Learn the Dhamma. Practise … Live …" → three phrases, one per line.
+  // "Learn the Dhamma. Practise … Live …" → one phrase per line.
   const phrases = t("today.tagline")
     .split(lang === "hi" ? /(?<=।)\s+/ : /(?<=\.)\s+/)
     .filter(Boolean);
@@ -108,57 +106,124 @@ export function SplashScreen() {
       {phase !== "done" && !isLanding && (
         <motion.div
           key="splash"
-          className="splash-root fixed inset-0 z-[999] overflow-hidden bg-[#F7F2E8]"
+          className="splash-root fixed inset-0 z-[999] overflow-hidden bg-[#04101A]"
           initial={false}
-          exit={{ opacity: 0, scale: 1.04, transition: { duration: fadeSeconds, ease: EASE } }}
+          exit={{ opacity: 0, transition: { duration: dive * 0.45, delay: dive * 0.55, ease: "easeOut" } }}
           onClick={skip}
           aria-hidden="true"
         >
-          {/* The artwork keeps its 2:3 shape and covers the screen; on tall
-              phones only the outer sky at the sides is trimmed. */}
-          <div className="absolute left-1/2 top-1/2 aspect-[2/3] w-[max(100vw,66.667vh)] -translate-x-1/2 -translate-y-1/2">
-            {SPLASH_LAYERS.map((layer, i) => (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                key={layer.src}
-                src={layer.src}
-                alt=""
-                draggable={false}
-                decoding="async"
-                fetchPriority={i === 0 || i === SPLASH_LAYERS.length - 1 ? "high" : "auto"}
-                className={`sp-layer absolute inset-0 h-full w-full select-none ${layer.className}`}
-              />
+          {/* While the artwork arrives: one slow breathing point of light. */}
+          <div className="lp-wait absolute left-1/2 size-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#FFE3A8]" style={{ top: `${LOTUS_Y * 100}%` }} />
+
+          <motion.div
+            className="lp-stage absolute inset-0"
+            style={{ transformOrigin: `50% ${LOTUS_Y * 100}%` }}
+            initial={false}
+            exit={{ scale: 9, rotate: 30, transition: { duration: dive, ease: [0.7, 0, 0.84, 0] } }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={lotusSrc("water")} alt="" draggable={false} fetchPriority="high" className="lp-img lp-water absolute inset-0 h-full w-full object-cover" />
+
+            {LOTUS_PADS.map((pad, i) => (
+              <div
+                key={pad.img}
+                className="lp-pad absolute"
+                style={vars({ left: `${pad.x * 100}%`, top: `${pad.y * 100}%`, width: `calc(var(--L) * ${pad.w})`, "--turn": `${pad.turn}deg`, "--d": s(0.2 + i * 0.25) })}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={lotusSrc(pad.img)} alt="" draggable={false} className="lp-img w-full" />
+              </div>
             ))}
+
+            {/* The flower, all positioned from its centre. */}
+            <div className="lp-lotus absolute left-1/2" style={{ top: `${LOTUS_Y * 100}%` }}>
+              <div className="lp-glow" style={vars({ "--d": s(LOTUS.bud.rise) })} />
+
+              {LOTUS.ripples.map((at) => (
+                <div key={at} className="lp-ripple" style={vars({ "--d": s(at), "--for": s(LOTUS.rippleFor) })} />
+              ))}
+
+              <div className="lp-bud" style={vars({ "--d": s(LOTUS.bud.rise), "--for": s(LOTUS.bud.riseFor), width: `calc(var(--L) * ${LOTUS.bud.w})` })}>
+                <div className="lp-bud-burst" style={vars({ "--d": s(LOTUS.bud.burst), "--for": s(LOTUS.bud.burstFor) })}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={lotusSrc("bud")} alt="" draggable={false} className="lp-img w-full" />
+                </div>
+              </div>
+
+              <div className="lp-flower" style={vars({ "--d": s(LOTUS.turn.at), "--for": s(LOTUS.turn.for) })}>
+                {LOTUS_PETALS.map((p) => (
+                  <div
+                    key={p.key}
+                    className="lp-petal"
+                    style={vars({
+                      height: `calc(var(--L) * ${p.length})`,
+                      width: `calc(var(--L) * ${p.length * PETAL_ASPECT[p.img]})`,
+                      "--a": `${p.angle}deg`,
+                    })}
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={lotusSrc(p.img)}
+                      alt=""
+                      draggable={false}
+                      className="lp-img lp-open h-full w-full"
+                      style={vars({ "--d": s(p.delay), "--for": s(LOTUS.petalFor), filter: p.dim < 1 ? `brightness(${p.dim})` : "none" })}
+                    />
+                  </div>
+                ))}
+                <div className="lp-centre" style={vars({ "--d": s(LOTUS.centre.at), "--for": s(LOTUS.centre.for), width: `calc(var(--L) * ${LOTUS.centre.w})` })}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={lotusSrc("centre")} alt="" draggable={false} className="lp-img w-full" />
+                </div>
+              </div>
+
+              <div className="lp-burst" style={vars({ "--d": s(LOTUS.burst.at), "--for": s(LOTUS.burst.for) })} />
+              {LOTUS_SPECKS.map((sp, i) => {
+                const rad = (sp.angle * Math.PI) / 180;
+                return (
+                  <div
+                    key={i}
+                    className="lp-speck"
+                    style={vars({
+                      width: sp.size,
+                      height: sp.size,
+                      "--x": (Math.cos(rad) * sp.distance).toFixed(3),
+                      "--y": (Math.sin(rad) * sp.distance).toFixed(3),
+                      "--d": s(sp.delay),
+                    })}
+                  />
+                );
+              })}
+
+              <div className="lp-wheel" style={vars({ "--d": s(LOTUS.wheel.at), "--for": s(LOTUS.wheel.for), width: `calc(var(--L) * ${LOTUS.wheel.w})` })}>
+                <div className="lp-wheel-glow" />
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={lotusSrc("wheel")} alt="" draggable={false} className="lp-img lp-spin relative w-full" />
+              </div>
+            </div>
+
+            {/* Name and tagline beneath the wheel */}
+            <div className="absolute inset-x-0 flex flex-col items-center px-6 text-center" style={{ top: `calc(${LOTUS_Y * 100}% + var(--L) * 0.4)` }}>
+              <p className="text-[44px] font-bold tracking-tight text-[#F7F2E8] [text-shadow:0_0_24px_rgba(255,206,120,0.55)]">
+                {"WePray".split("").map((ch, i) => (
+                  <span key={i} className="splash-letter" style={{ animationDelay: s(LOTUS.name.at + i * 0.06) }}>
+                    {ch}
+                  </span>
+                ))}
+              </p>
+              {/* Keyed by position so switching to Hindi on hydration swaps the
+                  words without restarting the animation. */}
+              <div lang={lang} className="mt-1.5 flex flex-col items-center gap-0.5">
+                {phrases.map((phrase, i) => (
+                  <p key={i} className="splash-phrase text-[15px] font-medium text-[#F7F2E8]/75" style={{ animationDelay: s(LOTUS.tagline.at + i * 0.18) }}>
+                    {phrase}
+                  </p>
+                ))}
+              </div>
+            </div>
             {/* Marks the artwork ready once fully downloaded (see WAIT_FOR_ART). */}
             <script dangerouslySetInnerHTML={{ __html: WAIT_FOR_ART }} />
-          </div>
-
-          {/* Name and tagline in the open sky above the sunrise */}
-          <div className="absolute inset-x-0 top-[13%] flex flex-col items-center px-6 text-center">
-            <p className="text-[44px] font-bold tracking-tight text-[#6D252C] drop-shadow-[0_1px_8px_rgba(247,242,232,0.8)]">
-              {"WePray".split("").map((ch, i) => (
-                <span key={i} className="splash-letter" style={delay(0.45 + i * 0.06)}>
-                  {ch}
-                </span>
-              ))}
-            </p>
-            {/* Keyed by position so switching to Hindi on hydration swaps the
-                words without restarting the animation. */}
-            <div lang={lang} className="mt-2 flex flex-col items-center gap-0.5">
-              {phrases.map((phrase, i) => (
-                <p key={i} className="splash-phrase text-[15px] font-medium text-[#4A3A36]" style={delay(0.95 + i * 0.22)}>
-                  {phrase}
-                </p>
-              ))}
-            </div>
-          </div>
-
-          {/* Quiet loading line, over the near hill */}
-          <div className="absolute inset-x-0 bottom-[calc(7%+env(safe-area-inset-bottom))] flex justify-center">
-            <div className="h-[2px] w-24 overflow-hidden rounded-full bg-[#F7F2E8]/20">
-              <div className="splash-progress h-full rounded-full bg-[#F7F2E8]/80" />
-            </div>
-          </div>
+          </motion.div>
         </motion.div>
       )}
     </AnimatePresence>
