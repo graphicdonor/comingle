@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthedSupabase } from "@/lib/supabase/api-auth";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { logActivity } from "@/lib/activity";
 
 /** A user can't call the Auth Admin API themselves, so this verifies the
  * caller's own session first, then uses the service-role client to actually
@@ -14,6 +15,7 @@ export async function POST(req: NextRequest) {
   const admin = createAdminClient();
   const { error } = await admin.auth.admin.deleteUser(user.id);
   if (error) return NextResponse.json({ error: error.message }, { status: 400 });
+  await logActivity({ event: "account_deleted", email: user.email ?? null, userId: user.id });
 
   return NextResponse.json({ ok: true });
 }

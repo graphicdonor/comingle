@@ -1,6 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
+import { logActivity } from "@/lib/activity";
 
 /** The practice app sets this cookie before Google sign-in (src/lib/practice/sync.ts). */
 const AUTH_NEXT_COOKIE = "auth-next";
@@ -55,6 +56,10 @@ export async function GET(request: NextRequest) {
   if (!user) {
     return fail("no_user");
   }
+
+  // The CMS activity log: a new account, or a returning one.
+  const isNew = Date.now() - Date.parse(user.created_at) < 5 * 60_000;
+  await logActivity({ event: isNew ? "signed_up" : "signed_in", email: user.email ?? null, userId: user.id, source: user.app_metadata?.provider ?? "google" });
 
   if (next) {
     return NextResponse.redirect(`${origin}${next}`);

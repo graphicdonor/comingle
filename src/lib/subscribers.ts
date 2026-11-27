@@ -63,15 +63,27 @@ export async function allowAttempt(ip: string): Promise<boolean> {
   return true;
 }
 
-/** Adds someone; signing up again keeps the original date. */
-export async function addSubscriber(s: Omit<Subscriber, "subscribedAt" | "consent">): Promise<void> {
+/** Adds someone; signing up again keeps the original date. True if they're new. */
+export async function addSubscriber(s: Omit<Subscriber, "subscribedAt" | "consent">): Promise<boolean> {
   await ensureBuckets();
   const path = `subscribers/${subscriberId(s.email)}.json`;
   const { data: existing } = await storage().download(path);
-  if (existing) return;
+  if (existing) return false;
   const record: Subscriber = { ...s, consent: SUBSCRIBE_CONSENT, subscribedAt: new Date().toISOString() };
   const { error } = await storage().upload(path, new Blob([JSON.stringify(record)], { type: "application/json" }), { contentType: "application/json", upsert: true });
   if (error) throw error;
+  return true;
+}
+
+export async function getSubscriber(id: string): Promise<Subscriber | null> {
+  if (!/^[0-9a-f]{32}$/.test(id)) return null;
+  const { data } = await storage().download(`subscribers/${id}.json`);
+  if (!data) return null;
+  try {
+    return JSON.parse(await data.text()) as Subscriber;
+  } catch {
+    return null;
+  }
 }
 
 export async function removeSubscriber(id: string): Promise<void> {

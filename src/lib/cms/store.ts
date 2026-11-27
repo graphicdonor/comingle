@@ -32,19 +32,19 @@ export function ensureBuckets(): Promise<void> {
   return bucketsReady;
 }
 
-async function readJson<T>(path: string): Promise<T | null> {
+export async function readJson<T>(path: string): Promise<T | null> {
   const { data, error } = await db().from(CMS_BUCKET).download(path);
   if (error || !data) return null;
   return JSON.parse(await data.text()) as T;
 }
 
-async function writeJson(path: string, value: unknown): Promise<void> {
+export async function writeJson(path: string, value: unknown): Promise<void> {
   const body = new Blob([JSON.stringify(value, null, 2)], { type: "application/json" });
   const { error } = await db().from(CMS_BUCKET).upload(path, body, { upsert: true, contentType: "application/json", cacheControl: "0" });
   if (error) throw new Error(`Couldn't save ${path}: ${error.message}`);
 }
 
-async function listNames(prefix: string): Promise<string[]> {
+export async function listNames(prefix: string): Promise<string[]> {
   const names: string[] = [];
   for (let offset = 0; ; offset += 1000) {
     const { data, error } = await db().from(CMS_BUCKET).list(prefix, { limit: 1000, offset, sortBy: { column: "name", order: "asc" } });

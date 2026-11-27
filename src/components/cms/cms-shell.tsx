@@ -2,7 +2,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpen, BookText, Flower2, LayoutDashboard, Loader2, LogOut, Mail, ScrollText, Sparkles, Users } from "lucide-react";
+import { BookOpen, BookText, Flower2, LayoutDashboard, Loader2, LogOut, Mail, UserRound, ScrollText, Sparkles, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ROLE_LABELS, can, type Actor } from "@/lib/cms/model";
 import { signInWithGoogle, signOut } from "@/lib/practice/sync";
@@ -116,6 +116,7 @@ export function CmsShell({ children }: { children: React.ReactNode }) {
     { href: "/cms/meditation", label: "Meditations", icon: Flower2, show: true },
     { href: "/cms/verse", label: "Daily Dhamma", icon: Sparkles, show: true },
     { href: "/cms/story", label: "Jātaka tales", icon: BookText, show: true },
+    { href: "/cms/users", label: "Users", icon: UserRound, show: can(actor, "manage_roles") },
     { href: "/cms/subscribers", label: "Subscribers", icon: Mail, show: can(actor, "manage_roles") },
     { href: "/cms/access", label: "Access", icon: Users, show: can(actor, "manage_roles") },
     { href: "/cms/audit", label: "Audit log", icon: ScrollText, show: can(actor, "publish") },

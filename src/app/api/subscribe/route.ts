@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { addSubscriber, allowAttempt, normaliseEmail } from "@/lib/subscribers";
+import { logActivity } from "@/lib/activity";
 
 export const dynamic = "force-dynamic";
 
@@ -19,7 +20,7 @@ export async function POST(req: NextRequest) {
   const source = body.source === "android" ? "android" : body.source === "web" ? "web" : "landing";
   try {
     if (!(await allowAttempt(clientIp(req)))) return NextResponse.json({ error: "Too many tries. Please try again in a little while." }, { status: 429 });
-    await addSubscriber({ email, lang, source });
+    if (await addSubscriber({ email, lang, source })) await logActivity({ event: "subscribed", email, source });
   } catch (e) {
     console.error("subscribe failed", e);
     return NextResponse.json({ error: "Couldn't sign you up just now. Please try again." }, { status: 503 });

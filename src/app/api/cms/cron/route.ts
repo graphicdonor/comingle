@@ -5,6 +5,7 @@ import { publishDue, rebuildSite } from "@/lib/cms/service";
 import { listItems } from "@/lib/cms/store";
 import { rollUpUsage } from "@/lib/cms/stats";
 import { pruneRateRecords } from "@/lib/subscribers";
+import { pruneActivity } from "@/lib/activity";
 
 export const dynamic = "force-dynamic";
 
@@ -19,5 +20,6 @@ export async function POST(req: Request) {
   if (published) await rebuildSite(`${published} scheduled item(s)`);
   await rollUpUsage().catch((e) => console.error("usage roll-up failed", e));
   await pruneRateRecords().catch((e) => console.error("subscribe rate prune failed", e));
+  await pruneActivity().catch((e) => console.error("activity prune failed", e));
   return NextResponse.json({ published });
 }
